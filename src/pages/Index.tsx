@@ -146,7 +146,7 @@ const Index = () => {
           {/* Social Links */}
           <div className="mt-8 space-y-3">
             <h3 className="text-white/70 text-sm font-medium">Social Links</h3>
-            <a href="https://linkedin.com/in/saranjthilak" className="flex items-center space-x-3 text-white/70 hover:text-white transition-colors">
+            <a href="https://linkedin.com/in/saranjayathilak" className="flex items-center space-x-3 text-white/70 hover:text-white transition-colors">
               <Linkedin className="w-4 h-4" />
               <span className="text-sm">LinkedIn</span>
             </a>
@@ -154,7 +154,7 @@ const Index = () => {
               <Github className="w-4 h-4" />
               <span className="text-sm">GitHub</span>
             </a>
-            <a href="tel:+4917446154592" className="flex items-center space-x-3 text-white/70 hover:text-white transition-colors">
+            <a href="tel:+491744614592" className="flex items-center space-x-3 text-white/70 hover:text-white transition-colors">
               <Phone className="w-4 h-4" />
               <span className="text-sm">Phone</span>
             </a>
@@ -177,12 +177,13 @@ const Index = () => {
                   <div className="flex-1">
                     <h1 className="text-5xl font-bold mb-4">Saran Jaya Thilak</h1>
                     <p className="text-xl mb-6 opacity-90">
-                      Data Scientist | Business Intelligence Specialist | AWS Certified Solutions Architect
+                      Data Scientist | Machine Learning | Cloud Infrastructure | CI/CD Automation Specialist
                     </p>
                     <p className="text-lg mb-8 opacity-80 max-w-2xl leading-relaxed">
-                      Innovative Data Scientist with 5+ years of expertise in cloud infrastructure, 
-                      data analytics, and CI/CD automation. Passionate about merging cutting-edge 
-                      technology to solve complex problems and drive insights through data.
+                      A data science professional with over 3 years of experience in machine learning and cloud infrastructure. 
+                      Key achievements include a 25% improvement in deployment cycles through CI/CD automation pipelines and a 15% 
+                      reduction in inventory costs via efficient management strategies. Experienced in designing scalable, cloud-native 
+                      infrastructures on AWS and building CI/CD pipelines to enhance deployment cycles.
                     </p>
                     <div className="flex items-center space-x-4 mb-8">
                       <div className="flex items-center space-x-2">
@@ -239,7 +240,7 @@ const Index = () => {
                     </div>
                     <div>
                       <h3 className="text-white font-semibold">25% Deployment Cycle Improvement</h3>
-                      <p className="text-white/70">Optimized CI/CD processes for faster delivery</p>
+                      <p className="text-white/70">CI/CD automation pipelines optimization</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-4">
@@ -248,7 +249,7 @@ const Index = () => {
                     </div>
                     <div>
                       <h3 className="text-white font-semibold">15% Inventory Cost Reduction</h3>
-                      <p className="text-white/70">Data-driven optimization strategies</p>
+                      <p className="text-white/70">Efficient management strategies implementation</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-4">
@@ -257,7 +258,7 @@ const Index = () => {
                     </div>
                     <div>
                       <h3 className="text-white font-semibold">98% SLA Compliance</h3>
-                      <p className="text-white/70">Led teams to exceptional service levels</p>
+                      <p className="text-white/70">Team leadership in global network operations</p>
                     </div>
                   </div>
                 </CardContent>
@@ -265,17 +266,18 @@ const Index = () => {
 
               <Card className="bg-white/10 backdrop-blur-sm border-white/20">
                 <CardHeader>
-                  <CardTitle className="text-white">Education & Background</CardTitle>
+                  <CardTitle className="text-white">Professional Background</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-white/80 leading-relaxed">
-                    With over 5 years of experience in data science and cloud infrastructure, 
-                    I specialize in building scalable data solutions and leading technical teams. 
-                    My expertise spans across machine learning, business intelligence, and DevOps practices.
+                    With over 3 years of experience in machine learning and cloud infrastructure, 
+                    I specialize in building scalable data solutions and CI/CD automation. 
+                    My expertise spans Python, SQL, and cloud technologies including AWS.
                   </p>
                   <p className="text-white/80 leading-relaxed mt-4">
-                    I'm passionate about Trustworthy AI and seek opportunities to drive innovation 
-                    through data-driven insights while maintaining ethical AI practices.
+                    I have demonstrated success in designing and deploying scalable, cloud-native 
+                    infrastructures, building efficient CI/CD pipelines, and improving system 
+                    reliability and cost efficiency through proactive monitoring.
                   </p>
                 </CardContent>
               </Card>
