@@ -209,8 +209,12 @@ const Index = () => {
                     </div>
                   </div>
                   <div className="hidden lg:block">
-                    <div className="w-64 h-64 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm">
-                      <div className="text-8xl">👨‍💻</div>
+                    <div className="w-64 h-64 rounded-full overflow-hidden border-4 border-white/20 shadow-2xl">
+                      <img 
+                        src="/lovable-uploads/5881e7e5-f088-4e07-a79c-59eacb55eeb0.png" 
+                        alt="Saran Jaya Thilak" 
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                   </div>
                 </div>
