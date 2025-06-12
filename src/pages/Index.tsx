@@ -161,10 +161,10 @@ const Index = () => {
           <div className="mt-12 space-y-4">
             <h3 className="text-white/70 text-sm font-medium uppercase tracking-wider">Connect</h3>
             <div className="grid grid-cols-2 gap-3">
-              <a href="https://linkedin.com/in/saranjayathilak" className="flex items-center justify-center space-x-2 p-3 bg-white/10 hover:bg-blue-500/20 rounded-xl transition-all duration-300 group">
+              <a href="https://www.linkedin.com/in/saranjayathilak" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center space-x-2 p-3 bg-white/10 hover:bg-blue-500/20 rounded-xl transition-all duration-300 group">
                 <Linkedin className="w-4 h-4 text-blue-400 group-hover:scale-110 transition-transform" />
               </a>
-              <a href="https://github.com/saranjthilak" className="flex items-center justify-center space-x-2 p-3 bg-white/10 hover:bg-gray-500/20 rounded-xl transition-all duration-300 group">
+              <a href="https://github.com/saranjthilak" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center space-x-2 p-3 bg-white/10 hover:bg-gray-500/20 rounded-xl transition-all duration-300 group">
                 <Github className="w-4 h-4 text-gray-400 group-hover:scale-110 transition-transform" />
               </a>
               <a href="tel:+491744614592" className="flex items-center justify-center space-x-2 p-3 bg-white/10 hover:bg-green-500/20 rounded-xl transition-all duration-300 group">
@@ -495,18 +495,18 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <div className="flex items-center space-x-4 p-4 bg-white/10 rounded-2xl backdrop-blur-sm hover:bg-white/20 transition-all duration-300">
+                  <a href="tel:+491744614592" className="flex items-center space-x-4 p-4 bg-white/10 rounded-2xl backdrop-blur-sm hover:bg-white/20 transition-all duration-300">
                     <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center">
                       <Phone className="w-6 h-6 text-white" />
                     </div>
                     <span className="text-white text-lg">+49 174 461 4592</span>
-                  </div>
-                  <div className="flex items-center space-x-4 p-4 bg-white/10 rounded-2xl backdrop-blur-sm hover:bg-white/20 transition-all duration-300">
+                  </a>
+                  <a href="mailto:saranjthilak@gmail.com" className="flex items-center space-x-4 p-4 bg-white/10 rounded-2xl backdrop-blur-sm hover:bg-white/20 transition-all duration-300">
                     <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-pink-600 rounded-2xl flex items-center justify-center">
                       <Mail className="w-6 h-6 text-white" />
                     </div>
                     <span className="text-white text-lg">saranjthilak@gmail.com</span>
-                  </div>
+                  </a>
                   <div className="flex items-center space-x-4 p-4 bg-white/10 rounded-2xl backdrop-blur-sm hover:bg-white/20 transition-all duration-300">
                     <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-2xl flex items-center justify-center">
                       <MapPin className="w-6 h-6 text-white" />
@@ -515,14 +515,14 @@ const Index = () => {
                   </div>
                   <Separator className="bg-white/20" />
                   <div className="flex space-x-4">
-                    <Button className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-2xl py-3 transition-all duration-300 hover:scale-105">
+                    <a href="https://www.linkedin.com/in/saranjayathilak" target="_blank" rel="noopener noreferrer" className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-2xl py-3 transition-all duration-300 hover:scale-105 flex items-center justify-center">
                       <Linkedin className="w-5 h-5 mr-2" />
                       LinkedIn
-                    </Button>
-                    <Button className="flex-1 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-800 hover:to-gray-900 text-white rounded-2xl py-3 transition-all duration-300 hover:scale-105">
+                    </a>
+                    <a href="https://github.com/saranjthilak" target="_blank" rel="noopener noreferrer" className="flex-1 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-800 hover:to-gray-900 text-white rounded-2xl py-3 transition-all duration-300 hover:scale-105 flex items-center justify-center">
                       <Github className="w-5 h-5 mr-2" />
                       GitHub
-                    </Button>
+                    </a>
                   </div>
                 </CardContent>
               </Card>
