@@ -44,6 +44,17 @@ const Index = () => {
     setActiveSection(id);
   };
 
+  const handleDownloadResume = () => {
+    const resumeUrl = "https://github.com/saranjthilak/saran-portfolio/raw/main/SaranJayaThilakResume%20(29).pdf";
+    const link = document.createElement('a');
+    link.href = resumeUrl;
+    link.download = 'SaranJayaThilak_Resume.pdf';
+    link.target = '_blank';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const experience = [
     {
       company: "Tesla",
@@ -245,6 +256,7 @@ const Index = () => {
                         <ArrowRight className="ml-2 w-5 h-5" />
                       </Button>
                       <Button 
+                        onClick={handleDownloadResume}
                         variant="outline" 
                         className="bg-white/10 border-white/30 text-white hover:bg-white/20 px-8 py-4 text-lg rounded-2xl backdrop-blur-sm transition-all duration-300 hover:scale-105"
                       >
