@@ -148,6 +148,27 @@ const Index = () => {
     }
   ];
 
+  const achievements = [
+    {
+      icon: "⚡",
+      title: "25% Deployment Cycle Improvement",
+      description: "CI/CD automation pipelines optimization",
+      gradient: "from-green-500 to-emerald-600"
+    },
+    {
+      icon: "💰",
+      title: "15% Inventory Cost Reduction",
+      description: "Efficient management strategies implementation",
+      gradient: "from-blue-500 to-cyan-600"
+    },
+    {
+      icon: "🎯",
+      title: "98% SLA Compliance",
+      description: "Team leadership in global network operations",
+      gradient: "from-purple-500 to-pink-600"
+    }
+  ];
+
   const navigation = [
     { id: "home", label: "Home", icon: "🏠" },
     { id: "about", label: "About", icon: "👤" },
@@ -296,34 +317,20 @@ const Index = () => {
                     <span>Key Achievements</span>
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-8">
-                  <div className="flex items-center space-x-6">
-                    <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg">
-                      <span className="text-3xl">⚡</span>
-                    </div>
-                    <div>
-                      <h3 className="text-white font-semibold text-xl">25% Deployment Cycle Improvement</h3>
-                      <p className="text-white/70">CI/CD automation pipelines optimization</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-6">
-                    <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-2xl flex items-center justify-center shadow-lg">
-                      <span className="text-3xl">💰</span>
-                    </div>
-                    <div>
-                      <h3 className="text-white font-semibold text-xl">15% Inventory Cost Reduction</h3>
-                      <p className="text-white/70">Efficient management strategies implementation</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-6">
-                    <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg">
-                      <span className="text-3xl">🎯</span>
-                    </div>
-                    <div>
-                      <h3 className="text-white font-semibold text-xl">98% SLA Compliance</h3>
-                      <p className="text-white/70">Team leadership in global network operations</p>
-                    </div>
-                  </div>
+                <CardContent>
+                  <ul className="space-y-6">
+                    {achievements.map((achievement, index) => (
+                      <li key={index} className="flex items-start space-x-4">
+                        <div className={`flex-shrink-0 w-12 h-12 bg-gradient-to-r ${achievement.gradient} rounded-2xl flex items-center justify-center shadow-lg`}>
+                          <span className="text-2xl">{achievement.icon}</span>
+                        </div>
+                        <div>
+                          <h3 className="text-white font-semibold text-lg">{achievement.title}</h3>
+                          <p className="text-white/70 text-sm">{achievement.description}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
                 </CardContent>
               </Card>
 
@@ -334,7 +341,7 @@ const Index = () => {
                     <span>Professional Background</span>
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-6">
+                <CardContent>
                   <p className="text-white/80 leading-relaxed text-lg">
                     Data Science and AI professional with expertise in data engineering, machine learning, and cloud infrastructure. Holds a Master’s in Data Science and completed a boot camp in Data Science & AI. AWS Certified Solutions Architect with hands-on experience in building scalable pipelines (AWS, GCP), automating workflows with CI/CD, and developing LLM-based applications including Retrieval-Augmented Generation (RAG) systems. Proficient in Python, SQL, Airflow, DBT, and MLflow. Published author of two IEEE research papers in applied machine learning.
                   </p>
