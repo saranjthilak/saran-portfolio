@@ -60,28 +60,28 @@ const Index = () => {
       company: "Tesla",
       role: "Production Associate",
       period: "2023–2025",
-      description: "Optimized production processes and implemented data-driven solutions for manufacturing efficiency.",
+      description: "Improved 24/7 production efficiency by optimizing inventory and streamlining workflows with cross-functional teams.",
       logo: "🚗"
     },
     {
       company: "Huawei",
       role: "Cloud Support Engineer",
       period: "2019–2022",
-      description: "Managed cloud infrastructure and provided technical support for enterprise clients.",
+      description: "Built scalable AWS infrastructure and CI/CD pipelines to automate deployments and enhance system reliability.",
       logo: "☁️"
     },
     {
       company: "Huawei",
       role: "O&M Engineer",
       period: "2016–2019",
-      description: "Operations and maintenance engineering for telecommunications infrastructure.",
+      description: "Led 24/7 telecom network operations and ensured SLA compliance across multiple network domains.",
       logo: "🔧"
     },
     {
       company: "Nokia",
       role: "O&M Engineer",
       period: "2014–2016",
-      description: "Network operations and maintenance for telecommunications systems.",
+      description: "Maintained telecom infrastructure with 99.99% uptime through proactive monitoring and fault resolution.",
       logo: "📡"
     }
   ];
@@ -436,7 +436,7 @@ const Index = () => {
                     <CardTitle className="text-white text-xl group-hover:text-blue-200 transition-colors">{project.title}</CardTitle>
                     <div className="flex flex-wrap gap-3">
                       {project.tools.map((tool) => (
-                        <Badge key={tool} className="bg-gradient-to-r from-blue-500/20 to-purple-600/20 text-blue-300 border-blue-500/30 hover:scale-110 transition-transform duration-200">
+                        <Badge key={tool} className="bg-gradient-to-r from-blue-500/20 to-purple-600/20 border-blue-500/30 text-blue-300 px-4 py-2">
                           {tool}
                         </Badge>
                       ))}
@@ -514,7 +514,7 @@ const Index = () => {
               {/* Master's - University of Europe for Applied Sciences */}
               <div className="flex flex-col md:flex-row items-center bg-white/10 backdrop-blur-xl border-white/20 rounded-2xl p-8 hover:bg-white/15 transition-all duration-300 hover:scale-105 hover:shadow-2xl group">
                 <div className="flex-shrink-0 w-20 h-20 bg-gradient-to-r from-blue-400 to-green-500 rounded-3xl flex items-center justify-center text-4xl shadow-lg mr-0 md:mr-8 mb-6 md:mb-0">
-                  🎓
+                  📓
                 </div>
                 <div>
                   <h3 className="text-2xl font-bold text-white mb-1 group-hover:text-blue-200 transition-colors">University of Europe for Applied Sciences</h3>
