@@ -239,10 +239,7 @@ const Index = () => {
                       Data Scientist | Machine Learning | Cloud Infrastructure | CI/CD Automation Specialist
                     </p>
                     <p className="text-lg mb-10 text-white/80 max-w-3xl leading-relaxed">
-                      A data science professional with over 3 years of experience in machine learning and cloud infrastructure. 
-                      Key achievements include a 25% improvement in deployment cycles through CI/CD automation pipelines and a 15% 
-                      reduction in inventory costs via efficient management strategies. Experienced in designing scalable, cloud-native 
-                      infrastructures on AWS and building CI/CD pipelines to enhance deployment cycles.
+                      Data science professional with over 5 years of hands-on experience specializing in machine learning, cloud infrastructure, and automation. Proven track record of driving operational excellence, including a 25% improvement in deployment cycles through the design and implementation of CI/CD automation pipelines, and a 15% reduction in inventory costs by optimizing management strategies. Adept at architecting scalable, cloud-native solutions on AWS and other platforms, with deep expertise in building robust, end-to-end CI/CD workflows to accelerate model deployment and ensure high reliability. Passionate about leveraging data science and cloud technologies to deliver impactful, efficient, and scalable business solutions.
                     </p>
                     <div className="flex items-center space-x-3 mb-10">
                       <MapPin className="w-5 h-5 text-blue-400" />
