@@ -88,28 +88,28 @@ const Index = () => {
 
   const projects = [
     {
-      title: "Divvy Bikes End-to-End Data Pipeline",
-      tools: ["GCP", "DBT", "Airflow", "BigQuery"],
-      description: "Built a comprehensive data pipeline for bike-sharing analytics with automated ETL processes.",
-      impact: "Improved data processing efficiency by 40%"
+      title: "IRIS – AI App to Chat with Your Data",
+      source: "Le Wagon | May 2025 – Jun 2025",
+      description: "Built a RAG-powered AI assistant using LangChain, LLaMA, DeepSeek, and ChatGPT to query and summarize documents from Google Drive, Notion, Sheets, and databases.",
+      skills: ["RAG", "LLMs", "LangChain", "LLaMA", "DeepSeek", "ChatGPT"],
     },
     {
-      title: "Data Visualizations for Netflix, Airbnb, Unicorn Companies",
-      tools: ["Python", "Tableau", "Power BI", "Pandas"],
-      description: "Created interactive dashboards and visualizations for business intelligence.",
-      impact: "Enhanced decision-making with real-time insights"
+      title: "Divvy Bikes – End-to-End Data Pipeline",
+      source: "University of Europe for Applied Sciences",
+      description: "Designed a full data pipeline on GCP using Terraform, Airflow, DBT, and BigQuery for data ingestion, transformation, and dashboarding in Google Data Studio.",
+      skills: ["GCP", "Terraform", "Airflow", "DBT", "BigQuery", "Data Studio", "Docker"],
     },
     {
-      title: "Terraform EC2 Setup",
-      tools: ["Terraform", "AWS", "Docker", "CI/CD"],
-      description: "Automated cloud infrastructure deployment and management.",
-      impact: "25% reduction in deployment cycle times"
+      title: "Data Visualization Projects",
+      source: "University of Europe for Applied Sciences",
+      description: "Created interactive dashboards for Netflix, Airbnb Berlin, and Unicorn companies to deliver business insights using Power BI and Tableau.",
+      skills: ["Power BI", "Tableau", "Data Visualization", "Analytical Thinking"],
     },
     {
-      title: "Streamlit Sales Forecast Tool",
-      tools: ["Python", "Streamlit", "TensorFlow", "ML"],
-      description: "Machine learning application for sales forecasting with interactive interface.",
-      impact: "Improved forecast accuracy by 30%"
+      title: "Customer Segmentation – K-Means Clustering",
+      source: "University of Europe for Applied Sciences",
+      description: "Implemented K-means clustering in Python to segment customers based on behavior and demographics for targeted marketing strategies.",
+      skills: ["Python", "K-Means", "Customer Segmentation", "Analytics"],
     }
   ];
 
@@ -431,23 +431,19 @@ const Index = () => {
             </div>
             <div className="grid md:grid-cols-2 gap-10">
               {projects.map((project, index) => (
-                <Card key={index} className="bg-white/10 backdrop-blur-xl border-white/20 hover:bg-white/15 transition-all duration-300 hover:scale-105 hover:shadow-2xl group">
+                <Card key={index} className="bg-white/10 backdrop-blur-xl border-white/20 hover:bg-white/15 transition-all duration-300 hover:scale-105 hover:shadow-2xl group flex flex-col">
                   <CardHeader>
                     <CardTitle className="text-white text-xl group-hover:text-blue-200 transition-colors">{project.title}</CardTitle>
+                    <CardDescription className="text-blue-300 pt-1">{project.source}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex-grow flex flex-col justify-between">
+                    <p className="text-white/80 mb-6 text-lg leading-relaxed">{project.description}</p>
                     <div className="flex flex-wrap gap-3">
-                      {project.tools.map((tool) => (
-                        <Badge key={tool} className="bg-gradient-to-r from-blue-500/20 to-purple-600/20 border-blue-500/30 text-blue-300 px-4 py-2">
-                          {tool}
+                      {project.skills.map((skill) => (
+                        <Badge key={skill} className="bg-gradient-to-r from-blue-500/20 to-purple-600/20 border-blue-500/30 text-blue-300 px-4 py-2">
+                          {skill}
                         </Badge>
                       ))}
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-white/80 mb-6 text-lg leading-relaxed">{project.description}</p>
-                    <div className="flex items-center space-x-3 p-4 bg-white/10 rounded-2xl backdrop-blur-sm">
-                      <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                      <span className="text-green-300 font-semibold">Impact:</span>
-                      <span className="text-white/70">{project.impact}</span>
                     </div>
                   </CardContent>
                 </Card>
