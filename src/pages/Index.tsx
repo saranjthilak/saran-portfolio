@@ -1,14 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { ArrowDown, ArrowRight, Github, Linkedin, Mail, Phone, Download, ExternalLink, MapPin, Sparkles } from "lucide-react";
+import { ArrowRight, Github, Linkedin, Mail, Phone, Download, ExternalLink, MapPin, Sparkles } from "lucide-react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { Textarea } from "@/components/ui/textarea";
+import ContactForm from "@/components/ContactForm";
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("home");
@@ -624,67 +620,8 @@ const Index = () => {
                 </CardContent>
               </Card>
 
-              <Card className="bg-white/10 backdrop-blur-xl border-white/20 hover:bg-white/15 transition-all duration-300 hover:scale-105">
-                <CardHeader>
-                  <CardTitle className="text-white text-2xl">Send a Message</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                    <div>
-                      <Label htmlFor="name" className="text-white text-lg mb-2 block">Name</Label>
-                      <Input 
-                        id="name" 
-                        placeholder="Your name" 
-                        className="bg-white/10 border-white/30 text-white placeholder:text-white/50 rounded-2xl py-3 backdrop-blur-sm focus:bg-white/20 transition-all duration-300"
-                        {...register("name", { required: "Name is required" })}
-                      />
-                      {errors.name && (
-                        <p className="text-red-400 text-sm mt-1">{errors.name.message}</p>
-                      )}
-                    </div>
-                    <div>
-                      <Label htmlFor="email" className="text-white text-lg mb-2 block">Email</Label>
-                      <Input 
-                        id="email" 
-                        type="email" 
-                        placeholder="your.email@example.com" 
-                        className="bg-white/10 border-white/30 text-white placeholder:text-white/50 rounded-2xl py-3 backdrop-blur-sm focus:bg-white/20 transition-all duration-300"
-                        {...register("email", { 
-                          required: "Email is required",
-                          pattern: {
-                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                            message: "Invalid email address"
-                          }
-                        })}
-                      />
-                      {errors.email && (
-                        <p className="text-red-400 text-sm mt-1">{errors.email.message}</p>
-                      )}
-                    </div>
-                    <div>
-                      <Label htmlFor="message" className="text-white text-lg mb-2 block">Message</Label>
-                      <Textarea 
-                        id="message" 
-                        placeholder="Your message..." 
-                        rows={4}
-                        className="bg-white/10 border-white/30 text-white placeholder:text-white/50 rounded-2xl py-3 backdrop-blur-sm focus:bg-white/20 transition-all duration-300"
-                        {...register("message", { required: "Message is required" })}
-                      />
-                      {errors.message && (
-                        <p className="text-red-400 text-sm mt-1">{errors.message.message}</p>
-                      )}
-                    </div>
-                    <Button 
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-2xl py-4 text-lg shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {isSubmitting ? "Sending..." : "Send Message"}
-                      <ArrowRight className="ml-2 w-5 h-5" />
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
+              <ContactForm />
+
             </div>
           </div>
         </section>
