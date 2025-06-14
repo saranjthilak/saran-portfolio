@@ -45,7 +45,7 @@ const Index = () => {
   };
 
   const handleDownloadResume = () => {
-    const resumeUrl = "https://github.com/saranjthilak/saran-portfolio/raw/main/SaranJayaThilakResume%20(29).pdf";
+    const resumeUrl = "https://github.com/saranjthilak/saran-portfolio/raw/main/SaranJayaThilakResume%20(36).pdf";
     const link = document.createElement('a');
     link.href = resumeUrl;
     link.download = 'SaranJayaThilak_Resume.pdf';
