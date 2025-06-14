@@ -121,16 +121,18 @@ const Index = () => {
 
   const publications = [
     {
-      title: "Solar PV ML Estimation",
+      title: "Performance Ratio Estimation of Solar Power Plants Using Machine Learning Algorithms",
       journal: "IEEE",
       date: "Sep 2023",
-      description: "Machine learning approach for solar photovoltaic energy estimation and optimization."
+      link: "https://ieeexplore.ieee.org/document/10317646",
+      description: "Applied advanced machine learning models to estimate the performance ratio of solar PV plants using operational and environmental data. Among tested algorithms, Random Search CV Regression achieved the highest accuracy with an R² of 0.93 and minimal error. Results highlight the effectiveness of models like Random Search CV, AdaBoost, and Random Forest in optimizing solar plant performance and advancing efficient renewable energy solutions."
     },
     {
-      title: "Airfare Prediction",
+      title: "A Comparison Between Machine Learning Models for Air ticket Price Prediction",
       journal: "IEEE",
       date: "Nov 2022",
-      description: "Predictive modeling for airline ticket pricing using advanced ML algorithms."
+      link: "https://ieeexplore.ieee.org/document/9998230",
+      description: "Explored machine learning techniques to predict airline ticket prices using two Kaggle datasets, addressing challenges from dynamic pricing fluctuations. Evaluated models including Random Forest and Randomized Search CV, with the proposed model providing accurate fare predictions. This solution supports travelers in making informed decisions by forecasting price trends from historical data."
     }
   ];
 
@@ -464,7 +466,7 @@ const Index = () => {
                 <Card key={index} className="bg-white/10 backdrop-blur-xl border-white/20 hover:bg-white/15 transition-all duration-300 hover:scale-105 hover:shadow-2xl group">
                   <CardContent className="p-8">
                     <div className="flex items-start justify-between">
-                      <div className="flex-1">
+                      <div className="flex-1 pr-8">
                         <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-blue-200 transition-colors">{pub.title}</h3>
                         <p className="text-white/70 mb-6 text-lg leading-relaxed">{pub.description}</p>
                         <div className="flex items-center space-x-6">
@@ -474,9 +476,11 @@ const Index = () => {
                           <span className="text-white/60 text-lg">{pub.date}</span>
                         </div>
                       </div>
-                      <Button variant="ghost" size="sm" className="text-blue-300 hover:text-white hover:bg-blue-500/20 rounded-2xl group-hover:scale-110 transition-all duration-300">
-                        <ExternalLink className="w-5 h-5" />
-                      </Button>
+                      <a href={pub.link} target="_blank" rel="noopener noreferrer">
+                        <Button variant="ghost" size="sm" className="text-blue-300 hover:text-white hover:bg-blue-500/20 rounded-2xl group-hover:scale-110 transition-all duration-300">
+                          <ExternalLink className="w-5 h-5" />
+                        </Button>
+                      </a>
                     </div>
                   </CardContent>
                 </Card>
