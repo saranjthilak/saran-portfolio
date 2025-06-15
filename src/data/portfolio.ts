@@ -1,4 +1,3 @@
-
 export const experience = [
   {
     company: "Tesla",
@@ -112,6 +111,12 @@ export const achievements = [
     title: "98% SLA Compliance",
     description: "Team leadership in global network operations",
     gradient: "from-purple-500 to-pink-600"
+  },
+  {
+    icon: "🔬",
+    title: "Two IEEE Machine Learning Publications",
+    description: "Authored and published innovative research in applied machine learning.",
+    gradient: "from-pink-600 to-yellow-400"
   }
 ];
 
