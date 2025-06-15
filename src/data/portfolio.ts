@@ -83,9 +83,7 @@ export const skills = {
     "DBT",
     "BigQuery",
     "Airflow",
-    "Looker",
-    "Looker Studio",
-    "Metabase"
+    "Looker"
   ]
 };
 
