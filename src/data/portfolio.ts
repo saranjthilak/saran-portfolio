@@ -102,8 +102,8 @@ export const achievements = [
   },
   {
     icon: "💰",
-    title: "15% Inventory Cost Reduction",
-    description: "Efficient management strategies implementation",
+    title: "20% Cloud Infrastructure Cost Savings",
+    description: "Automated scaling and cost optimization across AWS and GCP cloud platforms.",
     gradient: "from-blue-500 to-cyan-600"
   },
   {
