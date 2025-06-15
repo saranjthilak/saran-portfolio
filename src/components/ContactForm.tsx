@@ -1,4 +1,3 @@
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -36,10 +35,9 @@ const ContactForm = () => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // IMPORTANT: Replace these with your actual EmailJS credentials
-    const SERVICE_ID = "YOUR_SERVICE_ID";
-    const TEMPLATE_ID = "YOUR_TEMPLATE_ID";
-    const PUBLIC_KEY = "YOUR_PUBLIC_KEY";
+    const SERVICE_ID = "service_bryeang";
+    const TEMPLATE_ID = "template_quvbu2n";
+    const PUBLIC_KEY = "VAq0C9MtRV5tJxyv8";
 
     try {
       await emailjs.send(SERVICE_ID, TEMPLATE_ID, values, PUBLIC_KEY);
