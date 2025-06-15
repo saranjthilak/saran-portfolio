@@ -73,8 +73,8 @@ export const skills = {
     "Docker",
     "Terraform",
     "Kubernetes",
-    "Jenkins",
     "Git",
+    "GitHub Actions",
     "CI/CD"
   ],
   "BI & Analytics": [
@@ -82,8 +82,7 @@ export const skills = {
     "Power BI",
     "DBT",
     "BigQuery",
-    "Airflow",
-    "Looker"
+    "Airflow"
   ]
 };
 
