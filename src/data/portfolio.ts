@@ -84,7 +84,8 @@ export const skills = {
     "BigQuery",
     "Airflow",
     "Google Data Studio",
-    "Looker"
+    "Looker",
+    "Google Sheets"
   ]
 };
 
