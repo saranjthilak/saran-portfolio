@@ -73,8 +73,8 @@ export const skills = {
     "Docker",
     "Terraform",
     "Kubernetes",
+    "Linux",
     "Git",
-    "GitHub Actions",
     "CI/CD"
   ],
   "BI & Analytics": [
