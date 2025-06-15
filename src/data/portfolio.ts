@@ -57,9 +57,35 @@ export const projects = [
 ];
 
 export const skills = {
-  "Languages & ML": ["Python", "SQL", "NLP", "TensorFlow", "PyTorch", "Scikit-learn", "Pandas", "NumPy"],
-  "Cloud & DevOps": ["AWS", "GCP", "Docker", "Terraform", "Kubernetes", "Jenkins", "Git", "CI/CD"],
-  "BI & Analytics": ["Tableau", "Power BI", "DBT", "BigQuery", "Airflow", "Apache Spark", "Snowflake"]
+  "Languages & ML": [
+    "Python",
+    "SQL",
+    "NLP",
+    "TensorFlow",
+    "PyTorch",
+    "Scikit-learn",
+    "MLflow",
+    "RAG"
+  ],
+  "Cloud & DevOps": [
+    "AWS",
+    "GCP",
+    "Docker",
+    "Terraform",
+    "Kubernetes",
+    "Jenkins",
+    "Git",
+    "CI/CD"
+  ],
+  "BI & Analytics": [
+    "Tableau",
+    "Power BI",
+    "DBT",
+    "BigQuery",
+    "Airflow",
+    "Apache Spark",
+    "Snowflake"
+  ]
 };
 
 export const publications = [
