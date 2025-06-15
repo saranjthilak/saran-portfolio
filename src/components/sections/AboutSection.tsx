@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { achievements } from "@/data/portfolio";
 
@@ -7,11 +6,11 @@ const AboutSection = () => {
     <section id="about" className="py-24 px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-5xl font-bold text-white mb-6">About Me</h2>
+          <h2 className="text-5xl font-extrabold tracking-tight text-white mb-6">About Me</h2>
           <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full"></div>
         </div>
         <div className="grid md:grid-cols-2 gap-10">
-          <Card className="bg-white/10 backdrop-blur-xl border-white/20 hover:bg-white/15 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20">
+          <Card className="bg-white/5 backdrop-blur-xl border border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 group hover:border-white/20">
             <CardHeader>
               <CardTitle className="text-white text-2xl flex items-center space-x-3">
                 <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg"></div>
@@ -22,12 +21,12 @@ const AboutSection = () => {
               <ul className="space-y-6">
                 {achievements.map((achievement, index) => (
                   <li key={index} className="flex items-start space-x-4">
-                    <div className={`flex-shrink-0 w-12 h-12 bg-gradient-to-r ${achievement.gradient} rounded-2xl flex items-center justify-center shadow-lg`}>
+                    <div className={`flex-shrink-0 w-12 h-12 bg-gradient-to-r ${achievement.gradient} rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                       <span className="text-2xl">{achievement.icon}</span>
                     </div>
                     <div>
                       <h3 className="text-white font-semibold text-lg">{achievement.title}</h3>
-                      <p className="text-white/70 text-sm">{achievement.description}</p>
+                      <p className="text-white/70 text-base leading-relaxed">{achievement.description}</p>
                     </div>
                   </li>
                 ))}
@@ -35,7 +34,7 @@ const AboutSection = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-white/10 backdrop-blur-xl border-white/20 hover:bg-white/15 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20">
+          <Card className="bg-white/5 backdrop-blur-xl border border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-pink-500/20 group hover:border-white/20">
             <CardHeader>
               <CardTitle className="text-white text-2xl flex items-center space-x-3">
                 <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg"></div>

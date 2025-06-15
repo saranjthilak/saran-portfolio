@@ -1,4 +1,3 @@
-
 import { Github, Linkedin, Mail, Phone, Sparkles } from "lucide-react";
 import { navigation } from "@/data/portfolio";
 
@@ -9,13 +8,13 @@ interface SidebarProps {
 
 const Sidebar = ({ activeSection, scrollToSection }: SidebarProps) => {
   return (
-    <div className="fixed left-0 top-0 h-full w-72 bg-white/10 backdrop-blur-xl border-r border-white/20 z-10">
+    <div className="fixed left-0 top-0 h-full w-72 bg-black/20 backdrop-blur-xl border-r border-white/10 z-10">
       <div className="p-8">
         <div className="flex items-center space-x-3 mb-12">
           <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
             <Sparkles className="w-5 h-5 text-white" />
           </div>
-          <h2 className="text-white font-bold text-xl">Portfolio</h2>
+          <h2 className="text-white font-bold text-xl tracking-wide">Portfolio</h2>
         </div>
         
         <nav className="space-y-3">
@@ -23,14 +22,14 @@ const Sidebar = ({ activeSection, scrollToSection }: SidebarProps) => {
             <button
               key={item.id}
               onClick={() => scrollToSection(item.id)}
-              className={`w-full flex items-center space-x-4 px-6 py-4 rounded-2xl transition-all duration-300 group ${
+              className={`w-full flex items-center space-x-4 px-6 py-4 rounded-xl transition-all duration-300 group ${
                 activeSection === item.id
                   ? "bg-gradient-to-r from-blue-500/20 to-purple-600/20 text-white border border-blue-500/30 shadow-lg shadow-blue-500/25"
                   : "text-white/70 hover:bg-white/10 hover:text-white hover:transform hover:translate-x-1"
               }`}
             >
               <span className="text-xl">{item.icon}</span>
-              <span className="font-medium">{item.label}</span>
+              <span className="font-semibold tracking-wide">{item.label}</span>
               {activeSection === item.id && (
                 <div className="ml-auto w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
               )}
