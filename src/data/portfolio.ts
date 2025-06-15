@@ -82,7 +82,9 @@ export const skills = {
     "Power BI",
     "DBT",
     "BigQuery",
-    "Airflow"
+    "Airflow",
+    "Pandas",
+    "NumPy"
   ]
 };
 
