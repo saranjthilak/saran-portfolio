@@ -1,3 +1,4 @@
+
 export const experience = [
   {
     company: "Tesla",
@@ -15,7 +16,7 @@ export const experience = [
   },
   {
     company: "Huawei",
-    role: "O&M Engineer",
+    role: "O&M Team Lead",
     period: "2016–2019",
     description: "Led 24/7 telecom network operations and ensured SLA compliance across multiple network domains.",
     logo: "🔧"
