@@ -1,3 +1,4 @@
+
 export const experience = [
   {
     company: "Tesla",
@@ -50,8 +51,8 @@ export const projects = [
   },
   {
     title: "AI Product Matching System",
-    source: "Le Wagon",
-    description: "Built a scalable AI-powered product matching system using vector databases and visual-language models for image-based search. Developed an end-to-end pipeline with embedding, indexing (FAISS), and inference. Integrated a quantized CLIP model via NVIDIA Triton Inference Server and created an intuitive Gradio UI for image search. Containerized the application with Docker and designed it for modularity, logging, and startup-level performance optimization.",
+    source: "Le Wagon | May 2025 – Jun 2025",
+    description: "Built an AI-powered product matching system for image-based search using vector databases and visual-language models. Developed a full pipeline with FAISS indexing, Triton-served CLIP model, and a Gradio UI. Optimized for modularity, logging, and performance in a Dockerized setup.",
     skills: ["FAISS", "CLIP", "Triton", "Docker"],
   }
 ];
