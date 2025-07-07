@@ -1,4 +1,3 @@
-
 export const experience = [
   {
     company: "Tesla",
@@ -50,10 +49,10 @@ export const projects = [
     skills: ["Power BI", "Tableau", "Data Visualization", "Analytical Thinking"],
   },
   {
-    title: "Customer Segmentation – K-Means Clustering",
-    source: "University of Europe for Applied Sciences",
-    description: "Implemented K-means clustering in Python to segment customers based on behavior and demographics for targeted marketing strategies.",
-    skills: ["Python", "K-Means", "Customer Segmentation", "Analytics"],
+    title: "AI Product Matching System",
+    source: "Le Wagon",
+    description: "Built a scalable AI-powered product matching system using vector databases and visual-language models for image-based search. Developed an end-to-end pipeline with embedding, indexing (FAISS), and inference. Integrated a quantized CLIP model via NVIDIA Triton Inference Server and created an intuitive Gradio UI for image search. Containerized the application with Docker and designed it for modularity, logging, and startup-level performance optimization.",
+    skills: ["FAISS", "CLIP", "Triton", "Docker"],
   }
 ];
 
