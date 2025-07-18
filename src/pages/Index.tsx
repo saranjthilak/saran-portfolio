@@ -54,50 +54,24 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-background relative overflow-hidden">
-      {/* Futuristic background elements */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/10 via-transparent to-accent/10"></div>
-        <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-1/4 right-1/3 w-80 h-80 bg-accent/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }}></div>
-        <div className="absolute top-3/4 left-1/4 w-64 h-64 bg-primary/15 rounded-full blur-2xl animate-glow"></div>
-      </div>
-
-      {/* Glass overlay pattern */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent transform -skew-x-12 animate-shimmer"></div>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden bg-[size:200%_200%] animate-gradient-pan">
+      {/* Background decoration */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
 
       <Sidebar activeSection={activeSection} scrollToSection={scrollToSection} />
 
-      <div className="ml-72 min-h-screen relative z-10">
-        <div className="animate-fade-in-up">
-          <HeroSection scrollToSection={scrollToSection} handleDownloadResume={handleDownloadResume} />
-        </div>
-        <div className="animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-          <AboutSection />
-        </div>
-        <div className="animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-          <ExperienceSection />
-        </div>
-        <div className="animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
-          <SkillsSection />
-        </div>
-        <div className="animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
-          <ProjectsSection />
-        </div>
-        <div className="animate-fade-in-up" style={{ animationDelay: '1.0s' }}>
-          <PublicationsSection />
-        </div>
-        <div className="animate-fade-in-up" style={{ animationDelay: '1.2s' }}>
-          <EducationSection />
-        </div>
-        <div className="animate-fade-in-up" style={{ animationDelay: '1.4s' }}>
-          <CertificationsSection />
-        </div>
-        <div className="animate-fade-in-up" style={{ animationDelay: '1.6s' }}>
-          <ContactSection />
-        </div>
+      <div className="ml-72 min-h-screen relative z-0">
+        <HeroSection scrollToSection={scrollToSection} handleDownloadResume={handleDownloadResume} />
+        <AboutSection />
+        <ExperienceSection />
+        <SkillsSection />
+        <ProjectsSection />
+        <PublicationsSection />
+        <EducationSection />
+        <CertificationsSection />
+        <ContactSection />
         <Footer />
       </div>
     </div>
