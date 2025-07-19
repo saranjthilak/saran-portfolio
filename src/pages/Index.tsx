@@ -54,30 +54,11 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
-      {/* Futuristic Background Elements */}
-      <div className="absolute inset-0 bg-glow-gradient animate-glow-pulse"></div>
-      
-      {/* Neural Network Background Pattern */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-cyber-float"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-secondary/20 rounded-full blur-3xl animate-cyber-float" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-accent/20 rounded-full blur-3xl animate-cyber-float" style={{ animationDelay: '2s' }}></div>
-      </div>
-      
-      {/* Data Flow Lines */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-primary/20 animate-data-flow"></div>
-      <div className="absolute top-1/3 left-0 w-full h-px bg-secondary/20 animate-data-flow" style={{ animationDelay: '1.5s' }}></div>
-      <div className="absolute top-2/3 left-0 w-full h-px bg-accent/20 animate-data-flow" style={{ animationDelay: '3s' }}></div>
-      
-      {/* Grid Pattern Overlay */}
-      <div className="absolute inset-0 opacity-10" style={{
-        backgroundImage: `
-          linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px)
-        `,
-        backgroundSize: '50px 50px'
-      }}></div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden bg-[size:200%_200%] animate-gradient-pan">
+      {/* Background decoration */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
 
       <Sidebar activeSection={activeSection} scrollToSection={scrollToSection} />
 
