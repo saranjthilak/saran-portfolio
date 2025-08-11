@@ -54,11 +54,16 @@ const Index = () => {
   };
 
   return (
-      <div className="min-h-screen bg-background text-foreground relative">
+      <div className="min-h-screen bg-background text-foreground relative overflow-hidden">
+        {/* Futuristic subtle glows */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+          <div className="absolute -top-24 -left-24 w-[28rem] h-[28rem] rounded-full bg-primary/10 blur-3xl animate-float" />
+          <div className="absolute bottom-[-6rem] -right-24 w-[32rem] h-[32rem] rounded-full bg-primary/10 blur-3xl animate-float [animation-delay:2s]" />
+        </div>
 
-      <Sidebar activeSection={activeSection} scrollToSection={scrollToSection} />
+        <Sidebar activeSection={activeSection} scrollToSection={scrollToSection} />
 
-      <div className="ml-72 min-h-screen relative z-0">
+        <div className="ml-72 min-h-screen relative z-0">
         <HeroSection scrollToSection={scrollToSection} handleDownloadResume={handleDownloadResume} />
         <AboutSection />
         <ExperienceSection />

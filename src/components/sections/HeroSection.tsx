@@ -10,7 +10,9 @@ interface HeroSectionProps {
 
 const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps) => {
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center px-4 sm:px-8">
+    <section id="home" className="relative min-h-screen flex items-center justify-center px-4 sm:px-8 overflow-hidden">
+      {/* holographic beam */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-[48%] -translate-y-1/2 h-24 bg-gradient-to-r from-transparent via-primary/10 to-transparent" />
       <div className="max-w-5xl mx-auto w-full">
         <div className="flex flex-col items-center text-center">
           <div className="inline-flex items-center gap-2 bg-secondary px-4 sm:px-6 py-2 rounded-full border border-border mb-6 sm:mb-8">
@@ -18,16 +20,16 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
             <span className="text-secondary-foreground text-xs sm:text-sm font-medium tracking-wide">Available for new opportunities</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight mb-3">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight mb-3 text-transparent bg-clip-text bg-gradient-to-b from-foreground to-primary/70">
             Saran Jaya Thilak
           </h1>
 
-          <p className="text-lg sm:text-xl md:text-2xl mb-6 text-muted-foreground font-light tracking-wide">
+          <p className="text-lg sm:text-xl md:text-2xl mb-6 text-muted-foreground/90 font-light tracking-wide">
             Data Scientist | Machine Learning | Cloud Infrastructure | CI/CD Automation Specialist
           </p>
 
           <div className="my-6 sm:my-8">
-            <div className="w-56 h-56 sm:w-64 sm:h-64 rounded-full overflow-hidden border border-border shadow-xl mx-auto">
+            <div className="w-56 h-56 sm:w-64 sm:h-64 rounded-full overflow-hidden border border-border ring-1 ring-primary/20 shadow-glow mx-auto animate-neon">
               <img 
                 src="/lovable-uploads/5881e7e5-f088-4e07-a79c-59eacb55eeb0.png" 
                 alt="Saran Jaya Thilak" 

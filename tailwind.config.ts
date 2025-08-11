@@ -72,34 +72,37 @@ export default {
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
 			},
-			keyframes: {
-				'accordion-down': {
-					from: {
-						height: '0'
-					},
-					to: {
-						height: 'var(--radix-accordion-content-height)'
-					}
-				},
-				'accordion-up': {
-					from: {
-						height: 'var(--radix-accordion-content-height)'
-					},
-					to: {
-						height: '0'
-					}
-				},
+      keyframes: {
+        'accordion-down': {
+          from: { height: '0' },
+          to: { height: 'var(--radix-accordion-content-height)' }
+        },
+        'accordion-up': {
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: '0' }
+        },
         'gradient-pan': {
           '0%': { backgroundPosition: '0% 50%' },
           '50%': { backgroundPosition: '100% 50%' },
           '100%': { backgroundPosition: '0% 50%' },
-        }
-			},
-			animation: {
-				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out',
+        },
+        float: {
+          '0%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-6px)' },
+          '100%': { transform: 'translateY(0)' },
+        },
+        neon: {
+          '0%, 100%': { boxShadow: '0 0 0 0 hsl(var(--primary) / 0.35), 0 20px 60px -20px hsl(var(--primary) / 0.35)' },
+          '50%': { boxShadow: '0 0 0 8px hsl(var(--primary) / 0.15), 0 30px 80px -20px hsl(var(--primary) / 0.45)' },
+        },
+      },
+      animation: {
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
         'gradient-pan': 'gradient-pan 15s ease infinite',
-			}
+        float: 'float 6s ease-in-out infinite',
+        neon: 'neon 6s ease-in-out infinite',
+      }
 		}
 	},
 	plugins: [require("tailwindcss-animate")],
