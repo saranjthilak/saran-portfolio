@@ -54,16 +54,15 @@ const Index = () => {
   };
 
   return (
-      <div className="min-h-screen bg-background text-foreground relative overflow-hidden">
-        {/* Futuristic subtle glows */}
-        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute -top-24 -left-24 w-[28rem] h-[28rem] rounded-full bg-primary/10 blur-3xl animate-float" />
-          <div className="absolute bottom-[-6rem] -right-24 w-[32rem] h-[32rem] rounded-full bg-primary/10 blur-3xl animate-float [animation-delay:2s]" />
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden bg-[size:200%_200%] animate-gradient-pan">
+      {/* Background decoration */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
 
-        <Sidebar activeSection={activeSection} scrollToSection={scrollToSection} />
+      <Sidebar activeSection={activeSection} scrollToSection={scrollToSection} />
 
-        <div className="ml-72 min-h-screen relative z-0">
+      <div className="ml-72 min-h-screen relative z-0">
         <HeroSection scrollToSection={scrollToSection} handleDownloadResume={handleDownloadResume} />
         <AboutSection />
         <ExperienceSection />
