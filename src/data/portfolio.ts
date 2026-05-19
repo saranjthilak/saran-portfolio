@@ -142,20 +142,20 @@ export const certifications = [
 export const achievements = [
   {
     icon: "⚡",
-    title: "25% Deployment Cycle Improvement",
-    description: "CI/CD automation pipelines optimization",
+    title: "40% Boost in RAG Processing",
+    description: "Implemented advanced RAG techniques that increased LLM processing capabilities.",
     gradient: "from-green-500 to-emerald-600"
   },
   {
-    icon: "💰",
-    title: "20% Cloud Infrastructure Cost Savings",
-    description: "Automated scaling and cost optimization across AWS and GCP cloud platforms.",
+    icon: "🚀",
+    title: "30% Embedding Pipeline Accuracy Gain",
+    description: "Improved embedding pipelines for superior real-time LLM performance.",
     gradient: "from-blue-500 to-cyan-600"
   },
   {
     icon: "🎯",
-    title: "98% SLA Compliance",
-    description: "Team leadership in global network operations",
+    title: "25% Vector DB Efficiency Boost",
+    description: "Optimized vector database retrieval speed for AI systems.",
     gradient: "from-purple-500 to-pink-600"
   },
   {

@@ -25,14 +25,14 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
                   Saran Jaya Thilak
                 </h1>
                 <p className="text-lg sm:text-xl md:text-2xl mb-6 sm:mb-8 text-blue-200 font-light tracking-wide">
-                  Data Scientist | Machine Learning | Cloud Infrastructure | CI/CD Automation Specialist
+                  Generative AI | RAG Architectures | LLM Orchestration | Python Expertise
                 </p>
                 <p className="text-base sm:text-lg mb-8 sm:mb-10 text-white/80 max-w-3xl leading-relaxed mx-auto lg:mx-0">
-                  Data science professional with extensive experience in machine learning, cloud infrastructure, and automation. Skilled in designing scalable cloud-native architectures (AWS, GCP) and building end-to-end CI/CD pipelines to optimize deployments and operations. Passionate about machine learning and developing reliable, scalable AI systems. Strong collaborator focused on delivering data-driven solutions aligned with business goals.
+                  Data Engineering and Generative AI professional with 3 years of experience designing and deploying scalable data pipelines and LLM-powered systems. Strong expertise in Python, distributed data processing, and Retrieval-Augmented Generation (RAG) architectures — including vector databases, embedding pipelines, and model evaluation frameworks. Proven track record of 99.9% reliability in ML model deployment and a 30% boost in LLM classification accuracy through prompt engineering and retrieval tuning.
                 </p>
                 <div className="flex items-center justify-center lg:justify-start space-x-3 mb-8 sm:mb-10">
                   <MapPin className="w-5 h-5 text-blue-400" />
-                  <span className="text-white/80 text-base sm:text-lg">Berlin, Germany</span>
+                  <span className="text-white/80 text-base sm:text-lg">Bangalore, India</span>
                 </div>
                 <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 items-center justify-center lg:justify-start">
                   <Button 
