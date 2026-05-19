@@ -44,7 +44,7 @@ const AboutSection = () => {
             </CardHeader>
             <CardContent>
               <p className="text-white/80 leading-relaxed text-base sm:text-lg">
-                Data Science and AI professional with expertise in data engineering, machine learning, and cloud infrastructure. Holds a Master's in Data Science and completed a boot camp in Data Science & AI. AWS Certified Solutions Architect with hands-on experience in building scalable pipelines (AWS, GCP), automating workflows with CI/CD, and developing LLM-based applications including Retrieval-Augmented Generation (RAG) systems. Proficient in Python, SQL, Airflow, DBT, and MLflow. Published author of two IEEE research papers in applied machine learning.
+                Data Engineering and Generative AI professional with 3 years of experience designing and deploying scalable data pipelines and LLM-powered systems. Strong expertise in Python, distributed data processing, and Retrieval-Augmented Generation (RAG) architectures, including vector databases, embedding pipelines, and model evaluation frameworks. Master's in Data Science and AWS Certified Solutions Architect, with additional Oracle OCI Generative AI and AI Foundations certifications. Proven track record of 99.9% reliability in ML deployment, a 30% boost in LLM classification accuracy, and two IEEE publications in applied machine learning.
               </p>
             </CardContent>
           </Card>
