@@ -2,90 +2,99 @@
 export const experience = [
   {
     company: "Tesla",
-    role: "Production Associate",
+    role: "Data Engineer (Contract)",
     period: "2023–2025",
-    description: "Improved 24/7 production efficiency by optimizing inventory and streamlining workflows with cross-functional teams.",
+    description: "Designed RAG-based LLM chatbots improving customer interaction efficiency by 25%, added guardrails (hallucination detection, response validation), and architected Apache Airflow ETL pipelines with 99.9% reliability and real-time alerting.",
     logo: "🚗"
   },
   {
     company: "Huawei",
-    role: "Cloud Support Engineer",
-    period: "2019–2022",
-    description: "Built scalable AWS infrastructure and CI/CD pipelines to automate deployments and enhance system reliability.",
+    role: "Cloud Support Engineer (Contract)",
+    period: "2019–2021",
+    description: "Accelerated AWS cloud-native infrastructure with Terraform, implemented secure architectures (EC2, S3, Lambda, DynamoDB), and reduced AWS costs by ~20% through monitoring and optimization.",
     logo: "☁️"
   },
   {
     company: "Huawei",
-    role: "O&M Team Lead",
+    role: "Operations Team Leader (Contract)",
     period: "2016–2019",
-    description: "Led 24/7 telecom network operations and ensured SLA compliance across multiple network domains.",
+    description: "Executed 24×7 GOC operations supporting 99.9%+ availability across IP, transmission, mobile core, and RAN domains. Mentored junior engineers and reduced escalations by ~30%.",
     logo: "🔧"
   },
   {
     company: "Nokia",
-    role: "O&M Engineer",
+    role: "Operations & Maintenance Engineer (Contract)",
     period: "2014–2016",
-    description: "Maintained telecom infrastructure with 99.99% uptime through proactive monitoring and fault resolution.",
+    description: "Monitored statewide telecom infrastructure with 99.99% availability. Executed preventive and corrective maintenance on BTS, BSC, and transmission systems.",
     logo: "📡"
   }
 ];
 
 export const projects = [
   {
-    title: "IRIS – AI App to Chat with Your Data",
-    source: "Le Wagon | May 2025 – Jun 2025",
-    description: "Built a RAG-powered AI assistant using LangChain, LLaMA, DeepSeek, and ChatGPT to query and summarize documents from Google Drive, Notion, Sheets, and databases.",
-    skills: ["RAG", "LLMs", "LangChain", "LLaMA", "DeepSeek", "ChatGPT"],
+    title: "AI Product Matching System",
+    source: "FAISS + Triton Inference + CLIP",
+    description: "Developed an image-based product search engine using FAISS for vector similarity and a quantized CLIP model served via NVIDIA Triton Inference Server. Integrated MongoDB and Docker for fast, scalable product matching.",
+    skills: ["FAISS", "CLIP", "Triton", "MongoDB", "Docker"],
+  },
+  {
+    title: "AI Knowledge Assistant",
+    source: "Local RAG + LangChain",
+    description: "Built an AI chat interface to interact with PDFs by integrating Google Drive, Notion, Google Sheets, and SQL databases. Used LangChain for retrieval-augmented generation (RAG) and orchestration of local LLMs.",
+    skills: ["LangChain", "RAG", "LLMs", "Python"],
   },
   {
     title: "Divvy Bikes – End-to-End Data Pipeline",
-    source: "University of Europe for Applied Sciences",
-    description: "Designed a full data pipeline on GCP using Terraform, Airflow, DBT, and BigQuery for data ingestion, transformation, and dashboarding in Google Data Studio.",
-    skills: ["GCP", "Terraform", "Airflow", "DBT", "BigQuery", "Data Studio", "Docker"],
-  },
-  {
-    title: "Data Visualization Projects",
-    source: "University of Europe for Applied Sciences",
-    description: "Created interactive dashboards for Netflix, Airbnb Berlin, and Unicorn companies to deliver business insights using Power BI and Tableau.",
-    skills: ["Power BI", "Tableau", "Data Visualization", "Analytical Thinking"],
-  },
-  {
-    title: "AI Product Matching System",
-    source: "Le Wagon | May 2025 – Jun 2025",
-    description: "Built an AI-powered product matching system for image-based search using vector databases and visual-language models. Developed a full pipeline with FAISS indexing, Triton-served CLIP model, and a Gradio UI. Optimized for modularity, logging, and performance in a Dockerized setup.",
-    skills: ["FAISS", "CLIP", "Triton", "Docker"],
+    source: "GCP | Terraform | Airflow | DBT",
+    description: "Built an end-to-end data pipeline on GCP using Terraform for infrastructure, Airflow for orchestration, and DBT for SQL transformations. Loaded data into BigQuery and visualized insights via Google Data Studio.",
+    skills: ["GCP", "Terraform", "Airflow", "DBT", "BigQuery", "Data Studio"],
   }
 ];
 
 export const skills = {
-  "Languages & ML": [
+  "Generative AI & ML": [
+    "LLMs",
+    "RAG",
+    "LangChain",
+    "Vector DB",
+    "Prompt Engineering",
+    "PyTorch",
+    "TensorFlow",
+    "Keras",
+    "Scikit-learn",
+    "Deep Learning",
+    "NLP",
+    "Time Series",
+    "MLflow",
+    "MLOps"
+  ],
+  "Languages & Frameworks": [
     "Python",
     "SQL",
-    "NLP",
-    "TensorFlow",
-    "PyTorch",
-    "Scikit-learn",
-    "MLflow",
-    "RAG"
+    "FastAPI",
+    "Streamlit",
+    "Pandas",
+    "NumPy",
+    "REST",
+    "API Design",
+    "Microservices",
+    "Automated Testing"
   ],
-  "Cloud & DevOps": [
+  "Cloud, Data & DevOps": [
     "AWS",
     "GCP",
-    "Docker",
-    "Terraform",
-    "Kubernetes",
-    "Linux",
-    "Git",
-    "CI/CD"
-  ],
-  "BI & Analytics": [
-    "Tableau",
-    "Power BI",
-    "DBT",
     "BigQuery",
+    "DBT",
     "Airflow",
-    "Pandas",
-    "NumPy"
+    "Docker",
+    "Kubernetes",
+    "Terraform",
+    "IaC",
+    "CI/CD",
+    "GitHub",
+    "IAM",
+    "ETL",
+    "Tableau"
   ]
 };
 
@@ -117,6 +126,16 @@ export const certifications = [
     title: "SQL for Data Science",
     issuer: "UC Davis",
     logo: "🎓"
+  },
+  {
+    title: "OCI 2025 Certified Generative AI Professional",
+    issuer: "Oracle",
+    logo: "🤖"
+  },
+  {
+    title: "OCI 2025 Certified AI Foundations Associate",
+    issuer: "Oracle",
+    logo: "🧠"
   }
 ];
 
