@@ -32,7 +32,7 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
                 </p>
                 <div className="flex items-center justify-center lg:justify-start space-x-3 mb-8 sm:mb-10">
                   <MapPin className="w-5 h-5 text-blue-400" />
-                  <span className="text-white/80 text-base sm:text-lg">Bangalore, India</span>
+                  <span className="text-white/80 text-base sm:text-lg">Berlin, Germany</span>
                 </div>
                 <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 items-center justify-center lg:justify-start">
                   <Button 
