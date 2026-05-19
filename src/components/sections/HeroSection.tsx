@@ -58,6 +58,10 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
                     <img 
                       src="/lovable-uploads/5881e7e5-f088-4e07-a79c-59eacb55eeb0.png" 
                       alt="Saran Jaya Thilak" 
+                      width="320"
+                      height="320"
+                      fetchPriority="high"
+                      decoding="async"
                       className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
                     />
                   </div>
