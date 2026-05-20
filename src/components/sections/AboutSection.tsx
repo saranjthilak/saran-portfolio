@@ -1,20 +1,20 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { achievements } from "@/data/portfolio";
+import HudFrame from "@/components/ui/hud-frame";
+import SectionHeading from "@/components/ui/section-heading";
 
 const AboutSection = () => {
   return (
     <section id="about" className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 md:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12 sm:mb-16">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-4 sm:mb-6">About Me</h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full"></div>
-        </div>
+        <SectionHeading title="About Me" tag="Profile" />
         <div className="grid gap-8 md:gap-10 md:grid-cols-2">
-          <Card className="bg-white/5 backdrop-blur-xl border border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 group hover:border-white/20">
+          <HudFrame scan>
+          <Card className="bg-black/30 backdrop-blur-xl border border-cyan-400/30 hover:bg-white/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-cyan-500/30 group hover:border-cyan-400/60">
             <CardHeader>
               <CardTitle className="text-white text-xl sm:text-2xl flex items-center space-x-3">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg"></div>
+                <div className="w-8 h-8 bg-gradient-to-r from-cyan-500 to-fuchsia-500 rounded-lg shadow-[0_0_15px_rgba(34,211,238,0.6)]"></div>
                 <span>Key Achievements</span>
               </CardTitle>
             </CardHeader>
@@ -34,11 +34,13 @@ const AboutSection = () => {
               </ul>
             </CardContent>
           </Card>
+          </HudFrame>
 
-          <Card className="bg-white/5 backdrop-blur-xl border border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-pink-500/20 group hover:border-white/20">
+          <HudFrame scan variant="fuchsia">
+          <Card className="bg-black/30 backdrop-blur-xl border border-fuchsia-400/30 hover:bg-white/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-fuchsia-500/30 group hover:border-fuchsia-400/60">
             <CardHeader>
               <CardTitle className="text-white text-xl sm:text-2xl flex items-center space-x-3">
-                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg"></div>
+                <div className="w-8 h-8 bg-gradient-to-r from-fuchsia-500 to-indigo-500 rounded-lg shadow-[0_0_15px_rgba(217,70,239,0.6)]"></div>
                 <span>Professional Background</span>
               </CardTitle>
             </CardHeader>
@@ -48,6 +50,7 @@ const AboutSection = () => {
               </p>
             </CardContent>
           </Card>
+          </HudFrame>
         </div>
       </div>
     </section>
