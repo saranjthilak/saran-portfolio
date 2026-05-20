@@ -4,38 +4,39 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ExternalLink } from "lucide-react";
 import { publications } from "@/data/portfolio";
+import HudFrame from "@/components/ui/hud-frame";
+import SectionHeading from "@/components/ui/section-heading";
 
 const PublicationsSection = () => {
   return (
     <section id="publications" className="py-24 px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-5xl font-extrabold tracking-tight text-white mb-6">Publications</h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full"></div>
-        </div>
+        <SectionHeading title="Publications" tag="Research" />
         <div className="space-y-8">
           {publications.map((pub, index) => (
-            <Card key={index} className="bg-white/5 backdrop-blur-xl border border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 group hover:border-white/20">
+            <HudFrame key={index} scan variant="mixed">
+            <Card className="bg-black/30 backdrop-blur-xl border border-cyan-400/20 hover:bg-white/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-cyan-500/30 group hover:border-cyan-400/50">
               <CardContent className="p-8">
                 <div className="flex items-start justify-between">
                   <div className="flex-1 pr-8">
-                    <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-blue-200 transition-colors">{pub.title}</h3>
+                    <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-cyan-200 transition-colors tracking-wide">{pub.title}</h3>
                     <p className="text-white/70 mb-6 text-lg leading-relaxed">{pub.description}</p>
                     <div className="flex items-center space-x-6">
-                      <Badge className="bg-gradient-to-r from-blue-500/20 to-purple-600/20 border-blue-500/30 text-blue-300 px-4 py-2 tracking-wide">
+                      <Badge className="bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 border border-cyan-400/40 text-cyan-200 px-4 py-2 tracking-wider uppercase text-xs">
                         {pub.journal}
                       </Badge>
-                      <span className="text-white/60 text-lg">{pub.date}</span>
+                      <span className="text-cyan-300/70 text-sm uppercase tracking-[0.2em]">{pub.date}</span>
                     </div>
                   </div>
                   <a href={pub.link} target="_blank" rel="noopener noreferrer">
-                    <Button variant="ghost" size="icon" className="text-blue-300 hover:text-white hover:bg-blue-500/20 rounded-xl group-hover:scale-110 transition-all duration-300 h-12 w-12">
+                    <Button variant="ghost" size="icon" className="text-cyan-300 hover:text-white hover:bg-cyan-500/20 hover:shadow-[0_0_20px_rgba(34,211,238,0.5)] rounded-xl group-hover:scale-110 transition-all duration-300 h-12 w-12 border border-cyan-400/30">
                       <ExternalLink className="w-6 h-6" />
                     </Button>
                   </a>
                 </div>
               </CardContent>
             </Card>
+            </HudFrame>
           ))}
         </div>
       </div>
