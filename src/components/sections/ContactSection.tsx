@@ -3,57 +3,66 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Separator } from "@/components/ui/separator";
 import { Github, Linkedin, Mail, MapPin, Phone } from "lucide-react";
 import ContactForm from "@/components/ContactForm";
+import HudFrame from "@/components/ui/hud-frame";
+import SectionHeading from "@/components/ui/section-heading";
 
 const ContactSection = () => {
   return (
     <section id="contact" className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 md:px-8">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12 sm:mb-16">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-4 sm:mb-6">Let's Connect</h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full"></div>
-        </div>
+        <SectionHeading title="Let's Connect" tag="Channel Open" />
         <div className="grid gap-8 md:gap-10 md:grid-cols-2">
-          <Card className="bg-white/5 backdrop-blur-xl border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-[1.02]">
+          <HudFrame scan>
+          <Card className="bg-black/30 backdrop-blur-xl border border-cyan-400/30 hover:bg-white/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-cyan-500/30 hover:border-cyan-400/60">
             <CardHeader>
-              <CardTitle className="text-white text-xl sm:text-2xl">Get in Touch</CardTitle>
+              <CardTitle className="text-white text-xl sm:text-2xl flex items-center space-x-3">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-400"></span>
+                </span>
+                <span>Get in Touch</span>
+              </CardTitle>
               <CardDescription className="text-white/70 text-base sm:text-lg">
                 Ready to collaborate or discuss opportunities? Reach out!
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4 sm:space-y-6">
-              <a href="tel:+491744614592" className="flex items-center space-x-4 p-3 sm:p-4 bg-black/20 rounded-xl backdrop-blur-sm hover:bg-white/10 transition-all duration-300 group">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <a href="tel:+491744614592" className="flex items-center space-x-4 p-3 sm:p-4 bg-black/40 rounded-xl backdrop-blur-sm border border-cyan-400/20 hover:border-cyan-400/60 hover:bg-cyan-500/10 hover:shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all duration-300 group">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(34,211,238,0.5)] group-hover:scale-110 transition-transform duration-300">
                   <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
                 <span className="text-white text-base sm:text-lg tracking-wider">+49 174 461 4592</span>
               </a>
-              <a href="mailto:saranjthilak@gmail.com" className="flex items-center space-x-4 p-3 sm:p-4 bg-black/20 rounded-xl backdrop-blur-sm hover:bg-white/10 transition-all duration-300 group">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-red-500 to-pink-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <a href="mailto:saranjthilak@gmail.com" className="flex items-center space-x-4 p-3 sm:p-4 bg-black/40 rounded-xl backdrop-blur-sm border border-fuchsia-400/20 hover:border-fuchsia-400/60 hover:bg-fuchsia-500/10 hover:shadow-[0_0_15px_rgba(217,70,239,0.4)] transition-all duration-300 group">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-fuchsia-500 to-pink-500 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(217,70,239,0.5)] group-hover:scale-110 transition-transform duration-300">
                   <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
                 <span className="text-white text-base sm:text-lg tracking-wider break-all">saranjthilak@gmail.com</span>
               </a>
-              <div className="flex items-center space-x-4 p-3 sm:p-4 bg-black/20 rounded-xl backdrop-blur-sm">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center">
+              <div className="flex items-center space-x-4 p-3 sm:p-4 bg-black/40 rounded-xl backdrop-blur-sm border border-indigo-400/20">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(99,102,241,0.5)]">
                   <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
                 <span className="text-white text-base sm:text-lg tracking-wider">Berlin, Germany</span>
               </div>
-              <Separator className="bg-white/20" />
+              <Separator className="bg-cyan-400/20" />
               <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                <a href="https://www.linkedin.com/in/saranjayathilak" target="_blank" rel="noopener noreferrer" className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl py-3 transition-all duration-300 hover:scale-105 flex items-center justify-center text-sm sm:text-base font-semibold">
+                <a href="https://www.linkedin.com/in/saranjayathilak" target="_blank" rel="noopener noreferrer" className="flex-1 bg-gradient-to-r from-cyan-500 to-indigo-500 hover:from-cyan-400 hover:to-indigo-400 text-white rounded-xl py-3 transition-all duration-300 hover:scale-105 flex items-center justify-center text-sm sm:text-base font-semibold uppercase tracking-wider shadow-[0_0_15px_rgba(34,211,238,0.4)]">
                   <Linkedin className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                   LinkedIn
                 </a>
-                <a href="https://github.com/saranjthilak" target="_blank" rel="noopener noreferrer" className="flex-1 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-800 hover:to-gray-900 text-white rounded-xl py-3 transition-all duration-300 hover:scale-105 flex items-center justify-center text-sm sm:text-base font-semibold">
+                <a href="https://github.com/saranjthilak" target="_blank" rel="noopener noreferrer" className="flex-1 bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-400 hover:to-purple-500 text-white rounded-xl py-3 transition-all duration-300 hover:scale-105 flex items-center justify-center text-sm sm:text-base font-semibold uppercase tracking-wider shadow-[0_0_15px_rgba(217,70,239,0.4)]">
                   <Github className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                   GitHub
                 </a>
               </div>
             </CardContent>
           </Card>
+          </HudFrame>
 
-          <ContactForm />
+          <HudFrame scan variant="fuchsia">
+            <ContactForm />
+          </HudFrame>
 
         </div>
       </div>
