@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 
 interface SectionHeadingProps {
   title: string;
@@ -8,9 +8,9 @@ interface SectionHeadingProps {
 
 const SectionHeading = ({ title, tag = "SECTION", subtitle }: SectionHeadingProps) => {
   const reduce = useReducedMotion();
-  const item = {
+  const item: Variants = {
     hidden: { opacity: 0, y: 24, filter: "blur(8px)" },
-    show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+    show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.6, ease: "easeOut" } },
   };
   return (
     <motion.div
