@@ -1,4 +1,5 @@
 import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { experience } from "@/data/portfolio";
@@ -46,6 +47,35 @@ const highlightVariants: Variants = {
 
 const ExperienceSection = () => {
   const shouldReduce = useReducedMotion();
+  const itemRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const visibility = new Map<number, number>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const idx = Number((entry.target as HTMLElement).dataset.index);
+          visibility.set(idx, entry.intersectionRatio);
+        });
+        let bestIdx = 0;
+        let bestRatio = -1;
+        visibility.forEach((ratio, idx) => {
+          if (ratio > bestRatio) {
+            bestRatio = ratio;
+            bestIdx = idx;
+          }
+        });
+        if (bestRatio > 0) setActiveIndex(bestIdx);
+      },
+      {
+        rootMargin: "-35% 0px -35% 0px",
+        threshold: [0, 0.25, 0.5, 0.75, 1],
+      }
+    );
+    itemRefs.current.forEach((el) => el && observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section id="experience" className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 md:px-8">
@@ -63,13 +93,45 @@ const ExperienceSection = () => {
               key={index}
               custom={index}
               variants={shouldReduce ? undefined : itemVariants}
+              ref={(el) => (itemRefs.current[index] = el)}
+              data-index={index}
+              animate={
+                shouldReduce
+                  ? undefined
+                  : {
+                      scale: activeIndex === index ? 1.02 : 1,
+                    }
+              }
+              transition={{ type: "spring", stiffness: 200, damping: 25 }}
             >
               <HudFrame scan variant={index % 2 === 0 ? "cyan" : "fuchsia"}>
-                <Card className="relative bg-black/30 backdrop-blur-xl border border-cyan-400/20 hover:bg-white/10 transition-all duration-500 hover:scale-[1.02] hover:shadow-xl hover:shadow-cyan-500/30 group hover:border-cyan-400/50 overflow-hidden">
+                <Card
+                  className={`relative backdrop-blur-xl border transition-all duration-500 group overflow-hidden ${
+                    activeIndex === index
+                      ? "bg-white/10 border-cyan-400/60 shadow-2xl shadow-cyan-500/40"
+                      : "bg-black/30 border-cyan-400/20 hover:bg-white/10 hover:shadow-xl hover:shadow-cyan-500/30 hover:border-cyan-400/50"
+                  }`}
+                >
+                  {/* Active glow overlay */}
+                  <motion.div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-indigo-500/5 to-fuchsia-500/10"
+                    initial={false}
+                    animate={{ opacity: activeIndex === index ? 1 : 0 }}
+                    transition={{ duration: 0.5 }}
+                  />
                   {/* Highlight bar on left edge */}
                   <motion.div
-                    className={`absolute left-0 top-0 bottom-0 w-1 ${index % 2 === 0 ? "bg-gradient-to-b from-cyan-400 via-indigo-400 to-fuchsia-400" : "bg-gradient-to-b from-fuchsia-400 via-indigo-400 to-cyan-400"}`}
+                    className={`absolute left-0 top-0 bottom-0 ${index % 2 === 0 ? "bg-gradient-to-b from-cyan-400 via-indigo-400 to-fuchsia-400" : "bg-gradient-to-b from-fuchsia-400 via-indigo-400 to-cyan-400"}`}
                     variants={shouldReduce ? undefined : highlightVariants}
+                    animate={{
+                      width: activeIndex === index ? 6 : 4,
+                      boxShadow:
+                        activeIndex === index
+                          ? "0 0 24px hsl(190 100% 60% / 0.9)"
+                          : "0 0 0px hsl(190 100% 60% / 0)",
+                    }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
                   />
                   <CardContent className="p-6 sm:p-8 pl-8 sm:pl-10">
                     <div className="flex flex-col sm:flex-row items-start justify-between gap-6">
