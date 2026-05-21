@@ -153,7 +153,22 @@
   0% { transform: translateY(-100%); }
   100% { transform: translateY(100%); }
 }
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes gradient-pan {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
 .animate-neural-pulse { animation: neural-pulse 3s ease-in-out infinite; }
 .animate-cyber-float { animation: cyber-float 6s ease-in-out infinite; }
 .animate-orbit { animation: orbit 20s linear infinite; }
 .animate-scan { animation: scan 4s linear infinite; }
+.animate-shimmer { animation: shimmer 3s linear infinite; }
+.animate-gradient-pan { animation: gradient-pan 8s ease-in-out infinite; }
+.animate-float-slow { animation: float-slow 5s ease-in-out infinite; }
