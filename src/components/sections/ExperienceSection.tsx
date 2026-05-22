@@ -89,14 +89,23 @@ const ExperienceSection = () => {
       <div className="max-w-7xl mx-auto">
         <SectionHeading title="Experience" tag="Timeline" />
         <div ref={timelineRef} className="relative md:pl-10">
+          {/* Live region for active item announcements */}
+          <div aria-live="polite" aria-atomic="true" className="sr-only">
+            {`Now viewing item ${activeIndex + 1} of ${experience.length}: ${experience[activeIndex]?.role} at ${experience[activeIndex]?.company}`}
+          </div>
           {/* Scroll progress rail */}
           <div
-            aria-hidden
+            role="progressbar"
+            aria-label="Timeline scroll progress"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round((activeIndex / (experience.length - 1 || 1)) * 100)}
             className="pointer-events-none absolute left-3 top-0 bottom-0 hidden md:block w-[2px] rounded-full bg-white/10 overflow-hidden"
           >
             <motion.div
               style={shouldReduce ? { height: "100%" } : { height: progressHeight }}
               className="w-full bg-gradient-to-b from-cyan-400 via-indigo-400 to-fuchsia-400 shadow-[0_0_18px_rgba(34,211,238,0.7)]"
+              aria-hidden
             />
           </div>
           {/* Node markers */}
