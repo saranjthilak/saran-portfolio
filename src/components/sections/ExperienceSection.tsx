@@ -85,7 +85,7 @@ const ExperienceSection = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} id="experience" className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 md:px-8">
+    <section ref={sectionRef} id="experience" role="region" aria-label="Work experience timeline" aria-roledescription="timeline" className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 md:px-8">
       <div className="max-w-7xl mx-auto">
         <SectionHeading title="Experience" tag="Timeline" />
         <div ref={timelineRef} className="relative md:pl-10">
