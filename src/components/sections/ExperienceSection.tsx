@@ -140,6 +140,9 @@ const ExperienceSection = () => {
             {experience.map((job, index) => (
             <motion.div
               key={index}
+              role="listitem"
+              aria-label={`${job.role} at ${job.company}, ${job.period}`}
+              aria-current={activeIndex === index ? "step" : undefined}
               custom={index}
               variants={shouldReduce ? undefined : itemVariants}
               ref={(el) => (itemRefs.current[index] = el)}
