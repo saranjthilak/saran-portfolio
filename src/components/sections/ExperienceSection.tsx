@@ -6,6 +6,12 @@ import { experience } from "@/data/portfolio";
 import HudFrame from "@/components/ui/hud-frame";
 import SectionHeading from "@/components/ui/section-heading";
 
+/*
+ * Accessibility helpers
+ */
+const srOnly = "sr-only" as const;
+const visuallyHidden = "absolute w-px h-px p-0 -m-px overflow-hidden clip-rect-0 border-、";
+
 const containerVariants: Variants = {
   hidden: {},
   visible: {
