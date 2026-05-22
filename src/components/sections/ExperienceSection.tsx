@@ -129,6 +129,8 @@ const ExperienceSection = () => {
             })}
           </div>
           <motion.div
+            role="list"
+            aria-label="Experience entries"
             className="space-y-6 sm:space-y-8"
             variants={shouldReduce ? undefined : containerVariants}
             initial="hidden"
