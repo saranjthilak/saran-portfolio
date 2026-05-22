@@ -1,4 +1,4 @@
-import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform, type Variants } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -49,6 +49,13 @@ const ExperienceSection = () => {
   const shouldReduce = useReducedMotion();
   const itemRefs = useRef<Array<HTMLDivElement | null>>([]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const timelineRef = useRef<HTMLDivElement | null>(null);
+  const { scrollYProgress } = useScroll({
+    target: timelineRef,
+    offset: ["start center", "end center"],
+  });
+  const progressHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   useEffect(() => {
     const visibility = new Map<number, number>();
@@ -78,17 +85,48 @@ const ExperienceSection = () => {
   }, []);
 
   return (
-    <section id="experience" className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 md:px-8">
+    <section ref={sectionRef} id="experience" className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 md:px-8">
       <div className="max-w-7xl mx-auto">
         <SectionHeading title="Experience" tag="Timeline" />
-        <motion.div
-          className="space-y-6 sm:space-y-8"
-          variants={shouldReduce ? undefined : containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.15 }}
-        >
-          {experience.map((job, index) => (
+        <div ref={timelineRef} className="relative md:pl-10">
+          {/* Scroll progress rail */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-3 top-0 bottom-0 hidden md:block w-[2px] rounded-full bg-white/10 overflow-hidden"
+          >
+            <motion.div
+              style={shouldReduce ? { height: "100%" } : { height: progressHeight }}
+              className="w-full bg-gradient-to-b from-cyan-400 via-indigo-400 to-fuchsia-400 shadow-[0_0_18px_rgba(34,211,238,0.7)]"
+            />
+          </div>
+          {/* Node markers */}
+          <div aria-hidden className="pointer-events-none absolute left-0 top-0 bottom-0 hidden md:block w-7">
+            {experience.map((_, i) => {
+              const top = experience.length > 1 ? (i / (experience.length - 1)) * 100 : 50;
+              const isActive = activeIndex === i;
+              return (
+                <motion.div
+                  key={i}
+                  className={`absolute -translate-y-1/2 left-1 w-4 h-4 rounded-full border ${
+                    isActive
+                      ? "bg-cyan-400 border-cyan-200 shadow-[0_0_20px_rgba(34,211,238,0.9)]"
+                      : "bg-black border-cyan-400/40"
+                  }`}
+                  style={{ top: `${top}%` }}
+                  animate={{ scale: isActive ? 1.3 : 1 }}
+                  transition={{ type: "spring", stiffness: 220, damping: 18 }}
+                />
+              );
+            })}
+          </div>
+          <motion.div
+            className="space-y-6 sm:space-y-8"
+            variants={shouldReduce ? undefined : containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+          >
+            {experience.map((job, index) => (
             <motion.div
               key={index}
               custom={index}
@@ -153,8 +191,9 @@ const ExperienceSection = () => {
                 </Card>
               </HudFrame>
             </motion.div>
-          ))}
-        </motion.div>
+            ))}
+          </motion.div>
+        </div>
       </div>
     </section>
   );
