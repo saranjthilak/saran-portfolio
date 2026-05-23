@@ -172,3 +172,11 @@
 .animate-shimmer { animation: shimmer 3s linear infinite; }
 .animate-gradient-pan { animation: gradient-pan 8s ease-in-out infinite; }
 .animate-float-slow { animation: float-slow 5s ease-in-out infinite; }
+
+/* Custom cursor */
+@media (hover: hover) and (pointer: fine) {
+  html.cursor-none-root,
+  html.cursor-none-root * {
+    cursor: none !important;
+  }
+}
