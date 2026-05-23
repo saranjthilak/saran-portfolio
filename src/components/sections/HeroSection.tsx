@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Download, MapPin, Sparkles } from "lucide-react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
+import Magnetic from "@/components/ui/magnetic";
 
 interface HeroSectionProps {
   scrollToSection: (id: string) => void;
@@ -64,6 +65,7 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
                   <span className="text-white/80 text-base sm:text-lg">Berlin, Germany</span>
                 </motion.div>
                 <motion.div variants={item} className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 items-center justify-center lg:justify-start">
+                  <Magnetic className="w-full sm:w-auto">
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} className="w-full sm:w-auto">
                     <Button
                       onClick={() => scrollToSection('projects')}
@@ -75,6 +77,8 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
                       </motion.span>
                     </Button>
                   </motion.div>
+                  </Magnetic>
+                  <Magnetic className="w-full sm:w-auto">
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} className="w-full sm:w-auto">
                     <Button
                       onClick={handleDownloadResume}
@@ -85,6 +89,7 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
                       Download Resume
                     </Button>
                   </motion.div>
+                  </Magnetic>
                 </motion.div>
               </motion.div>
               <motion.div
