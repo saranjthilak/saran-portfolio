@@ -1,58 +1,50 @@
-import { cn } from "@/lib/utils";
-import { motion, useReducedMotion } from "framer-motion";
+import { ReactNode } from "react";
+
+type Variant = "cyan" | "fuchsia" | "mixed";
 
 interface HudFrameProps {
-  children: React.ReactNode;
-  className?: string;
+  children: ReactNode;
   scan?: boolean;
-  variant?: "cyan" | "fuchsia" | "mixed";
-  delay?: number;
+  variant?: Variant;
+  className?: string;
 }
 
-const variants = {
-  cyan: { tl: "border-cyan-400/70", tr: "border-cyan-400/70", bl: "border-cyan-400/70", br: "border-cyan-400/70" },
-  fuchsia: { tl: "border-fuchsia-400/70", tr: "border-fuchsia-400/70", bl: "border-fuchsia-400/70", br: "border-fuchsia-400/70" },
-  mixed: { tl: "border-cyan-400/70", tr: "border-fuchsia-400/70", bl: "border-fuchsia-400/70", br: "border-cyan-400/70" },
+const colorMap: Record<Variant, { a: string; b: string; scan: string; glow: string }> = {
+  cyan: {
+    a: "border-cyan-400/60",
+    b: "border-cyan-400/60",
+    scan: "via-cyan-400/70",
+    glow: "shadow-[0_0_12px_rgba(34,211,238,0.6)]",
+  },
+  fuchsia: {
+    a: "border-fuchsia-400/60",
+    b: "border-fuchsia-400/60",
+    scan: "via-fuchsia-400/70",
+    glow: "shadow-[0_0_12px_rgba(217,70,239,0.6)]",
+  },
+  mixed: {
+    a: "border-cyan-400/60",
+    b: "border-fuchsia-400/60",
+    scan: "via-cyan-400/70",
+    glow: "shadow-[0_0_12px_rgba(34,211,238,0.6)]",
+  },
 };
 
-const HudFrame = ({ children, className, scan = false, variant = "mixed", delay = 0 }: HudFrameProps) => {
-  const v = variants[variant];
-  const reduce = useReducedMotion();
+const HudFrame = ({ children, scan = false, variant = "mixed", className = "" }: HudFrameProps) => {
+  const c = colorMap[variant];
   return (
-    <motion.div
-      initial={reduce ? false : { opacity: 0, y: 40, scale: 0.96, filter: "blur(8px)" }}
-      whileInView={reduce ? undefined : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.7, delay, ease: "easeOut" }}
-      whileHover={reduce ? undefined : { y: -6, transition: { duration: 0.3 } }}
-      className={cn("relative", scan && "scanline overflow-hidden", className)}
-    >
-      <motion.div
-        aria-hidden
-        className={cn("pointer-events-none absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 z-10", v.tl)}
-        animate={reduce ? undefined : { opacity: [0.4, 1, 0.4] }}
-        transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        aria-hidden
-        className={cn("pointer-events-none absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 z-10", v.tr)}
-        animate={reduce ? undefined : { opacity: [0.4, 1, 0.4] }}
-        transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-      />
-      <motion.div
-        aria-hidden
-        className={cn("pointer-events-none absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 z-10", v.bl)}
-        animate={reduce ? undefined : { opacity: [0.4, 1, 0.4] }}
-        transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}
-      />
-      <motion.div
-        aria-hidden
-        className={cn("pointer-events-none absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 z-10", v.br)}
-        animate={reduce ? undefined : { opacity: [0.4, 1, 0.4] }}
-        transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut", delay: 1.8 }}
-      />
+    <div className={`relative ${className}`}>
       {children}
-    </motion.div>
+      <div className="pointer-events-none absolute inset-0 z-[1] overflow-hidden rounded-[inherit]" aria-hidden="true">
+        <div className={`absolute top-2 left-2 w-8 h-8 border-t-2 border-l-2 ${c.a}`} />
+        <div className={`absolute top-2 right-2 w-8 h-8 border-t-2 border-r-2 ${c.b}`} />
+        <div className={`absolute bottom-2 left-2 w-8 h-8 border-b-2 border-l-2 ${c.b}`} />
+        <div className={`absolute bottom-2 right-2 w-8 h-8 border-b-2 border-r-2 ${c.a}`} />
+        {scan && (
+          <div className={`absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent ${c.scan} to-transparent ${c.glow} animate-scan`} />
+        )}
+      </div>
+    </div>
   );
 };
 
