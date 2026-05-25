@@ -22,7 +22,7 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
     show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.7, ease: "easeOut" } },
   };
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center p-4 sm:p-8">
+    <section id="home" className="relative min-h-screen flex items-center justify-center p-4 sm:p-8 overflow-hidden">
       <NeuralNetBackdrop />
       <div className="max-w-6xl mx-auto w-full relative z-10">
         <motion.div
