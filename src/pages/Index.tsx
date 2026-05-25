@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Sidebar from "@/components/layout/Sidebar";
 import Footer from "@/components/layout/Footer";
 import CustomCursor from "@/components/ui/custom-cursor";
+import NeuralNetBackdrop from "@/components/ui/neural-net-backdrop";
 import HeroSection from "@/components/sections/HeroSection";
 import AboutSection from "@/components/sections/AboutSection";
 import ExperienceSection from "@/components/sections/ExperienceSection";
@@ -58,6 +59,9 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-[#05060f] via-[#0a0a23] to-[#05060f] relative overflow-hidden bg-[size:200%_200%] animate-gradient-pan">
       <CustomCursor />
       {/* Futuristic background */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <NeuralNetBackdrop />
+      </div>
       <div className="absolute inset-0 cyber-grid opacity-60 pointer-events-none"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(99,102,241,0.25),transparent_50%)]"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(168,85,247,0.25),transparent_50%)]"></div>
