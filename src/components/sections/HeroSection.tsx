@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Download, MapPin, Sparkles } from "lucide-react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import Magnetic from "@/components/ui/magnetic";
+import NeuralNetBackdrop from "@/components/ui/neural-net-backdrop";
 
 interface HeroSectionProps {
   scrollToSection: (id: string) => void;
@@ -21,8 +22,9 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
     show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.7, ease: "easeOut" } },
   };
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center p-4 sm:p-8">
-      <div className="max-w-6xl mx-auto w-full">
+    <section id="home" className="relative min-h-screen flex items-center justify-center p-4 sm:p-8 overflow-hidden">
+      <NeuralNetBackdrop />
+      <div className="max-w-6xl mx-auto w-full relative z-10">
         <motion.div
           initial={reduce ? false : { opacity: 0, scale: 0.96, y: 40 }}
           animate={reduce ? undefined : { opacity: 1, scale: 1, y: 0 }}
