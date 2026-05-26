@@ -4,6 +4,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Download, MapPin, Sparkles } from "lucide-react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import Magnetic from "@/components/ui/magnetic";
+import DecryptText from "@/components/ui/decrypt-text";
+import CountUp from "@/components/ui/count-up";
 
 interface HeroSectionProps {
   scrollToSection: (id: string) => void;
@@ -54,8 +56,12 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
                 <motion.h1 variants={item} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight mb-4 sm:mb-6 bg-gradient-to-r from-cyan-200 via-white to-fuchsia-300 bg-clip-text text-transparent neon-text bg-[length:200%_auto] animate-gradient-pan">
                   Saran Jaya Thilak
                 </motion.h1>
-                <motion.p variants={item} className="text-lg sm:text-xl md:text-2xl mb-6 sm:mb-8 text-cyan-200/90 font-light tracking-[0.15em]">
-                  Generative AI | RAG Architectures | LLM Orchestration | Python Expertise
+                <motion.p variants={item} className="text-lg sm:text-xl md:text-2xl mb-6 sm:mb-8 text-cyan-200/90 font-light tracking-[0.15em] font-mono">
+                  <DecryptText
+                    text="Generative AI | RAG Architectures | LLM Orchestration | Python Expertise"
+                    duration={2000}
+                    delay={400}
+                  />
                 </motion.p>
                 <motion.p variants={item} className="text-base sm:text-lg mb-8 sm:mb-10 text-white/80 max-w-3xl leading-relaxed mx-auto lg:mx-0">
                   Data Engineering and Generative AI professional with 3 years of experience designing and deploying scalable data pipelines and LLM-powered systems. Strong expertise in Python, distributed data processing, and Retrieval-Augmented Generation (RAG) architectures — including vector databases, embedding pipelines, and model evaluation frameworks. Proven track record of 99.9% reliability in ML model deployment and a 30% boost in LLM classification accuracy through prompt engineering and retrieval tuning.
@@ -63,6 +69,29 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
                 <motion.div variants={item} className="flex items-center justify-center lg:justify-start space-x-3 mb-8 sm:mb-10">
                   <MapPin className="w-5 h-5 text-blue-400" />
                   <span className="text-white/80 text-base sm:text-lg">Berlin, Germany</span>
+                </motion.div>
+                <motion.div
+                  variants={item}
+                  className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-8 sm:mb-10"
+                >
+                  {[
+                    { value: 99.9, suffix: "%", decimals: 1, label: "ML Reliability" },
+                    { value: 40, suffix: "%", decimals: 0, label: "RAG Speed Boost" },
+                    { value: 30, suffix: "%", decimals: 0, label: "Accuracy Gain" },
+                    { value: 3, suffix: "+", decimals: 0, label: "Years Experience" },
+                  ].map((s) => (
+                    <div
+                      key={s.label}
+                      className="relative bg-black/30 backdrop-blur border border-cyan-400/20 rounded-xl px-3 py-3 text-center hover:border-cyan-400/50 transition-colors"
+                    >
+                      <div className="text-2xl sm:text-3xl font-black bg-gradient-to-r from-cyan-300 to-fuchsia-300 bg-clip-text text-transparent">
+                        <CountUp end={s.value} suffix={s.suffix} decimals={s.decimals} />
+                      </div>
+                      <div className="mt-1 text-[10px] sm:text-xs uppercase tracking-[0.15em] text-white/60">
+                        {s.label}
+                      </div>
+                    </div>
+                  ))}
                 </motion.div>
                 <motion.div variants={item} className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 items-center justify-center lg:justify-start">
                   <Magnetic className="w-full sm:w-auto">
