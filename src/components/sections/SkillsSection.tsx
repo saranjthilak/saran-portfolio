@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { skills } from "@/data/portfolio";
 import HudFrame from "@/components/ui/hud-frame";
 import SectionHeading from "@/components/ui/section-heading";
+import Reveal from "@/components/ui/reveal";
 
 const SkillsSection = () => {
   return (
@@ -11,7 +12,8 @@ const SkillsSection = () => {
         <SectionHeading title="My Skills" tag="Stack" />
         <div className="grid md:grid-cols-3 gap-10">
           {Object.entries(skills).map(([category, skillList], index) => (
-            <HudFrame key={category} scan variant={index === 0 ? "cyan" : index === 1 ? "mixed" : "fuchsia"}>
+            <Reveal key={category} delay={index * 0.12} direction={index % 2 === 0 ? "up" : "scale"}>
+            <HudFrame scan variant={index === 0 ? "cyan" : index === 1 ? "mixed" : "fuchsia"}>
             <Card className="bg-black/30 backdrop-blur-xl border border-cyan-400/20 hover:bg-white/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-cyan-500/30 group hover:border-cyan-400/50">
               <CardHeader>
                 <CardTitle className="text-white text-2xl text-center flex items-center justify-center space-x-3">
@@ -37,6 +39,7 @@ const SkillsSection = () => {
               </CardContent>
             </Card>
             </HudFrame>
+            </Reveal>
           ))}
         </div>
       </div>
