@@ -6,6 +6,7 @@ import { ExternalLink } from "lucide-react";
 import { publications } from "@/data/portfolio";
 import HudFrame from "@/components/ui/hud-frame";
 import SectionHeading from "@/components/ui/section-heading";
+import Reveal from "@/components/ui/reveal";
 
 const PublicationsSection = () => {
   return (
@@ -14,7 +15,8 @@ const PublicationsSection = () => {
         <SectionHeading title="Publications" tag="Research" />
         <div className="space-y-8">
           {publications.map((pub, index) => (
-            <HudFrame key={index} scan variant="mixed">
+            <Reveal key={index} delay={index * 0.12} direction="up">
+            <HudFrame scan variant="mixed">
             <Card className="bg-black/30 backdrop-blur-xl border border-cyan-400/20 hover:bg-white/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-cyan-500/30 group hover:border-cyan-400/50">
               <CardContent className="p-8">
                 <div className="flex items-start justify-between">
@@ -37,6 +39,7 @@ const PublicationsSection = () => {
               </CardContent>
             </Card>
             </HudFrame>
+            </Reveal>
           ))}
         </div>
       </div>

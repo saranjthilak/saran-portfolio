@@ -1,6 +1,7 @@
 
 import HudFrame from "@/components/ui/hud-frame";
 import SectionHeading from "@/components/ui/section-heading";
+import Reveal from "@/components/ui/reveal";
 
 const items = [
   { logo: "🧑‍💻", title: "Le Wagon", level: "Boot Camp, Data science and AI", period: "04/2025 – 06/2025", variant: "fuchsia" as const },
@@ -20,7 +21,8 @@ const EducationSection = () => {
         />
         <div className="space-y-6 sm:space-y-8">
           {items.map((it, i) => (
-            <HudFrame key={i} scan variant={it.variant}>
+            <Reveal key={i} delay={i * 0.1} direction={i % 2 === 0 ? "right" : "left"}>
+            <HudFrame scan variant={it.variant}>
               <div className="flex flex-col md:flex-row items-center bg-black/30 backdrop-blur-xl border border-cyan-400/20 rounded-2xl p-6 sm:p-8 hover:bg-white/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-cyan-500/30 group hover:border-cyan-400/50">
                 <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-r from-cyan-500 via-indigo-500 to-fuchsia-500 rounded-2xl sm:rounded-3xl flex items-center justify-center text-2xl sm:text-4xl shadow-[0_0_25px_rgba(34,211,238,0.5)] mr-0 md:mr-6 lg:mr-8 mb-4 md:mb-0 group-hover:scale-110 transition-transform duration-300 mx-auto md:mx-0">
                   {it.logo}
@@ -32,6 +34,7 @@ const EducationSection = () => {
                 </div>
               </div>
             </HudFrame>
+            </Reveal>
           ))}
         </div>
       </div>
