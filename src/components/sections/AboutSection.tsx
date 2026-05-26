@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { achievements } from "@/data/portfolio";
 import HudFrame from "@/components/ui/hud-frame";
 import SectionHeading from "@/components/ui/section-heading";
+import Reveal from "@/components/ui/reveal";
 
 const AboutSection = () => {
   return (
@@ -10,6 +11,7 @@ const AboutSection = () => {
       <div className="max-w-7xl mx-auto">
         <SectionHeading title="About Me" tag="Profile" />
         <div className="grid gap-8 md:gap-10 md:grid-cols-2">
+          <Reveal direction="right">
           <HudFrame scan>
           <Card className="bg-black/30 backdrop-blur-xl border border-cyan-400/30 hover:bg-white/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-cyan-500/30 group hover:border-cyan-400/60">
             <CardHeader>
@@ -35,7 +37,9 @@ const AboutSection = () => {
             </CardContent>
           </Card>
           </HudFrame>
+          </Reveal>
 
+          <Reveal direction="left" delay={0.1}>
           <HudFrame scan variant="fuchsia">
           <Card className="bg-black/30 backdrop-blur-xl border border-fuchsia-400/30 hover:bg-white/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-fuchsia-500/30 group hover:border-fuchsia-400/60">
             <CardHeader>
@@ -51,6 +55,7 @@ const AboutSection = () => {
             </CardContent>
           </Card>
           </HudFrame>
+          </Reveal>
         </div>
       </div>
     </section>
