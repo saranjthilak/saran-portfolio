@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { projects } from "@/data/portfolio";
 import HudFrame from "@/components/ui/hud-frame";
 import SectionHeading from "@/components/ui/section-heading";
+import Reveal from "@/components/ui/reveal";
 
 const ProjectsSection = () => {
   return (
@@ -12,7 +13,8 @@ const ProjectsSection = () => {
         <SectionHeading title="Featured Projects" tag="Builds" />
         <div className="grid gap-8 md:gap-10 sm:grid-cols-2">
           {projects.map((project, index) => (
-            <HudFrame key={index} scan variant={index % 2 === 0 ? "cyan" : "fuchsia"} className="h-full">
+            <Reveal key={index} delay={index * 0.1} direction={index % 2 === 0 ? "right" : "left"} className="h-full">
+            <HudFrame scan variant={index % 2 === 0 ? "cyan" : "fuchsia"} className="h-full">
             <Card className="bg-black/30 backdrop-blur-xl border border-cyan-400/20 hover:bg-white/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-cyan-500/30 group hover:border-cyan-400/50 flex flex-col h-full">
               <CardHeader>
                 <CardTitle className="text-white text-lg sm:text-xl group-hover:text-cyan-200 transition-colors tracking-wide">{project.title}</CardTitle>
@@ -30,6 +32,7 @@ const ProjectsSection = () => {
               </CardContent>
             </Card>
             </HudFrame>
+            </Reveal>
           ))}
         </div>
       </div>
