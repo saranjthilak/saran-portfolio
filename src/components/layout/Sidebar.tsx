@@ -1,6 +1,7 @@
-import { Github, Linkedin, Mail, Phone, Sparkles, Volume2, VolumeX } from "lucide-react";
+import { Github, Linkedin, Mail, Phone, Sparkles, Volume2, VolumeX, Music, Music2 } from "lucide-react";
 import { navigation } from "@/data/portfolio";
 import { useUiSound } from "@/hooks/use-ui-sound";
+import { useAmbientMusic } from "@/hooks/use-ambient-music";
 
 interface SidebarProps {
   activeSection: string;
@@ -9,6 +10,7 @@ interface SidebarProps {
 
 const Sidebar = ({ activeSection, scrollToSection }: SidebarProps) => {
   const { muted, toggleMuted, play } = useUiSound();
+  const { playing: musicOn, toggle: toggleMusic } = useAmbientMusic();
   return (
     <div className="fixed left-0 top-0 h-full w-72 bg-black/20 backdrop-blur-xl border-r border-white/10 z-10">
       <div className="p-8">
@@ -19,6 +21,24 @@ const Sidebar = ({ activeSection, scrollToSection }: SidebarProps) => {
             </div>
             <h2 className="text-white font-bold text-xl tracking-wide">Portfolio</h2>
           </div>
+          <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => { play("click"); toggleMusic(); }}
+            onMouseEnter={() => play("hover")}
+            aria-label={musicOn ? "Pause ambient music" : "Play ambient music"}
+            title={musicOn ? "Music on" : "Music off"}
+            className={`relative w-9 h-9 rounded-lg flex items-center justify-center border transition-all duration-300 ${
+              musicOn
+                ? "bg-fuchsia-500/10 border-fuchsia-400/40 text-fuchsia-300 shadow-[0_0_12px_rgba(232,121,249,0.35)]"
+                : "bg-white/5 border-white/10 text-white/50 hover:text-white/80 hover:border-white/20"
+            }`}
+          >
+            {musicOn ? <Music2 className="w-4 h-4" /> : <Music className="w-4 h-4" />}
+            {musicOn && (
+              <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-fuchsia-400 animate-pulse" />
+            )}
+          </button>
           <button
             type="button"
             onClick={toggleMuted}
@@ -35,6 +55,7 @@ const Sidebar = ({ activeSection, scrollToSection }: SidebarProps) => {
               <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
             )}
           </button>
+          </div>
         </div>
         
         <nav className="space-y-3">
