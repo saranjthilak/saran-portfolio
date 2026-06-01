@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import { UiSoundProvider } from "@/hooks/use-ui-sound";
+import { AmbientMusicProvider } from "@/hooks/use-ambient-music";
 
 const queryClient = new QueryClient();
 
@@ -13,6 +14,7 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <UiSoundProvider>
+        <AmbientMusicProvider>
         <Toaster />
         <Sonner />
         <BrowserRouter>
@@ -22,6 +24,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
+        </AmbientMusicProvider>
       </UiSoundProvider>
     </TooltipProvider>
   </QueryClientProvider>
