@@ -36,18 +36,21 @@ export const projects = [
     source: "FAISS + Triton Inference + CLIP",
     description: "Developed an image-based product search engine using FAISS for vector similarity and a quantized CLIP model served via NVIDIA Triton Inference Server. Integrated MongoDB and Docker for fast, scalable product matching.",
     skills: ["FAISS", "CLIP", "Triton", "MongoDB", "Docker"],
+    image: "/src/assets/project-product-matching.jpg",
   },
   {
     title: "AI Knowledge Assistant",
     source: "Local RAG + LangChain",
     description: "Built an AI chat interface to interact with PDFs by integrating Google Drive, Notion, Google Sheets, and SQL databases. Used LangChain for retrieval-augmented generation (RAG) and orchestration of local LLMs.",
     skills: ["LangChain", "RAG", "LLMs", "Python"],
+    image: "/src/assets/project-knowledge-assistant.jpg",
   },
   {
     title: "Divvy Bikes – End-to-End Data Pipeline",
     source: "GCP | Terraform | Airflow | DBT",
     description: "Built an end-to-end data pipeline on GCP using Terraform for infrastructure, Airflow for orchestration, and DBT for SQL transformations. Loaded data into BigQuery and visualized insights via Google Data Studio.",
     skills: ["GCP", "Terraform", "Airflow", "DBT", "BigQuery", "Data Studio"],
+    image: "/src/assets/project-divvy-bikes.jpg",
   }
 ];
 
