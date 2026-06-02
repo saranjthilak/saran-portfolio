@@ -13,6 +13,7 @@ import PublicationsSection from "@/components/sections/PublicationsSection";
 import EducationSection from "@/components/sections/EducationSection";
 import CertificationsSection from "@/components/sections/CertificationsSection";
 import ContactSection from "@/components/sections/ContactSection";
+import SectionDivider from "@/components/ui/section-divider";
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("home");
@@ -74,13 +75,21 @@ const Index = () => {
 
       <div className="ml-72 min-h-screen relative z-0">
         <HeroSection scrollToSection={scrollToSection} handleDownloadResume={handleDownloadResume} />
+        <SectionDivider variant="cyan" />
         <AboutSection />
+        <SectionDivider variant="mixed" />
         <ExperienceSection />
+        <SectionDivider variant="fuchsia" />
         <SkillsSection />
+        <SectionDivider variant="cyan" flip />
         <ProjectsSection />
+        <SectionDivider variant="mixed" />
         <PublicationsSection />
+        <SectionDivider variant="fuchsia" flip />
         <EducationSection />
+        <SectionDivider variant="cyan" />
         <CertificationsSection />
+        <SectionDivider variant="mixed" flip />
         <ContactSection />
         <Footer />
       </div>
