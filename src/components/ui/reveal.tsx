@@ -50,11 +50,10 @@ const Reveal = ({
         ? "inset(0 0 100% 0)"
         : "inset(0 100% 0 0)";
     const wipeVariants: Variants = {
-      hidden: { opacity: 0, clipPath: from, WebkitClipPath: from },
+      hidden: { opacity: 0, clipPath: from },
       show: {
         opacity: 1,
         clipPath: "inset(0 0 0 0)",
-        WebkitClipPath: "inset(0 0 0 0)",
         transition: { duration: duration + 0.2, ease: [0.77, 0, 0.175, 1], delay },
       },
     };
