@@ -11,7 +11,18 @@ interface SidebarProps {
 
 const Sidebar = ({ activeSection, scrollToSection }: SidebarProps) => {
   const { muted, toggleMuted, play } = useUiSound();
-  const { playing: musicOn, toggle: toggleMusic } = useAmbientMusic();
+  const { playing: musicOn, toggle: toggleMusic, volume, setVolume } = useAmbientMusic();
+  const [showVol, setShowVol] = useState(false);
+  const volTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleVolChange = (v: number) => {
+    setVolume(v);
+    setShowVol(true);
+    if (volTimer.current) clearTimeout(volTimer.current);
+    volTimer.current = setTimeout(() => setShowVol(false), 2500);
+  };
+
+  useEffect(() => () => { if (volTimer.current) clearTimeout(volTimer.current); }, []);
   return (
     <div className="fixed left-0 top-0 h-full w-72 bg-black/20 backdrop-blur-xl border-r border-white/10 z-10">
       <div className="p-8">
