@@ -2,6 +2,7 @@ import { Github, Linkedin, Mail, Phone, Sparkles, Volume2, VolumeX, Music, Music
 import { navigation } from "@/data/portfolio";
 import { useUiSound } from "@/hooks/use-ui-sound";
 import { useAmbientMusic } from "@/hooks/use-ambient-music";
+import { useState, useRef, useEffect } from "react";
 
 interface SidebarProps {
   activeSection: string;
