@@ -68,6 +68,21 @@ const Sidebar = ({ activeSection, scrollToSection }: SidebarProps) => {
             )}
           </button>
           </div>
+          {musicOn && (
+            <div className={`flex items-center gap-2 mt-2 transition-all duration-500 ${showVol ? 'opacity-100 translate-y-0' : 'opacity-60 -translate-y-1'}`}>
+              <Volume2 className="w-3 h-3 text-fuchsia-300/70" />
+              <input
+                type="range"
+                min={0}
+                max={1}
+                step={0.01}
+                value={volume}
+                onChange={(e) => handleVolChange(parseFloat(e.target.value))}
+                className="w-full h-1 accent-fuchsia-400 bg-white/10 rounded-lg appearance-none cursor-pointer"
+              />
+              <span className="text-[10px] text-fuchsia-300/70 w-6 text-right">{Math.round(volume * 100)}</span>
+            </div>
+          )}
         </div>
         
         <nav className="space-y-3">
