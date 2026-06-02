@@ -33,56 +33,58 @@ const Sidebar = ({ activeSection, scrollToSection }: SidebarProps) => {
             </div>
             <h2 className="text-white font-bold text-xl tracking-wide">Portfolio</h2>
           </div>
-          <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => { play("click"); toggleMusic(); }}
-            onMouseEnter={() => play("hover")}
-            aria-label={musicOn ? "Pause ambient music" : "Play ambient music"}
-            title={musicOn ? "Music on" : "Music off"}
-            className={`relative w-9 h-9 rounded-lg flex items-center justify-center border transition-all duration-300 ${
-              musicOn
-                ? "bg-fuchsia-500/10 border-fuchsia-400/40 text-fuchsia-300 shadow-[0_0_12px_rgba(232,121,249,0.35)]"
-                : "bg-white/5 border-white/10 text-white/50 hover:text-white/80 hover:border-white/20"
-            }`}
-          >
-            {musicOn ? <Music2 className="w-4 h-4" /> : <Music className="w-4 h-4" />}
-            {musicOn && (
-              <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-fuchsia-400 animate-pulse" />
-            )}
-          </button>
-          <button
-            type="button"
-            onClick={toggleMuted}
-            aria-label={muted ? "Enable UI sounds" : "Mute UI sounds"}
-            title={muted ? "Sound off" : "Sound on"}
-            className={`relative w-9 h-9 rounded-lg flex items-center justify-center border transition-all duration-300 ${
-              muted
-                ? "bg-white/5 border-white/10 text-white/50 hover:text-white/80 hover:border-white/20"
-                : "bg-cyan-500/10 border-cyan-400/40 text-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.35)]"
-            }`}
-          >
-            {muted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-            {!muted && (
-              <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-            )}
-          </button>
-          </div>
-          {musicOn && (
-            <div className={`flex items-center gap-2 mt-2 transition-all duration-500 ${showVol ? 'opacity-100 translate-y-0' : 'opacity-60 -translate-y-1'}`}>
-              <Volume2 className="w-3 h-3 text-fuchsia-300/70" />
-              <input
-                type="range"
-                min={0}
-                max={1}
-                step={0.01}
-                value={volume}
-                onChange={(e) => handleVolChange(parseFloat(e.target.value))}
-                className="w-full h-1 accent-fuchsia-400 bg-white/10 rounded-lg appearance-none cursor-pointer"
-              />
-              <span className="text-[10px] text-fuchsia-300/70 w-6 text-right">{Math.round(volume * 100)}</span>
+          <div className="flex flex-col items-end">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => { play("click"); toggleMusic(); }}
+                onMouseEnter={() => play("hover")}
+                aria-label={musicOn ? "Pause ambient music" : "Play ambient music"}
+                title={musicOn ? "Music on" : "Music off"}
+                className={`relative w-9 h-9 rounded-lg flex items-center justify-center border transition-all duration-300 ${
+                  musicOn
+                    ? "bg-fuchsia-500/10 border-fuchsia-400/40 text-fuchsia-300 shadow-[0_0_12px_rgba(232,121,249,0.35)]"
+                    : "bg-white/5 border-white/10 text-white/50 hover:text-white/80 hover:border-white/20"
+                }`}
+              >
+                {musicOn ? <Music2 className="w-4 h-4" /> : <Music className="w-4 h-4" />}
+                {musicOn && (
+                  <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-fuchsia-400 animate-pulse" />
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={toggleMuted}
+                aria-label={muted ? "Enable UI sounds" : "Mute UI sounds"}
+                title={muted ? "Sound off" : "Sound on"}
+                className={`relative w-9 h-9 rounded-lg flex items-center justify-center border transition-all duration-300 ${
+                  muted
+                    ? "bg-white/5 border-white/10 text-white/50 hover:text-white/80 hover:border-white/20"
+                    : "bg-cyan-500/10 border-cyan-400/40 text-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.35)]"
+                }`}
+              >
+                {muted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                {!muted && (
+                  <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                )}
+              </button>
             </div>
-          )}
+            {musicOn && (
+              <div className={`flex items-center gap-2 mt-2 w-full transition-all duration-500 ${showVol ? 'opacity-100 translate-y-0' : 'opacity-60 -translate-y-1'}`}>
+                <Volume2 className="w-3 h-3 text-fuchsia-300/70 shrink-0" />
+                <input
+                  type="range"
+                  min={0}
+                  max={1}
+                  step={0.01}
+                  value={volume}
+                  onChange={(e) => handleVolChange(parseFloat(e.target.value))}
+                  className="w-full h-1 accent-fuchsia-400 bg-white/10 rounded-lg appearance-none cursor-pointer"
+                />
+                <span className="text-[10px] text-fuchsia-300/70 w-6 text-right shrink-0">{Math.round(volume * 100)}</span>
+              </div>
+            )}
+          </div>
         </div>
         
         <nav className="space-y-3">
