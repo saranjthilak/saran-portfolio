@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useMemo } from "react";
 
 type Variant = "cyan" | "fuchsia" | "mixed";
 
@@ -35,7 +35,7 @@ const colorMap: Record<Variant, { a: string; b: string; scan: string; glow: stri
 const HudFrame = ({ children, scan = false, variant = "mixed", className = "", readout, id }: HudFrameProps) => {
   const c = colorMap[variant];
   const textColor = variant === "fuchsia" ? "text-fuchsia-300/70" : "text-cyan-300/70";
-  const stamp = id ?? Math.random().toString(36).slice(2, 6).toUpperCase();
+  const stamp = useMemo(() => id ?? Math.random().toString(36).slice(2, 6).toUpperCase(), [id]);
   return (
     <div className={`relative ${className}`}>
       {children}
