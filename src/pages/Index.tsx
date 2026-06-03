@@ -14,6 +14,7 @@ import EducationSection from "@/components/sections/EducationSection";
 import CertificationsSection from "@/components/sections/CertificationsSection";
 import ContactSection from "@/components/sections/ContactSection";
 import SectionDivider from "@/components/ui/section-divider";
+import MicroHud from "@/components/ui/micro-hud";
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("home");
@@ -72,6 +73,7 @@ const Index = () => {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] border border-purple-500/10 rounded-full animate-orbit" style={{ animationDirection: 'reverse', animationDuration: '30s' }}></div>
 
       <Sidebar activeSection={activeSection} scrollToSection={scrollToSection} />
+      <MicroHud />
 
       <div className="ml-72 min-h-screen relative z-0">
         <HeroSection scrollToSection={scrollToSection} handleDownloadResume={handleDownloadResume} />
