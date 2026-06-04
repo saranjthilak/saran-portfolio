@@ -4,11 +4,15 @@ import { certifications } from "@/data/portfolio";
 import HudFrame from "@/components/ui/hud-frame";
 import SectionHeading from "@/components/ui/section-heading";
 import Reveal from "@/components/ui/reveal";
+import HeroGlobe from "@/components/ui/hero-globe";
 
 const CertificationsSection = () => {
   return (
-    <section id="certifications" className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 md:px-8">
-      <div className="max-w-7xl mx-auto">
+    <section id="certifications" className="relative py-12 sm:py-16 md:py-24 px-4 sm:px-6 md:px-8 overflow-hidden">
+      <div className="absolute inset-0 z-0 opacity-50 pointer-events-none">
+        <HeroGlobe />
+      </div>
+      <div className="relative z-10 max-w-7xl mx-auto">
         <SectionHeading title="Certifications" tag="Credentials" />
         <div className="grid gap-8 md:gap-10 md:grid-cols-2">
           {certifications.map((cert, index) => (
