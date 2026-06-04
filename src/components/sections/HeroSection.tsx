@@ -32,7 +32,7 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
           animate={reduce ? undefined : { opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.9, ease: "easeOut" }}
         >
-        <Card className="relative bg-black/30 backdrop-blur-2xl border border-indigo-500/30 shadow-2xl shadow-indigo-500/30 overflow-hidden scanline">
+        <Card className="relative bg-black/10 backdrop-blur-xl border border-indigo-500/20 shadow-2xl shadow-indigo-500/20 overflow-hidden scanline">
           {/* Corner brackets */}
           <div className="pointer-events-none absolute top-0 left-0 w-12 h-12 border-t-2 border-l-2 border-cyan-400/70"></div>
           <div className="pointer-events-none absolute top-0 right-0 w-12 h-12 border-t-2 border-r-2 border-fuchsia-400/70"></div>
