@@ -6,6 +6,7 @@ import { motion, useReducedMotion, type Variants } from "framer-motion";
 import Magnetic from "@/components/ui/magnetic";
 import DecryptText from "@/components/ui/decrypt-text";
 import CountUp from "@/components/ui/count-up";
+import HeroGlobe from "@/components/ui/hero-globe";
 
 interface HeroSectionProps {
   scrollToSection: (id: string) => void;
@@ -24,6 +25,7 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
   };
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center p-4 sm:p-8 overflow-hidden">
+      <HeroGlobe />
       <div className="max-w-6xl mx-auto w-full relative z-10">
         <motion.div
           initial={reduce ? false : { opacity: 0, scale: 0.96, y: 40 }}
