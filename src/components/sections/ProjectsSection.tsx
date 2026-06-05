@@ -5,6 +5,7 @@ import { projects } from "@/data/portfolio";
 import HudFrame from "@/components/ui/hud-frame";
 import SectionHeading from "@/components/ui/section-heading";
 import Reveal from "@/components/ui/reveal";
+import { motion } from "framer-motion";
 import productMatchingImg from "@/assets/project-product-matching.jpg";
 import knowledgeAssistantImg from "@/assets/project-knowledge-assistant.jpg";
 import divvyBikesImg from "@/assets/project-divvy-bikes.jpg";
@@ -13,46 +14,50 @@ const projectImages = [productMatchingImg, knowledgeAssistantImg, divvyBikesImg]
 
 const ProjectsSection = () => {
   return (
-    <section id="projects" className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 md:px-8">
+    <section id="projects" className="py-16 sm:py-24 md:py-32 px-4 sm:px-6 md:px-8">
       <div className="max-w-7xl mx-auto">
         <SectionHeading title="Featured Projects" tag="Builds" />
-        <div className="grid gap-8 md:gap-10 sm:grid-cols-2">
+        <div className="grid gap-6 md:gap-8 sm:grid-cols-2">
           {projects.map((project, index) => (
             <Reveal key={index} delay={index * 0.1} direction={index % 2 === 0 ? "right" : "left"} className="h-full">
-            <HudFrame scan variant={index % 2 === 0 ? "cyan" : "fuchsia"} className="h-full">
-            <Card className="bg-black/30 backdrop-blur-xl border border-cyan-400/20 hover:bg-white/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-cyan-500/30 group hover:border-cyan-400/50 flex flex-col h-full">
-              <div className="relative overflow-hidden rounded-t-lg aspect-[16/9] border-b border-cyan-400/20">
+            <motion.div
+              whileHover={{ y: -6 }}
+              transition={{ type: "spring", stiffness: 260, damping: 22 }}
+              className="h-full"
+            >
+            <Card className="glass rounded-2xl overflow-hidden hover:border-primary/50 transition-all duration-500 hover:shadow-elegant group flex flex-col h-full relative">
+              <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="relative overflow-hidden aspect-[16/9] border-b border-border">
                 <img
                   src={projectImages[index]}
                   alt={`${project.title} preview`}
                   loading="lazy"
                   width={800}
                   height={450}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
-                <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_0%,rgba(34,211,238,0.06)_50%,transparent_100%)] bg-[length:100%_6px] mix-blend-overlay pointer-events-none" />
-                <div className="absolute top-2 left-2 flex items-center gap-1.5 px-2 py-1 rounded bg-black/60 backdrop-blur border border-cyan-400/40">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                  <span className="text-[10px] tracking-[0.2em] uppercase text-cyan-200">Live Preview</span>
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent pointer-events-none" />
+                <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-md glass">
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                  <span className="text-[10px] tracking-[0.2em] uppercase text-foreground/80 font-mono">Live</span>
                 </div>
               </div>
               <CardHeader>
-                <CardTitle className="text-white text-lg sm:text-xl group-hover:text-cyan-200 transition-colors tracking-wide">{project.title}</CardTitle>
-                <CardDescription className="text-cyan-300/80 pt-1 text-xs sm:text-sm uppercase tracking-[0.2em]">// {project.source}</CardDescription>
+                <CardTitle className="font-display text-xl sm:text-2xl font-semibold text-foreground group-hover:text-gradient-primary transition-colors tracking-tight">{project.title}</CardTitle>
+                <CardDescription className="text-muted-foreground pt-1 text-[11px] uppercase tracking-[0.2em] font-mono">{project.source}</CardDescription>
               </CardHeader>
               <CardContent className="flex-grow flex flex-col justify-between">
-                <p className="text-white/80 mb-6 text-base sm:text-lg leading-relaxed">{project.description}</p>
-                <div className="flex flex-wrap gap-2 sm:gap-3">
+                <p className="text-muted-foreground mb-6 text-sm sm:text-base leading-relaxed">{project.description}</p>
+                <div className="flex flex-wrap gap-2">
                   {project.skills.map((skill) => (
-                    <Badge key={skill} className="bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 border border-cyan-400/40 text-cyan-200 px-3 sm:px-4 py-1 sm:py-2 text-xs tracking-wider uppercase">
+                    <Badge key={skill} className="bg-secondary/60 border border-border text-foreground/80 hover:border-primary/40 hover:bg-primary/10 px-2.5 py-1 text-[10px] tracking-[0.1em] uppercase font-mono font-medium rounded-md">
                       {skill}
                     </Badge>
                   ))}
                 </div>
               </CardContent>
             </Card>
-            </HudFrame>
+            </motion.div>
             </Reveal>
           ))}
         </div>
