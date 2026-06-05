@@ -20,22 +20,22 @@ const SectionHeading = ({ title, tag = "SECTION", subtitle }: SectionHeadingProp
       viewport={{ once: true, margin: "-60px" }}
       transition={{ staggerChildren: 0.12 }}
     >
-      <motion.div variants={item} className="inline-flex items-center space-x-2 bg-gradient-to-r from-cyan-500/10 to-fuchsia-500/10 px-4 py-1.5 rounded-full border border-cyan-400/30 mb-5 backdrop-blur">
+      <motion.div variants={item} className="inline-flex items-center space-x-2 glass px-4 py-1.5 rounded-full mb-5">
         <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-400"></span>
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
         </span>
-        <span className="text-cyan-200 text-[10px] sm:text-xs font-medium tracking-[0.25em] uppercase">// {tag}</span>
+        <span className="text-foreground/80 text-[10px] sm:text-xs font-medium tracking-[0.25em] uppercase font-mono">{tag}</span>
       </motion.div>
-      <motion.h2 variants={item} className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-200 via-white to-fuchsia-300 bg-clip-text text-transparent neon-text mb-4 sm:mb-6 bg-[length:200%_auto] animate-gradient-pan">
+      <motion.h2 variants={item} className="font-display text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight text-gradient-primary neon-text mb-4 sm:mb-6">
         {title}
       </motion.h2>
       <motion.div
         variants={item}
-        className="w-24 h-1 bg-gradient-to-r from-cyan-400 via-indigo-500 to-fuchsia-500 mx-auto rounded-full shadow-[0_0_20px_rgba(34,211,238,0.6)] bg-[length:200%_auto] animate-shimmer"
+        className="w-16 h-px bg-gradient-to-r from-transparent via-primary to-transparent mx-auto"
       />
       {subtitle && (
-        <motion.p variants={item} className="text-white/80 mt-4 text-base sm:text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
+        <motion.p variants={item} className="text-muted-foreground mt-5 text-base sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
           {subtitle}
         </motion.p>
       )}
