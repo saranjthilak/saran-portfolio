@@ -24,14 +24,14 @@ const Sidebar = ({ activeSection, scrollToSection }: SidebarProps) => {
 
   useEffect(() => () => { if (volTimer.current) clearTimeout(volTimer.current); }, []);
   return (
-    <div className="fixed left-0 top-0 h-full w-72 bg-black/20 backdrop-blur-xl border-r border-white/10 z-10">
+    <div className="fixed left-0 top-0 h-full w-72 glass border-r border-border z-10 rounded-none">
       <div className="p-8">
         <div className="flex items-center justify-between mb-12">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-white" />
+            <div className="w-10 h-10 bg-gradient-primary rounded-xl flex items-center justify-center shadow-glow">
+              <Sparkles className="w-5 h-5 text-primary-foreground" />
             </div>
-            <h2 className="text-white font-bold text-xl tracking-wide">Portfolio</h2>
+            <h2 className="font-display text-foreground font-semibold text-xl tracking-tight">Portfolio</h2>
           </div>
           <div className="flex flex-col items-end">
             <div className="flex items-center gap-2">
@@ -93,23 +93,23 @@ const Sidebar = ({ activeSection, scrollToSection }: SidebarProps) => {
               key={item.id}
               onClick={() => { play("click"); scrollToSection(item.id); }}
               onMouseEnter={() => play("hover")}
-              className={`w-full flex items-center space-x-4 px-6 py-4 rounded-xl transition-all duration-300 group ${
+              className={`w-full flex items-center space-x-4 px-5 py-3.5 rounded-xl transition-all duration-300 group ${
                 activeSection === item.id
-                  ? "bg-gradient-to-r from-blue-500/20 to-purple-600/20 text-white border border-blue-500/30 shadow-lg shadow-blue-500/25"
-                  : "text-white/70 hover:bg-white/10 hover:text-white hover:transform hover:translate-x-1"
+                  ? "bg-primary/10 text-foreground border border-primary/30 shadow-glow"
+                  : "text-muted-foreground hover:bg-secondary/40 hover:text-foreground hover:translate-x-1"
               }`}
             >
-              <span className="text-xl">{item.icon}</span>
-              <span className="font-semibold tracking-wide">{item.label}</span>
+              <span className="text-lg">{item.icon}</span>
+              <span className="font-medium tracking-tight text-sm">{item.label}</span>
               {activeSection === item.id && (
-                <div className="ml-auto w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                <div className="ml-auto w-1.5 h-1.5 bg-primary rounded-full animate-pulse shadow-glow"></div>
               )}
             </button>
           ))}
         </nav>
         
         <div className="mt-12 space-y-4">
-          <h3 className="text-white/70 text-sm font-medium uppercase tracking-wider">Connect</h3>
+          <h3 className="text-muted-foreground text-[11px] font-medium uppercase tracking-[0.2em] font-mono">Connect</h3>
           <div className="grid grid-cols-2 gap-3">
             <a onMouseEnter={() => play("hover")} onClick={() => play("click")} href="https://www.linkedin.com/in/saranjayathilak" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center space-x-2 p-3 bg-white/10 hover:bg-blue-500/20 rounded-xl transition-all duration-300 group">
               <Linkedin className="w-4 h-4 text-blue-400 group-hover:scale-110 transition-transform" />

@@ -20,7 +20,9 @@ export default {
 		},
 		extend: {
       fontFamily: {
-        sans: ['"Exo 2"', 'sans-serif'],
+        sans: ['"DM Sans"', 'system-ui', 'sans-serif'],
+        display: ['"Space Grotesk"', '"DM Sans"', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
 			colors: {
 				border: 'hsl(var(--border))',
