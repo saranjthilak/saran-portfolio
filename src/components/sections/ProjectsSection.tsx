@@ -66,15 +66,13 @@ const ProjectsSection = () => {
   const [filter, setFilter] = useState<FilterKey>("all");
   const [query, setQuery] = useState("");
 
-  const { featured, others, filtered } = useMemo(() => {
-    if (!repos) return { featured: [], others: [], filtered: [] as Array<GitHubRepo & { matched: string[] }> };
+    const { featured, filtered } = useMemo(() => {
+    if (!repos) return { featured: [], filtered: [] as Array<GitHubRepo & { matched: string[] }> };
 
     const enriched = repos.map((r) => ({ ...r, matched: matchKeywords(r) }));
     const featured = enriched
       .filter((r) => r.matched.length > 0)
       .sort((a, b) => b.matched.length - a.matched.length || b.stargazers_count - a.stargazers_count);
-    const others = enriched.filter((r) => r.matched.length === 0);
-
     const q = query.trim().toLowerCase();
     let list = enriched;
     if (filter === "other") {
@@ -94,7 +92,7 @@ const ProjectsSection = () => {
       return b.stargazers_count - a.stargazers_count;
     });
 
-    return { featured, others, filtered: list };
+    return { featured, filtered: list };
   }, [repos, filter, query]);
 
   return (
@@ -210,9 +208,6 @@ const ProjectsSection = () => {
             No repositories match your filters.
           </div>
         )}
-
-        {/* eslint-disable-next-line @typescript-eslint/no-unused-expressions */}
-        {others.length > 0 ? null : null}
       </div>
     </section>
   );
