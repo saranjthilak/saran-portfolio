@@ -33,21 +33,13 @@ const ProficiencyBar = ({
 
   return (
     <div ref={ref} className="group/skill">
-      <div className="flex items-center justify-between mb-1.5">
+      <div className="flex items-center mb-1.5">
         <div className="flex items-center gap-2">
           <span className={`w-1.5 h-1.5 rounded-full ${c.dot} ${c.text}`} style={{ boxShadow: `0 0 8px ${c.glow}` }} />
           <span className="text-white/90 text-xs font-medium tracking-wider uppercase group-hover/skill:text-white transition-colors">
             {name}
           </span>
         </div>
-        <motion.span
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.4 + idx * 0.04, duration: 0.4 }}
-          className={`text-[10px] font-mono ${c.text}`}
-        >
-          {level}%
-        </motion.span>
       </div>
       <div className="relative h-2 rounded-full bg-white/5 border border-white/10 overflow-hidden backdrop-blur-sm">
         <div
