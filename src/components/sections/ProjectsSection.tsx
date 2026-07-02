@@ -1,10 +1,22 @@
 import { useMemo } from "react";
 import { Github, AlertCircle, Sparkles } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import SectionHeading from "@/components/ui/section-heading";
 import Reveal from "@/components/ui/reveal";
 import RepoCard from "@/components/projects/RepoCard";
 import GitHubStats from "@/components/projects/GitHubStats";
 import { useGitHubRepos, type GitHubRepo } from "@/hooks/use-github-repos";
+import { projects as curatedProjects } from "@/data/portfolio";
+import productMatchingImg from "@/assets/project-product-matching.jpg";
+import knowledgeAssistantImg from "@/assets/project-knowledge-assistant.jpg";
+import divvyBikesImg from "@/assets/project-divvy-bikes.jpg";
+
+const IMAGE_MAP: Record<string, string> = {
+  "/src/assets/project-product-matching.jpg": productMatchingImg,
+  "/src/assets/project-knowledge-assistant.jpg": knowledgeAssistantImg,
+  "/src/assets/project-divvy-bikes.jpg": divvyBikesImg,
+};
 
 const GITHUB_USER = "saranjthilak";
 
@@ -45,7 +57,55 @@ const ProjectsSection = () => {
       <div className="max-w-7xl mx-auto">
         <SectionHeading title="Projects" tag="GitHub" />
 
-        {/* Stats */}
+        {/* Curated featured projects */}
+        <div className="mb-16">
+          <div className="mb-6">
+            <div className="text-[11px] tracking-[0.3em] uppercase font-mono text-primary/80 mb-1">Selected Work</div>
+            <h3 className="font-display text-2xl sm:text-3xl font-semibold tracking-tight text-gradient-primary">
+              Featured Projects
+            </h3>
+          </div>
+          <div className="grid gap-6 md:gap-8 lg:grid-cols-3">
+            {curatedProjects.map((p, i) => (
+              <Reveal key={p.title} delay={i * 0.08} direction="up" className="h-full">
+                <Card className="glass rounded-2xl overflow-hidden h-full flex flex-col group hover:border-primary/40 hover:shadow-elegant transition-all duration-500">
+                  <div className="relative aspect-[16/10] overflow-hidden border-b border-border/50">
+                    <img
+                      src={IMAGE_MAP[p.image] ?? p.image}
+                      alt={p.title}
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
+                  </div>
+                  <CardHeader className="pb-3">
+                    <div className="text-[10px] font-mono tracking-[0.2em] uppercase text-primary/80 mb-1">
+                      {p.source}
+                    </div>
+                    <CardTitle className="font-display text-xl font-semibold tracking-tight group-hover:text-gradient-primary transition-colors">
+                      {p.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex-grow flex flex-col gap-4">
+                    <p className="text-foreground/75 text-sm leading-relaxed">{p.description}</p>
+                    <div className="flex flex-wrap gap-1.5 mt-auto pt-2">
+                      {p.skills.map((s) => (
+                        <Badge
+                          key={s}
+                          className="bg-primary/10 border border-primary/30 text-primary px-2 py-0.5 text-[10px] tracking-[0.1em] uppercase font-mono font-medium rounded-md"
+                        >
+                          {s}
+                        </Badge>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+
+        {/* GitHub stats */}
         {user && repos && <GitHubStats user={user} repos={repos} />}
 
         {/* Loading skeleton */}
@@ -79,9 +139,9 @@ const ProjectsSection = () => {
           <div>
             <div className="flex items-end justify-between flex-wrap gap-3 mb-6">
               <div>
-                <div className="text-[11px] tracking-[0.3em] uppercase font-mono text-primary/80 mb-1">Highlighted</div>
+                <div className="text-[11px] tracking-[0.3em] uppercase font-mono text-primary/80 mb-1">Live from GitHub</div>
                 <h3 className="font-display text-2xl sm:text-3xl font-semibold tracking-tight text-gradient-primary">
-                  Featured Repositories
+                  More on GitHub
                 </h3>
               </div>
               <a
