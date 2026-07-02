@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Github, Linkedin, Mail, MapPin, Phone } from "lucide-react";
+import { Github, Linkedin, Mail, MapPin } from "lucide-react";
 import ContactForm from "@/components/ContactForm";
 import HudFrame from "@/components/ui/hud-frame";
 import SectionHeading from "@/components/ui/section-heading";
@@ -29,12 +29,6 @@ const ContactSection = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4 sm:space-y-6">
-              <a href="tel:+491744614592" className="flex items-center space-x-4 p-3 sm:p-4 bg-black/40 rounded-xl backdrop-blur-sm border border-cyan-400/20 hover:border-cyan-400/60 hover:bg-cyan-500/10 hover:shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all duration-300 group">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(34,211,238,0.5)] group-hover:scale-110 transition-transform duration-300">
-                  <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                </div>
-                <span className="text-white text-base sm:text-lg tracking-wider">+49 174 461 4592</span>
-              </a>
               <a href="mailto:saranjthilak@gmail.com" className="flex items-center space-x-4 p-3 sm:p-4 bg-black/40 rounded-xl backdrop-blur-sm border border-fuchsia-400/20 hover:border-fuchsia-400/60 hover:bg-fuchsia-500/10 hover:shadow-[0_0_15px_rgba(217,70,239,0.4)] transition-all duration-300 group">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-fuchsia-500 to-pink-500 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(217,70,239,0.5)] group-hover:scale-110 transition-transform duration-300">
                   <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-white" />

@@ -45,9 +45,17 @@ const AboutSection = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground leading-relaxed text-base sm:text-lg">
-                Data Engineering and Generative AI professional with 3 years of experience designing and deploying scalable data pipelines and LLM-powered systems. Strong expertise in Python, distributed data processing, and Retrieval-Augmented Generation (RAG) architectures, including vector databases, embedding pipelines, and model evaluation frameworks. Master's in Data Science and AWS Certified Solutions Architect, with additional Oracle OCI Generative AI and AI Foundations certifications. Proven track record of 99.9% reliability in ML deployment, a 30% boost in LLM classification accuracy, and two IEEE publications in applied machine learning.
-              </p>
+              <div className="space-y-4 text-muted-foreground leading-relaxed text-base sm:text-lg">
+                <p>
+                  My path into AI started in telecom operations at Nokia and Huawei, where I spent years keeping mission-critical infrastructure running at 99.99% availability. That grounding in reliability, on-call discipline, and systems thinking is what still shapes how I build data platforms today.
+                </p>
+                <p>
+                  I moved deeper into the data stack through a Master's in Data Science, an AWS Solutions Architect certification, and Oracle's Generative AI and AI Foundations credentials — then applied it end-to-end at Tesla, designing Airflow ETL pipelines and RAG-based LLM assistants with guardrails for hallucination detection and response validation.
+                </p>
+                <p>
+                  Today I focus on the intersection of data engineering and generative AI: vector databases, embedding pipelines, retrieval tuning, and evaluation frameworks that turn LLM prototypes into production systems. Two IEEE publications in applied machine learning keep the research muscle sharp.
+                </p>
+              </div>
             </CardContent>
           </Card>
           </Reveal>
