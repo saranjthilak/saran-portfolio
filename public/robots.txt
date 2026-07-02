@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://saran-portfolio.lovable.app/sitemap.xml
+Sitemap: https://saran.cloud/sitemap.xml
