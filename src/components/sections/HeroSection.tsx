@@ -57,7 +57,7 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
                 </motion.h1>
                 <motion.p variants={item} className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 text-primary/90 font-normal tracking-[0.04em] font-mono">
                   <DecryptText
-                    text="Generative AI | RAG Architectures | LLM Orchestration | Python Expertise"
+                    text="Data Engineer & Generative AI Specialist"
                     duration={2000}
                     delay={400}
                   />
