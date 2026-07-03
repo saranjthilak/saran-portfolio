@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import Sidebar from "@/components/layout/Sidebar";
 import Footer from "@/components/layout/Footer";
 import CustomCursor from "@/components/ui/custom-cursor";
-import NeuralNetBackdrop from "@/components/ui/neural-net-backdrop";
 import HeroSection from "@/components/sections/HeroSection";
 import AboutSection from "@/components/sections/AboutSection";
 import ExperienceSection from "@/components/sections/ExperienceSection";
@@ -65,19 +64,13 @@ const Index = () => {
       className="min-h-screen bg-background relative overflow-hidden"
     >
       <CustomCursor />
-      {/* Futuristic background */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <NeuralNetBackdrop />
-      </div>
-      <div className="fixed inset-0 bg-gradient-mesh pointer-events-none"></div>
-      <div className="fixed inset-0 cyber-grid opacity-40 pointer-events-none"></div>
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-primary/10 rounded-full blur-[160px] pointer-events-none"></div>
-      <div className="fixed bottom-0 right-1/4 w-[700px] h-[700px] bg-accent/10 rounded-full blur-[160px] animate-neural-pulse pointer-events-none" style={{ animationDelay: '1.5s' }}></div>
+      {/* Subtle dot-grid backdrop */}
+      <div className="fixed inset-0 dot-grid opacity-40 pointer-events-none"></div>
 
       <Sidebar activeSection={activeSection} scrollToSection={scrollToSection} />
       <MicroHud />
 
-      <div className="ml-72 min-h-screen relative z-0">
+      <div className="ml-20 min-h-screen relative z-0">
         <HeroSection scrollToSection={scrollToSection} handleDownloadResume={handleDownloadResume} />
         <SectionDivider variant="cyan" />
         <AboutSection />

@@ -1,8 +1,36 @@
-import { Github, Linkedin, Mail, Phone, Sparkles, Volume2, VolumeX, Music, Music2 } from "lucide-react";
+import {
+  Github,
+  Linkedin,
+  Mail,
+  Home,
+  User,
+  Briefcase,
+  Zap,
+  Rocket,
+  BookOpen,
+  GraduationCap,
+  Trophy,
+  MessageSquare,
+  Volume2,
+  VolumeX,
+  Music,
+  Music2,
+} from "lucide-react";
 import { navigation } from "@/data/portfolio";
 import { useUiSound } from "@/hooks/use-ui-sound";
 import { useAmbientMusic } from "@/hooks/use-ambient-music";
-import { useState, useRef, useEffect } from "react";
+
+const iconMap: Record<string, typeof Home> = {
+  home: Home,
+  about: User,
+  experience: Briefcase,
+  skills: Zap,
+  projects: Rocket,
+  publications: BookOpen,
+  education: GraduationCap,
+  certifications: Trophy,
+  contact: MessageSquare,
+};
 
 interface SidebarProps {
   activeSection: string;
@@ -11,122 +39,92 @@ interface SidebarProps {
 
 const Sidebar = ({ activeSection, scrollToSection }: SidebarProps) => {
   const { muted, toggleMuted, play } = useUiSound();
-  const { playing: musicOn, toggle: toggleMusic, volume, setVolume } = useAmbientMusic();
-  const [showVol, setShowVol] = useState(false);
-  const volTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { playing: musicOn, toggle: toggleMusic } = useAmbientMusic();
 
-  const handleVolChange = (v: number) => {
-    setVolume(v);
-    setShowVol(true);
-    if (volTimer.current) clearTimeout(volTimer.current);
-    volTimer.current = setTimeout(() => setShowVol(false), 2500);
-  };
-
-  useEffect(() => () => { if (volTimer.current) clearTimeout(volTimer.current); }, []);
   return (
-    <div className="fixed left-0 top-0 h-full w-72 glass border-r border-border z-10 rounded-none">
-      <div className="p-8">
-        <div className="flex items-center justify-between mb-12">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-primary rounded-xl flex items-center justify-center shadow-glow">
-              <Sparkles className="w-5 h-5 text-primary-foreground" />
-            </div>
-            <h2 className="font-display text-foreground font-semibold text-xl tracking-tight">Portfolio</h2>
-          </div>
-          <div className="flex flex-col items-end">
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => { play("click"); toggleMusic(); }}
-                onMouseEnter={() => play("hover")}
-                aria-label={musicOn ? "Pause ambient music" : "Play ambient music"}
-                title={musicOn ? "Music on" : "Music off"}
-                className={`relative w-9 h-9 rounded-lg flex items-center justify-center border transition-all duration-300 ${
-                  musicOn
-                    ? "bg-fuchsia-500/10 border-fuchsia-400/40 text-fuchsia-300 shadow-[0_0_12px_rgba(232,121,249,0.35)]"
-                    : "bg-white/5 border-white/10 text-white/50 hover:text-white/80 hover:border-white/20"
-                }`}
-              >
-                {musicOn ? <Music2 className="w-4 h-4" /> : <Music className="w-4 h-4" />}
-                {musicOn && (
-                  <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-fuchsia-400 animate-pulse" />
-                )}
-              </button>
-              <button
-                type="button"
-                onClick={toggleMuted}
-                aria-label={muted ? "Enable UI sounds" : "Mute UI sounds"}
-                title={muted ? "Sound off" : "Sound on"}
-                className={`relative w-9 h-9 rounded-lg flex items-center justify-center border transition-all duration-300 ${
-                  muted
-                    ? "bg-white/5 border-white/10 text-white/50 hover:text-white/80 hover:border-white/20"
-                    : "bg-cyan-500/10 border-cyan-400/40 text-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.35)]"
-                }`}
-              >
-                {muted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-                {!muted && (
-                  <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                )}
-              </button>
-            </div>
-            {musicOn && (
-              <div className={`flex items-center gap-2 mt-2 w-full transition-all duration-500 ${showVol ? 'opacity-100 translate-y-0' : 'opacity-60 -translate-y-1'}`}>
-                <Volume2 className="w-3 h-3 text-fuchsia-300/70 shrink-0" />
-                <input
-                  type="range"
-                  min={0}
-                  max={1}
-                  step={0.01}
-                  value={volume}
-                  onChange={(e) => handleVolChange(parseFloat(e.target.value))}
-                  className="w-full h-1 accent-fuchsia-400 bg-white/10 rounded-lg appearance-none cursor-pointer"
-                />
-                <span className="text-[10px] text-fuchsia-300/70 w-6 text-right shrink-0">{Math.round(volume * 100)}</span>
-              </div>
-            )}
-          </div>
-        </div>
-        
-        <nav className="space-y-3">
-          {navigation.map((item) => (
+    <aside className="fixed left-0 top-0 h-full w-20 z-20 flex flex-col items-center py-6 bg-[hsl(var(--surface-2))] border-r border-border">
+      {/* Monogram */}
+      <div className="w-10 h-10 mb-10 bg-primary flex items-center justify-center font-bold text-[13px] text-primary-foreground tracking-tighter">
+        SJT
+      </div>
+
+      {/* Nav */}
+      <nav className="flex-1 flex flex-col items-center gap-1">
+        {navigation.map((item) => {
+          const Icon = iconMap[item.id] ?? Home;
+          const active = activeSection === item.id;
+          return (
             <button
               key={item.id}
               onClick={() => { play("click"); scrollToSection(item.id); }}
               onMouseEnter={() => play("hover")}
-              className={`w-full flex items-center space-x-4 px-5 py-3.5 rounded-xl transition-all duration-300 group ${
-                activeSection === item.id
-                  ? "bg-primary/10 text-foreground border border-primary/30 shadow-glow"
-                  : "text-muted-foreground hover:bg-secondary/40 hover:text-foreground hover:translate-x-1"
+              aria-label={item.label}
+              title={item.label}
+              className={`relative group w-full py-3 flex items-center justify-center transition-colors ${
+                active ? "text-primary" : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <span className="text-lg">{item.icon}</span>
-              <span className="font-medium tracking-tight text-sm">{item.label}</span>
-              {activeSection === item.id && (
-                <div className="ml-auto w-1.5 h-1.5 bg-primary rounded-full animate-pulse shadow-glow"></div>
+              {active && (
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-0.5 bg-primary" />
               )}
+              <Icon className="w-4 h-4" strokeWidth={1.75} />
+              {/* Tooltip */}
+              <span className="pointer-events-none absolute left-full ml-3 px-2 py-1 bg-[hsl(var(--surface))] border border-border text-foreground text-[10px] font-mono uppercase tracking-[0.2em] opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all whitespace-nowrap z-30">
+                {item.label}
+              </span>
             </button>
-          ))}
-        </nav>
-        
-        <div className="mt-12 space-y-4">
-          <h3 className="text-muted-foreground text-[11px] font-medium uppercase tracking-[0.2em] font-mono">Connect</h3>
-          <div className="grid grid-cols-2 gap-3">
-            <a onMouseEnter={() => play("hover")} onClick={() => play("click")} href="https://www.linkedin.com/in/saranjayathilak" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center space-x-2 p-3 bg-white/10 hover:bg-blue-500/20 rounded-xl transition-all duration-300 group">
-              <Linkedin className="w-4 h-4 text-blue-400 group-hover:scale-110 transition-transform" />
-            </a>
-            <a onMouseEnter={() => play("hover")} onClick={() => play("click")} href="https://github.com/saranjthilak" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center space-x-2 p-3 bg-white/10 hover:bg-gray-500/20 rounded-xl transition-all duration-300 group">
-              <Github className="w-4 h-4 text-gray-400 group-hover:scale-110 transition-transform" />
-            </a>
-            <a onMouseEnter={() => play("hover")} onClick={() => play("click")} href="tel:+491744614592" className="flex items-center justify-center space-x-2 p-3 bg-white/10 hover:bg-green-500/20 rounded-xl transition-all duration-300 group">
-              <Phone className="w-4 h-4 text-green-400 group-hover:scale-110 transition-transform" />
-            </a>
-            <a onMouseEnter={() => play("hover")} onClick={() => play("click")} href="mailto:saranjthilak@gmail.com" className="flex items-center justify-center space-x-2 p-3 bg-white/10 hover:bg-red-500/20 rounded-xl transition-all duration-300 group">
-              <Mail className="w-4 h-4 text-red-400 group-hover:scale-110 transition-transform" />
-            </a>
-          </div>
-        </div>
+          );
+        })}
+      </nav>
+
+      {/* Audio toggles */}
+      <div className="flex flex-col items-center gap-2 mb-4">
+        <button
+          type="button"
+          onClick={() => { play("click"); toggleMusic(); }}
+          aria-label={musicOn ? "Pause ambient music" : "Play ambient music"}
+          title={musicOn ? "Music on" : "Music off"}
+          className={`w-8 h-8 flex items-center justify-center border transition-colors ${
+            musicOn
+              ? "border-primary/50 text-primary"
+              : "border-border text-muted-foreground hover:text-foreground hover:border-foreground/40"
+          }`}
+        >
+          {musicOn ? <Music2 className="w-3.5 h-3.5" /> : <Music className="w-3.5 h-3.5" />}
+        </button>
+        <button
+          type="button"
+          onClick={toggleMuted}
+          aria-label={muted ? "Enable UI sounds" : "Mute UI sounds"}
+          title={muted ? "Sound off" : "Sound on"}
+          className={`w-8 h-8 flex items-center justify-center border transition-colors ${
+            muted
+              ? "border-border text-muted-foreground hover:text-foreground hover:border-foreground/40"
+              : "border-primary/50 text-primary"
+          }`}
+        >
+          {muted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+        </button>
       </div>
-    </div>
+
+      {/* Connect icons */}
+      <div className="flex flex-col items-center gap-2 pt-4 border-t border-border w-8">
+        <a onMouseEnter={() => play("hover")} onClick={() => play("click")} href="https://www.linkedin.com/in/saranjayathilak" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-muted-foreground hover:text-primary transition-colors p-1.5">
+          <Linkedin className="w-3.5 h-3.5" />
+        </a>
+        <a onMouseEnter={() => play("hover")} onClick={() => play("click")} href="https://github.com/saranjthilak" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="text-muted-foreground hover:text-primary transition-colors p-1.5">
+          <Github className="w-3.5 h-3.5" />
+        </a>
+        <a onMouseEnter={() => play("hover")} onClick={() => play("click")} href="mailto:saranjthilak@gmail.com" aria-label="Email" className="text-muted-foreground hover:text-primary transition-colors p-1.5">
+          <Mail className="w-3.5 h-3.5" />
+        </a>
+      </div>
+
+      {/* Version stamp */}
+      <div className="mt-4 [writing-mode:vertical-lr] rotate-180 font-mono text-[9px] tracking-[0.2em] text-muted-foreground/60">
+        V.03—26
+      </div>
+    </aside>
   );
 };
 
