@@ -38,6 +38,7 @@ export const projects = [
     skills: ["FAISS", "CLIP", "Triton", "MongoDB", "Docker"],
     image: "/src/assets/project-product-matching.jpg",
     url: "https://github.com/saranjthilak/ai_poduct_matching",
+    featured: true,
   },
   {
     title: "Car Manual RAG Assistant",
@@ -46,6 +47,7 @@ export const projects = [
     skills: ["RAG", "LangChain", "Embeddings", "LLMs", "Python"],
     image: "/src/assets/project-knowledge-assistant.jpg",
     url: "https://github.com/saranjthilak/Car-Manual-RAG-Assistant",
+    featured: true,
   },
   {
     title: "Divvy Bikes – End-to-End Data Pipeline",
@@ -54,6 +56,7 @@ export const projects = [
     skills: ["GCP", "Terraform", "Airflow", "DBT", "BigQuery", "Data Studio"],
     image: "/src/assets/project-divvy-bikes.jpg",
     url: "https://github.com/saranjthilak/Divvy-Bike-Data-End-to-End-Pipeline",
+    featured: true,
   },
   {
     title: "Multimodal RAG System",

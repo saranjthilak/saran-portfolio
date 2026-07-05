@@ -66,7 +66,7 @@ const ProjectsSection = () => {
             </h3>
           </div>
           <div className="grid gap-6 md:gap-8 lg:grid-cols-3">
-            {curatedProjects.map((p, i) => (
+            {curatedProjects.filter((p) => p.featured).map((p, i) => (
               <Reveal key={p.title} delay={i * 0.08} direction="up" className="h-full">
                 <Card className="glass rounded-2xl overflow-hidden h-full flex flex-col group hover:border-primary/40 hover:shadow-elegant transition-all duration-500">
                   {p.image ? (
