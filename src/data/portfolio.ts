@@ -37,13 +37,15 @@ export const projects = [
     description: "Developed an image-based product search engine using FAISS for vector similarity and a quantized CLIP model served via NVIDIA Triton Inference Server. Integrated MongoDB and Docker for fast, scalable product matching.",
     skills: ["FAISS", "CLIP", "Triton", "MongoDB", "Docker"],
     image: "/src/assets/project-product-matching.jpg",
+    url: "https://github.com/saranjthilak/ai_poduct_matching",
   },
   {
-    title: "AI Knowledge Assistant",
-    source: "Local RAG + LangChain",
-    description: "Built an AI chat interface to interact with PDFs by integrating Google Drive, Notion, Google Sheets, and SQL databases. Used LangChain for retrieval-augmented generation (RAG) and orchestration of local LLMs.",
-    skills: ["LangChain", "RAG", "LLMs", "Python"],
+    title: "Car Manual RAG Assistant",
+    source: "RAG + Vector Embeddings + LLMs",
+    description: "AI-powered RAG assistant that answers car manual queries using semantic search, vector embeddings, and LLMs for accurate, context-aware responses.",
+    skills: ["RAG", "LangChain", "Embeddings", "LLMs", "Python"],
     image: "/src/assets/project-knowledge-assistant.jpg",
+    url: "https://github.com/saranjthilak/Car-Manual-RAG-Assistant",
   },
   {
     title: "Divvy Bikes – End-to-End Data Pipeline",
@@ -51,6 +53,28 @@ export const projects = [
     description: "Built an end-to-end data pipeline on GCP using Terraform for infrastructure, Airflow for orchestration, and DBT for SQL transformations. Loaded data into BigQuery and visualized insights via Google Data Studio.",
     skills: ["GCP", "Terraform", "Airflow", "DBT", "BigQuery", "Data Studio"],
     image: "/src/assets/project-divvy-bikes.jpg",
+    url: "https://github.com/saranjthilak/Divvy-Bike-Data-End-to-End-Pipeline",
+  },
+  {
+    title: "Multimodal RAG System",
+    source: "Production RAG + Conversational AI",
+    description: "A production-ready Multimodal Retrieval-Augmented Generation (RAG) system that supports conversational querying over text data and is extendable to images.",
+    skills: ["RAG", "Multimodal", "LangChain", "Python", "LLMs"],
+    url: "https://github.com/saranjthilak/Multimodel_RAG",
+  },
+  {
+    title: "German Learning App",
+    source: "TypeScript | AI Tutor | A1–C1",
+    description: "AI-powered German learning platform with interactive lessons, vocabulary practice, pronunciation support, quizzes, and personalized learning from A1 to C1.",
+    skills: ["TypeScript", "AI", "NLP", "React"],
+    url: "https://github.com/saranjthilak/German-Learning-APP",
+  },
+  {
+    title: "Vanilla Steel Assessment",
+    source: "Full-stack | APIs | Docker",
+    description: "A full-stack assessment project demonstrating modern software engineering practices, including backend development, APIs, testing, containerization, and deployment.",
+    skills: ["Python", "FastAPI", "Docker", "Testing", "CI/CD"],
+    url: "https://github.com/saranjthilak/vanilla-steel-assessment",
   }
 ];
 

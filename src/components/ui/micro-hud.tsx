@@ -16,7 +16,7 @@ const MicroHud = () => {
     <div className="fixed top-6 right-6 z-40 hidden md:flex items-center gap-6 font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground pointer-events-none select-none">
       <div className="flex items-center gap-2">
         <span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--signal))] animate-pulse" />
-        <span>System Active</span>
+        <span>Available for Hire</span>
       </div>
       <span className="opacity-30">/</span>
       <span>
