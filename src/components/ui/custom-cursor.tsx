@@ -1,13 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
+// Orange accent token — matches --primary in index.css
+const BRACKET_COLOR = "rgba(249, 115, 22, 0.95)";
+
 const CustomCursor = () => {
   const x = useMotionValue(-100);
   const y = useMotionValue(-100);
-  const ringX = useSpring(x, { stiffness: 180, damping: 20, mass: 0.6 });
-  const ringY = useSpring(y, { stiffness: 180, damping: 20, mass: 0.6 });
-  const dotX = useSpring(x, { stiffness: 600, damping: 30, mass: 0.3 });
-  const dotY = useSpring(y, { stiffness: 600, damping: 30, mass: 0.3 });
+
+  // Each bracket follows with a slight lag for a precision feel
+  const tlX = useSpring(x, { stiffness: 260, damping: 24, mass: 0.5 });
+  const tlY = useSpring(y, { stiffness: 260, damping: 24, mass: 0.5 });
+  const brX = useSpring(x, { stiffness: 260, damping: 24, mass: 0.5 });
+  const brY = useSpring(y, { stiffness: 260, damping: 24, mass: 0.5 });
+
+  // Center dot is fast/snappy
+  const dotX = useSpring(x, { stiffness: 800, damping: 32, mass: 0.2 });
+  const dotY = useSpring(y, { stiffness: 800, damping: 32, mass: 0.2 });
 
   const [hovering, setHovering] = useState(false);
   const [clicking, setClicking] = useState(false);
@@ -56,45 +65,85 @@ const CustomCursor = () => {
 
   if (!enabledRef.current) return null;
 
+  // Brackets frame the cursor point; on hover they snap tighter
+  const offset = hovering ? 10 : 14;
+  const arm = hovering ? 7 : 10;
+
   return (
     <>
+      {/* Top-left L bracket */}
       <motion.div
         aria-hidden
-        className="pointer-events-none fixed left-0 top-0 z-[9999] rounded-full mix-blend-screen"
+        className="pointer-events-none fixed left-0 top-0 z-[9999]"
         style={{
-          x: ringX,
-          y: ringY,
-          translateX: "-50%",
-          translateY: "-50%",
+          x: tlX,
+          y: tlY,
+          translateX: `-${offset}px`,
+          translateY: `-${offset}px`,
           opacity: visible ? 1 : 0,
         }}
-        animate={{
-          width: hovering ? 56 : 32,
-          height: hovering ? 56 : 32,
-          borderColor: hovering
-            ? "rgba(217,70,239,0.9)"
-            : "rgba(34,211,238,0.8)",
-          boxShadow: hovering
-            ? "0 0 30px rgba(217,70,239,0.6), inset 0 0 12px rgba(34,211,238,0.4)"
-            : "0 0 18px rgba(34,211,238,0.55)",
-          scale: clicking ? 0.85 : 1,
-        }}
-        transition={{ type: "spring", stiffness: 260, damping: 22 }}
+        animate={{ scale: clicking ? 1.2 : 1 }}
+        transition={{ type: "spring", stiffness: 400, damping: 28 }}
       >
-        <div className="w-full h-full rounded-full border-[1.5px] border-inherit" />
+        <span
+          style={{
+            display: "block",
+            width: arm,
+            height: arm,
+            borderTop: `1.5px solid ${BRACKET_COLOR}`,
+            borderLeft: `1.5px solid ${BRACKET_COLOR}`,
+          }}
+        />
       </motion.div>
+
+      {/* Bottom-right L bracket */}
       <motion.div
         aria-hidden
-        className="pointer-events-none fixed left-0 top-0 z-[9999] w-1.5 h-1.5 rounded-full bg-white mix-blend-difference"
+        className="pointer-events-none fixed left-0 top-0 z-[9999]"
+        style={{
+          x: brX,
+          y: brY,
+          translateX: `${offset}px`,
+          translateY: `${offset}px`,
+          opacity: visible ? 1 : 0,
+        }}
+        animate={{ scale: clicking ? 1.2 : 1 }}
+        transition={{ type: "spring", stiffness: 400, damping: 28 }}
+      >
+        <span
+          style={{
+            display: "block",
+            width: arm,
+            height: arm,
+            borderBottom: `1.5px solid ${BRACKET_COLOR}`,
+            borderRight: `1.5px solid ${BRACKET_COLOR}`,
+          }}
+        />
+      </motion.div>
+
+      {/* Center dot */}
+      <motion.div
+        aria-hidden
+        className="pointer-events-none fixed left-0 top-0 z-[9999]"
         style={{
           x: dotX,
           y: dotY,
           translateX: "-50%",
           translateY: "-50%",
           opacity: visible ? 1 : 0,
-          boxShadow: "0 0 8px rgba(255,255,255,0.9)",
         }}
-      />
+      >
+        <span
+          style={{
+            display: "block",
+            width: 3,
+            height: 3,
+            borderRadius: 9999,
+            background: BRACKET_COLOR,
+            boxShadow: "0 0 6px rgba(249, 115, 22, 0.6)",
+          }}
+        />
+      </motion.div>
     </>
   );
 };
