@@ -1,12 +1,9 @@
 import { useMemo } from "react";
-import { Github, AlertCircle, Sparkles, ExternalLink } from "lucide-react";
+import { Github, ExternalLink } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import SectionHeading from "@/components/ui/section-heading";
 import Reveal from "@/components/ui/reveal";
-import RepoCard from "@/components/projects/RepoCard";
-import GitHubStats from "@/components/projects/GitHubStats";
-import { useGitHubRepos, type GitHubRepo } from "@/hooks/use-github-repos";
 import { projects as curatedProjects } from "@/data/portfolio";
 import productMatchingImg from "@/assets/project-product-matching.jpg";
 import knowledgeAssistantImg from "@/assets/project-knowledge-assistant.jpg";
@@ -17,28 +14,6 @@ const IMAGE_MAP: Record<string, string> = {
   "/src/assets/project-knowledge-assistant.jpg": knowledgeAssistantImg,
   "/src/assets/project-divvy-bikes.jpg": divvyBikesImg,
 };
-
-const GITHUB_USER = "saranjthilak";
-
-const FEATURED_KEYWORDS = [
-  "AI", "LLM", "RAG", "Machine Learning", "ML", "Data Engineering",
-  "AWS", "Terraform", "Docker", "Kubernetes", "MLOps", "FAISS",
-  "Triton", "OpenAI",
-];
-
-function haystack(r: GitHubRepo): string {
-  return [r.name, r.description ?? "", (r.topics ?? []).join(" "), r.language ?? ""].join(" ").toLowerCase();
-}
-
-function matchKeywords(r: GitHubRepo): string[] {
-  const hay = haystack(r);
-  const out = new Set<string>();
-  for (const kw of FEATURED_KEYWORDS) {
-    const needle = kw.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    if (new RegExp(`(?:^|[^a-z0-9])${needle}(?:$|[^a-z0-9])`, "i").test(hay)) out.add(kw);
-  }
-  return Array.from(out);
-}
 
 const ProjectsSection = () => {
   const { user, repos, loading, error } = useGitHubRepos(GITHUB_USER);
