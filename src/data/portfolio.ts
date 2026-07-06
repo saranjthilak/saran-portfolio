@@ -2,28 +2,28 @@
 export const experience = [
   {
     company: "Tesla",
-    role: "Data Engineer (Contract)",
+    role: "Data Engineer",
     period: "2023–2025",
     description: "Designed RAG-based LLM chatbots improving customer interaction efficiency by 25%, added guardrails (hallucination detection, response validation), and architected Apache Airflow ETL pipelines with 99.9% reliability and real-time alerting.",
     logo: "🚗"
   },
   {
     company: "Huawei",
-    role: "Cloud Support Engineer (Contract)",
+    role: "Cloud Support Engineer",
     period: "2019–2021",
     description: "Accelerated AWS cloud-native infrastructure with Terraform, implemented secure architectures (EC2, S3, Lambda, DynamoDB), and reduced AWS costs by ~20% through monitoring and optimization.",
     logo: "☁️"
   },
   {
     company: "Huawei",
-    role: "Operations Team Leader (Contract)",
+    role: "Operations Team Leader",
     period: "2016–2019",
     description: "Executed 24×7 GOC operations supporting 99.9%+ availability across IP, transmission, mobile core, and RAN domains. Mentored junior engineers and reduced escalations by ~30%.",
     logo: "🔧"
   },
   {
     company: "Nokia",
-    role: "Operations & Maintenance Engineer (Contract)",
+    role: "Operations & Maintenance Engineer",
     period: "2014–2016",
     description: "Monitored statewide telecom infrastructure with 99.99% availability. Executed preventive and corrective maintenance on BTS, BSC, and transmission systems.",
     logo: "📡"
