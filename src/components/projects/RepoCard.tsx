@@ -109,17 +109,6 @@ const RepoCard = ({ repo, featured, matched }: Props) => {
             >
               <Github className="w-3.5 h-3.5" aria-hidden /> View on GitHub
             </a>
-            {repo.homepage && (
-              <a
-                href={repo.homepage}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 text-xs font-mono tracking-[0.15em] uppercase px-3 py-2 rounded-lg glass hover:border-primary/40 transition-colors"
-                aria-label={`Open live site for ${repo.name}`}
-              >
-                <ExternalLink className="w-3.5 h-3.5" aria-hidden /> Live
-              </a>
-            )}
           </div>
         </CardContent>
       </Card>
