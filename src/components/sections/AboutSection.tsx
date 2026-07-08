@@ -137,7 +137,7 @@ const AboutSection = () => {
           subtitle="Operational history, performance metrics, and system capabilities."
         />
         <div className="grid gap-8 md:gap-10 md:grid-cols-2">
-          <Reveal direction="wipe-right">
+          <Reveal direction="right">
             <HudFrame scan variant="cyan" readout="LOG●" id="ABT1">
               <div className="bg-black/40 backdrop-blur-xl border border-cyan-400/20 rounded-2xl p-6 sm:p-8 hover:border-cyan-400/50 transition-colors duration-500">
                 <BootLog />
@@ -145,7 +145,7 @@ const AboutSection = () => {
             </HudFrame>
           </Reveal>
 
-          <Reveal direction="wipe" delay={0.1}>
+          <Reveal direction="left" delay={0.1}>
             <HudFrame scan variant="fuchsia" readout="METRICS●" id="ABT2">
               <div className="bg-black/40 backdrop-blur-xl border border-fuchsia-400/20 rounded-2xl p-6 sm:p-8 hover:border-fuchsia-400/50 transition-colors duration-500 h-full flex flex-col justify-center">
                 <PerformanceTelemetry />
