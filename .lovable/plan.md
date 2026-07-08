@@ -1,65 +1,40 @@
-## Skills → Neural Constellation
+## About Section — Futuristic HUD Redesign
 
-Full redesign of the Skills section. The three category cards are replaced by a single wide "neural network" canvas where every skill is a glowing node connected by animated synapse lines to one of three hubs (AI/ML, Backend, Cloud/DevOps).
+### Goal
+Replace the current two-column card layout with a high-tech "System Profile" interface that matches the neural-constellation Skills section and HUD-framed Experience timeline.
 
-### What the user sees
+### What we'll build
 
-```text
-       LLMs •─────────●                              ●─────• Airflow
-                 \    │                              │    /
-     RAG •────────●───┤  ● AI/ML   ● Backend   ● Cloud/DevOps  ├───●───• AWS
-                 /    │                              │    \
-   LangChain • ●      ●                              ●      ● Docker
-```
+#### 1. Restructure as a HUD dashboard
+- **Left panel — Boot Log / System Profile**
+  - Wrap in `HudFrame` with `scan` + `variant="cyan"`
+  - Render the 3 professional-background paragraphs as a terminal-style boot sequence
+  - Use monospace font, subtle line numbers, a blinking cursor on the last line, and a slow vertical scanline shimmer
+  - Paragraphs appear staggered on scroll entry (already supported by `Reveal`)
 
-- Dark starfield background with a faint animated grid.
-- Three hub nodes pulse gently in cyan / indigo / fuchsia (matches existing palette).
-- Each skill is a small node; size + glow scale with proficiency; color inherits its category.
-- Synapse lines connect every skill to its hub with a slow flowing signal (moving dash) — reads as data traveling.
-- Nodes drift subtly (organic floating), never chaotic.
-- Hover a node → HUD tooltip with skill name + level, its synapse brightens, unrelated nodes dim to ~25%.
-- Hover a hub → isolate only that category's constellation.
-- Legend chip row (All / AI & ML / Backend / Cloud & DevOps) below the canvas to persist isolation.
-- Reduced-motion users get the constellation static (no drift, no traveling signals).
+- **Right panel — Performance Telemetry**
+  - Wrap in `HudFrame` with `scan` + `variant="fuchsia"`
+  - Convert the 4 achievement items into metric readouts with animated horizontal progress bars
+  - Each bar uses the existing gradient colors (green→emerald, blue→cyan, purple→pink, pink→yellow) and fills from 0 to the metric value on scroll entry
+  - Metrics: 40% RAG Boost, 30% Accuracy Gain, 25% Vector DB Efficiency, 2× IEEE Publications (converted to a maxed "Research Output" bar)
+  - Each item keeps its icon but displayed inside a small glowing hexagon badge
 
-### Layout
+#### 2. Animations & motion
+- Entry: `Reveal` with `direction="wipe-right"` on left panel, `direction="wipe"` on right panel
+- Progress bars: CSS `@keyframes` or Framer Motion `animate` filling bars over 1.2s after entering viewport
+- Blinking cursor: CSS `hud-blink` keyframe already exists
+- Scanlines: reuse `HudFrame scan` prop (already implemented)
+- `useReducedMotion()` will disable bar-fill animations and blink cursor
 
-- Full-width section, single SVG canvas (no 3-column card grid).
-- Canvas ~720px tall on desktop, ~560px on tablet.
-- Mobile (< 768px): canvas collapses to a stacked list of category groups with the same node visual language (glowing dots + connectors + proficiency bar), keeps touch-friendly.
-- Section heading stays; add a one-line subtitle: "Hover a node to inspect. Click a hub to isolate a domain."
+#### 3. Responsive
+- Stack vertically on mobile: Boot Log first, then Telemetry
+- Bars remain readable at full width
 
-### Interactions
+#### 4. Files changed
+- `src/components/sections/AboutSection.tsx` — full rewrite of layout, reuse `HudFrame`, `Reveal`, `SectionHeading`
+- `src/index.css` — add one `@keyframes bar-fill` animation for telemetry bars (kept lightweight, GPU-friendly)
 
-- Hover node → tooltip + focus dim + brighter synapse.
-- Hover hub → isolate category.
-- Click chip → persist isolation until "All" clicked.
-- Idle → slow drift + traveling signal pulses.
-- Scroll-in → nodes fade in from hub outward (stagger by distance), lines draw last.
-
-### Technical details
-
-- New component: `src/components/skills/NeuralSkillsNetwork.tsx` (SVG + framer-motion, no WebGL/Three.js — light + battery friendly).
-- New mobile fallback: `src/components/skills/SkillsStackFallback.tsx` (reuses existing proficiency-bar visual).
-- Graph data + layout: `src/data/skills-graph.ts`. Deterministic layout — hubs at x = 260/600/940 (viewBox 1200×680); satellites on two concentric rings around each hub using the golden angle so nothing overlaps.
-- Drift = per-node framer-motion `animate` with sinusoidal x/y offsets, seeded params.
-- Synapse signal = SVG `<path>` with animated `strokeDashoffset` (GPU-friendly).
-- Focus dim = local React state `hoveredId | isolatedHub`; nodes and links derive opacity from it (no re-layout).
-- Tooltip = HUD-style chip using existing cyber palette.
-- `useReducedMotion()` disables drift, traveling signals, entry stagger.
-- `useIsMobile()` (already in project) swaps to fallback.
-- No new dependencies.
-
-### Files touched
-
-- Rewrite: `src/components/sections/SkillsSection.tsx` (thin wrapper: heading + desktop/mobile switch)
-- New: `src/components/skills/NeuralSkillsNetwork.tsx`
-- New: `src/components/skills/SkillsStackFallback.tsx`
-- New: `src/data/skills-graph.ts` (hubs, layout, proficiency levels)
-- Optional: add 1 keyframe (`synapse-flow`) to `src/index.css`
-
-### Out of scope
-
-- No WebGL / Three.js.
-- No new dependencies.
-- Other sections untouched.
+### What stays the same
+- All text content from `achievements` and the 3 biography paragraphs (no copy edits)
+- Existing color palette and design tokens
+- No new npm dependencies
