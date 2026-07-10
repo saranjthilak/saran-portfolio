@@ -172,7 +172,128 @@ const SkillChip = ({
   );
 };
 
-/* ── Main Section (placeholder — cards will be enhanced in next commit) ── */
+/* ── Synaptic Timeline Node ── */
+const SynapticNode = ({
+  label,
+  isLast,
+  variant,
+  index,
+}: {
+  label: string;
+  isLast: boolean;
+  variant: "cyan" | "fuchsia" | "mixed";
+  index: number;
+}) => {
+  const reduce = useReducedMotion();
+
+  const nodeColor: Record<string, { bg: string; border: string; glow: string; line: string }> = {
+    cyan: {
+      bg: "bg-cyan-400",
+      border: "border-cyan-400",
+      glow: "shadow-[0_0_20px_rgba(34,211,238,0.6),0_0_40px_rgba(34,211,238,0.2)]",
+      line: "from-cyan-400/60 via-cyan-400/20 to-transparent",
+    },
+    fuchsia: {
+      bg: "bg-fuchsia-400",
+      border: "border-fuchsia-400",
+      glow: "shadow-[0_0_20px_rgba(217,70,239,0.6),0_0_40px_rgba(217,70,239,0.2)]",
+      line: "from-fuchsia-400/60 via-fuchsia-400/20 to-transparent",
+    },
+    mixed: {
+      bg: "bg-indigo-400",
+      border: "border-indigo-400",
+      glow: "shadow-[0_0_20px_rgba(99,102,241,0.6),0_0_40px_rgba(99,102,241,0.2)]",
+      line: "from-indigo-400/60 via-indigo-400/20 to-transparent",
+    },
+  };
+
+  const c = nodeColor[variant];
+
+  return (
+    <div className="flex flex-col items-center">
+      {/* Node */}
+      <motion.div
+        className="relative z-10"
+        initial={reduce ? false : { scale: 0, opacity: 0 }}
+        whileInView={{ scale: 1, opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{
+          type: "spring",
+          stiffness: 200,
+          damping: 15,
+          delay: index * 0.15,
+        }}
+      >
+        {/* Pulse ring */}
+        <div
+          className={`absolute -inset-2 rounded-full ${c.border} border opacity-30 animate-ping`}
+          style={{ animationDuration: "3s" }}
+        />
+        {/* Outer ring */}
+        <div
+          className={`w-10 h-10 rounded-full border-2 ${c.border} ${c.glow} flex items-center justify-center bg-black/80 backdrop-blur-sm`}
+        >
+          {/* Inner label */}
+          <span className="text-[8px] font-mono font-bold text-white tracking-wider">
+            {label}
+          </span>
+        </div>
+      </motion.div>
+
+      {/* Connecting line */}
+      {!isLast && (
+        <motion.div
+          className={`w-[2px] bg-gradient-to-b ${c.line}`}
+          initial={reduce ? { height: 120 } : { height: 0 }}
+          whileInView={{ height: 120 }}
+          viewport={{ once: true }}
+          transition={{
+            duration: 0.8,
+            delay: index * 0.15 + 0.2,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+        />
+      )}
+    </div>
+  );
+};
+
+/* ── Data Particles ── */
+const DataParticles = () => {
+  const particles = useMemo(
+    () =>
+      Array.from({ length: 15 }, (_, i) => ({
+        id: i,
+        left: `${Math.random() * 100}%`,
+        top: `${Math.random() * 100}%`,
+        delay: `${Math.random() * 5}s`,
+        duration: `${4 + Math.random() * 4}s`,
+        size: Math.random() > 0.6 ? 3 : 2,
+      })),
+    []
+  );
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
+      {particles.map((p) => (
+        <div
+          key={p.id}
+          className="absolute rounded-full bg-cyan-400/20 animate-pulse"
+          style={{
+            left: p.left,
+            top: p.top,
+            width: p.size,
+            height: p.size,
+            animationDelay: p.delay,
+            animationDuration: p.duration,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+/* ── Main Section (placeholder — full layout in next commit) ── */
 const EducationSection = () => {
   return (
     <section id="education" className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 md:px-8">
