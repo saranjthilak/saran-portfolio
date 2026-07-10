@@ -70,7 +70,109 @@ const educationData: EducationItem[] = [
   },
 ];
 
-/* ── Main Section (placeholder — will be enhanced in next commits) ── */
+/* ── Animated XP Bar ── */
+const XPBar = ({
+  value,
+  variant,
+  index,
+}: {
+  value: number;
+  variant: "cyan" | "fuchsia" | "mixed";
+  index: number;
+}) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, amount: 0.5 });
+  const reduce = useReducedMotion();
+
+  const gradients: Record<string, string> = {
+    cyan: "from-cyan-400 via-blue-400 to-indigo-500",
+    fuchsia: "from-fuchsia-400 via-pink-400 to-rose-500",
+    mixed: "from-cyan-400 via-indigo-400 to-fuchsia-500",
+  };
+
+  const glowColors: Record<string, string> = {
+    cyan: "shadow-[0_0_12px_rgba(34,211,238,0.5)]",
+    fuchsia: "shadow-[0_0_12px_rgba(217,70,239,0.5)]",
+    mixed: "shadow-[0_0_12px_rgba(99,102,241,0.5)]",
+  };
+
+  return (
+    <div ref={ref} className="space-y-1.5">
+      <div className="flex items-center justify-between">
+        <span className="text-[10px] font-mono uppercase tracking-[0.15em] text-white/40">
+          Knowledge Acquired
+        </span>
+        <span className="text-[10px] font-mono text-cyan-300/70 tracking-wider">
+          {value}%
+        </span>
+      </div>
+      <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden border border-white/10">
+        <motion.div
+          className={`h-full rounded-full bg-gradient-to-r ${gradients[variant]} ${glowColors[variant]}`}
+          initial={{ width: reduce ? `${value}%` : "0%" }}
+          animate={{ width: isInView || reduce ? `${value}%` : "0%" }}
+          transition={{
+            duration: 1.4,
+            delay: index * 0.15 + 0.3,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
+/* ── Skill Chip ── */
+const SkillChip = ({
+  label,
+  variant,
+  index,
+}: {
+  label: string;
+  variant: "cyan" | "fuchsia" | "mixed";
+  index: number;
+}) => {
+  const reduce = useReducedMotion();
+
+  const borderColor: Record<string, string> = {
+    cyan: "border-cyan-400/30 hover:border-cyan-400/70 hover:shadow-[0_0_10px_rgba(34,211,238,0.2)]",
+    fuchsia:
+      "border-fuchsia-400/30 hover:border-fuchsia-400/70 hover:shadow-[0_0_10px_rgba(217,70,239,0.2)]",
+    mixed:
+      "border-indigo-400/30 hover:border-indigo-400/70 hover:shadow-[0_0_10px_rgba(99,102,241,0.2)]",
+  };
+
+  const textColor: Record<string, string> = {
+    cyan: "text-cyan-300/80 group-hover:text-cyan-200",
+    fuchsia: "text-fuchsia-300/80 group-hover:text-fuchsia-200",
+    mixed: "text-indigo-300/80 group-hover:text-indigo-200",
+  };
+
+  return (
+    <motion.span
+      initial={reduce ? false : { opacity: 0, scale: 0.8 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{
+        duration: 0.3,
+        delay: index * 0.06 + 0.4,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      className={`group inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border ${borderColor[variant]} bg-white/[0.02] backdrop-blur-sm transition-all duration-300 cursor-default`}
+    >
+      <span
+        className={`w-1 h-1 rounded-full ${
+          variant === "fuchsia" ? "bg-fuchsia-400" : variant === "mixed" ? "bg-indigo-400" : "bg-cyan-400"
+        }`}
+      />
+      <span className={`text-[10px] font-mono tracking-wider uppercase ${textColor[variant]}`}>
+        {label}
+      </span>
+    </motion.span>
+  );
+};
+
+/* ── Main Section (placeholder — cards will be enhanced in next commit) ── */
 const EducationSection = () => {
   return (
     <section id="education" className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 md:px-8">
