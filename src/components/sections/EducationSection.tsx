@@ -293,7 +293,112 @@ const DataParticles = () => {
   );
 };
 
-/* ── Main Section (placeholder — full layout in next commit) ── */
+/* ── Education Card ── */
+const EducationCard = ({ item, index }: { item: EducationItem; index: number }) => {
+  const reduce = useReducedMotion();
+
+  const accentColor: Record<string, string> = {
+    cyan: "text-cyan-400",
+    fuchsia: "text-fuchsia-400",
+    mixed: "text-indigo-400",
+  };
+
+  const borderHover: Record<string, string> = {
+    cyan: "hover:border-cyan-400/50 hover:shadow-[0_0_30px_rgba(34,211,238,0.1)]",
+    fuchsia: "hover:border-fuchsia-400/50 hover:shadow-[0_0_30px_rgba(217,70,239,0.1)]",
+    mixed: "hover:border-indigo-400/50 hover:shadow-[0_0_30px_rgba(99,102,241,0.1)]",
+  };
+
+  const borderBase: Record<string, string> = {
+    cyan: "border-cyan-400/15",
+    fuchsia: "border-fuchsia-400/15",
+    mixed: "border-indigo-400/15",
+  };
+
+  return (
+    <motion.div
+      initial={reduce ? false : { opacity: 0, x: index % 2 === 0 ? -60 : 60, filter: "blur(8px)" }}
+      whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{
+        duration: 0.7,
+        delay: index * 0.12,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+    >
+      <HudFrame scan variant={item.variant} id={`EDU${index}`}>
+        <div
+          className={`relative bg-black/40 backdrop-blur-xl border ${borderBase[item.variant]} rounded-2xl p-6 sm:p-8 ${borderHover[item.variant]} transition-all duration-500 group overflow-hidden`}
+        >
+          {/* Subtle gradient overlay on hover */}
+          <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] via-transparent to-white/[0.01] opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
+
+          <div className="relative z-10">
+            {/* Header row */}
+            <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6 mb-5">
+              {/* Icon */}
+              <motion.div
+                className={`flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-xl border ${borderBase[item.variant]} bg-white/[0.03] flex items-center justify-center text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-500 mx-auto sm:mx-0`}
+                whileHover={{ rotate: [0, -5, 5, 0] }}
+                transition={{ duration: 0.5 }}
+              >
+                {item.icon}
+              </motion.div>
+
+              {/* Info */}
+              <div className="flex-1 text-center sm:text-left min-w-0">
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white/70 transition-all duration-300 tracking-wide leading-tight">
+                  {item.institution}
+                </h3>
+                <div className={`text-sm font-semibold ${accentColor[item.variant]} mb-1`}>
+                  {item.degree}
+                </div>
+                <div className="text-white/60 text-xs sm:text-sm leading-relaxed">
+                  {item.field}
+                </div>
+              </div>
+
+              {/* Period & Location badge */}
+              <div className="flex-shrink-0 text-center sm:text-right space-y-1.5">
+                <div
+                  className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md border ${borderBase[item.variant]} bg-white/[0.03]`}
+                >
+                  <span className="text-[10px] font-mono text-white/70 tracking-wider">
+                    {item.period}
+                  </span>
+                </div>
+                <div className="flex items-center justify-center sm:justify-end gap-1.5">
+                  <svg className="w-3 h-3 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  <span className="text-[10px] font-mono text-white/40 tracking-wider">
+                    {item.location}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Separator */}
+            <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-4" />
+
+            {/* Skills */}
+            <div className="flex flex-wrap gap-2 mb-4">
+              {item.skills.map((skill, i) => (
+                <SkillChip key={skill} label={skill} variant={item.variant} index={i} />
+              ))}
+            </div>
+
+            {/* XP Bar */}
+            <XPBar value={item.xp} variant={item.variant} index={index} />
+          </div>
+        </div>
+      </HudFrame>
+    </motion.div>
+  );
+};
+
+/* ── Main Section (placeholder — final layout in next commit) ── */
 const EducationSection = () => {
   return (
     <section id="education" className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 md:px-8">
@@ -305,20 +410,7 @@ const EducationSection = () => {
         />
         <div className="space-y-6 sm:space-y-8">
           {educationData.map((it, i) => (
-            <Reveal key={i} delay={i * 0.1} direction={i % 2 === 0 ? "right" : "left"}>
-            <HudFrame scan variant={it.variant}>
-              <div className="flex flex-col md:flex-row items-center bg-black/30 backdrop-blur-xl border border-cyan-400/20 rounded-2xl p-6 sm:p-8 hover:bg-white/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-cyan-500/30 group hover:border-cyan-400/50">
-                <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-r from-cyan-500 via-indigo-500 to-fuchsia-500 rounded-2xl sm:rounded-3xl flex items-center justify-center text-2xl sm:text-4xl shadow-[0_0_25px_rgba(34,211,238,0.5)] mr-0 md:mr-6 lg:mr-8 mb-4 md:mb-0 group-hover:scale-110 transition-transform duration-300 mx-auto md:mx-0">
-                  {it.icon}
-                </div>
-                <div className="text-center md:text-left">
-                  <h3 className="text-xl sm:text-2xl font-bold text-white mb-1 group-hover:text-cyan-200 transition-colors tracking-wide">{it.institution}</h3>
-                  <div className="text-cyan-300 text-sm sm:text-base mb-2 uppercase tracking-[0.2em]">{it.degree} — {it.field}</div>
-                  <div className="text-white/70 text-sm sm:text-base font-mono">{it.period}</div>
-                </div>
-              </div>
-            </HudFrame>
-            </Reveal>
+            <EducationCard key={i} item={it} index={i} />
           ))}
         </div>
       </div>
