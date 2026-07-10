@@ -398,20 +398,71 @@ const EducationCard = ({ item, index }: { item: EducationItem; index: number }) 
   );
 };
 
-/* ── Main Section (placeholder — final layout in next commit) ── */
+/* ── Main Section ── */
 const EducationSection = () => {
   return (
-    <section id="education" className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 md:px-8">
-      <div className="max-w-7xl mx-auto">
+    <section id="education" className="relative py-16 sm:py-24 md:py-32 px-4 sm:px-6 md:px-8 overflow-hidden">
+      {/* Background particles */}
+      <DataParticles />
+
+      <div className="max-w-7xl mx-auto relative z-10">
         <SectionHeading
           title="Education"
           tag="Neural Pathway"
           subtitle="A knowledge evolution spanning continents — from core engineering foundations to cutting-edge AI research and production ML systems."
         />
-        <div className="space-y-6 sm:space-y-8">
-          {educationData.map((it, i) => (
-            <EducationCard key={i} item={it} index={i} />
-          ))}
+
+        {/* Timeline layout */}
+        <div className="relative">
+          {/* Desktop timeline spine */}
+          <div className="hidden md:block absolute left-8 top-0 bottom-0 w-[2px]">
+            <div className="absolute inset-0 bg-gradient-to-b from-fuchsia-400/30 via-cyan-400/20 to-cyan-400/5 rounded-full" />
+            {/* Animated pulse traveling down the spine */}
+            <motion.div
+              className="absolute left-0 w-[2px] h-16 bg-gradient-to-b from-transparent via-cyan-400/80 to-transparent rounded-full"
+              animate={{ top: ["0%", "100%"] }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+            />
+          </div>
+
+          <div className="space-y-8 sm:space-y-10 md:space-y-12">
+            {educationData.map((item, index) => (
+              <div key={index} className="flex gap-6 md:gap-10">
+                {/* Timeline node — desktop only */}
+                <div className="hidden md:flex flex-col items-center flex-shrink-0 w-16">
+                  <SynapticNode
+                    label={item.nodeLabel}
+                    isLast={index === educationData.length - 1}
+                    variant={item.variant}
+                    index={index}
+                  />
+                </div>
+
+                {/* Card */}
+                <div className="flex-1 min-w-0">
+                  <EducationCard item={item} index={index} />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Terminal node at the bottom */}
+          <Reveal direction="up" delay={0.6}>
+            <div className="flex items-center gap-4 mt-10 md:ml-[4.5rem]">
+              <div className="h-px flex-1 bg-gradient-to-r from-cyan-400/30 to-transparent" />
+              <div className="flex items-center gap-2 px-4 py-2 border border-cyan-400/20 rounded-full bg-black/30 backdrop-blur-sm">
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                <span className="text-[10px] font-mono text-cyan-300/70 tracking-[0.2em] uppercase">
+                  Continuously Learning · System Online
+                </span>
+              </div>
+              <div className="h-px flex-1 bg-gradient-to-l from-fuchsia-400/30 to-transparent" />
+            </div>
+          </Reveal>
         </div>
       </div>
     </section>
