@@ -6,9 +6,7 @@ import ContactForm from "@/components/ContactForm";
 import SectionHeading from "@/components/ui/section-heading";
 import Reveal from "@/components/ui/reveal";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { useRef, useState, useEffect, lazy, Suspense } from "react";
-
-const ContactScene3D = lazy(() => import("@/components/ContactScene3D"));
+import { useRef, useState, useEffect } from "react";
 
 /* ── Status Line ── */
 const StatusLine = ({ label, value, color }: { label: string; value: string; color: string }) => {
@@ -209,12 +207,7 @@ const ContactSection = () => {
       ref={sectionRef}
       className="relative py-16 sm:py-20 md:py-28 px-4 sm:px-6 md:px-8 overflow-hidden"
     >
-      {/* 3D Background */}
-      {!reduce && (
-        <Suspense fallback={null}>
-          <ContactScene3D />
-        </Suspense>
-      )}
+
 
       {/* Animated Grid Overlay */}
       <AnimatedGrid />
