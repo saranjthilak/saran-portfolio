@@ -4,7 +4,7 @@ import { useRef, useMemo, useState } from "react";
 import { certifications } from "@/data/portfolio";
 import SectionHeading from "@/components/ui/section-heading";
 import HudFrame from "@/components/ui/hud-frame";
-import HeroGlobe from "@/components/ui/hero-globe";
+
 
 /* ── Extended certification data ── */
 interface CertDetail {
@@ -412,10 +412,6 @@ const GridParticles = () => {
 const CertificationsSection = () => {
   return (
     <section id="certifications" className="relative py-16 sm:py-24 md:py-32 px-4 sm:px-6 md:px-8 overflow-hidden">
-      {/* 3D Globe backdrop */}
-      <div className="absolute inset-0 z-0 opacity-30 pointer-events-none">
-        <HeroGlobe />
-      </div>
 
       {/* Ambient particles */}
       <GridParticles />
