@@ -16,6 +16,10 @@ const metricValues: Record<string, number> = {
   "30% Embedding Pipeline Accuracy Gain": 30,
   "25% Vector DB Efficiency Boost": 25,
   "Two IEEE Machine Learning Publications": 100,
+  "99.9% ETL Pipeline Reliability": 99,
+  "~20% AWS Cloud Cost Reduction": 20,
+  "99.99% Network Uptime": 99,
+  "4 Professional AI & Cloud Certifications": 80,
 };
 
 const metricColors: Record<string, string> = {
@@ -23,6 +27,10 @@ const metricColors: Record<string, string> = {
   "30% Embedding Pipeline Accuracy Gain": "from-cyan-400 to-blue-500",
   "25% Vector DB Efficiency Boost": "from-fuchsia-400 to-purple-500",
   "Two IEEE Machine Learning Publications": "from-pink-400 to-rose-500",
+  "99.9% ETL Pipeline Reliability": "from-amber-400 to-orange-500",
+  "~20% AWS Cloud Cost Reduction": "from-teal-400 to-emerald-500",
+  "99.99% Network Uptime": "from-sky-400 to-indigo-500",
+  "4 Professional AI & Cloud Certifications": "from-yellow-400 to-amber-500",
 };
 
 const BootLog = () => {

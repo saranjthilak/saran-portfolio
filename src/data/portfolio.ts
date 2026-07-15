@@ -193,6 +193,30 @@ export const achievements = [
     title: "Two IEEE Machine Learning Publications",
     description: "Authored and published innovative research in applied machine learning.",
     gradient: "from-pink-600 to-yellow-400"
+  },
+  {
+    icon: "🔄",
+    title: "99.9% ETL Pipeline Reliability",
+    description: "Architected Apache Airflow ETL pipelines with real-time alerting at Tesla.",
+    gradient: "from-amber-500 to-orange-600"
+  },
+  {
+    icon: "💰",
+    title: "~20% AWS Cloud Cost Reduction",
+    description: "Optimized AWS infrastructure through monitoring and resource right-sizing at Huawei.",
+    gradient: "from-teal-400 to-emerald-500"
+  },
+  {
+    icon: "📡",
+    title: "99.99% Network Uptime",
+    description: "Maintained statewide telecom infrastructure availability across BTS, BSC, and transmission systems at Nokia.",
+    gradient: "from-sky-400 to-indigo-500"
+  },
+  {
+    icon: "🏅",
+    title: "4 Professional AI & Cloud Certifications",
+    description: "AWS Solutions Architect, Oracle Gen AI Professional, Oracle AI Foundations, SQL for Data Science.",
+    gradient: "from-yellow-400 to-amber-500"
   }
 ];
 
