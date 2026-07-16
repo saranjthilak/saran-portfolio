@@ -13,6 +13,7 @@ import EducationSection from "@/components/sections/EducationSection";
 import CertificationsSection from "@/components/sections/CertificationsSection";
 import ContactSection from "@/components/sections/ContactSection";
 import SectionDivider from "@/components/ui/section-divider";
+import SectionReveal from "@/components/ui/SectionReveal";
 import MicroHud from "@/components/ui/micro-hud";
 import { motion } from "framer-motion";
 
@@ -72,22 +73,47 @@ const Index = () => {
 
       <div className="ml-20 min-h-screen relative z-0">
         <HeroSection scrollToSection={scrollToSection} handleDownloadResume={handleDownloadResume} />
+
         <SectionDivider variant="cyan" />
-        <AboutSection />
+        <SectionReveal accent="rgba(34,211,238,0.25)">
+          <AboutSection />
+        </SectionReveal>
+
         <SectionDivider variant="mixed" />
-        <ExperienceSection />
+        <SectionReveal accent="rgba(129,140,248,0.25)">
+          <ExperienceSection />
+        </SectionReveal>
+
         <SectionDivider variant="fuchsia" />
-        <SkillsSection />
+        <SectionReveal accent="rgba(232,121,249,0.2)">
+          <SkillsSection />
+        </SectionReveal>
+
         <SectionDivider variant="cyan" flip />
-        <ProjectsSection />
+        <SectionReveal accent="rgba(34,211,238,0.25)">
+          <ProjectsSection />
+        </SectionReveal>
+
         <SectionDivider variant="mixed" />
-        <PublicationsSection />
+        <SectionReveal accent="rgba(129,140,248,0.2)">
+          <PublicationsSection />
+        </SectionReveal>
+
         <SectionDivider variant="fuchsia" flip />
-        <EducationSection />
+        <SectionReveal accent="rgba(232,121,249,0.2)">
+          <EducationSection />
+        </SectionReveal>
+
         <SectionDivider variant="cyan" />
-        <CertificationsSection />
+        <SectionReveal accent="rgba(34,211,238,0.2)">
+          <CertificationsSection />
+        </SectionReveal>
+
         <SectionDivider variant="mixed" flip />
-        <ContactSection />
+        <SectionReveal accent="rgba(129,140,248,0.2)">
+          <ContactSection />
+        </SectionReveal>
+
         <Footer />
       </div>
     </motion.div>
