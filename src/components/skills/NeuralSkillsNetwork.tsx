@@ -1,568 +1,358 @@
-import { useMemo, useState, useRef, useCallback } from "react";
+import { useState, useRef, useMemo } from "react";
 import { motion, useReducedMotion, useInView, AnimatePresence } from "framer-motion";
 import { skills } from "@/data/portfolio";
-import { skillLevels, HUBS, type HubDef } from "@/data/skills-graph";
-
-/* ─── Layout constants ─── */
-const VIEW_W = 1200;
-const VIEW_H = 700;
+import { skillLevels, HUBS } from "@/data/skills-graph";
 
 /* ─── Types ─── */
-interface SkillNode {
-  id: string;
+interface SkillItem {
   name: string;
   level: number;
   hubIndex: number;
-  x: number;
-  y: number;
-  r: number;
-  angle: number;
-  ring: number;
 }
 
-/* ─── Deterministic pseudo-random ─── */
-const seededRandom = (seed: number) => {
-  const x = Math.sin(seed * 9301 + 49297) * 233280;
-  return x - Math.floor(x);
-};
+/* ─── Level label helper ─── */
+const getLevelLabel = (level: number) =>
+  level >= 90 ? "Expert" :
+  level >= 80 ? "Advanced" :
+  level >= 70 ? "Proficient" : "Intermediate";
 
-/* ─── Build hexagonal constellation layout ─── */
-function buildConstellation(): { nodes: SkillNode[] } {
-  const nodes: SkillNode[] = [];
-  const GOLDEN = Math.PI * (3 - Math.sqrt(5));
-
-  HUBS.forEach((hub, hi) => {
-    const list = (skills as Record<string, string[]>)[hub.key] ?? [];
-    const baseAngle = hi * 0.5;
-
-    list.forEach((name, i) => {
-      const level = skillLevels[name] ?? 80;
-      const ring = i < 5 ? 0 : i < 10 ? 1 : 2;
-      const ringRadius = 100 + ring * 55;
-      const angle = baseAngle + i * GOLDEN;
-      const x = hub.x + Math.cos(angle) * ringRadius;
-      const y = hub.y + Math.sin(angle) * ringRadius * 0.85;
-
-      nodes.push({
-        id: `${hi}-${i}-${name}`,
-        name,
-        level,
-        hubIndex: hi,
-        x, y,
-        r: 4 + (level / 100) * 5,
-        angle,
-        ring,
-      });
-    });
-  });
-
-  return { nodes };
-}
-
-/* ────────────────────────────── MAIN COMPONENT ────────────────────────────── */
-
-const NeuralSkillsNetwork = () => {
-  const reduce = useReducedMotion();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(containerRef, { once: true, amount: 0.2 });
-  const { nodes } = useMemo(() => buildConstellation(), []);
-
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const [isolated, setIsolated] = useState<number | null>(null);
-  const [hoveredHub, setHoveredHub] = useState<number | null>(null);
-
-  const activeHub = hoveredHub ?? isolated;
-  const hoveredNode = nodes.find((n) => n.id === hoveredId) ?? null;
-
-  /* ─ opacity helpers ─ */
-  const getNodeOpacity = useCallback((n: SkillNode) => {
-    if (hoveredId) return n.id === hoveredId ? 1 : 0.12;
-    if (activeHub !== null) return n.hubIndex === activeHub ? 1 : 0.08;
-    return 0.9;
-  }, [hoveredId, activeHub]);
-
-  const getLinkOpacity = useCallback((n: SkillNode) => {
-    if (hoveredId) return n.id === hoveredId ? 0.9 : 0.04;
-    if (activeHub !== null) return n.hubIndex === activeHub ? 0.55 : 0.03;
-    return 0.25;
-  }, [hoveredId, activeHub]);
+/* ─── Circular progress arc ─── */
+const SkillArc = ({ level, color, size = 28 }: { level: number; color: string; size?: number }) => {
+  const r = (size - 4) / 2;
+  const circumference = 2 * Math.PI * r;
+  const offset = circumference - (level / 100) * circumference;
 
   return (
-    <div ref={containerRef} className="relative">
-      <svg
-        viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
-        className="w-full h-[560px] md:h-[700px] block"
-        role="img"
-        aria-label="Interactive neural constellation of skills grouped by domain"
-      >
-        <defs>
-          {/* Hub radial glows */}
-          {HUBS.map((h, i) => (
-            <radialGradient key={`hg-${i}`} id={`hub-glow-${i}`} cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor={h.color} stopOpacity="0.3" />
-              <stop offset="40%" stopColor={h.color} stopOpacity="0.08" />
-              <stop offset="100%" stopColor={h.color} stopOpacity="0" />
-            </radialGradient>
-          ))}
-
-          {/* Skill node gradient */}
-          {HUBS.map((h, i) => (
-            <radialGradient key={`ng-${i}`} id={`node-grad-${i}`} cx="30%" cy="30%" r="70%">
-              <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
-              <stop offset="50%" stopColor={h.color} stopOpacity="1" />
-              <stop offset="100%" stopColor={h.color} stopOpacity="0.6" />
-            </radialGradient>
-          ))}
-
-          {/* Grid pattern */}
-          <pattern id="hex-grid" width="60" height="60" patternUnits="userSpaceOnUse">
-            <circle cx="30" cy="30" r="1" fill="rgba(255,255,255,0.03)" />
-          </pattern>
-          <radialGradient id="grid-vignette" cx="50%" cy="50%" r="55%">
-            <stop offset="0%" stopColor="white" stopOpacity="1" />
-            <stop offset="100%" stopColor="white" stopOpacity="0" />
-          </radialGradient>
-          <mask id="grid-mask">
-            <rect width={VIEW_W} height={VIEW_H} fill="url(#grid-vignette)" />
-          </mask>
-
-          {/* Glow filter */}
-          <filter id="glow-sm" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-          <filter id="glow-lg" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-
-        {/* Dot grid backdrop */}
-        <rect width={VIEW_W} height={VIEW_H} fill="url(#hex-grid)" mask="url(#grid-mask)" />
-
-        {/* Hub ambient glow */}
-        {HUBS.map((h, i) => (
-          <motion.circle
-            key={`glow-${i}`}
-            cx={h.x}
-            cy={h.y}
-            r={240}
-            fill={`url(#hub-glow-${i})`}
-            style={{ transition: "opacity 500ms ease" }}
-            opacity={activeHub === null || activeHub === i ? 1 : 0.15}
-            animate={reduce ? undefined : {
-              r: [240, 260, 240],
-              opacity: activeHub === null || activeHub === i ? [1, 0.7, 1] : [0.15, 0.1, 0.15],
-            }}
-            transition={reduce ? undefined : {
-              duration: 4 + i * 0.5,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-
-        {/* ── Synapse connections (curved bezier) ── */}
-        <g>
-          {nodes.map((n) => {
-            const hub = HUBS[n.hubIndex];
-            const midX = (hub.x + n.x) / 2;
-            const midY = (hub.y + n.y) / 2;
-            // Offset control point perpendicular to the line
-            const dx = n.x - hub.x;
-            const dy = n.y - hub.y;
-            const len = Math.hypot(dx, dy);
-            const perpX = -dy / len * 20 * (n.ring % 2 === 0 ? 1 : -1);
-            const perpY = dx / len * 20 * (n.ring % 2 === 0 ? 1 : -1);
-            const cx = midX + perpX;
-            const cy = midY + perpY;
-
-            const isActive = hoveredId === n.id;
-            return (
-              <motion.path
-                key={`link-${n.id}`}
-                d={`M ${hub.x} ${hub.y} Q ${cx} ${cy} ${n.x} ${n.y}`}
-                fill="none"
-                stroke={hub.color}
-                strokeWidth={isActive ? 2 : 0.8}
-                strokeLinecap="round"
-                style={{
-                  opacity: getLinkOpacity(n),
-                  transition: "opacity 400ms ease, stroke-width 200ms ease",
-                }}
-                initial={reduce ? undefined : { pathLength: 0 }}
-                animate={isInView || reduce ? { pathLength: 1 } : { pathLength: 0 }}
-                transition={reduce ? undefined : {
-                  duration: 1.2,
-                  delay: 0.3 + n.hubIndex * 0.15 + (nodes.indexOf(n) % 5) * 0.08,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-              />
-            );
-          })}
-        </g>
-
-        {/* ── Pulse rings on synapses (active connections) ── */}
-        {!reduce && nodes.map((n) => {
-          if (hoveredId && hoveredId !== n.id) return null;
-          if (activeHub !== null && n.hubIndex !== activeHub) return null;
-          const hub = HUBS[n.hubIndex];
-          const seed = n.hubIndex * 100 + nodes.indexOf(n);
-          return (
-            <motion.circle
-              key={`pulse-${n.id}`}
-              cx={hub.x}
-              cy={hub.y}
-              r={3}
-              fill={hub.color}
-              opacity={0}
-              animate={{
-                cx: [hub.x, n.x],
-                cy: [hub.y, n.y],
-                opacity: [0, 0.6, 0],
-                r: [2, 1.5, 0],
-              }}
-              transition={{
-                duration: 2.5 + seededRandom(seed) * 2,
-                repeat: Infinity,
-                delay: seededRandom(seed + 7) * 4,
-                ease: "easeInOut",
-              }}
-            />
-          );
-        })}
-
-        {/* ── Hub cores ── */}
-        {HUBS.map((h, i) => (
-          <g
-            key={`hub-${i}`}
-            style={{ cursor: "pointer" }}
-            onMouseEnter={() => setHoveredHub(i)}
-            onMouseLeave={() => setHoveredHub(null)}
-            onClick={() => setIsolated(isolated === i ? null : i)}
-          >
-            {/* Outer pulse ring */}
-            {!reduce && (
-              <motion.circle
-                cx={h.x}
-                cy={h.y}
-                r={30}
-                fill="none"
-                stroke={h.color}
-                strokeWidth={1}
-                opacity={0.3}
-                animate={{
-                  r: [30, 42, 30],
-                  opacity: [0.3, 0, 0.3],
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: i * 0.6,
-                }}
-              />
-            )}
-
-            {/* Hex-like outer ring */}
-            <circle
-              cx={h.x}
-              cy={h.y}
-              r={22}
-              fill="none"
-              stroke={h.color}
-              strokeWidth={1.5}
-              opacity={activeHub === i ? 0.8 : 0.3}
-              style={{ transition: "opacity 300ms ease" }}
-            />
-
-            {/* Core gradient */}
-            <circle
-              cx={h.x}
-              cy={h.y}
-              r={16}
-              fill={h.color}
-              opacity={0.2}
-            />
-            <circle
-              cx={h.x}
-              cy={h.y}
-              r={10}
-              fill={h.color}
-              opacity={0.9}
-              filter="url(#glow-sm)"
-            />
-            <circle
-              cx={h.x}
-              cy={h.y}
-              r={4}
-              fill="#ffffff"
-              opacity={0.95}
-            />
-
-            {/* Hub label */}
-            <text
-              x={h.x}
-              y={h.y + 52}
-              textAnchor="middle"
-              fill={h.color}
-              fontSize="11"
-              fontFamily="JetBrains Mono, monospace"
-              letterSpacing="4"
-              opacity={activeHub === null || activeHub === i ? 0.9 : 0.3}
-              style={{ textTransform: "uppercase", transition: "opacity 400ms ease" }}
-            >
-              {h.short}
-            </text>
-
-            {/* Count badge */}
-            <text
-              x={h.x}
-              y={h.y + 66}
-              textAnchor="middle"
-              fill={h.color}
-              fontSize="9"
-              fontFamily="JetBrains Mono, monospace"
-              opacity={0.4}
-            >
-              {((skills as Record<string, string[]>)[h.key] ?? []).length} nodes
-            </text>
-          </g>
-        ))}
-
-        {/* ── Skill nodes ── */}
-        {nodes.map((n, idx) => {
-          const hub = HUBS[n.hubIndex];
-          const isHovered = hoveredId === n.id;
-
-          return (
-            <motion.g
-              key={n.id}
-              onMouseEnter={() => setHoveredId(n.id)}
-              onMouseLeave={() => setHoveredId(null)}
-              style={{
-                cursor: "pointer",
-                opacity: getNodeOpacity(n),
-                transition: "opacity 400ms ease",
-              }}
-              initial={reduce ? undefined : { opacity: 0, scale: 0 }}
-              animate={isInView || reduce ? { opacity: getNodeOpacity(n), scale: 1 } : undefined}
-              transition={reduce ? undefined : {
-                duration: 0.6,
-                delay: 0.5 + idx * 0.03,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-            >
-              {/* Floating drift */}
-              <motion.g
-                animate={reduce ? undefined : {
-                  y: [0, -(2 + seededRandom(idx) * 3), 0, 2 + seededRandom(idx + 5) * 3, 0],
-                  x: [0, 1.5 + seededRandom(idx + 10) * 2, 0, -(1.5 + seededRandom(idx + 15) * 2), 0],
-                }}
-                transition={reduce ? undefined : {
-                  duration: 6 + seededRandom(idx) * 4,
-                  delay: seededRandom(idx + 20) * 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
-                {/* Hover ring */}
-                {isHovered && (
-                  <motion.circle
-                    cx={n.x}
-                    cy={n.y}
-                    r={n.r + 10}
-                    fill="none"
-                    stroke={hub.color}
-                    strokeWidth={1}
-                    initial={{ r: n.r, opacity: 0 }}
-                    animate={{ r: n.r + 12, opacity: [0, 0.6, 0] }}
-                    transition={{ duration: 1.2, repeat: Infinity }}
-                  />
-                )}
-
-                {/* Outer glow */}
-                <circle
-                  cx={n.x}
-                  cy={n.y}
-                  r={n.r * 2.5}
-                  fill={hub.color}
-                  opacity={isHovered ? 0.25 : 0.08}
-                  style={{ transition: "opacity 300ms ease" }}
-                />
-
-                {/* Core node */}
-                <circle
-                  cx={n.x}
-                  cy={n.y}
-                  r={isHovered ? n.r * 1.3 : n.r}
-                  fill={`url(#node-grad-${n.hubIndex})`}
-                  filter={isHovered ? "url(#glow-sm)" : undefined}
-                  style={{ transition: "r 200ms ease" }}
-                />
-
-                {/* Inner highlight */}
-                <circle
-                  cx={n.x - n.r * 0.2}
-                  cy={n.y - n.r * 0.2}
-                  r={n.r * 0.35}
-                  fill="#ffffff"
-                  opacity={0.8}
-                />
-
-                {/* Skill name label (visible on hover or when isolated) */}
-                {(isHovered || (activeHub === n.hubIndex && !hoveredId)) && (
-                  <motion.text
-                    x={n.x}
-                    y={n.y - n.r - 8}
-                    textAnchor="middle"
-                    fill="#ffffff"
-                    fontSize="10"
-                    fontFamily="JetBrains Mono, monospace"
-                    letterSpacing="1"
-                    initial={{ opacity: 0, y: n.y - n.r - 2 }}
-                    animate={{ opacity: 0.9, y: n.y - n.r - 8 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {n.name}
-                  </motion.text>
-                )}
-
-                {/* Hit area */}
-                <circle cx={n.x} cy={n.y} r={Math.max(16, n.r * 3)} fill="transparent" />
-              </motion.g>
-            </motion.g>
-          );
-        })}
-      </svg>
-
-      {/* ── Floating HUD Tooltip ── */}
-      <AnimatePresence>
-        {hoveredNode && (
-          <HudTooltip node={hoveredNode} hub={HUBS[hoveredNode.hubIndex]} />
-        )}
-      </AnimatePresence>
-
-      {/* ── Domain filter chips ── */}
-      <div className="mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-        <FilterChip
-          active={isolated === null}
-          color="#ffffff"
-          onClick={() => setIsolated(null)}
-          label="All Domains"
-          count={nodes.length}
-        />
-        {HUBS.map((h, i) => (
-          <FilterChip
-            key={h.key}
-            active={isolated === i}
-            color={h.color}
-            onClick={() => setIsolated(isolated === i ? null : i)}
-            label={h.short}
-            count={((skills as Record<string, string[]>)[h.key] ?? []).length}
-          />
-        ))}
-      </div>
-
-      <p className="mt-4 text-center text-xs sm:text-sm font-mono tracking-[0.2em] uppercase text-muted-foreground">
-        Hover a node to inspect · Click a hub to isolate
-      </p>
-    </div>
+    <svg width={size} height={size} className="shrink-0 -rotate-90">
+      <circle
+        cx={size / 2}
+        cy={size / 2}
+        r={r}
+        fill="none"
+        stroke="rgba(255,255,255,0.06)"
+        strokeWidth={2.5}
+      />
+      <motion.circle
+        cx={size / 2}
+        cy={size / 2}
+        r={r}
+        fill="none"
+        stroke={color}
+        strokeWidth={2.5}
+        strokeLinecap="round"
+        strokeDasharray={circumference}
+        initial={{ strokeDashoffset: circumference }}
+        whileInView={{ strokeDashoffset: offset }}
+        viewport={{ once: true }}
+        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+        style={{ filter: `drop-shadow(0 0 4px ${color}80)` }}
+      />
+    </svg>
   );
 };
 
-/* ────────────────────────────── HUD TOOLTIP ────────────────────────────── */
-
-const HudTooltip = ({ node, hub }: { node: SkillNode; hub: HubDef }) => {
-  const left = `${(node.x / VIEW_W) * 100}%`;
-  const top = `${(node.y / VIEW_H) * 100}%`;
-
-  const levelLabel =
-    node.level >= 90 ? "Expert" :
-    node.level >= 80 ? "Advanced" :
-    node.level >= 70 ? "Proficient" : "Intermediate";
+/* ─── Individual Skill Chip ─── */
+const SkillChip = ({
+  skill,
+  color,
+  colorSoft,
+  index,
+  isActive,
+}: {
+  skill: SkillItem;
+  color: string;
+  colorSoft: string;
+  index: number;
+  isActive: boolean;
+}) => {
+  const [hovered, setHovered] = useState(false);
+  const reduce = useReducedMotion();
 
   return (
     <motion.div
-      className="pointer-events-none absolute -translate-x-1/2 -translate-y-[160%] z-10"
-      style={{ left, top }}
-      initial={{ opacity: 0, y: 8, scale: 0.9 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: 4, scale: 0.95 }}
-      transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+      className="relative"
+      initial={reduce ? undefined : { opacity: 0, y: 12, scale: 0.9 }}
+      whileInView={reduce ? undefined : { opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true }}
+      transition={reduce ? undefined : {
+        duration: 0.4,
+        delay: 0.08 + index * 0.04,
+        ease: [0.22, 1, 0.36, 1],
+      }}
     >
-      <div
-        className="relative px-4 py-3 rounded-xl backdrop-blur-xl border font-mono text-xs whitespace-nowrap"
+      <motion.div
+        className="group relative flex items-center gap-2.5 px-3 py-2 rounded-xl cursor-default transition-all duration-300 border"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
         style={{
-          background: "rgba(8,8,14,0.92)",
-          borderColor: `${hub.color}60`,
-          boxShadow: `0 0 30px ${hub.color}30, 0 0 60px ${hub.color}10, inset 0 1px 0 rgba(255,255,255,0.05)`,
+          background: hovered
+            ? `linear-gradient(135deg, ${color}18, ${color}08)`
+            : "rgba(255,255,255,0.02)",
+          borderColor: hovered ? `${color}50` : "rgba(255,255,255,0.06)",
+          boxShadow: hovered
+            ? `0 0 20px ${color}15, 0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04)`
+            : "0 2px 8px rgba(0,0,0,0.2)",
+          opacity: isActive ? 1 : 0.35,
+          transition: "all 400ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
+        whileHover={reduce ? undefined : { y: -2 }}
       >
-        {/* Scanline effect */}
-        <div
-          className="absolute inset-0 rounded-xl overflow-hidden opacity-[0.03]"
-          style={{
-            backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.5) 2px, rgba(255,255,255,0.5) 3px)",
-          }}
-        />
+        <SkillArc level={skill.level} color={color} />
 
-        <div className="relative">
-          <div className="flex items-center gap-2 mb-1.5">
-            <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: hub.color, boxShadow: `0 0 8px ${hub.color}` }} />
-            <span className="text-[9px] tracking-[0.3em] uppercase opacity-50" style={{ color: hub.color }}>
-              Skill Node
-            </span>
-          </div>
+        <span className="text-[13px] font-medium tracking-wide text-white/90 whitespace-nowrap">
+          {skill.name}
+        </span>
 
-          <div className="text-sm font-bold tracking-wide text-white">{node.name}</div>
+        {/* Hover percentage badge */}
+        <AnimatePresence>
+          {hovered && (
+            <motion.span
+              className="ml-auto text-[10px] font-mono tabular-nums font-semibold"
+              style={{ color }}
+              initial={{ opacity: 0, x: -6 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -4 }}
+              transition={{ duration: 0.2 }}
+            >
+              {skill.level}%
+            </motion.span>
+          )}
+        </AnimatePresence>
+      </motion.div>
 
-          <div className="mt-2 flex items-center gap-3">
-            {/* Level bar */}
-            <div className="h-1.5 w-24 rounded-full bg-white/10 overflow-hidden">
-              <motion.div
-                className="h-full rounded-full"
+      {/* Tooltip popover */}
+      <AnimatePresence>
+        {hovered && (
+          <motion.div
+            className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 z-30 pointer-events-none"
+            initial={{ opacity: 0, y: 6, scale: 0.92 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 4, scale: 0.95 }}
+            transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div
+              className="relative px-3.5 py-2 rounded-lg backdrop-blur-xl border font-mono text-[10px] whitespace-nowrap"
+              style={{
+                background: "rgba(6,6,12,0.95)",
+                borderColor: `${color}40`,
+                boxShadow: `0 0 24px ${color}20, 0 8px 32px rgba(0,0,0,0.5)`,
+              }}
+            >
+              {/* Scanline texture */}
+              <div
+                className="absolute inset-0 rounded-lg overflow-hidden opacity-[0.03]"
                 style={{
-                  background: `linear-gradient(90deg, ${hub.color}, ${hub.color}cc)`,
-                  boxShadow: `0 0 8px ${hub.color}`,
+                  backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.5) 2px, rgba(255,255,255,0.5) 3px)",
                 }}
-                initial={{ width: 0 }}
-                animate={{ width: `${node.level}%` }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              />
+
+              <div className="relative flex items-center gap-2.5">
+                <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: color, boxShadow: `0 0 8px ${color}` }} />
+                <span className="tracking-[0.2em] uppercase opacity-60" style={{ color }}>
+                  {getLevelLabel(skill.level)}
+                </span>
+                <span className="text-white/50">·</span>
+                <span className="text-white/80 font-semibold tabular-nums">{skill.level}%</span>
+              </div>
+
+              {/* Proficiency bar */}
+              <div className="mt-1.5 h-1 w-full rounded-full bg-white/8 overflow-hidden">
+                <motion.div
+                  className="h-full rounded-full"
+                  style={{
+                    background: `linear-gradient(90deg, ${color}, ${color}aa)`,
+                    boxShadow: `0 0 8px ${color}`,
+                  }}
+                  initial={{ width: 0 }}
+                  animate={{ width: `${skill.level}%` }}
+                  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                />
+              </div>
+
+              {/* Arrow */}
+              <div
+                className="absolute left-1/2 -translate-x-1/2 -bottom-1 w-2 h-2 rotate-45"
+                style={{
+                  background: "rgba(6,6,12,0.95)",
+                  borderRight: `1px solid ${color}40`,
+                  borderBottom: `1px solid ${color}40`,
+                }}
               />
             </div>
-            <span className="text-[10px] tabular-nums" style={{ color: hub.color }}>
-              {node.level}%
-            </span>
-          </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+};
 
-          <div className="mt-1.5 text-[9px] tracking-wider uppercase opacity-40">
-            {levelLabel}
-          </div>
-        </div>
+/* ─── Domain Card ─── */
+const DomainCard = ({
+  hub,
+  hubIndex,
+  skillList,
+  isActive,
+  onToggle,
+}: {
+  hub: typeof HUBS[0];
+  hubIndex: number;
+  skillList: SkillItem[];
+  isActive: boolean;
+  onToggle: () => void;
+}) => {
+  const reduce = useReducedMotion();
+  const cardRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(cardRef, { once: true, amount: 0.15 });
 
-        {/* Bottom arrow */}
+  const avgLevel = useMemo(
+    () => Math.round(skillList.reduce((sum, s) => sum + s.level, 0) / skillList.length),
+    [skillList]
+  );
+
+  return (
+    <motion.div
+      ref={cardRef}
+      className="relative group"
+      initial={reduce ? undefined : { opacity: 0, y: 40 }}
+      animate={isInView || reduce ? { opacity: 1, y: 0 } : undefined}
+      transition={reduce ? undefined : {
+        duration: 0.7,
+        delay: hubIndex * 0.15,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+    >
+      {/* Animated border glow */}
+      <div
+        className="absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+        style={{
+          background: `linear-gradient(135deg, ${hub.color}30, transparent 40%, transparent 60%, ${hub.color}20)`,
+        }}
+      />
+
+      <div
+        className="relative rounded-2xl border overflow-hidden"
+        style={{
+          background: "rgba(8,8,14,0.7)",
+          borderColor: isActive ? `${hub.color}40` : "rgba(255,255,255,0.06)",
+          boxShadow: isActive
+            ? `0 0 40px ${hub.color}12, 0 20px 60px rgba(0,0,0,0.4)`
+            : "0 10px 40px rgba(0,0,0,0.3)",
+          backdropFilter: "blur(20px)",
+          transition: "border-color 500ms ease, box-shadow 500ms ease",
+        }}
+      >
+        {/* Scanline overlay */}
         <div
-          className="absolute left-1/2 -translate-x-1/2 -bottom-1.5 w-3 h-3 rotate-45"
+          className="absolute inset-0 pointer-events-none opacity-[0.015]"
           style={{
-            background: "rgba(8,8,14,0.92)",
-            borderRight: `1px solid ${hub.color}60`,
-            borderBottom: `1px solid ${hub.color}60`,
+            backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.4) 2px, rgba(255,255,255,0.4) 3px)",
           }}
         />
+
+        {/* Ambient glow at top */}
+        <div
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 pointer-events-none"
+          style={{
+            background: `radial-gradient(ellipse at 50% 0%, ${hub.color}15, transparent 70%)`,
+          }}
+        />
+
+        {/* ── Card Header ── */}
+        <div
+          className="relative px-5 sm:px-6 pt-5 sm:pt-6 pb-4 cursor-pointer"
+          onClick={onToggle}
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              {/* Pulsing core dot */}
+              <div className="relative">
+                <span
+                  className="block w-3 h-3 rounded-full"
+                  style={{
+                    background: hub.color,
+                    boxShadow: `0 0 12px ${hub.color}, 0 0 24px ${hub.color}60`,
+                  }}
+                />
+                {!reduce && (
+                  <span
+                    className="absolute inset-0 rounded-full animate-ping"
+                    style={{
+                      background: hub.color,
+                      opacity: 0.4,
+                    }}
+                  />
+                )}
+              </div>
+
+              <div>
+                <h3
+                  className="text-sm sm:text-base font-mono font-semibold tracking-[0.15em] uppercase"
+                  style={{ color: hub.color }}
+                >
+                  {hub.short}
+                </h3>
+                <p className="text-[10px] font-mono tracking-wider text-white/30 uppercase mt-0.5">
+                  {hub.label}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              {/* Average proficiency arc */}
+              <div className="relative">
+                <SkillArc level={avgLevel} color={hub.color} size={36} />
+                <span
+                  className="absolute inset-0 flex items-center justify-center text-[8px] font-mono font-bold tabular-nums"
+                  style={{ color: hub.color }}
+                >
+                  {avgLevel}
+                </span>
+              </div>
+
+              {/* Skill count badge */}
+              <span
+                className="text-[10px] font-mono px-2.5 py-1 rounded-lg border tabular-nums"
+                style={{
+                  color: `${hub.color}cc`,
+                  borderColor: `${hub.color}30`,
+                  background: `${hub.color}08`,
+                }}
+              >
+                {skillList.length}
+              </span>
+            </div>
+          </div>
+
+          {/* Separator line */}
+          <div
+            className="mt-4 h-px"
+            style={{
+              background: `linear-gradient(90deg, transparent, ${hub.color}30, transparent)`,
+            }}
+          />
+        </div>
+
+        {/* ── Skills Grid ── */}
+        <div className="relative px-5 sm:px-6 pb-5 sm:pb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {skillList.map((skill, i) => (
+              <SkillChip
+                key={skill.name}
+                skill={skill}
+                color={hub.color}
+                colorSoft={hub.colorSoft}
+                index={i}
+                isActive={isActive}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </motion.div>
   );
 };
 
-/* ────────────────────────────── FILTER CHIP ────────────────────────────── */
-
+/* ─── Filter Chip ─── */
 const FilterChip = ({
   active, color, onClick, label, count,
 }: {
@@ -607,5 +397,70 @@ const FilterChip = ({
     </span>
   </button>
 );
+
+/* ────────────────────────────── MAIN COMPONENT ────────────────────────────── */
+
+const NeuralSkillsNetwork = () => {
+  const [isolated, setIsolated] = useState<number | null>(null);
+
+  /* Build skill lists per hub */
+  const hubSkills = useMemo(() =>
+    HUBS.map((hub, hi) => {
+      const list = (skills as Record<string, string[]>)[hub.key] ?? [];
+      return list.map((name): SkillItem => ({
+        name,
+        level: skillLevels[name] ?? 80,
+        hubIndex: hi,
+      }));
+    }),
+    []
+  );
+
+  const totalCount = hubSkills.reduce((sum, list) => sum + list.length, 0);
+
+  return (
+    <div className="relative">
+      {/* ── Domain filter chips ── */}
+      <div className="mb-8 sm:mb-10 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+        <FilterChip
+          active={isolated === null}
+          color="#ffffff"
+          onClick={() => setIsolated(null)}
+          label="All Domains"
+          count={totalCount}
+        />
+        {HUBS.map((h, i) => (
+          <FilterChip
+            key={h.key}
+            active={isolated === i}
+            color={h.color}
+            onClick={() => setIsolated(isolated === i ? null : i)}
+            label={h.short}
+            count={hubSkills[i].length}
+          />
+        ))}
+      </div>
+
+      {/* ── Cards Grid ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6">
+        {HUBS.map((hub, i) => (
+          <DomainCard
+            key={hub.key}
+            hub={hub}
+            hubIndex={i}
+            skillList={hubSkills[i]}
+            isActive={isolated === null || isolated === i}
+            onToggle={() => setIsolated(isolated === i ? null : i)}
+          />
+        ))}
+      </div>
+
+      {/* ── Interaction hint ── */}
+      <p className="mt-6 sm:mt-8 text-center text-xs sm:text-sm font-mono tracking-[0.2em] uppercase text-muted-foreground">
+        Hover a skill to inspect · Click a domain to isolate
+      </p>
+    </div>
+  );
+};
 
 export default NeuralSkillsNetwork;

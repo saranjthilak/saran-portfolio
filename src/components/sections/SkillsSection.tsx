@@ -10,8 +10,8 @@ const SkillsSection = () => {
       <div className="max-w-7xl mx-auto">
         <SectionHeading
           title="Skill Network"
-          tag="Neural Stack"
-          subtitle="A live constellation of the skills I work with — grouped into three domains and wired to their hubs. Hover a node to inspect. Click a hub to isolate."
+          tag="Tech Arsenal"
+          subtitle="My core toolkit organized by domain — hover any skill to inspect proficiency, or click a domain header to isolate."
         />
         {isMobile ? <SkillsStackFallback /> : <NeuralSkillsNetwork />}
       </div>
