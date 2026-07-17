@@ -207,6 +207,15 @@
     mix-blend-mode: overlay;
     opacity: 0.4;
   }
+
+  /* Hide scrollbar for horizontal scroll showcase */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @keyframes neural-pulse {
