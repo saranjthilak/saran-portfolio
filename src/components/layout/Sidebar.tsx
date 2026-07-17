@@ -49,8 +49,8 @@ const Sidebar = ({ activeSection, scrollToSection }: SidebarProps) => {
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 flex flex-col items-center gap-1">
-        {navigation.map((item) => {
+      <nav className="flex-1 flex flex-col items-center gap-0.5">
+        {navigation.map((item, index) => {
           const Icon = iconMap[item.id] ?? Home;
           const active = activeSection === item.id;
           return (
@@ -60,13 +60,19 @@ const Sidebar = ({ activeSection, scrollToSection }: SidebarProps) => {
               onMouseEnter={() => play("hover")}
               aria-label={item.label}
               title={item.label}
-              className={`relative group w-full py-3 flex items-center justify-center transition-colors ${
+              className={`relative group w-full py-2.5 flex flex-col items-center justify-center gap-0.5 transition-colors ${
                 active ? "text-primary" : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {active && (
                 <span className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-0.5 bg-primary" />
               )}
+              {/* Chapter number */}
+              <span className={`font-mono text-[7px] tracking-[0.15em] transition-colors ${
+                active ? "text-primary" : "text-muted-foreground/40 group-hover:text-muted-foreground/60"
+              }`}>
+                {String(index + 1).padStart(2, "0")}
+              </span>
               <Icon className="w-4 h-4" strokeWidth={1.75} />
               {/* Tooltip */}
               <span className="pointer-events-none absolute left-full ml-3 px-2 py-1 bg-[hsl(var(--surface))] border border-border text-foreground text-[10px] font-mono uppercase tracking-[0.2em] opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all whitespace-nowrap z-30">
