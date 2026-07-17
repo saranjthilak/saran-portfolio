@@ -15,6 +15,8 @@ import ContactSection from "@/components/sections/ContactSection";
 import SectionDivider from "@/components/ui/section-divider";
 import SectionReveal from "@/components/ui/SectionReveal";
 import MicroHud from "@/components/ui/micro-hud";
+import ParticleField from "@/components/ui/ParticleField";
+import ScrollProgress from "@/components/ui/ScrollProgress";
 import { motion } from "framer-motion";
 
 const Index = () => {
@@ -64,9 +66,10 @@ const Index = () => {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="min-h-screen bg-background relative overflow-hidden"
     >
+      <ScrollProgress />
       <CustomCursor />
-      {/* Subtle dot-grid backdrop */}
-      <div className="fixed inset-0 dot-grid opacity-40 pointer-events-none"></div>
+      {/* Animated particle field backdrop */}
+      <ParticleField />
 
       <Sidebar activeSection={activeSection} scrollToSection={scrollToSection} />
       <MicroHud />
