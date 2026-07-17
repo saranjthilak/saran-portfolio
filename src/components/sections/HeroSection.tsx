@@ -105,9 +105,36 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
           </div>
         </div>
 
-        {/* Avatar panel */}
-        <div className="hidden lg:flex lg:w-1/3 relative bg-[hsl(var(--surface-2))] items-center justify-center p-12">
-          <div className="relative w-full aspect-square border border-border p-2">
+        {/* Avatar panel with floating tech keywords */}
+        <div className="hidden lg:flex lg:w-1/3 relative bg-[hsl(var(--surface-2))] items-center justify-center p-12 overflow-hidden">
+          {/* Floating tech keywords */}
+          {[
+            { label: "RAG", x: "8%", y: "8%", delay: "0s", dur: "7s" },
+            { label: "LLMs", x: "72%", y: "5%", delay: "1.2s", dur: "8s" },
+            { label: "Airflow", x: "5%", y: "75%", delay: "0.5s", dur: "9s" },
+            { label: "FAISS", x: "75%", y: "80%", delay: "2s", dur: "7.5s" },
+            { label: "PyTorch", x: "60%", y: "35%", delay: "0.8s", dur: "8.5s" },
+            { label: "Vector DB", x: "3%", y: "40%", delay: "1.5s", dur: "6.5s" },
+            { label: "AWS", x: "78%", y: "55%", delay: "2.5s", dur: "7s" },
+            { label: "Docker", x: "35%", y: "88%", delay: "0.3s", dur: "9.5s" },
+            { label: "Python", x: "55%", y: "12%", delay: "1.8s", dur: "8s" },
+            { label: "ETL", x: "20%", y: "60%", delay: "3s", dur: "7.5s" },
+          ].map((tag) => (
+            <span
+              key={tag.label}
+              className="absolute font-mono text-[9px] tracking-[0.15em] uppercase px-2 py-1 border border-primary/15 text-primary/30 bg-primary/[0.03] select-none pointer-events-none"
+              style={{
+                left: tag.x,
+                top: tag.y,
+                animation: `cyber-float ${tag.dur} ease-in-out infinite`,
+                animationDelay: tag.delay,
+              }}
+            >
+              {tag.label}
+            </span>
+          ))}
+
+          <div className="relative w-full aspect-square border border-border p-2 z-10">
             {/* Corner accents */}
             <span className="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-primary z-10" />
             <span className="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-primary z-10" />
@@ -123,7 +150,7 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
               />
             </div>
           </div>
-          <div className="absolute right-4 bottom-4 font-mono text-[8px] text-muted-foreground/50 leading-tight tracking-widest text-right">
+          <div className="absolute right-4 bottom-4 font-mono text-[8px] text-muted-foreground/50 leading-tight tracking-widest text-right z-10">
             DATA_STREAM_8829<br />
             BERLIN_NODE_04<br />
             STABLE_BUILD_2026
