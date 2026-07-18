@@ -651,3 +651,103 @@
     cursor: none !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   MARQUEE — infinite scroll animation
+   ═══════════════════════════════════════════════════════════ */
+
+@keyframes marquee-left {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-25%); }
+}
+@keyframes marquee-right {
+  0%   { transform: translateX(-25%); }
+  100% { transform: translateX(0); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   HOVER DISTORTION — CSS-only image effect for project cards
+   ═══════════════════════════════════════════════════════════ */
+
+.hover-distort {
+  position: relative;
+  overflow: hidden;
+}
+
+/* On hover: subtle scale + brief pixel-snap effect */
+.hover-distort img {
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1),
+              filter 400ms ease;
+}
+
+.hover-distort:hover img {
+  transform: scale(1.06);
+  filter: contrast(1.1) brightness(1.05);
+}
+
+/* Grid overlay that reveals on hover */
+.hover-grid-reveal {
+  opacity: 0;
+  background-image:
+    linear-gradient(
+      0deg,
+      rgba(249, 115, 22, 0.06) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(249, 115, 22, 0.06) 1px,
+      transparent 1px
+    );
+  background-size: 20px 20px;
+  transition: opacity 500ms ease;
+}
+.hover-distort:hover .hover-grid-reveal {
+  opacity: 1;
+}
+
+/* Glitch slice on hover — brief clip-path flash */
+.hover-distort::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    hsl(24 95% 53% / 0.08) 45%,
+    hsl(24 95% 53% / 0.12) 50%,
+    hsl(24 95% 53% / 0.08) 55%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 300ms ease;
+  pointer-events: none;
+  z-index: 5;
+}
+.hover-distort:hover::after {
+  opacity: 1;
+  animation: hover-scan-flash 1.5s ease-in-out infinite;
+}
+
+@keyframes hover-scan-flash {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(200%); }
+}
+
+/* Reduced motion: disable hover animations */
+@media (prefers-reduced-motion: reduce) {
+  .hover-distort img {
+    transition: none !important;
+  }
+  .hover-distort:hover img {
+    transform: none !important;
+    filter: none !important;
+  }
+  .hover-distort:hover .hover-grid-reveal {
+    opacity: 0 !important;
+  }
+  .hover-distort:hover::after {
+    opacity: 0 !important;
+    animation: none !important;
+  }
+}
