@@ -17,11 +17,14 @@ import SectionReveal from "@/components/ui/SectionReveal";
 import MicroHud from "@/components/ui/micro-hud";
 import ParticleField from "@/components/ui/ParticleField";
 import ScrollProgress from "@/components/ui/ScrollProgress";
+import { useLenis } from "@/hooks/useLenis";
 import { motion } from "framer-motion";
 
 const Index = () => {
+  useLenis(); // Smooth scroll — respects prefers-reduced-motion
   const [activeSection, setActiveSection] = useState("home");
   const [isScrolling, setIsScrolling] = useState(false);
+
 
   useEffect(() => {
     const sections = document.querySelectorAll("section");
