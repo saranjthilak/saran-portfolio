@@ -2,6 +2,7 @@
 import { ArrowRight, Download } from "lucide-react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import CountUp from "@/components/ui/count-up";
+import { useEffect, useRef, useState } from "react";
 
 interface HeroSectionProps {
   scrollToSection: (id: string) => void;
@@ -15,8 +16,50 @@ const stats = [
   { value: 3, suffix: "+", decimals: 0, label: "Years Experience" },
 ];
 
+const techKeywords = [
+  { label: "RAG", x: "8%", y: "8%", delay: "0s", dur: "7s" },
+  { label: "LLMs", x: "72%", y: "5%", delay: "1.2s", dur: "8s" },
+  { label: "Airflow", x: "5%", y: "75%", delay: "0.5s", dur: "9s" },
+  { label: "FAISS", x: "75%", y: "80%", delay: "2s", dur: "7.5s" },
+  { label: "PyTorch", x: "60%", y: "35%", delay: "0.8s", dur: "8.5s" },
+  { label: "Vector DB", x: "3%", y: "40%", delay: "1.5s", dur: "6.5s" },
+  { label: "AWS", x: "78%", y: "55%", delay: "2.5s", dur: "7s" },
+  { label: "Docker", x: "35%", y: "88%", delay: "0.3s", dur: "9.5s" },
+  { label: "Python", x: "55%", y: "12%", delay: "1.8s", dur: "8s" },
+  { label: "ETL", x: "20%", y: "60%", delay: "3s", dur: "7.5s" },
+];
+
+/* Binary/hex strings for the data overlay */
+const dataLines = [
+  "0x4A 0x54 0x48 0x49 0x4C",
+  "STREAM_ACTIVE //ok",
+  "node.sync() → 200",
+  "▓▓▓▓▓▓▓░░░ 72%",
+  "ml.predict(batch_09)",
+  "FAISS.index ✓ dim=768",
+  "torch.cuda → gpu:0",
+  "latency: 12ms ▼",
+];
+
 const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps) => {
   const reduce = useReducedMotion();
+  const [glitchActive, setGlitchActive] = useState(false);
+  const glitchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  /* Periodic random glitch burst */
+  useEffect(() => {
+    if (reduce) return;
+    const triggerGlitch = () => {
+      setGlitchActive(true);
+      setTimeout(() => setGlitchActive(false), 200 + Math.random() * 300);
+      glitchTimerRef.current = setTimeout(triggerGlitch, 3000 + Math.random() * 5000);
+    };
+    glitchTimerRef.current = setTimeout(triggerGlitch, 2000);
+    return () => {
+      if (glitchTimerRef.current) clearTimeout(glitchTimerRef.current);
+    };
+  }, [reduce]);
+
   const container: Variants = {
     hidden: {},
     show: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
@@ -35,8 +78,8 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
       <div className="pointer-events-none absolute inset-0 dot-grid opacity-60" aria-hidden />
 
       <div className="relative flex-1 flex flex-col lg:flex-row">
-        {/* Main content */}
-        <div className="flex-1 flex flex-col p-8 sm:p-12 lg:p-16 border-r border-border">
+        {/* ═══ Left: Main content ═══ */}
+        <div className="flex-1 flex flex-col p-8 sm:p-12 lg:p-16 border-r border-border z-10">
           <motion.div
             className="flex-1 flex flex-col justify-center gap-8 max-w-2xl"
             variants={container}
@@ -105,24 +148,38 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
           </div>
         </div>
 
-        {/* Avatar panel with floating tech keywords */}
-        <div className="hidden lg:flex lg:w-1/3 relative bg-[hsl(var(--surface-2))] items-center justify-center p-12 overflow-hidden">
-          {/* Floating tech keywords */}
-          {[
-            { label: "RAG", x: "8%", y: "8%", delay: "0s", dur: "7s" },
-            { label: "LLMs", x: "72%", y: "5%", delay: "1.2s", dur: "8s" },
-            { label: "Airflow", x: "5%", y: "75%", delay: "0.5s", dur: "9s" },
-            { label: "FAISS", x: "75%", y: "80%", delay: "2s", dur: "7.5s" },
-            { label: "PyTorch", x: "60%", y: "35%", delay: "0.8s", dur: "8.5s" },
-            { label: "Vector DB", x: "3%", y: "40%", delay: "1.5s", dur: "6.5s" },
-            { label: "AWS", x: "78%", y: "55%", delay: "2.5s", dur: "7s" },
-            { label: "Docker", x: "35%", y: "88%", delay: "0.3s", dur: "9.5s" },
-            { label: "Python", x: "55%", y: "12%", delay: "1.8s", dur: "8s" },
-            { label: "ETL", x: "20%", y: "60%", delay: "3s", dur: "7.5s" },
-          ].map((tag) => (
+        {/* ═══ Right: Immersive Avatar Panel ═══ */}
+        <div className="hidden lg:flex lg:w-[42%] relative items-center justify-center overflow-hidden">
+          {/* ── Background: radial glow matching primary color ── */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: `
+                radial-gradient(ellipse 80% 60% at 50% 45%, hsl(24 95% 53% / 0.08) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 80% at 30% 60%, hsl(190 85% 53% / 0.05) 0%, transparent 60%)
+              `,
+            }}
+          />
+
+          {/* ── Animated scanlines overlay ── */}
+          <div className="hero-scanlines absolute inset-0 pointer-events-none z-20" />
+
+          {/* ── Rotating reticle ring ── */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+            <div
+              className="hero-reticle"
+              style={{
+                width: "clamp(280px, 70%, 420px)",
+                height: "clamp(280px, 70%, 420px)",
+              }}
+            />
+          </div>
+
+          {/* ── Floating tech keywords ── */}
+          {techKeywords.map((tag) => (
             <span
               key={tag.label}
-              className="absolute font-mono text-[9px] tracking-[0.15em] uppercase px-2 py-1 border border-primary/15 text-primary/30 bg-primary/[0.03] select-none pointer-events-none"
+              className="absolute font-mono text-[9px] tracking-[0.15em] uppercase px-2 py-1 border border-primary/15 text-primary/30 bg-primary/[0.03] select-none pointer-events-none z-30"
               style={{
                 left: tag.x,
                 top: tag.y,
@@ -134,26 +191,82 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
             </span>
           ))}
 
-          <div className="relative w-full aspect-square border border-border p-2 z-10">
-            {/* Corner accents */}
-            <span className="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-primary z-10" />
-            <span className="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-primary z-10" />
-            <div className="w-full h-full bg-secondary overflow-hidden grayscale contrast-125">
-              <img
-                src="/lovable-uploads/5881e7e5-f088-4e07-a79c-59eacb55eeb0.png"
-                alt="Saran Jaya Thilak"
-                width="640"
-                height="640"
-                fetchPriority="high"
-                decoding="async"
-                className="w-full h-full object-cover"
-              />
+          {/* ── The image itself with merge effects ── */}
+          <div className="relative w-full h-full flex items-center justify-center">
+            {/* Hexagonal / circular image with gradient mask to merge into BG */}
+            <div
+              className={`hero-avatar-wrapper ${glitchActive ? "hero-glitch-active" : ""}`}
+              style={{
+                width: "clamp(300px, 75%, 450px)",
+                height: "clamp(300px, 75%, 450px)",
+              }}
+            >
+              {/* RGB shift layers (only visible during glitch) */}
+              <div className="hero-rgb-layer hero-rgb-red">
+                <img
+                  src="/lovable-uploads/5881e7e5-f088-4e07-a79c-59eacb55eeb0.png"
+                  alt=""
+                  aria-hidden="true"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="hero-rgb-layer hero-rgb-blue">
+                <img
+                  src="/lovable-uploads/5881e7e5-f088-4e07-a79c-59eacb55eeb0.png"
+                  alt=""
+                  aria-hidden="true"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              {/* Main image */}
+              <div className="hero-avatar-img">
+                <img
+                  src="/lovable-uploads/5881e7e5-f088-4e07-a79c-59eacb55eeb0.png"
+                  alt="Saran Jaya Thilak"
+                  width="640"
+                  height="640"
+                  fetchPriority="high"
+                  decoding="async"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              {/* Gradient mask overlay to dissolve edges */}
+              <div className="hero-avatar-fade" />
+
+              {/* Scanline bar sweeping over the image */}
+              <div className="hero-scan-bar" />
             </div>
           </div>
-          <div className="absolute right-4 bottom-4 font-mono text-[8px] text-muted-foreground/50 leading-tight tracking-widest text-right z-10">
-            DATA_STREAM_8829<br />
+
+          {/* ── Data stream overlay ── */}
+          <div className="absolute right-6 top-12 bottom-12 w-[140px] pointer-events-none z-30 overflow-hidden opacity-40">
+            <div className="hero-data-stream font-mono text-[8px] text-primary/60 leading-[2.4] whitespace-nowrap">
+              {[...dataLines, ...dataLines, ...dataLines].map((line, i) => (
+                <div key={i} className="hero-data-line" style={{ animationDelay: `${i * 0.3}s` }}>
+                  {line}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── Corner brackets (HUD targeting) ── */}
+          <span className="absolute top-6 left-6 w-8 h-8 border-t border-l border-primary/40 z-30" />
+          <span className="absolute top-6 right-6 w-8 h-8 border-t border-r border-primary/40 z-30" />
+          <span className="absolute bottom-6 left-6 w-8 h-8 border-b border-l border-primary/40 z-30" />
+          <span className="absolute bottom-6 right-6 w-8 h-8 border-b border-r border-primary/40 z-30" />
+
+          {/* ── Status footer ── */}
+          <div className="absolute right-4 bottom-4 font-mono text-[8px] text-muted-foreground/50 leading-tight tracking-widest text-right z-30">
+            <span className="text-primary/60">●</span> DATA_STREAM_8829<br />
             BERLIN_NODE_04<br />
             STABLE_BUILD_2026
+          </div>
+
+          {/* ── Coordinate label ── */}
+          <div className="absolute left-6 bottom-4 font-mono text-[8px] text-muted-foreground/30 tracking-widest z-30">
+            52.5200°N 13.4050°E
           </div>
         </div>
       </div>
