@@ -227,6 +227,7 @@ const ContactSection = () => {
         <SectionHeading
           title="Let's Connect"
           tag="Transmission Ready"
+          index="09"
           subtitle="Establishing secure connection. Ready to collaborate on data engineering, AI systems, or cutting-edge projects."
         />
 

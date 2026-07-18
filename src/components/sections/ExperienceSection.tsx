@@ -313,7 +313,7 @@ const ExperienceSection = () => {
       {!shouldReduce && <FloatingParticles />}
 
       <div className="relative max-w-7xl mx-auto">
-        <SectionHeading title="Experience" tag="Mission Log" />
+        <SectionHeading title="Experience" tag="Mission Log" index="02" />
 
         <div ref={timelineRef} className="relative md:pl-14">
           {/* Live region for screen readers */}

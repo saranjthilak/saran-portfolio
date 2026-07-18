@@ -4,6 +4,7 @@ import { achievements } from "@/data/portfolio";
 import SectionHeading from "@/components/ui/section-heading";
 import Reveal from "@/components/ui/reveal";
 import HudFrame from "@/components/ui/hud-frame";
+import { useParallaxRef } from "@/hooks/useParallax";
 
 const bioLines = [
   "My path into AI started in telecom operations at Nokia and Huawei, where I spent years keeping mission-critical infrastructure running at 99.99% availability. That grounding in reliability, on-call discipline, and systems thinking is what still shapes how I build data platforms today.",
@@ -136,30 +137,38 @@ const PerformanceTelemetry = () => {
 };
 
 const AboutSection = () => {
+  const { ref: leftRef, y: leftY } = useParallaxRef({ speed: 0.12 });
+  const { ref: rightRef, y: rightY } = useParallaxRef({ speed: 0.22 });
+
   return (
     <section id="about" className="py-16 sm:py-24 md:py-32 px-4 sm:px-6 md:px-8">
       <div className="max-w-7xl mx-auto">
         <SectionHeading
           title="About Me"
           tag="System Profile"
+          index="01"
           subtitle="Operational history, performance metrics, and system capabilities."
         />
         <div className="grid gap-8 md:gap-10 md:grid-cols-2">
-          <Reveal direction="right">
-            <HudFrame scan variant="cyan" readout="LOG●" id="ABT1">
-              <div className="bg-black/40 backdrop-blur-xl border border-cyan-400/20 rounded-2xl p-6 sm:p-8 hover:border-cyan-400/50 transition-colors duration-500">
-                <BootLog />
-              </div>
-            </HudFrame>
-          </Reveal>
+          <motion.div ref={leftRef} style={{ y: leftY }}>
+            <Reveal direction="right">
+              <HudFrame scan variant="cyan" readout="LOG●" id="ABT1">
+                <div className="bg-black/40 backdrop-blur-xl border border-cyan-400/20 rounded-2xl p-6 sm:p-8 hover:border-cyan-400/50 transition-colors duration-500">
+                  <BootLog />
+                </div>
+              </HudFrame>
+            </Reveal>
+          </motion.div>
 
-          <Reveal direction="left" delay={0.1}>
-            <HudFrame scan variant="fuchsia" readout="METRICS●" id="ABT2">
-              <div className="bg-black/40 backdrop-blur-xl border border-fuchsia-400/20 rounded-2xl p-6 sm:p-8 hover:border-fuchsia-400/50 transition-colors duration-500 h-full flex flex-col justify-center">
-                <PerformanceTelemetry />
-              </div>
-            </HudFrame>
-          </Reveal>
+          <motion.div ref={rightRef} style={{ y: rightY }}>
+            <Reveal direction="left" delay={0.1}>
+              <HudFrame scan variant="fuchsia" readout="METRICS●" id="ABT2">
+                <div className="bg-black/40 backdrop-blur-xl border border-fuchsia-400/20 rounded-2xl p-6 sm:p-8 hover:border-fuchsia-400/50 transition-colors duration-500 h-full flex flex-col justify-center">
+                  <PerformanceTelemetry />
+                </div>
+              </HudFrame>
+            </Reveal>
+          </motion.div>
         </div>
       </div>
     </section>

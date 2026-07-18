@@ -409,6 +409,7 @@ const EducationSection = () => {
         <SectionHeading
           title="Education"
           tag="Neural Pathway"
+          index="07"
           subtitle="A knowledge evolution spanning continents — from core engineering foundations to cutting-edge AI research and production ML systems."
         />
 

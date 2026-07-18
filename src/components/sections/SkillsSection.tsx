@@ -11,6 +11,7 @@ const SkillsSection = () => {
         <SectionHeading
           title="Skill Network"
           tag="Tech Arsenal"
+          index="03"
           subtitle="My core toolkit organized by domain — hover any skill to inspect proficiency, or click a domain header to isolate."
         />
         {isMobile ? <SkillsStackFallback /> : <NeuralSkillsNetwork />}

@@ -2,6 +2,7 @@
 import { ArrowRight, Download } from "lucide-react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import CountUp from "@/components/ui/count-up";
+import TextReveal from "@/components/ui/TextReveal";
 import { useEffect, useRef, useState } from "react";
 
 interface HeroSectionProps {
@@ -94,12 +95,24 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
               Data Engineer &amp; Generative AI Specialist
             </motion.span>
 
-            <motion.h1
-              variants={item}
-              className="font-display text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-extrabold text-foreground tracking-tighter leading-[0.85] uppercase"
-            >
-              Saran<br />Jaya<br />Thilak
-            </motion.h1>
+            <motion.div variants={item}>
+              <h1
+                className="font-display font-extrabold text-foreground tracking-tighter leading-[0.85] uppercase"
+                style={{ fontSize: "clamp(3.5rem, 10vw, 10rem)" }}
+              >
+                <TextReveal stagger={0.06} duration={0.7} animateOnMount className="gap-x-[0.2em]">
+                  Saran
+                </TextReveal>
+                <br />
+                <TextReveal stagger={0.06} duration={0.7} delay={0.15} animateOnMount className="gap-x-[0.2em]">
+                  Jaya
+                </TextReveal>
+                <br />
+                <TextReveal stagger={0.06} duration={0.7} delay={0.3} animateOnMount className="gap-x-[0.2em]">
+                  Thilak
+                </TextReveal>
+              </h1>
+            </motion.div>
 
             <motion.p
               variants={item}

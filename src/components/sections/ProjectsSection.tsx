@@ -76,7 +76,7 @@ const ProjectsSection = () => {
   return (
     <section id="projects" className="py-16 sm:py-24 md:py-32 px-4 sm:px-6 md:px-8">
       <div className="max-w-7xl mx-auto">
-        <SectionHeading title="Projects" tag="GitHub" />
+        <SectionHeading title="Projects" tag="GitHub" index="05" />
 
         {/* ── Featured: Horizontal Scroll Showcase ── */}
         <div className="mb-16">
@@ -151,7 +151,7 @@ const ProjectsSection = () => {
                       }}
                     >
                       {p.image ? (
-                        <div className="relative aspect-[16/10] overflow-hidden border-b border-border/50">
+                        <div className="relative aspect-[16/10] overflow-hidden border-b border-border/50 hover-distort">
                           <img
                             src={IMAGE_MAP[p.image] ?? p.image}
                             alt={p.title}
@@ -159,8 +159,10 @@ const ProjectsSection = () => {
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                           />
                           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
+                          {/* Hover grid overlay */}
+                          <div className="hover-grid-reveal pointer-events-none absolute inset-0 z-10" />
                           {/* Project number badge */}
-                          <div className="absolute top-3 left-3 font-mono text-[10px] tracking-[0.2em] uppercase px-2 py-1 bg-background/80 backdrop-blur-sm border border-border text-primary">
+                          <div className="absolute top-3 left-3 font-mono text-[10px] tracking-[0.2em] uppercase px-2 py-1 bg-background/80 backdrop-blur-sm border border-border text-primary z-20">
                             {String(i + 1).padStart(2, "0")}
                           </div>
                         </div>

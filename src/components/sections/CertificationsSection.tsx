@@ -420,6 +420,7 @@ const CertificationsSection = () => {
         <SectionHeading
           title="Certifications"
           tag="Credential Vault"
+          index="08"
           subtitle="Industry-validated credentials authenticating expertise in cloud architecture, generative AI, and data science."
         />
 

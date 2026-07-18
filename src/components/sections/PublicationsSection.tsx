@@ -176,7 +176,7 @@ const PublicationsSection = () => {
       {!shouldReduce && <ResearchParticles />}
 
       <div className="relative max-w-7xl mx-auto">
-        <SectionHeading title="Publications" tag="Research Archive" />
+        <SectionHeading title="Publications" tag="Research Archive" index="06" />
 
         <motion.div
           className="space-y-8 sm:space-y-10"
