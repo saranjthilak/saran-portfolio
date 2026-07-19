@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+
+import { useState, useEffect } from "react";
 import Sidebar from "@/components/layout/Sidebar";
 import Footer from "@/components/layout/Footer";
 import CustomCursor from "@/components/ui/custom-cursor";
@@ -12,43 +13,21 @@ import EducationSection from "@/components/sections/EducationSection";
 import CertificationsSection from "@/components/sections/CertificationsSection";
 import ContactSection from "@/components/sections/ContactSection";
 import SectionDivider from "@/components/ui/section-divider";
+import SectionReveal from "@/components/ui/SectionReveal";
 import MicroHud from "@/components/ui/micro-hud";
 import ParticleField from "@/components/ui/ParticleField";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 import { useLenis } from "@/hooks/useLenis";
-import { motion, useScroll, useTransform } from "framer-motion";
-
-const SECTIONS = [
-  { id: "home", component: HeroSection, divider: "cyan" },
-  { id: "about", component: AboutSection, divider: "mixed" },
-  { id: "experience", component: ExperienceSection, divider: "fuchsia" },
-  { id: "skills", component: SkillsSection, divider: "cyan" },
-  { id: "projects", component: ProjectsSection, divider: "mixed" },
-  { id: "publications", component: PublicationsSection, divider: "fuchsia" },
-  { id: "education", component: EducationSection, divider: "cyan" },
-  { id: "certifications", component: CertificationsSection, divider: "mixed" },
-  { id: "contact", component: ContactSection, divider: "fuchsia" },
-];
+import { motion } from "framer-motion";
 
 const Index = () => {
   useLenis(); // Smooth scroll — respects prefers-reduced-motion
   const [activeSection, setActiveSection] = useState("home");
   const [isScrolling, setIsScrolling] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-  });
-
-  // Calculate the total number of items in the horizontal track
-  // Each section + dividers + footer
-  const totalPanels = SECTIONS.length + 1; // +1 for Footer
-  
-  // Translate the horizontal track. 
-  // We want to move left by (total width - viewport width)
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", `-${(totalPanels - 1) * 100}vw`]);
 
   useEffect(() => {
+    const sections = document.querySelectorAll("section");
     const observer = new IntersectionObserver(
       (entries) => {
         if (isScrolling) return;
@@ -58,10 +37,9 @@ const Index = () => {
           }
         });
       },
-      { rootMargin: "-40% -40% -40% -40%" } // Triggers when roughly centered horizontally
+      { rootMargin: "-50% 0px -50% 0px" }
     );
 
-    const sections = document.querySelectorAll("section");
     sections.forEach((section) => observer.observe(section));
 
     return () => sections.forEach((section) => observer.unobserve(section));
@@ -69,17 +47,8 @@ const Index = () => {
 
   const scrollToSection = (id: string) => {
     setIsScrolling(true);
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
     setActiveSection(id);
-    
-    // Find the index of the section to scroll to
-    const index = SECTIONS.findIndex(s => s.id === id);
-    if (index !== -1) {
-      // Calculate scroll offset based on total height and index
-      const maxScroll = (containerRef.current?.scrollHeight || 0) - window.innerHeight;
-      const targetScroll = (index / (totalPanels - 1)) * maxScroll;
-      window.scrollTo({ top: targetScroll, behavior: 'smooth' });
-    }
-    
     setTimeout(() => setIsScrolling(false), 1000);
   };
 
@@ -98,52 +67,60 @@ const Index = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="bg-background relative"
+      className="min-h-screen bg-background relative overflow-hidden"
     >
       <ScrollProgress />
       <CustomCursor />
+      {/* Animated particle field backdrop */}
       <ParticleField />
+
       <Sidebar activeSection={activeSection} scrollToSection={scrollToSection} />
       <MicroHud />
 
-      {/* The scrolling container height controls how much we can scroll vertically */}
-      <div 
-        ref={containerRef} 
-        className="relative z-0"
-        style={{ height: `${totalPanels * 100}vh` }} 
-      >
-        {/* The sticky wrapper that holds the horizontal track */}
-        <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center bg-background">
-          <motion.div 
-            style={{ x }} 
-            className="flex flex-row h-screen will-change-transform ml-20"
-          >
-            {SECTIONS.map((section, idx) => {
-              const Component = section.component;
-              return (
-                <div key={section.id} className="flex flex-row h-screen items-center">
-                  <div className="w-[calc(100vw-5rem)] h-screen overflow-y-auto relative flex-shrink-0 hide-scrollbar">
-                    <Component 
-                      scrollToSection={scrollToSection} 
-                      handleDownloadResume={handleDownloadResume} 
-                    />
-                  </div>
-                  {/* Vertical Section Divider */}
-                  {idx < SECTIONS.length - 1 && (
-                    <div className="h-full w-px bg-border shrink-0 flex items-center justify-center relative z-20">
-                      <SectionDivider variant={section.divider as any} />
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-            
-            {/* Footer Panel */}
-            <div className="w-[calc(100vw-5rem)] h-screen overflow-y-auto flex-shrink-0 bg-background relative hide-scrollbar">
-              <Footer />
-            </div>
-          </motion.div>
-        </div>
+      <div className="ml-20 min-h-screen relative z-0">
+        <HeroSection scrollToSection={scrollToSection} handleDownloadResume={handleDownloadResume} />
+
+        <SectionDivider variant="cyan" />
+        <SectionReveal accent="rgba(34,211,238,0.25)">
+          <AboutSection />
+        </SectionReveal>
+
+        <SectionDivider variant="mixed" />
+        <SectionReveal accent="rgba(129,140,248,0.25)">
+          <ExperienceSection />
+        </SectionReveal>
+
+        <SectionDivider variant="fuchsia" />
+        <SectionReveal accent="rgba(232,121,249,0.2)">
+          <SkillsSection />
+        </SectionReveal>
+
+        <SectionDivider variant="cyan" flip />
+        <SectionReveal accent="rgba(34,211,238,0.25)">
+          <ProjectsSection />
+        </SectionReveal>
+
+        <SectionDivider variant="mixed" />
+        <SectionReveal accent="rgba(129,140,248,0.2)">
+          <PublicationsSection />
+        </SectionReveal>
+
+        <SectionDivider variant="fuchsia" flip />
+        <SectionReveal accent="rgba(232,121,249,0.2)">
+          <EducationSection />
+        </SectionReveal>
+
+        <SectionDivider variant="cyan" />
+        <SectionReveal accent="rgba(34,211,238,0.2)">
+          <CertificationsSection />
+        </SectionReveal>
+
+        <SectionDivider variant="mixed" flip />
+        <SectionReveal accent="rgba(129,140,248,0.2)">
+          <ContactSection />
+        </SectionReveal>
+
+        <Footer />
       </div>
     </motion.div>
   );
