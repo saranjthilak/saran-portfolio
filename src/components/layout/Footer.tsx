@@ -25,6 +25,7 @@ const Footer = () => {
           speed={40}
           direction="left"
           scrollReactive
+          slowOnHover
           className="text-foreground/[0.07]"
           itemClassName="gap-0"
         >

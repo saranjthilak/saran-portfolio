@@ -1,5 +1,4 @@
 import { useRef, useEffect, useState, type ReactNode } from "react";
-import { useScroll } from "framer-motion";
 
 interface MarqueeProps {
   children: ReactNode;
@@ -15,6 +14,8 @@ interface MarqueeProps {
   itemClassName?: string;
   /** Pause on hover. Default false */
   pauseOnHover?: boolean;
+  /** Slow down on hover instead of pausing. Default false */
+  slowOnHover?: boolean;
 }
 
 /**
@@ -24,6 +25,7 @@ interface MarqueeProps {
  * - Uses CSS translateX animation
  * - Adjusts animation speed based on scroll velocity
  * - Pauses when out of viewport via IntersectionObserver
+ * - Optionally slows down on hover for better readability
  */
 const Marquee = ({
   children,
@@ -33,10 +35,12 @@ const Marquee = ({
   className = "",
   itemClassName = "",
   pauseOnHover = false,
+  slowOnHover = false,
 }: MarqueeProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(true);
   const [scrollSpeed, setScrollSpeed] = useState(1);
+  const [isHovered, setIsHovered] = useState(false);
   const lastScrollY = useRef(0);
   const lastTime = useRef(Date.now());
 
@@ -77,7 +81,9 @@ const Marquee = ({
 
   // Compute animation duration from speed
   const baseDuration = 100 / speed; // seconds for one full cycle
-  const adjustedDuration = baseDuration / scrollSpeed;
+  // When hovered and slowOnHover is active, run at 25% speed (4× duration)
+  const hoverMultiplier = slowOnHover && isHovered ? 0.25 : 1;
+  const adjustedDuration = baseDuration / (scrollSpeed * hoverMultiplier);
 
   const animDir = direction === "left" ? "marquee-left" : "marquee-right";
 
@@ -85,6 +91,8 @@ const Marquee = ({
     <div
       ref={containerRef}
       className={`overflow-hidden whitespace-nowrap ${className}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       style={{
         // Pause via CSS when not visible or reduced motion
         ["--marquee-play" as string]: isVisible ? "running" : "paused",
@@ -96,6 +104,8 @@ const Marquee = ({
           animation: `${animDir} ${adjustedDuration}s linear infinite`,
           animationPlayState: isVisible ? "running" : "paused",
           willChange: "transform",
+          // Smooth transition when speed changes on hover
+          transition: "animation-duration 0.6s ease",
         }}
       >
         {/* 4 copies for seamless loop */}
@@ -110,3 +120,4 @@ const Marquee = ({
 };
 
 export default Marquee;
+
