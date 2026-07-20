@@ -1,16 +1,4 @@
 import { Github, Linkedin, Mail, ArrowUp } from "lucide-react";
-import Marquee from "@/components/ui/Marquee";
-
-const marqueeItems = [
-  "DATA ENGINEERING",
-  "GENERATIVE AI",
-  "RAG PIPELINES",
-  "VECTOR DATABASES",
-  "LLM SYSTEMS",
-  "CLOUD ARCHITECTURE",
-  "ML OPS",
-  "ETL PIPELINES",
-];
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -18,82 +6,55 @@ const Footer = () => {
   };
 
   return (
-    <footer className="relative">
-      {/* ── Marquee strip ── */}
-      <div className="border-y border-border overflow-hidden py-5 sm:py-6">
-        <Marquee
-          speed={40}
-          direction="left"
-          scrollReactive
-          slowOnHover
-          className="text-foreground/[0.07]"
-          itemClassName="gap-0"
-        >
-          <span className="font-display text-6xl sm:text-7xl md:text-8xl font-extrabold tracking-tighter uppercase whitespace-nowrap">
-            {marqueeItems.map((item, i) => (
-              <span key={i}>
-                {item}
-                <span className="inline-block mx-4 sm:mx-6 text-primary/30 align-middle text-4xl">✦</span>
-              </span>
-            ))}
-          </span>
-        </Marquee>
-      </div>
+    <footer className="relative border-t border-white/10 mt-24">
+      <div className="py-12 px-6 sm:px-8">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+          
+          {/* Brand & Copyright */}
+          <div className="flex flex-col items-center md:items-start gap-2">
+            <div className="text-xl font-display font-bold">Saran Jaya Thilak</div>
+            <p className="text-muted-foreground text-sm font-light">
+              © {new Date().getFullYear()} — All rights reserved.
+            </p>
+          </div>
 
-      {/* ── Footer content ── */}
-      <div className="py-10 px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-            {/* Left: Copyright + tagline */}
-            <div className="flex flex-col items-center sm:items-start gap-1">
-              <p className="text-foreground/60 text-sm">
-                © {new Date().getFullYear()} Saran Jaya Thilak. Built with passion for data and innovation.
-              </p>
-              <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-muted-foreground/40">
-                V.03—26 · BERLIN_NODE_04 · REACT + VITE
-              </span>
-            </div>
-
-            {/* Right: Social links + Back to top */}
-            <div className="flex items-center gap-3">
-              <a
-                href="https://www.linkedin.com/in/saranjayathilak"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn"
-                className="w-8 h-8 border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 transition-colors"
-              >
-                <Linkedin className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href="https://github.com/saranjthilak"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="GitHub"
-                className="w-8 h-8 border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 transition-colors"
-              >
-                <Github className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href="mailto:saranjthilak@gmail.com"
-                aria-label="Email"
-                className="w-8 h-8 border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 transition-colors"
-              >
-                <Mail className="w-3.5 h-3.5" />
-              </a>
-
-              {/* Divider */}
-              <div className="w-px h-6 bg-border mx-1" />
-
-              {/* Back to top */}
-              <button
-                onClick={scrollToTop}
-                aria-label="Back to top"
-                className="w-8 h-8 border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-colors group"
-              >
-                <ArrowUp className="w-3.5 h-3.5 group-hover:-translate-y-0.5 transition-transform" />
-              </button>
-            </div>
+          {/* Social Links */}
+          <div className="flex items-center gap-4">
+            <a
+              href="https://www.linkedin.com/in/saranjayathilak"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+              className="w-10 h-10 rounded-full glass flex items-center justify-center text-foreground hover:bg-white/10 transition-colors hover:-translate-y-1"
+            >
+              <Linkedin className="w-4 h-4" />
+            </a>
+            <a
+              href="https://github.com/saranjthilak"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub"
+              className="w-10 h-10 rounded-full glass flex items-center justify-center text-foreground hover:bg-white/10 transition-colors hover:-translate-y-1"
+            >
+              <Github className="w-4 h-4" />
+            </a>
+            <a
+              href="mailto:saranjthilak@gmail.com"
+              aria-label="Email"
+              className="w-10 h-10 rounded-full glass flex items-center justify-center text-foreground hover:bg-white/10 transition-colors hover:-translate-y-1"
+            >
+              <Mail className="w-4 h-4" />
+            </a>
+            
+            <div className="w-px h-6 bg-white/10 mx-2" />
+            
+            <button
+              onClick={scrollToTop}
+              aria-label="Back to top"
+              className="w-10 h-10 rounded-full glass flex items-center justify-center text-foreground hover:bg-white/10 transition-colors hover:-translate-y-1 group"
+            >
+              <ArrowUp className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform" />
+            </button>
           </div>
         </div>
       </div>
