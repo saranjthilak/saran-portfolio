@@ -1,15 +1,13 @@
-import { motion, useInView, useReducedMotion } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 import { achievements } from "@/data/portfolio";
 import SectionHeading from "@/components/ui/section-heading";
-import Reveal from "@/components/ui/reveal";
-import HudFrame from "@/components/ui/hud-frame";
-import { useParallaxRef } from "@/hooks/useParallax";
+import { useInView } from "framer-motion";
+import { useRef } from "react";
 
 const bioLines = [
   "My path into AI started in telecom operations at Nokia and Huawei, where I spent years keeping mission-critical infrastructure running at 99.99% availability. That grounding in reliability, on-call discipline, and systems thinking is what still shapes how I build data platforms today.",
-  "I moved deeper into the data stack through a Master's in Data Science, an AWS Solutions Architect certification, and Oracle's Generative AI and AI Foundations credentials — then applied it end-to-end at Tesla, designing Airflow ETL pipelines and RAG-based LLM assistants with guardrails for hallucination detection and response validation.",
-  "Today I focus on the intersection of data engineering and generative AI: vector databases, embedding pipelines, retrieval tuning, and evaluation frameworks that turn LLM prototypes into production systems. Two IEEE publications in applied machine learning keep the research muscle sharp.",
+  "I moved deeper into the data stack through a Master's in Data Science, an AWS Solutions Architect certification, and Oracle's Generative AI credentials — then applied it end-to-end at Tesla, designing Airflow ETL pipelines and RAG-based LLM assistants with guardrails for hallucination detection.",
+  "Today I focus on the intersection of data engineering and generative AI: vector databases, embedding pipelines, retrieval tuning, and evaluation frameworks that turn LLM prototypes into production systems."
 ];
 
 const metricValues: Record<string, number> = {
@@ -23,152 +21,84 @@ const metricValues: Record<string, number> = {
   "4 Professional AI & Cloud Certifications": 80,
 };
 
-const metricColors: Record<string, string> = {
-  "40% Boost in RAG Processing": "from-emerald-400 to-green-500",
-  "30% Embedding Pipeline Accuracy Gain": "from-cyan-400 to-blue-500",
-  "25% Vector DB Efficiency Boost": "from-fuchsia-400 to-purple-500",
-  "Two IEEE Machine Learning Publications": "from-pink-400 to-rose-500",
-  "99.9% ETL Pipeline Reliability": "from-amber-400 to-orange-500",
-  "~20% AWS Cloud Cost Reduction": "from-teal-400 to-emerald-500",
-  "99.99% Network Uptime": "from-sky-400 to-indigo-500",
-  "4 Professional AI & Cloud Certifications": "from-yellow-400 to-amber-500",
-};
-
-const BootLog = () => {
-  const reduce = useReducedMotion();
-  return (
-    <div className="font-mono text-sm sm:text-base leading-relaxed text-cyan-100/80 space-y-4">
-      <div className="flex items-center gap-2 text-cyan-300/60 text-xs uppercase tracking-[0.2em] mb-4">
-        <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-        System Profile — v2.4.1
-      </div>
-      {bioLines.map((line, i) => (
-        <motion.div
-          key={i}
-          initial={reduce ? false : { opacity: 0, x: -12 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.5, delay: i * 0.18, ease: [0.22, 1, 0.36, 1] }}
-          className="relative pl-5 border-l border-cyan-400/20"
-        >
-          <span className="absolute left-0 top-0 -translate-x-1/2 text-[10px] text-cyan-400/40 select-none">
-            {String(i + 1).padStart(2, "0")}
-          </span>
-          <p>{line}</p>
-        </motion.div>
-      ))}
-      <motion.div
-        initial={reduce ? false : { opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ delay: bioLines.length * 0.18 + 0.3 }}
-        className="flex items-center gap-2 pt-2"
-      >
-        <span className="text-cyan-400/70">{">"}</span>
-        <span className="w-2 h-4 bg-cyan-400/70 animate-hud-blink" />
-      </motion.div>
-    </div>
-  );
-};
-
-const TelemetryBar = ({
-  icon,
-  title,
-  value,
-  colorClass,
-  index,
-}: {
-  icon: string;
-  title: string;
-  value: number;
-  colorClass: string;
-  index: number;
+const MetricCard = ({ 
+  achievement, 
+  index 
+}: { 
+  achievement: typeof achievements[0], 
+  index: number 
 }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, amount: 0.5 });
-  const reduce = useReducedMotion();
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const val = metricValues[achievement.title] ?? 50;
 
   return (
-    <div ref={ref} className="space-y-2">
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 20 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={{ type: "spring", stiffness: 100, damping: 20, delay: index * 0.1 }}
+      className="glass p-5 rounded-2xl flex flex-col gap-3 group hover:bg-white/5 transition-colors"
+    >
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <span className="text-lg">{icon}</span>
-          <span className="text-sm sm:text-base font-medium text-foreground">
-            {title}
-          </span>
-        </div>
-        <span className="text-xs sm:text-sm font-mono text-cyan-300/70 tracking-wider">
-          {value === 100 ? "MAX" : `${value}%`}
-        </span>
+        <span className="text-xl">{achievement.icon}</span>
+        <span className="text-xs font-mono text-muted-foreground">{val === 100 ? 'MAX' : `${val}%`}</span>
       </div>
-      <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-white/10">
-        <motion.div
-          className={`h-full rounded-full bg-gradient-to-r ${colorClass}`}
-          initial={{ width: reduce ? `${value}%` : "0%" }}
-          animate={{ width: isInView || reduce ? `${value}%` : "0%" }}
-          transition={{ duration: 1.2, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
+      <div>
+        <h4 className="text-sm font-medium text-foreground mb-1">{achievement.title}</h4>
+        <p className="text-xs text-muted-foreground line-clamp-2">{achievement.description}</p>
+      </div>
+      <div className="mt-auto h-1 w-full bg-white/5 rounded-full overflow-hidden">
+        <motion.div 
+          initial={{ width: 0 }}
+          animate={isInView ? { width: `${val}%` } : { width: 0 }}
+          transition={{ duration: 1, delay: 0.2 + (index * 0.1), ease: "easeOut" }}
+          className="h-full bg-primary/60 rounded-full"
         />
       </div>
-    </div>
-  );
-};
-
-const PerformanceTelemetry = () => {
-  return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-2 text-fuchsia-300/60 text-xs uppercase tracking-[0.2em] mb-2">
-        <span className="w-2 h-2 rounded-full bg-fuchsia-400 animate-pulse" />
-        Performance Telemetry
-      </div>
-      <div className="space-y-5">
-        {achievements.map((a, i) => (
-          <TelemetryBar
-            key={a.title}
-            icon={a.icon}
-            title={a.title}
-            value={metricValues[a.title] ?? 50}
-            colorClass={metricColors[a.title] ?? "from-cyan-400 to-blue-500"}
-            index={i}
-          />
-        ))}
-      </div>
-    </div>
+    </motion.div>
   );
 };
 
 const AboutSection = () => {
-  const { ref: leftRef, y: leftY } = useParallaxRef({ speed: 0.12 });
-  const { ref: rightRef, y: rightY } = useParallaxRef({ speed: 0.22 });
-
   return (
-    <section id="about" className="py-16 sm:py-24 md:py-32 px-4 sm:px-6 md:px-8">
+    <section id="about" className="py-20 sm:py-32 px-6 sm:px-8">
       <div className="max-w-7xl mx-auto">
         <SectionHeading
-          title="About Me"
-          tag="System Profile"
+          title="About"
+          tag="Profile"
           index="01"
-          subtitle="Operational history, performance metrics, and system capabilities."
+          subtitle="A blend of deep engineering discipline and modern AI innovation."
         />
-        <div className="grid gap-8 md:gap-10 md:grid-cols-2">
-          <motion.div ref={leftRef} style={{ y: leftY }}>
-            <Reveal direction="right">
-              <HudFrame scan variant="cyan" readout="LOG●" id="ABT1">
-                <div className="bg-black/40 backdrop-blur-xl border border-cyan-400/20 rounded-2xl p-6 sm:p-8 hover:border-cyan-400/50 transition-colors duration-500">
-                  <BootLog />
-                </div>
-              </HudFrame>
-            </Reveal>
+        
+        <div className="grid lg:grid-cols-5 gap-6 mt-12">
+          {/* Left Bio Card */}
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ type: "spring", stiffness: 100, damping: 20 }}
+            className="lg:col-span-2 glass rounded-3xl p-8 sm:p-10 flex flex-col justify-center"
+          >
+            <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-8">
+              <span className="text-xl">👋</span>
+            </div>
+            <h3 className="text-2xl font-display font-bold mb-6">The Journey</h3>
+            <div className="space-y-6">
+              {bioLines.map((line, i) => (
+                <p key={i} className="text-muted-foreground leading-relaxed text-sm sm:text-base font-light">
+                  {line}
+                </p>
+              ))}
+            </div>
           </motion.div>
 
-          <motion.div ref={rightRef} style={{ y: rightY }}>
-            <Reveal direction="left" delay={0.1}>
-              <HudFrame scan variant="fuchsia" readout="METRICS●" id="ABT2">
-                <div className="bg-black/40 backdrop-blur-xl border border-fuchsia-400/20 rounded-2xl p-6 sm:p-8 hover:border-fuchsia-400/50 transition-colors duration-500 h-full flex flex-col justify-center">
-                  <PerformanceTelemetry />
-                </div>
-              </HudFrame>
-            </Reveal>
-          </motion.div>
+          {/* Right Metrics Grid */}
+          <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {achievements.map((achievement, i) => (
+              <MetricCard key={i} achievement={achievement} index={i} />
+            ))}
+          </div>
         </div>
       </div>
     </section>

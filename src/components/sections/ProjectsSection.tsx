@@ -1,13 +1,10 @@
-import { Github, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import SectionHeading from "@/components/ui/section-heading";
-import Reveal from "@/components/ui/reveal";
+import { Github, ExternalLink } from "lucide-react";
+import { motion } from "framer-motion";
 import { projects as curatedProjects } from "@/data/portfolio";
 import productMatchingImg from "@/assets/project-product-matching.jpg";
 import knowledgeAssistantImg from "@/assets/project-knowledge-assistant.jpg";
 import divvyBikesImg from "@/assets/project-divvy-bikes.jpg";
-import { useRef, useState, useEffect, useCallback } from "react";
+import SectionHeading from "@/components/ui/section-heading";
 
 const IMAGE_MAP: Record<string, string> = {
   "/src/assets/project-product-matching.jpg": productMatchingImg,
@@ -15,280 +12,87 @@ const IMAGE_MAP: Record<string, string> = {
   "/src/assets/project-divvy-bikes.jpg": divvyBikesImg,
 };
 
-const featuredProjects = curatedProjects.filter((p) => p.featured);
-const otherProjects = curatedProjects.filter((p) => !p.featured);
-
-const ProjectsSection = () => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [activeIdx, setActiveIdx] = useState(0);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
-
-  const updateScrollState = useCallback(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    setCanScrollLeft(el.scrollLeft > 10);
-    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
-
-    /* figure out which card is centred */
-    const cards = el.querySelectorAll<HTMLElement>("[data-project-card]");
-    let closestIdx = 0;
-    let closestDist = Infinity;
-    const center = el.scrollLeft + el.clientWidth / 2;
-    cards.forEach((card, i) => {
-      const cardCenter = card.offsetLeft + card.offsetWidth / 2;
-      const dist = Math.abs(cardCenter - center);
-      if (dist < closestDist) {
-        closestDist = dist;
-        closestIdx = i;
-      }
-    });
-    setActiveIdx(closestIdx);
-  }, []);
-
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    el.addEventListener("scroll", updateScrollState, { passive: true });
-    updateScrollState();
-    return () => el.removeEventListener("scroll", updateScrollState);
-  }, [updateScrollState]);
-
-  const scrollTo = (dir: "left" | "right") => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const cardWidth = el.querySelector<HTMLElement>("[data-project-card]")?.offsetWidth ?? 400;
-    const gap = 24; // matches gap-6
-    el.scrollBy({ left: dir === "left" ? -(cardWidth + gap) : cardWidth + gap, behavior: "smooth" });
-  };
-
-  const scrollToIdx = (idx: number) => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const cards = el.querySelectorAll<HTMLElement>("[data-project-card]");
-    if (cards[idx]) {
-      const cardCenter = cards[idx].offsetLeft + cards[idx].offsetWidth / 2;
-      const containerCenter = el.clientWidth / 2;
-      el.scrollTo({ left: cardCenter - containerCenter, behavior: "smooth" });
-    }
-  };
-
+const ProjectCard = ({ project, index }: { project: typeof curatedProjects[0], index: number }) => {
   return (
-    <section id="projects" className="py-16 sm:py-24 md:py-32 px-4 sm:px-6 md:px-8">
-      <div className="max-w-7xl mx-auto">
-        <SectionHeading title="Projects" tag="GitHub" index="05" />
-
-        {/* ── Featured: Horizontal Scroll Showcase ── */}
-        <div className="mb-16">
-          <div className="mb-6 flex items-end justify-between">
-            <div>
-              <div className="text-[11px] tracking-[0.3em] uppercase font-mono text-primary/80 mb-1">Selected Work</div>
-              <h3 className="font-display text-2xl sm:text-3xl font-semibold tracking-tight text-gradient-primary">
-                Featured Projects
-              </h3>
-            </div>
-            {/* Arrow navigation */}
-            <div className="hidden sm:flex items-center gap-2">
-              <button
-                onClick={() => scrollTo("left")}
-                disabled={!canScrollLeft}
-                className="w-9 h-9 border border-border flex items-center justify-center text-foreground hover:bg-primary/10 hover:border-primary/40 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:border-border transition-colors"
-                aria-label="Previous project"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => scrollTo("right")}
-                disabled={!canScrollRight}
-                className="w-9 h-9 border border-border flex items-center justify-center text-foreground hover:bg-primary/10 hover:border-primary/40 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:border-border transition-colors"
-                aria-label="Next project"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-
-          {/* Scrollable container */}
-          <div className="relative">
-            {/* Left fade */}
-            {canScrollLeft && (
-              <div className="absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-r from-background to-transparent" />
-            )}
-            {/* Right fade */}
-            {canScrollRight && (
-              <div className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-l from-background to-transparent" />
-            )}
-
-            <div
-              ref={scrollRef}
-              className="flex gap-6 overflow-x-auto scroll-snap-x pb-4 -mx-4 px-4 scrollbar-hide"
-              style={{
-                scrollSnapType: "x mandatory",
-                WebkitOverflowScrolling: "touch",
-                scrollbarWidth: "none",
-                msOverflowStyle: "none",
-              }}
-            >
-              {featuredProjects.map((p, i) => (
-                <div
-                  key={p.title}
-                  data-project-card
-                  className="flex-shrink-0 w-[85vw] sm:w-[70vw] md:w-[50vw] lg:w-[420px] xl:w-[460px] scroll-snap-center"
-                  style={{
-                    scrollSnapAlign: "center",
-                    perspective: "1200px",
-                  }}
-                >
-                  <Reveal delay={i * 0.08} direction="up" className="h-full">
-                    <Card
-                      className={`glass rounded-2xl overflow-hidden h-full flex flex-col group transition-all duration-500 ${
-                        activeIdx === i
-                          ? "border-primary/50 shadow-glow scale-[1.02]"
-                          : "border-border hover:border-primary/30 hover:shadow-elegant scale-100"
-                      }`}
-                      style={{
-                        transition: "transform 500ms cubic-bezier(0.22,1,0.36,1), border-color 400ms, box-shadow 400ms",
-                      }}
-                    >
-                      {p.image ? (
-                        <div className="relative aspect-[16/10] overflow-hidden border-b border-border/50 hover-distort">
-                          <img
-                            src={IMAGE_MAP[p.image] ?? p.image}
-                            alt={p.title}
-                            loading="lazy"
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                          />
-                          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
-                          {/* Hover grid overlay */}
-                          <div className="hover-grid-reveal pointer-events-none absolute inset-0 z-10" />
-                          {/* Project number badge */}
-                          <div className="absolute top-3 left-3 font-mono text-[10px] tracking-[0.2em] uppercase px-2 py-1 bg-background/80 backdrop-blur-sm border border-border text-primary z-20">
-                            {String(i + 1).padStart(2, "0")}
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="relative aspect-[16/10] overflow-hidden border-b border-border/50 bg-secondary/40 flex items-center justify-center">
-                          <div
-                            className="absolute inset-0 opacity-40"
-                            style={{
-                              backgroundImage:
-                                "linear-gradient(hsl(var(--border)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--border)) 1px, transparent 1px)",
-                              backgroundSize: "24px 24px",
-                            }}
-                            aria-hidden
-                          />
-                          <Github className="relative w-10 h-10 text-primary/70" aria-hidden />
-                        </div>
-                      )}
-                      <CardHeader className="pb-3">
-                        <div className="text-[10px] font-mono tracking-[0.2em] uppercase text-primary/80 mb-1">
-                          {p.source}
-                        </div>
-                        <CardTitle className="font-display text-xl font-semibold tracking-tight group-hover:text-gradient-primary transition-colors">
-                          {p.title}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="flex-grow flex flex-col gap-4">
-                        <p className="text-foreground/75 text-sm leading-relaxed">{p.description}</p>
-                        <div className="flex flex-wrap gap-1.5 mt-auto pt-2">
-                          {p.skills.map((s) => (
-                            <Badge
-                              key={s}
-                              className="bg-primary/10 border border-primary/30 text-primary px-2 py-0.5 text-[10px] tracking-[0.1em] uppercase font-mono font-medium rounded-md"
-                            >
-                              {s}
-                            </Badge>
-                          ))}
-                        </div>
-                        {p.url && (
-                          <a
-                            href={p.url}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-flex items-center gap-2 self-start text-[10px] font-mono tracking-[0.2em] uppercase px-3 py-2 rounded-lg bg-primary/10 border border-primary/30 text-primary hover:bg-primary/20 transition-colors"
-                            aria-label={`View ${p.title} on GitHub`}
-                          >
-                            <Github className="w-3.5 h-3.5" aria-hidden /> View Repo
-                            <ExternalLink className="w-3 h-3 opacity-70" aria-hidden />
-                          </a>
-                        )}
-                      </CardContent>
-                    </Card>
-                  </Reveal>
-                </div>
-              ))}
-            </div>
-
-            {/* Dot indicators */}
-            <div className="flex items-center justify-center gap-2 mt-6">
-              {featuredProjects.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => scrollToIdx(i)}
-                  aria-label={`Go to project ${i + 1}`}
-                  className={`transition-all duration-300 rounded-full ${
-                    activeIdx === i
-                      ? "w-6 h-2 bg-primary"
-                      : "w-2 h-2 bg-border hover:bg-muted-foreground"
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* ── Other Projects: Compact Grid ── */}
-        {otherProjects.length > 0 && (
-          <div>
-            <div className="mb-6">
-              <div className="text-[11px] tracking-[0.3em] uppercase font-mono text-muted-foreground/60 mb-1">Open Source</div>
-              <h3 className="font-display text-xl sm:text-2xl font-semibold tracking-tight text-foreground/80">
-                Other Projects
-              </h3>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {otherProjects.map((p, i) => (
-                <Reveal key={p.title} delay={i * 0.06} direction="up" className="h-full">
-                  <Card className="glass rounded-xl overflow-hidden h-full flex flex-col group hover:border-primary/30 transition-all duration-400">
-                    <CardHeader className="pb-2">
-                      <div className="flex items-center gap-2 mb-1">
-                        <Github className="w-4 h-4 text-primary/60" />
-                        <span className="text-[10px] font-mono tracking-[0.15em] uppercase text-muted-foreground">{p.source}</span>
-                      </div>
-                      <CardTitle className="font-display text-base font-semibold tracking-tight group-hover:text-primary transition-colors">
-                        {p.title}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex-grow flex flex-col gap-3 pt-0">
-                      <p className="text-foreground/65 text-xs leading-relaxed line-clamp-3">{p.description}</p>
-                      <div className="flex flex-wrap gap-1 mt-auto">
-                        {p.skills.map((s) => (
-                          <Badge
-                            key={s}
-                            className="bg-muted/50 border border-border text-muted-foreground px-1.5 py-0 text-[9px] tracking-[0.1em] uppercase font-mono rounded"
-                          >
-                            {s}
-                          </Badge>
-                        ))}
-                      </div>
-                      {p.url && (
-                        <a
-                          href={p.url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-1.5 self-start text-[9px] font-mono tracking-[0.15em] uppercase text-primary/70 hover:text-primary transition-colors"
-                          aria-label={`View ${p.title} on GitHub`}
-                        >
-                          View Repo <ExternalLink className="w-2.5 h-2.5" aria-hidden />
-                        </a>
-                      )}
-                    </CardContent>
-                  </Card>
-                </Reveal>
-              ))}
-            </div>
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ type: "spring", stiffness: 100, damping: 20, delay: index * 0.1 }}
+      className={`glass rounded-3xl overflow-hidden group flex flex-col ${project.featured ? 'md:col-span-2 lg:col-span-1' : ''}`}
+    >
+      {/* Image Container */}
+      <div className="relative aspect-[16/10] overflow-hidden bg-white/5">
+        {project.image ? (
+          <img
+            src={IMAGE_MAP[project.image] ?? project.image}
+            alt={project.title}
+            loading="lazy"
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center opacity-20 group-hover:opacity-40 transition-opacity">
+            <Github className="w-16 h-16" />
           </div>
         )}
+        <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+      </div>
+
+      {/* Content Container */}
+      <div className="p-6 sm:p-8 flex flex-col flex-grow">
+        <div className="text-xs font-mono tracking-widest uppercase text-primary/80 mb-3">
+          {project.source}
+        </div>
+        <h3 className="text-xl sm:text-2xl font-bold font-display mb-4 text-foreground group-hover:text-primary transition-colors">
+          {project.title}
+        </h3>
+        <p className="text-muted-foreground text-sm leading-relaxed mb-8 flex-grow font-light">
+          {project.description}
+        </p>
+
+        {/* Footer: Tags & Links */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-auto">
+          <div className="flex flex-wrap gap-2">
+            {project.skills.slice(0, 3).map(skill => (
+              <span key={skill} className="px-2.5 py-1 text-[10px] uppercase tracking-wider font-mono bg-white/5 rounded-md border border-white/5 text-foreground/70">
+                {skill}
+              </span>
+            ))}
+            {project.skills.length > 3 && (
+              <span className="px-2.5 py-1 text-[10px] uppercase tracking-wider font-mono bg-white/5 rounded-md border border-white/5 text-foreground/40">
+                +{project.skills.length - 3}
+              </span>
+            )}
+          </div>
+
+          {project.url && (
+            <a
+              href={project.url}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center justify-center w-10 h-10 rounded-full glass hover:bg-white/10 transition-colors shrink-0"
+              aria-label={`View ${project.title} on GitHub`}
+            >
+              <ExternalLink className="w-4 h-4" />
+            </a>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+const ProjectsSection = () => {
+  return (
+    <section id="projects" className="py-20 sm:py-32 px-6 sm:px-8">
+      <div className="max-w-7xl mx-auto">
+        <SectionHeading title="Projects" tag="Portfolio" index="04" subtitle="Featured work spanning AI, data engineering, and full-stack development." />
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">
+          {curatedProjects.map((project, index) => (
+            <ProjectCard key={project.title} project={project} index={index} />
+          ))}
+        </div>
       </div>
     </section>
   );
