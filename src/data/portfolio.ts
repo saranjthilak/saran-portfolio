@@ -63,6 +63,7 @@ export const projects = [
     source: "Production RAG + Conversational AI",
     description: "A production-ready Multimodal Retrieval-Augmented Generation (RAG) system that supports conversational querying over text data and is extendable to images.",
     skills: ["RAG", "Multimodal", "LangChain", "Python", "LLMs"],
+    image: "/src/assets/project-multimodal-rag.png",
     url: "https://github.com/saranjthilak/Multimodel_RAG",
   },
   {
@@ -70,6 +71,7 @@ export const projects = [
     source: "TypeScript | AI Tutor | A1–C1",
     description: "AI-powered German learning platform with interactive lessons, vocabulary practice, pronunciation support, quizzes, and personalized learning from A1 to C1.",
     skills: ["TypeScript", "AI", "NLP", "React"],
+    image: "/src/assets/project-german-app.png",
     url: "https://github.com/saranjthilak/German-Learning-APP",
   },
   {
@@ -77,6 +79,7 @@ export const projects = [
     source: "Full-stack | APIs | Docker",
     description: "A full-stack assessment project demonstrating modern software engineering practices, including backend development, APIs, testing, containerization, and deployment.",
     skills: ["Python", "FastAPI", "Docker", "Testing", "CI/CD"],
+    image: "/src/assets/project-vanilla-steel.png",
     url: "https://github.com/saranjthilak/vanilla-steel-assessment",
   }
 ];

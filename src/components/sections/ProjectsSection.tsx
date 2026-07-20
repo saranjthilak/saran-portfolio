@@ -4,12 +4,18 @@ import { projects as curatedProjects } from "@/data/portfolio";
 import productMatchingImg from "@/assets/project-product-matching.jpg";
 import knowledgeAssistantImg from "@/assets/project-knowledge-assistant.jpg";
 import divvyBikesImg from "@/assets/project-divvy-bikes.jpg";
+import multimodalRagImg from "@/assets/project-multimodal-rag.png";
+import germanAppImg from "@/assets/project-german-app.png";
+import vanillaSteelImg from "@/assets/project-vanilla-steel.png";
 import SectionHeading from "@/components/ui/section-heading";
 
 const IMAGE_MAP: Record<string, string> = {
   "/src/assets/project-product-matching.jpg": productMatchingImg,
   "/src/assets/project-knowledge-assistant.jpg": knowledgeAssistantImg,
   "/src/assets/project-divvy-bikes.jpg": divvyBikesImg,
+  "/src/assets/project-multimodal-rag.png": multimodalRagImg,
+  "/src/assets/project-german-app.png": germanAppImg,
+  "/src/assets/project-vanilla-steel.png": vanillaSteelImg,
 };
 
 const ProjectCard = ({ project, index }: { project: typeof curatedProjects[0], index: number }) => {
