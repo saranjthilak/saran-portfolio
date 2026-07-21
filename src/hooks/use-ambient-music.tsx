@@ -29,11 +29,13 @@ export const AmbientMusicProvider = ({ children }: { children: ReactNode }) => {
     try {
       const v = localStorage.getItem(VOL_KEY);
       if (v) setVolumeState(Math.max(0, Math.min(1, parseFloat(v))));
-    } catch {}
+    } catch {
+      // ignore
+    }
   }, []);
 
   const build = useCallback((): Nodes | null => {
-    const AC = window.AudioContext || (window as any).webkitAudioContext;
+    const AC = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
     if (!AC) return null;
     const ctx: AudioContext = new AC();
     const master = ctx.createGain();
@@ -83,7 +85,9 @@ export const AmbientMusicProvider = ({ children }: { children: ReactNode }) => {
         n.oscs.forEach((o) => o.stop());
         n.lfo.stop();
         n.ctx.close();
-      } catch {}
+      } catch {
+        // ignore
+      }
       nodesRef.current = null;
     }, 1400);
   }, []);
@@ -105,7 +109,7 @@ export const AmbientMusicProvider = ({ children }: { children: ReactNode }) => {
       const next = !p;
       if (next) start();
       else stop();
-      try { localStorage.setItem(STORAGE_KEY, next ? "1" : "0"); } catch {}
+      try { localStorage.setItem(STORAGE_KEY, next ? "1" : "0"); } catch { /* ignore */ }
       return next;
     });
   }, [start, stop]);
@@ -113,7 +117,7 @@ export const AmbientMusicProvider = ({ children }: { children: ReactNode }) => {
   const setVolume = useCallback((v: number) => {
     const clamped = Math.max(0, Math.min(1, v));
     setVolumeState(clamped);
-    try { localStorage.setItem(VOL_KEY, String(clamped)); } catch {}
+    try { localStorage.setItem(VOL_KEY, String(clamped)); } catch { /* ignore */ }
     const n = nodesRef.current;
     if (n) {
       const t = n.ctx.currentTime;

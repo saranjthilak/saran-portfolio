@@ -21,18 +21,22 @@ export const UiSoundProvider = ({ children }: { children: ReactNode }) => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored !== null) setMuted(stored === "1");
-    } catch {}
+    } catch {
+      // ignore
+    }
   }, []);
 
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, muted ? "1" : "0");
-    } catch {}
+    } catch {
+      // ignore
+    }
   }, [muted]);
 
   const getCtx = useCallback(() => {
     if (typeof window === "undefined") return null;
-    const AC = window.AudioContext || (window as any).webkitAudioContext;
+    const AC = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
     if (!AC) return null;
     if (!ctxRef.current) ctxRef.current = new AC();
     if (ctxRef.current.state === "suspended") ctxRef.current.resume().catch(() => {});
@@ -79,7 +83,7 @@ export const UiSoundProvider = ({ children }: { children: ReactNode }) => {
       // Prime audio context on the user gesture that unmutes.
       if (!next) {
         const ctx = (() => {
-          const AC = window.AudioContext || (window as any).webkitAudioContext;
+          const AC = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
           if (!AC) return null;
           if (!ctxRef.current) ctxRef.current = new AC();
           if (ctxRef.current.state === "suspended") ctxRef.current.resume().catch(() => {});
