@@ -60,6 +60,8 @@ const SectionReveal = ({ children, accent = "rgba(34,211,238,0.3)", className }:
     reduce ? [0, 0, 0, 0, 0, 0] : [4, 1, 0, 0, 1, 4]
   );
 
+  const filterValue = useTransform(blur, (v) => `blur(${v}px)`);
+
   // Edge glow opacity — brightest when entering/leaving
   const glowOpacity = useTransform(
     scrollYProgress,
@@ -97,7 +99,7 @@ const SectionReveal = ({ children, accent = "rgba(34,211,238,0.3)", className }:
           scale,
           y,
           opacity,
-          filter: useTransform(blur, (v) => `blur(${v}px)`),
+          filter: filterValue,
           transformOrigin: "center center",
           willChange: "transform, opacity, filter",
         }}
