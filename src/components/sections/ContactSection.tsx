@@ -3,6 +3,7 @@ import { motion, useInView } from "framer-motion";
 import { Copy, Mail, MapPin, Send, CheckCircle2 } from "lucide-react";
 import SectionHeading from "@/components/ui/section-heading";
 import { useUiSound } from "@/hooks/use-ui-sound";
+import ContactForm from "@/components/ContactForm";
 
 const ContactSection = () => {
   const [copied, setCopied] = useState(false);
@@ -38,39 +39,36 @@ const ContactSection = () => {
           {/* Subtle background glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-[500px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
 
-          <div className="relative z-10 flex flex-col items-center text-center">
-            <div className="w-20 h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-primary mb-8">
-              <Mail className="w-8 h-8" />
-            </div>
-            
-            <h3 className="text-3xl sm:text-4xl font-display font-bold mb-4 text-foreground">Let's build something.</h3>
-            <p className="text-muted-foreground text-lg mb-10 max-w-lg font-light">
-              Whether you need a resilient data pipeline, a scalable RAG architecture, or just want to say hi.
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-              <a
-                href={`mailto:${email}`}
-                onMouseEnter={() => play("hover")}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-foreground text-background rounded-full font-medium transition-transform hover:scale-105 active:scale-95"
-              >
-                <Send className="w-4 h-4" />
-                Send Email
-              </a>
+          <div className="relative z-10 flex flex-col lg:flex-row items-center lg:items-start gap-12 lg:gap-8 w-full text-center lg:text-left">
+            <div className="flex-1 flex flex-col items-center lg:items-start w-full">
+              <div className="w-20 h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-primary mb-8">
+                <Mail className="w-8 h-8" />
+              </div>
               
-              <button
-                onClick={handleCopyEmail}
-                onMouseEnter={() => play("hover")}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 glass rounded-full font-medium text-foreground hover:bg-white/5 transition-colors"
-              >
-                {copied ? <CheckCircle2 className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
-                {copied ? "Copied!" : "Copy Email"}
-              </button>
+              <h3 className="text-3xl sm:text-4xl font-display font-bold mb-4 text-foreground">Let's build something.</h3>
+              <p className="text-muted-foreground text-lg mb-10 max-w-lg font-light">
+                Whether you need a resilient data pipeline, a scalable RAG architecture, or just want to say hi.
+              </p>
+
+              <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+                <button
+                  onClick={handleCopyEmail}
+                  onMouseEnter={() => play("hover")}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 glass rounded-full font-medium text-foreground hover:bg-white/5 transition-colors"
+                >
+                  {copied ? <CheckCircle2 className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+                  {copied ? "Copied!" : email}
+                </button>
+              </div>
+
+              <div className="flex items-center justify-center lg:justify-start gap-2 mt-12 text-sm text-muted-foreground">
+                <MapPin className="w-4 h-4 text-primary/70" />
+                Based in Berlin, Germany
+              </div>
             </div>
 
-            <div className="flex items-center gap-2 mt-12 text-sm text-muted-foreground">
-              <MapPin className="w-4 h-4 text-primary/70" />
-              Based in Berlin, Germany
+            <div className="flex-1 w-full max-w-md lg:max-w-none">
+              <ContactForm />
             </div>
           </div>
         </motion.div>
