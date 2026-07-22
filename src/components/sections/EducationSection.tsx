@@ -43,34 +43,36 @@ const educationData = [
 const EducationCard = ({ item, index }: { item: typeof educationData[0], index: number }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, x: -30 }}
+      whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ type: "spring", stiffness: 100, damping: 20, delay: index * 0.1 }}
-      className="glass p-6 sm:p-8 rounded-3xl group hover:bg-white/5 transition-colors"
+      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: index * 0.1 }}
+      className="group relative glass-panel p-6 sm:p-10 rounded-3xl transition-all duration-500 hover:-translate-y-1 border border-white/[0.05] hover:border-white/[0.15] hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] bg-background/50 backdrop-blur-xl overflow-hidden"
     >
-      <div className="flex flex-col sm:flex-row gap-6">
-        <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-3xl shrink-0 group-hover:scale-110 transition-transform duration-500">
+      <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-[40px] -translate-y-1/2 translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+
+      <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 relative z-10">
+        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-white/10 to-transparent border border-white/10 shadow-inner flex items-center justify-center text-3xl shrink-0 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-500">
           {item.icon}
         </div>
         
         <div className="flex-grow">
-          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 mb-2">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 mb-3">
             <div>
-              <h3 className="text-xl font-bold font-display text-foreground">{item.institution}</h3>
-              <div className="text-primary text-sm font-medium mt-1">{item.degree}</div>
+              <h3 className="text-xl sm:text-2xl font-bold font-display text-foreground group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-primary/80 transition-all duration-300">{item.institution}</h3>
+              <div className="text-primary text-sm font-semibold mt-1.5">{item.degree}</div>
             </div>
-            <div className="flex flex-col sm:items-end text-left sm:text-right">
-              <span className="text-xs font-mono tracking-widest text-muted-foreground uppercase">{item.period}</span>
-              <span className="text-xs text-muted-foreground/60 mt-1">{item.location}</span>
+            <div className="flex flex-col sm:items-end text-left sm:text-right mt-2 sm:mt-0">
+              <span className="text-[10px] sm:text-xs font-mono tracking-widest text-muted-foreground uppercase bg-white/5 px-2.5 py-1 rounded-md border border-white/5">{item.period}</span>
+              <span className="text-xs text-muted-foreground/60 mt-2">{item.location}</span>
             </div>
           </div>
           
-          <p className="text-sm text-foreground/80 font-light mb-4">{item.field}</p>
+          <p className="text-sm text-foreground/80 font-light mb-6">{item.field}</p>
           
           <div className="flex flex-wrap gap-2">
             {item.skills.map((skill) => (
-              <span key={skill} className="px-2.5 py-1 text-[10px] uppercase tracking-wider font-mono bg-white/5 rounded-md border border-white/5 text-foreground/60">
+              <span key={skill} className="px-3 py-1 text-[10px] uppercase tracking-widest font-mono bg-white/5 rounded-full border border-white/5 text-foreground/70 shadow-inner group-hover:border-white/10 transition-colors">
                 {skill}
               </span>
             ))}
@@ -83,8 +85,11 @@ const EducationCard = ({ item, index }: { item: typeof educationData[0], index: 
 
 const EducationSection = () => {
   return (
-    <section id="education" className="py-20 sm:py-32 px-6 sm:px-8 bg-white/[0.01]">
-      <div className="max-w-4xl mx-auto">
+    <section id="education" className="relative py-20 sm:py-32 px-6 sm:px-8 overflow-hidden">
+      {/* Background Blobs */}
+      <div className="absolute top-[20%] right-[-10%] w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full mix-blend-screen pointer-events-none" />
+
+      <div className="max-w-4xl mx-auto relative z-10">
         <SectionHeading
           title="Education"
           tag="Academic"
@@ -92,7 +97,9 @@ const EducationSection = () => {
           subtitle="A solid foundation in engineering, scaling up to advanced AI research."
         />
         
-        <div className="space-y-6 mt-16">
+        <div className="space-y-6 sm:space-y-8 mt-16 sm:mt-24 relative">
+          <div className="absolute left-[39px] top-4 bottom-4 w-px bg-gradient-to-b from-primary/30 via-primary/10 to-transparent hidden sm:block pointer-events-none" />
+          
           {educationData.map((item, index) => (
             <EducationCard key={index} item={item} index={index} />
           ))}
