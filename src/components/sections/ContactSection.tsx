@@ -18,7 +18,7 @@ const ContactSection = () => {
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(email);
     setCopied(true);
-    play("success");
+    play("click");
     setTimeout(() => setCopied(false), 2000);
   };
 
