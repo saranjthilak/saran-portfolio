@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import Sidebar from "@/components/layout/Sidebar";
 import Footer from "@/components/layout/Footer";
@@ -9,6 +10,10 @@ import ProjectsSection from "@/components/sections/ProjectsSection";
 import PublicationsSection from "@/components/sections/PublicationsSection";
 import EducationSection from "@/components/sections/EducationSection";
 import CertificationsSection from "@/components/sections/CertificationsSection";
+import AwsCloudSection from "@/components/sections/AwsCloudSection";
+import GithubContributionsSection from "@/components/sections/GithubContributionsSection";
+import TestimonialsSection from "@/components/sections/TestimonialsSection";
+import BlogSection from "@/components/sections/BlogSection";
 import ContactSection from "@/components/sections/ContactSection";
 import { useLenis } from "@/hooks/useLenis";
 import { motion } from "framer-motion";
@@ -86,6 +91,18 @@ const Index = () => {
         
         <div className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent my-12" />
         <CertificationsSection />
+        
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent my-12" />
+        <AwsCloudSection />
+        
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent my-12" />
+        <GithubContributionsSection />
+        
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent my-12" />
+        <TestimonialsSection />
+
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent my-12" />
+        <BlogSection />
         
         <div className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent my-12" />
         <ContactSection />
