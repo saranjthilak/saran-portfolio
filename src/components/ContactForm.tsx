@@ -1,3 +1,5 @@
+"use client";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -52,8 +54,17 @@ const ContactForm = () => {
     const TEMPLATE_ID = "template_quvbu2n";
     const PUBLIC_KEY = "VAq0C9MtRV5tJxyv8";
 
+    // Pass multiple common template variable names just in case the template uses them
+    const templateParams = {
+      ...values,
+      from_name: values.name,
+      reply_to: values.email,
+      user_name: values.name,
+      user_email: values.email,
+    };
+
     try {
-      await emailjs.send(SERVICE_ID, TEMPLATE_ID, values, PUBLIC_KEY);
+      await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, { publicKey: PUBLIC_KEY });
       toast.success("Message sent successfully! I'll get back to you soon.");
       setSent(true);
       form.reset();
