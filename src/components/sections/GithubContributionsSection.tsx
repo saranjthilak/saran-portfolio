@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import SectionHeading from "@/components/ui/section-heading";
 import { Github } from "lucide-react";
@@ -30,9 +33,17 @@ const generateContributionData = () => {
   return data;
 };
 
-const contributionData = generateContributionData();
+const generateStaticData = () => {
+  return Array.from({ length: 52 }, () => Array(7).fill(0));
+};
 
 const GithubContributionsSection = () => {
+  const [contributionData, setContributionData] = useState<number[][]>(generateStaticData());
+
+  useEffect(() => {
+    setContributionData(generateContributionData());
+  }, []);
+
   return (
     <section id="github" className="relative py-20 sm:py-32 px-6 sm:px-8 overflow-hidden">
       {/* Background Blobs */}
