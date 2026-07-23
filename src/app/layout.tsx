@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { UiSoundProvider } from "@/hooks/use-ui-sound";
-import { AmbientMusicProvider } from "@/hooks/use-ambient-music";
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -64,13 +63,9 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={`${inter.className} antialiased`}>
         <TooltipProvider>
-          <UiSoundProvider>
-            <AmbientMusicProvider>
               {children}
               <Toaster />
               <Sonner />
-            </AmbientMusicProvider>
-          </UiSoundProvider>
         </TooltipProvider>
       </body>
     </html>
