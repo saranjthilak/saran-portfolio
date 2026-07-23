@@ -4,13 +4,13 @@ import { useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { Copy, Mail, MapPin, CheckCircle2 } from "lucide-react";
 import SectionHeading from "@/components/ui/section-heading";
-import { useUiSound } from "@/hooks/use-ui-sound";
+
 import ContactForm from "@/components/ContactForm";
 
 const ContactSection = () => {
   const [copied, setCopied] = useState(false);
   const email = "saranjthilak@gmail.com";
-  const { play } = useUiSound();
+
   
   const containerRef = useRef(null);
   const isInView = useInView(containerRef, { once: true, margin: "-100px" });
@@ -18,7 +18,6 @@ const ContactSection = () => {
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(email);
     setCopied(true);
-    play("click");
     setTimeout(() => setCopied(false), 2000);
   };
 
