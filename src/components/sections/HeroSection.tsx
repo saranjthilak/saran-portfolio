@@ -27,7 +27,7 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.95]);
 
   const springTransition = {
-    type: "spring",
+    type: "spring" as const,
     stiffness: 100,
     damping: 20,
     mass: 1,
