@@ -18,5 +18,5 @@
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["next.config.mjs"]
+  "include": ["next-env.d.ts"]
 }
