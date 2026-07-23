@@ -111,38 +111,45 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        className="mt-20 sm:mt-32 w-full max-w-5xl mx-auto px-6 relative z-10"
+        className="mt-20 sm:mt-32 w-full max-w-5xl mx-auto px-6 relative z-10 flex flex-col items-center gap-8"
       >
-        <div className="relative aspect-[21/9] sm:aspect-[21/8] w-full rounded-[2rem] overflow-hidden glass-panel border border-white/10 shadow-2xl group">
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent z-10" />
-          
-          <img
-            src="/lovable-uploads/5881e7e5-f088-4e07-a79c-59eacb55eeb0.png"
-            alt="Saran Jaya Thilak"
-            className="w-full h-full object-cover object-top transition-transform duration-[2s] group-hover:scale-105 filter grayscale-[20%]"
-          />
-          
-          {/* Stats Overlay */}
-          <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-10 z-20">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
-              {stats.map((s, i) => (
-                <motion.div 
-                  key={s.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.2 + (i * 0.1), duration: 0.8 }}
-                  className="flex flex-col gap-1.5"
-                >
-                  <div className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-display text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60">
-                    <CountUp end={s.value} suffix={s.suffix} decimals={s.decimals} />
-                  </div>
-                  <div className="text-[10px] sm:text-xs font-semibold text-white/50 tracking-widest uppercase font-mono">
-                    {s.label}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+        {/* Portrait Photo Card */}
+        <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 rounded-full overflow-hidden group">
+          {/* Animated gradient border */}
+          <div className="absolute -inset-[3px] rounded-full bg-gradient-to-br from-primary via-accent to-primary opacity-70 group-hover:opacity-100 transition-opacity duration-700 animate-spin-slow" style={{ animationDuration: '8s' }} />
+          <div className="absolute inset-[3px] rounded-full overflow-hidden bg-background z-[1]">
+            <img
+              src="/lovable-uploads/5881e7e5-f088-4e07-a79c-59eacb55eeb0.png"
+              alt="Saran Jaya Thilak"
+              className="w-full h-full object-cover object-[center_20%] transition-transform duration-[2s] group-hover:scale-110"
+            />
+            {/* Subtle overlay on hover */}
+            <div className="absolute inset-0 bg-gradient-to-t from-background/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          </div>
+          {/* Glow effect */}
+          <div className="absolute inset-0 rounded-full bg-primary/20 blur-[40px] opacity-0 group-hover:opacity-60 transition-opacity duration-700 -z-10" />
+        </div>
+
+        {/* Stats Row */}
+        <div className="w-full max-w-4xl glass-panel rounded-2xl border border-white/10 p-6 sm:p-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+            {stats.map((s, i) => (
+              <motion.div 
+                key={s.label}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 + (i * 0.1), duration: 0.8 }}
+                className="flex flex-col items-center gap-1.5 text-center"
+              >
+                <div className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-display text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60">
+                  <CountUp end={s.value} suffix={s.suffix} decimals={s.decimals} />
+                </div>
+                <div className="text-[10px] sm:text-xs font-semibold text-white/50 tracking-widest uppercase font-mono">
+                  {s.label}
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </motion.div>
