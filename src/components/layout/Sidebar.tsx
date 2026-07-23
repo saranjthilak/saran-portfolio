@@ -33,7 +33,7 @@ interface SidebarProps {
 const Sidebar = ({ activeSection, scrollToSection }: SidebarProps) => {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
-  const springConfig = { type: "spring", stiffness: 300, damping: 20 };
+  const springConfig = { type: "spring" as const, stiffness: 300, damping: 20 };
 
   return (
     <motion.div 
