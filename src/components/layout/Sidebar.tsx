@@ -1,7 +1,4 @@
 import {
-  Github,
-  Linkedin,
-  Mail,
   Home,
   User,
   Briefcase,
@@ -11,14 +8,8 @@ import {
   GraduationCap,
   Trophy,
   MessageSquare,
-  Volume2,
-  VolumeX,
-  Music,
-  Music2,
 } from "lucide-react";
 import { navigation } from "@/data/portfolio";
-import { useUiSound } from "@/hooks/use-ui-sound";
-import { useAmbientMusic } from "@/hooks/use-ambient-music";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 
@@ -40,8 +31,6 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ activeSection, scrollToSection }: SidebarProps) => {
-  const { muted, toggleMuted, play } = useUiSound();
-  const { playing: musicOn, toggle: toggleMusic } = useAmbientMusic();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   const springConfig = { type: "spring", stiffness: 300, damping: 20 };
@@ -61,9 +50,9 @@ const Sidebar = ({ activeSection, scrollToSection }: SidebarProps) => {
         return (
           <button
             key={item.id}
-            onMouseEnter={() => { play("hover"); setHoveredItem(item.id); }}
+            onMouseEnter={() => setHoveredItem(item.id)}
             onMouseLeave={() => setHoveredItem(null)}
-            onClick={() => { play("click"); scrollToSection(item.id); }}
+            onClick={() => scrollToSection(item.id)}
             className={`relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full transition-colors duration-300 ${
               active ? "text-primary" : "text-muted-foreground hover:text-foreground hover:bg-white/5"
             }`}
@@ -94,28 +83,6 @@ const Sidebar = ({ activeSection, scrollToSection }: SidebarProps) => {
           </button>
         );
       })}
-
-      <div className="w-px h-6 bg-white/10 mx-1 sm:mx-2" />
-
-      {/* Audio Controls */}
-      <button
-        onClick={() => { play("click"); toggleMusic(); }}
-        className={`w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full transition-colors ${
-          musicOn ? "text-primary bg-white/5" : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-        }`}
-      >
-        {musicOn ? <Music2 className="w-4 h-4 sm:w-5 sm:h-5" /> : <Music className="w-4 h-4 sm:w-5 sm:h-5" />}
-      </button>
-
-      <button
-        onClick={toggleMuted}
-        className={`w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full transition-colors ${
-          !muted ? "text-primary bg-white/5" : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-        }`}
-      >
-        {!muted ? <Volume2 className="w-4 h-4 sm:w-5 sm:h-5" /> : <VolumeX className="w-4 h-4 sm:w-5 sm:h-5" />}
-      </button>
-
     </motion.div>
   );
 };
