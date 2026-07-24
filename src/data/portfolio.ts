@@ -36,7 +36,7 @@ export const projects = [
     source: "FAISS + Triton Inference + CLIP",
     description: "Developed an image-based product search engine using FAISS for vector similarity and a quantized CLIP model served via NVIDIA Triton Inference Server. Integrated MongoDB and Docker for fast, scalable product matching.",
     skills: ["FAISS", "CLIP", "Triton", "MongoDB", "Docker"],
-    image: "/src/assets/project-product-matching.png",
+    image: "/images/projects/project-product-matching.png",
     url: "https://github.com/saranjthilak/ai_poduct_matching",
     featured: true,
   },
@@ -45,7 +45,7 @@ export const projects = [
     source: "RAG + Vector Embeddings + LLMs",
     description: "AI-powered RAG assistant that answers car manual queries using semantic search, vector embeddings, and LLMs for accurate, context-aware responses.",
     skills: ["RAG", "LangChain", "Embeddings", "LLMs", "Python"],
-    image: "/src/assets/project-knowledge-assistant.png",
+    image: "/images/projects/project-knowledge-assistant.png",
     url: "https://github.com/saranjthilak/Car-Manual-RAG-Assistant",
     featured: true,
   },
@@ -54,7 +54,7 @@ export const projects = [
     source: "GCP | Terraform | Airflow | DBT",
     description: "Built an end-to-end data pipeline on GCP using Terraform for infrastructure, Airflow for orchestration, and DBT for SQL transformations. Loaded data into BigQuery and visualized insights via Google Data Studio.",
     skills: ["GCP", "Terraform", "Airflow", "DBT", "BigQuery", "Data Studio"],
-    image: "/src/assets/project-divvy-bikes.png",
+    image: "/images/projects/project-divvy-bikes.png",
     url: "https://github.com/saranjthilak/Divvy-Bike-Data-End-to-End-Pipeline",
     featured: true,
   },
@@ -63,7 +63,7 @@ export const projects = [
     source: "Production RAG + Conversational AI",
     description: "A production-ready Multimodal Retrieval-Augmented Generation (RAG) system that supports conversational querying over text data and is extendable to images.",
     skills: ["RAG", "Multimodal", "LangChain", "Python", "LLMs"],
-    image: "/src/assets/project-multimodal-rag.png",
+    image: "/images/projects/project-multimodal-rag.png",
     url: "https://github.com/saranjthilak/Multimodel_RAG",
   },
   {
@@ -71,7 +71,7 @@ export const projects = [
     source: "TypeScript | AI Tutor | A1–C1",
     description: "AI-powered German learning platform with interactive lessons, vocabulary practice, pronunciation support, quizzes, and personalized learning from A1 to C1.",
     skills: ["TypeScript", "AI", "NLP", "React"],
-    image: "/src/assets/project-german-app.png",
+    image: "/images/projects/project-german-app.png",
     url: "https://github.com/saranjthilak/German-Learning-APP",
   },
   {
@@ -79,7 +79,7 @@ export const projects = [
     source: "Full-stack | APIs | Docker",
     description: "A full-stack assessment project demonstrating modern software engineering practices, including backend development, APIs, testing, containerization, and deployment.",
     skills: ["Python", "FastAPI", "Docker", "Testing", "CI/CD"],
-    image: "/src/assets/project-vanilla-steel.png",
+    image: "/images/projects/project-vanilla-steel.png",
     url: "https://github.com/saranjthilak/vanilla-steel-assessment",
   }
 ];

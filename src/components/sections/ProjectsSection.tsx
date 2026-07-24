@@ -1,22 +1,7 @@
 import { Github, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 import { projects as curatedProjects } from "@/data/portfolio";
-import productMatchingImg from "@/assets/project-product-matching.png";
-import knowledgeAssistantImg from "@/assets/project-knowledge-assistant.png";
-import divvyBikesImg from "@/assets/project-divvy-bikes.png";
-import multimodalRagImg from "@/assets/project-multimodal-rag.png";
-import germanAppImg from "@/assets/project-german-app.png";
-import vanillaSteelImg from "@/assets/project-vanilla-steel.png";
 import SectionHeading from "@/components/ui/section-heading";
-
-const IMAGE_MAP: Record<string, string> = {
-  "/src/assets/project-product-matching.png": productMatchingImg,
-  "/src/assets/project-knowledge-assistant.png": knowledgeAssistantImg,
-  "/src/assets/project-divvy-bikes.png": divvyBikesImg,
-  "/src/assets/project-multimodal-rag.png": multimodalRagImg,
-  "/src/assets/project-german-app.png": germanAppImg,
-  "/src/assets/project-vanilla-steel.png": vanillaSteelImg,
-};
 
 const ProjectCard = ({ project, index }: { project: typeof curatedProjects[0], index: number }) => {
   return (
@@ -33,7 +18,7 @@ const ProjectCard = ({ project, index }: { project: typeof curatedProjects[0], i
       <div className="relative aspect-[16/10] overflow-hidden bg-white/[0.02]">
         {project.image ? (
           <img
-            src={IMAGE_MAP[project.image] ?? project.image}
+            src={project.image}
             alt={project.title}
             loading="lazy"
             className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105 filter grayscale-[20%] group-hover:grayscale-0"
