@@ -5,6 +5,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import PageTransition from "@/components/ui/page-transition";
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -63,7 +64,9 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={`${inter.className} antialiased`}>
         <TooltipProvider>
-              {children}
+              <PageTransition>
+                {children}
+              </PageTransition>
               <Toaster />
               <Sonner />
         </TooltipProvider>
