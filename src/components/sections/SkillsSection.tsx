@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { skills } from "@/data/portfolio";
 import SectionHeading from "@/components/ui/section-heading";
+import CountUp from "@/components/ui/count-up";
 
 // Utility to generate a pseudo-random proficiency (80-98%) based on string to keep it deterministic
 const getProficiency = (skill: string) => {
@@ -46,7 +47,7 @@ const SkillsSection = () => {
                     <div key={skill} className="flex flex-col gap-2">
                       <div className="flex justify-between items-center text-xs font-medium">
                         <span className="text-foreground/90">{skill}</span>
-                        <span className="text-primary/70 font-mono">{proficiency}%</span>
+                        <span className="text-primary/70 font-mono"><CountUp end={proficiency} suffix="%" duration={1400} /></span>
                       </div>
                       <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden shadow-inner">
                         <motion.div
