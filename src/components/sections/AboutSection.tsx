@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { achievements } from "@/data/portfolio";
 import SectionHeading from "@/components/ui/section-heading";
+import CountUp from "@/components/ui/count-up";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
 
@@ -44,7 +45,9 @@ const MetricCard = ({
       
       <div className="flex items-center justify-between relative z-10">
         <span className="text-xl p-2 bg-white/5 rounded-lg border border-white/5 group-hover:scale-110 transition-transform duration-300">{achievement.icon}</span>
-        <span className="text-xs font-mono text-primary font-medium tracking-wider">{val === 100 ? 'MAX' : `${val}%`}</span>
+        <span className="text-xs font-mono text-primary font-medium tracking-wider">
+              {val === 100 ? 'MAX' : <CountUp end={val} suffix="%" duration={1400} />}
+            </span>
       </div>
       <div className="relative z-10 mt-2">
         <h4 className="text-sm font-semibold text-foreground mb-1.5 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-primary/80 transition-all">{achievement.title}</h4>
