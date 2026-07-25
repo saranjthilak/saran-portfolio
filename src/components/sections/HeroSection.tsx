@@ -2,6 +2,8 @@ import { ArrowRight, Download, Sparkles } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import CountUp from "@/components/ui/count-up";
+import MagneticButton from "@/components/ui/magnetic-button";
+import TextScramble from "@/components/ui/text-scramble";
 
 interface HeroSectionProps {
   scrollToSection: (id: string) => void;
@@ -13,6 +15,14 @@ const stats = [
   { value: 40, suffix: "%", decimals: 0, label: "RAG Speed Boost", delta: true },
   { value: 30, suffix: "%", decimals: 0, label: "Accuracy Gain" },
   { value: 3, suffix: "+", decimals: 0, label: "Years Experience" },
+];
+
+const scramblePhrases = [
+  "RAG pipelines",
+  "vector databases",
+  "LLM systems",
+  "data platforms",
+  "ML deployments",
 ];
 
 const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps) => {
@@ -78,8 +88,12 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
           transition={{ ...springTransition, delay: 0.3 }}
           className="max-w-2xl text-lg sm:text-xl text-muted-foreground mb-10 leading-relaxed font-light"
         >
-          Architecting resilient data infrastructure and <span className="text-foreground font-medium">LLM-powered systems</span>. 
-          Specializing in RAG pipelines, vector databases, and production-scale ML deployments.
+          Architecting resilient data infrastructure and <span className="text-foreground font-medium">LLM-powered systems</span>.{" "}
+          Specializing in{" "}
+          <span className="text-primary font-medium font-mono">
+            <TextScramble phrases={scramblePhrases} interval={2500} speed={35} />
+          </span>{" "}
+          and production-scale AI.
         </motion.p>
 
         <motion.div
@@ -88,20 +102,22 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
           transition={{ ...springTransition, delay: 0.4 }}
           className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
         >
-          <button
+          <MagneticButton
+            strength={12}
             onClick={() => scrollToSection("projects")}
             className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 px-8 py-4 bg-primary text-primary-foreground rounded-full font-semibold transition-all hover:bg-primary/90 hover:shadow-[0_0_30px_rgba(59,130,246,0.4)] active:scale-95"
           >
             Explore Work
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-          </button>
-          <button
+          </MagneticButton>
+          <MagneticButton
+            strength={8}
             onClick={handleDownloadResume}
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 glass rounded-full font-medium text-foreground hover:bg-white/5 transition-colors hover:border-white/20 active:scale-95"
           >
             <Download className="w-4 h-4" />
             Download CV
-          </button>
+          </MagneticButton>
         </motion.div>
       </motion.div>
 
