@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import SectionHeading from "@/components/ui/section-heading";
+import CountUp from "@/components/ui/count-up";
 import { Github } from "lucide-react";
 
 // Generate fake contribution data for the mock graph
@@ -71,7 +72,7 @@ const GithubContributionsSection = () => {
               <Github className="w-8 h-8 text-foreground" />
               <div>
                 <h3 className="text-xl font-display font-semibold text-foreground">saranjthilak</h3>
-                <p className="text-sm text-muted-foreground">843 contributions in the last year</p>
+                <p className="text-sm text-muted-foreground"><CountUp end={843} duration={2000} /> contributions in the last year</p>
               </div>
             </div>
             
