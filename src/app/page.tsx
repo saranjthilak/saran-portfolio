@@ -18,6 +18,17 @@ import ContactSection from "@/components/sections/ContactSection";
 import { useLenis } from "@/hooks/useLenis";
 import { motion } from "framer-motion";
 
+/** Animated divider that scales in from center when scrolled into view */
+const AnimatedDivider = () => (
+  <motion.div
+    initial={{ scaleX: 0, opacity: 0 }}
+    whileInView={{ scaleX: 1, opacity: 1 }}
+    viewport={{ once: true, margin: "-40px" }}
+    transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+    className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent my-12 origin-center"
+  />
+);
+
 const Index = () => {
   useLenis();
   const [activeSection, setActiveSection] = useState("home");
@@ -70,41 +81,41 @@ const Index = () => {
       <div className="w-full min-h-screen relative z-0 pb-24">
         <HeroSection scrollToSection={scrollToSection} handleDownloadResume={handleDownloadResume} />
         
-        {/* Subtle dividers between sections */}
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent my-12" />
+        {/* Animated dividers between sections */}
+        <AnimatedDivider />
         <AboutSection />
         
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent my-12" />
+        <AnimatedDivider />
         <ExperienceSection />
         
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent my-12" />
+        <AnimatedDivider />
         <SkillsSection />
         
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent my-12" />
+        <AnimatedDivider />
         <ProjectsSection />
         
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent my-12" />
+        <AnimatedDivider />
         <PublicationsSection />
         
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent my-12" />
+        <AnimatedDivider />
         <EducationSection />
         
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent my-12" />
+        <AnimatedDivider />
         <CertificationsSection />
         
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent my-12" />
+        <AnimatedDivider />
         <AwsCloudSection />
         
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent my-12" />
+        <AnimatedDivider />
         <GithubContributionsSection />
         
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent my-12" />
+        <AnimatedDivider />
         <TestimonialsSection />
 
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent my-12" />
+        <AnimatedDivider />
         <BlogSection />
         
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent my-12" />
+        <AnimatedDivider />
         <ContactSection />
 
         <Footer />
