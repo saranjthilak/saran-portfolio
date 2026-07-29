@@ -37,8 +37,12 @@ const fieldVariants: Variants = {
   }),
 };
 
+const RATE_LIMIT_MS = 60_000; // 60-second cooldown between submissions
+
 const ContactForm = () => {
   const [sent, setSent] = useState(false);
+  const [honeypot, setHoneypot] = useState("");
+  const [lastSubmitTime, setLastSubmitTime] = useState(0);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -50,9 +54,24 @@ const ContactForm = () => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const SERVICE_ID = "service_bryeang";
-    const TEMPLATE_ID = "template_quvbu2n";
-    const PUBLIC_KEY = "VAq0C9MtRV5tJxyv8";
+    // Honeypot check — bots will fill the hidden field
+    if (honeypot) return;
+
+    // Rate limiting — prevent rapid-fire submissions
+    const now = Date.now();
+    if (now - lastSubmitTime < RATE_LIMIT_MS) {
+      toast.error("Please wait a moment before sending another message.");
+      return;
+    }
+
+    const SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+    const TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
+    const PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
+
+    if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
+      toast.error("Email service is not configured. Please try again later.");
+      return;
+    }
 
     // Pass multiple common template variable names just in case the template uses them
     const templateParams = {
@@ -67,6 +86,7 @@ const ContactForm = () => {
       await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, { publicKey: PUBLIC_KEY });
       toast.success("Message sent successfully! I'll get back to you soon.");
       setSent(true);
+      setLastSubmitTime(Date.now());
       form.reset();
       setTimeout(() => setSent(false), 4000);
     } catch (error) {
@@ -105,7 +125,7 @@ const ContactForm = () => {
           </div>
         </div>
         <span className="font-mono text-[9px] tracking-[0.2em] text-muted-foreground/50 uppercase hidden sm:block">
-          SECURE·E2E
+          SECURE·TLS
         </span>
       </div>
 
@@ -113,6 +133,19 @@ const ContactForm = () => {
       <div className="p-5 sm:p-6 relative z-10">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+            {/* Honeypot field — hidden from real users, traps bots */}
+            <div className="absolute opacity-0 top-0 left-0 h-0 w-0 -z-10" aria-hidden="true">
+              <label htmlFor="website">Website</label>
+              <input
+                type="text"
+                id="website"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+              />
+            </div>
             <motion.div
               variants={fieldVariants}
               custom={0.1}
@@ -251,7 +284,7 @@ const ContactForm = () => {
               </span>
               <span className="font-mono text-[9px] tracking-[0.2em] text-muted-foreground/40 uppercase flex items-center gap-1">
                 <span className="w-1 h-1 rounded-full bg-[hsl(var(--signal))] animate-pulse" />
-                Encrypted
+                Connected
               </span>
             </div>
           </form>
