@@ -68,7 +68,7 @@ const ProjectCard = ({ project, index }: { project: typeof curatedProjects[0], i
               <a
                 href={project.url}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="inline-flex items-center justify-center w-12 h-12 rounded-full glass-panel border border-white/10 hover:bg-white/10 hover:border-white/20 hover:text-primary hover:shadow-[0_0_15px_rgba(59,130,246,0.3)] transition-all duration-300 shrink-0"
                 aria-label={`View ${project.title} on GitHub`}
               >
