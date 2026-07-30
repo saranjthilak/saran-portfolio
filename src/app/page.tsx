@@ -15,6 +15,8 @@ import GithubContributionsSection from "@/components/sections/GithubContribution
 import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import BlogSection from "@/components/sections/BlogSection";
 import ContactSection from "@/components/sections/ContactSection";
+import dynamic from "next/dynamic";
+const Background3D = dynamic(() => import("@/components/ui/Background3D"), { ssr: false });
 import { useLenis } from "@/hooks/useLenis";
 import { motion } from "framer-motion";
 
@@ -74,11 +76,12 @@ const Index = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="min-h-screen bg-background relative overflow-hidden text-foreground selection:bg-primary/30"
+      className="min-h-screen bg-transparent relative text-foreground selection:bg-primary/30"
     >
+      <Background3D />
       <Sidebar activeSection={activeSection} scrollToSection={scrollToSection} />
 
-      <div className="w-full min-h-screen relative z-0 pb-24">
+      <div className="w-full min-h-screen relative z-0 pb-24 bg-transparent">
         <HeroSection scrollToSection={scrollToSection} handleDownloadResume={handleDownloadResume} />
         
         {/* Animated dividers between sections */}

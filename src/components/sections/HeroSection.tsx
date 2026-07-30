@@ -47,7 +47,7 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
     <section
       ref={containerRef}
       id="home"
-      className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-background pt-20 pb-16"
+      className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-transparent pt-20 pb-16"
     >
       {/* Premium Vercel/Linear animated blobs */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
@@ -133,7 +133,7 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
         <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 rounded-full overflow-hidden group">
           {/* Animated gradient border */}
           <div className="absolute -inset-[3px] rounded-full bg-gradient-to-br from-primary via-accent to-primary opacity-70 group-hover:opacity-100 transition-opacity duration-700 animate-spin-slow" style={{ animationDuration: '8s' }} />
-          <div className="absolute inset-[3px] rounded-full overflow-hidden bg-background z-[1]">
+          <div className="absolute inset-[3px] rounded-full overflow-hidden bg-transparent z-[1]">
             <img
               src="/lovable-uploads/5881e7e5-f088-4e07-a79c-59eacb55eeb0.png"
               alt="Saran Jaya Thilak"
