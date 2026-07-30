@@ -24,7 +24,7 @@ const MagneticButton = ({
   as: Tag = "button",
   ...props
 }: MagneticButtonProps) => {
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<any>(null);
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
