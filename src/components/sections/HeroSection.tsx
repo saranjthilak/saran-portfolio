@@ -1,6 +1,6 @@
 import { ArrowRight, Download, Sparkles } from "lucide-react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
 import CountUp from "@/components/ui/count-up";
 import MagneticButton from "@/components/ui/magnetic-button";
 import TextScramble from "@/components/ui/text-scramble";
@@ -27,21 +27,52 @@ const scramblePhrases = [
 
 const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Scroll-driven parallax
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.95]);
+  const y1 = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);  // name — slow
+  const y2 = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);  // subtitle — faster
+  const y3 = useTransform(scrollYProgress, [0, 1], ["0%", "55%"]);  // buttons — fastest
+  const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.92]);
 
-  const springTransition = {
-    type: "spring" as const,
-    stiffness: 100,
-    damping: 20,
-    mass: 1,
-  };
+  // Mouse-follow parallax on hero text
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const smoothMouseX = useSpring(mouseX, { stiffness: 50, damping: 20 });
+  const smoothMouseY = useSpring(mouseY, { stiffness: 50, damping: 20 });
+
+  // Transform mouse position to subtle offset
+  const textX = useTransform(smoothMouseX, [-1, 1], [-12, 12]);
+  const textY = useTransform(smoothMouseY, [-1, 1], [-8, 8]);
+
+  useEffect(() => {
+    setIsMounted(true);
+    const handleMouseMove = (e: MouseEvent) => {
+      const cx = (e.clientX / window.innerWidth - 0.5) * 2;
+      const cy = (e.clientY / window.innerHeight - 0.5) * 2;
+      mouseX.set(cx);
+      mouseY.set(cy);
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
+
+  // Choreographed entrance — each element gets a unique delay
+  const entrance = (delay: number) => ({
+    initial: { opacity: 0, y: 30, filter: "blur(10px)" },
+    animate: isMounted ? { opacity: 1, y: 0, filter: "blur(0px)" } : {},
+    transition: {
+      duration: 0.8,
+      delay,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  });
 
   return (
     <section
@@ -49,7 +80,7 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
       id="home"
       className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-transparent pt-20 pb-16"
     >
-      {/* Premium Vercel/Linear animated blobs */}
+      {/* Animated blobs — enhanced with more movement */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
         <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-primary/20 blur-[120px] rounded-full mix-blend-screen animate-blob" />
         <div className="absolute top-[20%] right-[-10%] w-[400px] h-[400px] bg-accent/20 blur-[120px] rounded-full mix-blend-screen animate-blob animation-delay-2000" />
@@ -59,74 +90,78 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
       {/* Grid Pattern */}
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdGggZD0iTTAgMGg0MHY0MEgwVjB6bTIwIDIwaDIwdjIwSDIweiIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjAyKSIgZmlsbC1ydWxlPSJldmVub2RkIi8+PC9zdmc+')] opacity-50 pointer-events-none [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)] z-0" />
 
+      {/* Main content with scroll-driven parallax */}
       <motion.div 
-        style={{ y, opacity, scale }}
+        style={{ opacity, scale }}
         className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 md:px-12 flex flex-col items-center justify-center text-center mt-12"
       >
+        {/* Badge — first to appear */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ ...springTransition, delay: 0.1 }}
+          {...entrance(0.2)}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel border border-white/10 mb-8 shadow-[0_0_20px_rgba(59,130,246,0.15)]"
         >
           <Sparkles className="w-4 h-4 text-primary animate-pulse" />
           <span className="text-xs font-semibold tracking-widest uppercase text-foreground/90">Available for new opportunities</span>
         </motion.div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ ...springTransition, delay: 0.2 }}
-          className="text-5xl sm:text-7xl md:text-8xl font-display font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white via-white to-white/40 mb-6 drop-shadow-sm"
-        >
-          Saran Jaya Thilak
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ ...springTransition, delay: 0.3 }}
-          className="max-w-2xl text-lg sm:text-xl text-muted-foreground mb-10 leading-relaxed font-light"
-        >
-          Architecting resilient data infrastructure and <span className="text-foreground font-medium">LLM-powered systems</span>.{" "}
-          Specializing in{" "}
-          <span className="text-primary font-medium font-mono">
-            <TextScramble phrases={scramblePhrases} interval={2500} speed={35} />
-          </span>{" "}
-          and production-scale AI.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ ...springTransition, delay: 0.4 }}
-          className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
-        >
-          <MagneticButton
-            strength={12}
-            onClick={() => scrollToSection("projects")}
-            className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 px-8 py-4 bg-primary text-primary-foreground rounded-full font-semibold transition-all hover:bg-primary/90 hover:shadow-[0_0_30px_rgba(59,130,246,0.4)] active:scale-95"
+        {/* Name — mouse-follow parallax + animated gradient */}
+        <motion.div style={{ x: textX, y: textY }}>
+          <motion.h1
+            {...entrance(0.4)}
+            className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-display font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white via-white/90 to-primary/60 mb-6 drop-shadow-sm animate-gradient-text"
+            style={{ backgroundSize: "200% 200%" }}
           >
-            Explore Work
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-          </MagneticButton>
-          <MagneticButton
-            strength={8}
-            onClick={handleDownloadResume}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 glass rounded-full font-medium text-foreground hover:bg-white/5 transition-colors hover:border-white/20 active:scale-95"
+            Saran Jaya Thilak
+          </motion.h1>
+        </motion.div>
+
+        {/* Subtitle with different parallax rate */}
+        <motion.div style={{ y: y2 }}>
+          <motion.p
+            {...entrance(0.6)}
+            className="max-w-2xl text-lg sm:text-xl text-muted-foreground mb-10 leading-relaxed font-light"
           >
-            <Download className="w-4 h-4" />
-            Download CV
-          </MagneticButton>
+            Architecting resilient data infrastructure and <span className="text-foreground font-medium">LLM-powered systems</span>.{" "}
+            Specializing in{" "}
+            <span className="text-primary font-medium font-mono">
+              <TextScramble phrases={scramblePhrases} interval={2500} speed={35} />
+            </span>{" "}
+            and production-scale AI.
+          </motion.p>
+        </motion.div>
+
+        {/* CTA Buttons with deeper parallax */}
+        <motion.div style={{ y: y3 }}>
+          <motion.div
+            {...entrance(0.8)}
+            className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
+          >
+            <MagneticButton
+              strength={12}
+              onClick={() => scrollToSection("projects")}
+              className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 px-8 py-4 bg-primary text-primary-foreground rounded-full font-semibold transition-all hover:bg-primary/90 hover:shadow-[0_0_30px_rgba(59,130,246,0.4)] active:scale-95"
+            >
+              Explore Work
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </MagneticButton>
+            <MagneticButton
+              strength={8}
+              onClick={handleDownloadResume}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 glass rounded-full font-medium text-foreground hover:bg-white/5 transition-colors hover:border-white/20 active:scale-95"
+            >
+              <Download className="w-4 h-4" />
+              Download CV
+            </MagneticButton>
+          </motion.div>
         </motion.div>
       </motion.div>
 
-      {/* Floating Image / Avatar Card with Apple-like scroll reveal */}
+      {/* Floating Image / Avatar Card with enhanced scroll reveal */}
       <motion.div
-        initial={{ opacity: 0, y: 60 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, y: 80, scale: 0.9 }}
+        whileInView={{ opacity: 1, y: 0, scale: 1 }}
         viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
         className="mt-20 sm:mt-32 w-full max-w-5xl mx-auto px-6 relative z-10 flex flex-col items-center gap-8"
       >
         {/* Portrait Photo Card */}
@@ -152,10 +187,10 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
             {stats.map((s, i) => (
               <motion.div 
                 key={s.label}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
+                whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                 viewport={{ once: true }}
-                transition={{ delay: 0.2 + (i * 0.1), duration: 0.8 }}
+                transition={{ delay: 0.3 + (i * 0.12), duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                 className="flex flex-col items-center gap-1.5 text-center"
               >
                 <div className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-display text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60">
