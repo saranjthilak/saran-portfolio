@@ -1,149 +1,130 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import * as THREE from "three";
 
+/**
+ * Animated gradient mesh background inspired by Apple / Stripe / Linear.
+ *
+ * Renders several large soft-edged colour orbs that drift around the viewport
+ * on independent CSS animations, producing a continuously shifting gradient
+ * mesh effect.  Pure CSS — no canvas, no Three.js.
+ */
 export default function Background3D() {
-  const mountRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
+  /* Subtle scroll-parallax: shift the mesh slightly opposite to scroll */
   useEffect(() => {
-    if (!mountRef.current) return;
+    const el = containerRef.current;
+    if (!el) return;
 
-    // Scene setup
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-    camera.position.z = 8;
-
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    mountRef.current.appendChild(renderer.domElement);
-
-    // Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-    scene.add(ambientLight);
-
-    const dirLight1 = new THREE.DirectionalLight(0xffffff, 1);
-    dirLight1.position.set(10, 10, 10);
-    scene.add(dirLight1);
-
-    const dirLight2 = new THREE.DirectionalLight(0x4f46e5, 0.5);
-    dirLight2.position.set(-10, -10, -10);
-    scene.add(dirLight2);
-
-    // Premium Glass Material (MeshPhysicalMaterial)
-    const createGlassMaterial = (color: number) => {
-      return new THREE.MeshPhysicalMaterial({
-        color: color,
-        metalness: 0.1,
-        roughness: 0.2,
-        transmission: 0.9,
-        ior: 1.5,
-        thickness: 2,
-        transparent: true,
-        side: THREE.DoubleSide,
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        el.style.transform = `translateY(${y * 0.08}px)`;
+        ticking = false;
       });
     };
 
-    // Shapes
-    const shapes: { mesh: THREE.Mesh; basePosition: THREE.Vector3; speed: number }[] = [];
-
-    // Icosahedron
-    const icosahedron = new THREE.Mesh(
-      new THREE.IcosahedronGeometry(1.5, 0),
-      createGlassMaterial(0x4f46e5)
-    );
-    scene.add(icosahedron);
-    shapes.push({ mesh: icosahedron, basePosition: new THREE.Vector3(-3.5, 1.5, -2), speed: 1.5 });
-
-    // Torus
-    const torus = new THREE.Mesh(
-      new THREE.TorusGeometry(1.2, 0.4, 16, 50),
-      createGlassMaterial(0xdb2777)
-    );
-    scene.add(torus);
-    shapes.push({ mesh: torus, basePosition: new THREE.Vector3(3.5, -1.5, -1), speed: 2 });
-
-    // Octahedron
-    const octahedron = new THREE.Mesh(
-      new THREE.OctahedronGeometry(1, 0),
-      createGlassMaterial(0x0ea5e9)
-    );
-    scene.add(octahedron);
-    shapes.push({ mesh: octahedron, basePosition: new THREE.Vector3(1.5, 3, -4), speed: 1 });
-
-    // Sphere
-    const sphere = new THREE.Mesh(
-      new THREE.SphereGeometry(1, 32, 32),
-      createGlassMaterial(0x10b981)
-    );
-    scene.add(sphere);
-    shapes.push({ mesh: sphere, basePosition: new THREE.Vector3(-2, -3, -3), speed: 1.2 });
-
-    // Animation Loop
-    let animationFrameId: number;
-    let time = 0;
-
-    const animate = () => {
-      time += 0.01;
-      const scrollY = window.scrollY;
-
-      shapes.forEach(({ mesh, basePosition, speed }, i) => {
-        // Base floating animation
-        mesh.rotation.x = time * 0.2 * speed + i;
-        mesh.rotation.y = time * 0.3 * speed + i;
-        
-        // Floating position offset
-        const floatY = Math.sin(time * speed) * 0.5;
-
-        // Scroll parallax
-        const scrollParallaxY = scrollY * 0.002;
-        const scrollParallaxRotX = scrollY * 0.0005;
-        const scrollParallaxRotY = scrollY * 0.001;
-
-        mesh.position.set(
-          basePosition.x,
-          basePosition.y + floatY + scrollParallaxY,
-          basePosition.z
-        );
-
-        mesh.rotation.x += scrollParallaxRotX;
-        mesh.rotation.y += scrollParallaxRotY;
-      });
-
-      renderer.render(scene, camera);
-      animationFrameId = requestAnimationFrame(animate);
-    };
-
-    animate();
-
-    // Resize Handler
-    const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    // Cleanup
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      cancelAnimationFrame(animationFrameId);
-      
-      if (mountRef.current && renderer.domElement) {
-        mountRef.current.removeChild(renderer.domElement);
-      }
-      
-      renderer.dispose();
-      scene.clear();
-    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
     <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
-      <div ref={mountRef} className="absolute inset-0" />
-      <div className="absolute inset-0 bg-background/80" />
+      {/* Gradient orbs container — parallaxes on scroll */}
+      <div ref={containerRef} className="absolute inset-0 will-change-transform">
+        {/* ─── Primary blue orb ─── */}
+        <div
+          className="absolute rounded-full mix-blend-screen"
+          style={{
+            width: "55vmax",
+            height: "55vmax",
+            top: "-15%",
+            left: "-10%",
+            background:
+              "radial-gradient(circle at center, hsla(217,91%,60%,0.35) 0%, hsla(217,91%,60%,0) 70%)",
+            animation: "mesh-drift-1 22s ease-in-out infinite alternate",
+          }}
+        />
+
+        {/* ─── Accent violet orb ─── */}
+        <div
+          className="absolute rounded-full mix-blend-screen"
+          style={{
+            width: "50vmax",
+            height: "50vmax",
+            top: "10%",
+            right: "-15%",
+            background:
+              "radial-gradient(circle at center, hsla(258,90%,66%,0.3) 0%, hsla(258,90%,66%,0) 70%)",
+            animation: "mesh-drift-2 26s ease-in-out infinite alternate",
+          }}
+        />
+
+        {/* ─── Teal / cyan orb ─── */}
+        <div
+          className="absolute rounded-full mix-blend-screen"
+          style={{
+            width: "45vmax",
+            height: "45vmax",
+            bottom: "-10%",
+            left: "15%",
+            background:
+              "radial-gradient(circle at center, hsla(187,72%,50%,0.22) 0%, hsla(187,72%,50%,0) 70%)",
+            animation: "mesh-drift-3 20s ease-in-out infinite alternate",
+          }}
+        />
+
+        {/* ─── Rose / pink orb ─── */}
+        <div
+          className="absolute rounded-full mix-blend-screen"
+          style={{
+            width: "40vmax",
+            height: "40vmax",
+            bottom: "5%",
+            right: "5%",
+            background:
+              "radial-gradient(circle at center, hsla(330,80%,55%,0.18) 0%, hsla(330,80%,55%,0) 70%)",
+            animation: "mesh-drift-4 24s ease-in-out infinite alternate",
+          }}
+        />
+
+        {/* ─── Warm amber orb (subtle) ─── */}
+        <div
+          className="absolute rounded-full mix-blend-screen"
+          style={{
+            width: "35vmax",
+            height: "35vmax",
+            top: "40%",
+            left: "35%",
+            background:
+              "radial-gradient(circle at center, hsla(38,92%,55%,0.1) 0%, hsla(38,92%,55%,0) 70%)",
+            animation: "mesh-drift-5 28s ease-in-out infinite alternate",
+          }}
+        />
+      </div>
+
+      {/* Noise texture overlay for organic feel */}
+      <div
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+          backgroundRepeat: "repeat",
+          backgroundSize: "128px 128px",
+        }}
+      />
+
+      {/* Dark vignette for depth */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 60% at 50% 50%, transparent 30%, hsl(223 49% 8% / 0.6) 100%)",
+        }}
+      />
     </div>
   );
 }
