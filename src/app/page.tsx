@@ -18,23 +18,24 @@ import ContactSection from "@/components/sections/ContactSection";
 import dynamic from "next/dynamic";
 const Background3D = dynamic(() => import("@/components/ui/Background3D"), { ssr: false });
 import { useLenis } from "@/hooks/useLenis";
-import { motion } from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion";
+import SectionDivider from "@/components/ui/SectionDivider";
+import dynamic from "next/dynamic";
+const CustomCursor = dynamic(() => import("@/components/ui/CustomCursor"), { ssr: false });
 
-/** Animated divider that scales in from center when scrolled into view */
-const AnimatedDivider = () => (
-  <motion.div
-    initial={{ scaleX: 0, opacity: 0 }}
-    whileInView={{ scaleX: 1, opacity: 1 }}
-    viewport={{ once: true, margin: "-40px" }}
-    transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-    className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent my-12 origin-center"
-  />
-);
 
 const Index = () => {
   useLenis();
   const [activeSection, setActiveSection] = useState("home");
   const [isScrolling, setIsScrolling] = useState(false);
+
+  // Scroll progress bar
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
 
   useEffect(() => {
     const sections = document.querySelectorAll("section");
@@ -78,47 +79,50 @@ const Index = () => {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="min-h-screen bg-transparent relative text-foreground selection:bg-primary/30"
     >
+      <CustomCursor />
+      {/* Scroll Progress Bar */}
+      <motion.div className="scroll-progress w-full" style={{ scaleX }} />
+
       <Background3D />
       <Sidebar activeSection={activeSection} scrollToSection={scrollToSection} />
 
       <div className="w-full min-h-screen relative z-0 pb-24 bg-transparent">
         <HeroSection scrollToSection={scrollToSection} handleDownloadResume={handleDownloadResume} />
         
-        {/* Animated dividers between sections */}
-        <AnimatedDivider />
+        <SectionDivider variant="dot-fade" />
         <AboutSection />
         
-        <AnimatedDivider />
+        <SectionDivider variant="glow-line" />
         <ExperienceSection />
         
-        <AnimatedDivider />
+        <SectionDivider variant="wave" />
         <SkillsSection />
         
-        <AnimatedDivider />
+        <SectionDivider variant="dot-fade" />
         <ProjectsSection />
         
-        <AnimatedDivider />
+        <SectionDivider variant="glow-line" />
         <PublicationsSection />
         
-        <AnimatedDivider />
+        <SectionDivider variant="wave" />
         <EducationSection />
         
-        <AnimatedDivider />
+        <SectionDivider variant="dot-fade" />
         <CertificationsSection />
         
-        <AnimatedDivider />
+        <SectionDivider variant="glow-line" />
         <AwsCloudSection />
         
-        <AnimatedDivider />
+        <SectionDivider variant="wave" />
         <GithubContributionsSection />
         
-        <AnimatedDivider />
+        <SectionDivider variant="dot-fade" />
         <TestimonialsSection />
 
-        <AnimatedDivider />
+        <SectionDivider variant="glow-line" />
         <BlogSection />
         
-        <AnimatedDivider />
+        <SectionDivider variant="wave" />
         <ContactSection />
 
         <Footer />
