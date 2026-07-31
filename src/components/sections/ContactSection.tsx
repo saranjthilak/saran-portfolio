@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { Copy, Mail, MapPin, CheckCircle2 } from "lucide-react";
 import SectionHeading from "@/components/ui/section-heading";
-
+import ScrollReveal from "@/components/ui/ScrollReveal";
 import ContactForm from "@/components/ContactForm";
 
 const ContactSection = () => {
@@ -34,10 +34,9 @@ const ContactSection = () => {
           subtitle="I'm always open to discussing new opportunities, technical challenges, or collaborations."
         />
 
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+        <ScrollReveal
+          preset="blur-in"
+          delay={0.2}
           className="mt-16 sm:mt-24 glass-panel rounded-[2rem] p-8 sm:p-12 lg:p-16 relative overflow-hidden border border-white/[0.05] bg-background/50 backdrop-blur-xl shadow-2xl"
         >
           {/* Subtle background glow */}
@@ -76,7 +75,7 @@ const ContactSection = () => {
               <ContactForm />
             </div>
           </div>
-        </motion.div>
+        </ScrollReveal>
       </div>
     </section>
   );

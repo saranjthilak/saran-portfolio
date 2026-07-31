@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import SectionHeading from "@/components/ui/section-heading";
 import { Quote } from "lucide-react";
+import ScrollReveal from "@/components/ui/ScrollReveal";
 
 const testimonials = [
   {
@@ -39,12 +40,10 @@ const TestimonialsSection = () => {
 
         <div className="grid md:grid-cols-3 gap-6 mt-16 sm:mt-24">
           {testimonials.map((testimonial, idx) => (
-            <motion.div
+            <ScrollReveal
               key={idx}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: idx * 0.1 }}
+              preset="scale-up"
+              delay={idx * 0.12}
               className="group relative glass-panel rounded-3xl p-8 sm:p-10 border border-white/[0.05] hover:border-white/[0.15] transition-colors bg-background/50 backdrop-blur-xl flex flex-col hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] duration-500"
             >
               <Quote className="w-10 h-10 text-primary/20 mb-6 group-hover:text-primary/40 transition-colors" />
@@ -62,7 +61,7 @@ const TestimonialsSection = () => {
                   <div className="text-xs text-muted-foreground">{testimonial.role} at {testimonial.company}</div>
                 </div>
               </div>
-            </motion.div>
+            </ScrollReveal>
           ))}
         </div>
       </div>

@@ -2,14 +2,13 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { experience } from "@/data/portfolio";
 import SectionHeading from "@/components/ui/section-heading";
+import ScrollReveal from "@/components/ui/ScrollReveal";
 
 const ExperienceCard = ({ job, index }: { job: typeof experience[0], index: number }) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: index * 0.1 }}
+    <ScrollReveal
+      preset={index % 2 === 0 ? "fade-left" : "fade-right"}
+      delay={index * 0.1}
       className="relative pl-8 md:pl-0"
     >
       {/* Timeline Dot (Mobile) */}
@@ -44,7 +43,7 @@ const ExperienceCard = ({ job, index }: { job: typeof experience[0], index: numb
         </div>
         
       </div>
-    </motion.div>
+    </ScrollReveal>
   );
 };
 

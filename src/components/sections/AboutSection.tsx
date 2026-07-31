@@ -4,6 +4,7 @@ import SectionHeading from "@/components/ui/section-heading";
 import CountUp from "@/components/ui/count-up";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
+import ScrollReveal from "@/components/ui/ScrollReveal";
 
 const bioLines = [
   "My path into AI started in telecom operations at Nokia and Huawei, where I spent years keeping mission-critical infrastructure running at 99.99% availability. That grounding in reliability, on-call discipline, and systems thinking is what still shapes how I build data platforms today.",
@@ -85,11 +86,7 @@ const AboutSection = () => {
         
         <div className="grid lg:grid-cols-5 gap-6 mt-16">
           {/* Left Bio Card */}
-          <motion.div 
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          <ScrollReveal preset="blur-in" delay={0.1}
             className="lg:col-span-2 relative glass-panel rounded-3xl p-8 sm:p-10 flex flex-col justify-center border border-white/[0.08] hover:border-white/[0.15] transition-colors bg-background/50 backdrop-blur-xl"
           >
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-white/10 to-transparent border border-white/10 shadow-inner flex items-center justify-center mb-8">
@@ -103,7 +100,7 @@ const AboutSection = () => {
                 </p>
               ))}
             </div>
-          </motion.div>
+          </ScrollReveal>
 
           {/* Right Metrics Grid */}
           <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
