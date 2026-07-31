@@ -87,9 +87,10 @@ const ScrollReveal = ({
   margin = "-80px",
   once = true,
 }: ScrollRevealProps) => {
-  const { hidden, visible } = presets[preset];
+  const hidden = presets[preset].hidden as any;
+  const visible = presets[preset].visible as any;
 
-  const ease = [0.16, 1, 0.3, 1]; // Smooth ease-out
+  const ease = [0.16, 1, 0.3, 1] as [number, number, number, number]; // Smooth ease-out
 
   if (stagger !== undefined) {
     // Stagger mode: wraps children in a container with staggerChildren

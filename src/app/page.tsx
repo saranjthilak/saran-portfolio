@@ -20,7 +20,6 @@ const Background3D = dynamic(() => import("@/components/ui/Background3D"), { ssr
 import { useLenis } from "@/hooks/useLenis";
 import { motion, useScroll, useSpring } from "framer-motion";
 import SectionDivider from "@/components/ui/SectionDivider";
-import dynamic from "next/dynamic";
 const CustomCursor = dynamic(() => import("@/components/ui/CustomCursor"), { ssr: false });
 
 
