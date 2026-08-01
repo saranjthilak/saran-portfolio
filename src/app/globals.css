@@ -191,8 +191,18 @@
   }
 }
 
-/* ─── Horizontal Scroll Section ─── */
-.horizontal-scroll-section {
-  position: relative;
-  overflow: hidden;
+/* ─── Beam Sweep Animation ─── */
+@keyframes beam-sweep {
+  0%   { transform: translateX(-100%) rotate(-45deg); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateX(200%) rotate(-45deg); opacity: 0; }
+}
+
+.animate-beam-sweep {
+  animation: beam-sweep 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-beam-sweep-2 {
+  animation: beam-sweep 2.5s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
 }
