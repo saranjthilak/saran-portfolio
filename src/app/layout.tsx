@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Onest } from 'next/font/google';
 import './globals.css';
 
 import { Toaster } from "@/components/ui/toaster";
@@ -7,12 +7,12 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import PageTransition from "@/components/ui/page-transition";
 
-const inter = Inter({ subsets: ['latin'] });
+const onest = Onest({ subsets: ['latin'], weight: ['400','500','600','700'], variable: '--font-onest' });
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://saranjthilak.com'),
   title: {
-    default: 'Saran Jaya Thilak | AI & Data Engineer',
+    default: 'Saran Jaya Thilak — Data Engineer & Generative AI Specialist',
     template: '%s | Saran Jaya Thilak',
   },
   description: 'Portfolio of Saran Jaya Thilak, an AI & Data Engineer specializing in RAG systems, scalable data pipelines, and cloud architecture.',
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://saranjthilak.com',
-    title: 'Saran Jaya Thilak | AI & Data Engineer',
+    title: 'Saran Jaya Thilak — Data Engineer & Generative AI Specialist',
     description: 'Portfolio of Saran Jaya Thilak, an AI & Data Engineer specializing in RAG systems, scalable data pipelines, and cloud architecture.',
     siteName: 'Saran Jaya Thilak Portfolio',
     images: [
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Saran Jaya Thilak | AI & Data Engineer',
+    title: 'Saran Jaya Thilak — Data Engineer & Generative AI Specialist',
     description: 'Portfolio of Saran Jaya Thilak, an AI & Data Engineer specializing in RAG systems, scalable data pipelines, and cloud architecture.',
     images: ['/og-image.png'],
     creator: '@saranjthilak',
@@ -61,8 +61,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.className} antialiased cursor-none`}>
+    <html lang="en">
+      <body className={`${onest.variable} font-sans antialiased`}>
         <TooltipProvider>
               <PageTransition>
                 {children}
