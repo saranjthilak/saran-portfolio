@@ -124,20 +124,24 @@ export const LineReveal = ({ lines, className = "", delay = 0, stagger = 120, ac
 export const WordReveal = ({ text, className = "", mutedFrom, delay = 0 }: { text: string; className?: string; mutedFrom?: number; delay?: number }) => {
   const words = text.split(" ");
   return (
-    <span className={className}>
+    <motion.span
+      className={className}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: "-10%" }}
+      transition={{ staggerChildren: 0.035, delayChildren: delay / 1000 }}
+    >
       {words.map((w, i) => (
         <motion.span
           key={w + i}
           className={`inline-block ${mutedFrom !== undefined && i >= mutedFrom ? "text-muted-foreground" : ""}`}
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-10%" }}
-          transition={{ duration: 0.7, delay: delay / 1000 + i * 0.035, ease: EASE_QUART }}
+          variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0 } }}
+          transition={{ duration: 0.7, ease: EASE_QUART }}
         >
           {w}&nbsp;
         </motion.span>
       ))}
-    </span>
+    </motion.span>
   );
 };
 
