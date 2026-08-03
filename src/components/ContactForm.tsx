@@ -18,7 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { ArrowRight, Send, CheckCircle2, Terminal } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { useState } from "react";
 
 const formSchema = z.object({
@@ -96,200 +96,96 @@ const ContactForm = () => {
   }
 
   const inputClasses =
-    "bg-background/60 border-border text-foreground placeholder:text-muted-foreground/50 rounded-lg py-3 px-4 font-mono text-sm backdrop-blur-sm focus:border-primary/60 focus:ring-1 focus:ring-primary/30 focus:bg-background/80 transition-all duration-300";
+    "h-auto rounded-xl border-border bg-white px-4 py-3.5 text-base text-foreground placeholder:text-muted-foreground/60 focus-visible:ring-0 focus-visible:border-accent transition-colors";
 
   return (
-    <div className="relative bg-background/70 backdrop-blur-2xl border border-border rounded-lg overflow-hidden">
-      {/* Scanline overlay */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.03] z-10"
-        style={{
-          backgroundImage: "repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(255,255,255,0.08) 2px, rgba(255,255,255,0.08) 3px)",
-        }}
-        aria-hidden
-      />
-
-      {/* Header */}
-      <div className="relative border-b border-border px-5 sm:px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="flex gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
-            <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
-            <span className="w-2.5 h-2.5 rounded-full bg-[hsl(var(--signal))]/70" />
+    <div className="rounded-[1.75rem] bg-surface p-6 sm:p-8">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+          {/* Honeypot field — hidden from real users, traps bots */}
+          <div className="absolute h-0 w-0 -z-10 opacity-0" aria-hidden="true">
+            <label htmlFor="website">Website</label>
+            <input
+              type="text"
+              id="website"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              value={honeypot}
+              onChange={(e) => setHoneypot(e.target.value)}
+            />
           </div>
-          <div className="flex items-center gap-2">
-            <Terminal className="w-3.5 h-3.5 text-primary" />
-            <span className="font-mono text-xs tracking-[0.15em] text-foreground/80 uppercase font-semibold">
-              Transmit Message
-            </span>
-          </div>
-        </div>
-        <span className="font-mono text-[9px] tracking-[0.2em] text-muted-foreground/50 uppercase hidden sm:block">
-          SECURE·TLS
-        </span>
-      </div>
 
-      {/* Form Content */}
-      <div className="p-5 sm:p-6 relative z-10">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-            {/* Honeypot field — hidden from real users, traps bots */}
-            <div className="absolute opacity-0 top-0 left-0 h-0 w-0 -z-10" aria-hidden="true">
-              <label htmlFor="website">Website</label>
-              <input
-                type="text"
-                id="website"
-                name="website"
-                tabIndex={-1}
-                autoComplete="off"
-                value={honeypot}
-                onChange={(e) => setHoneypot(e.target.value)}
-              />
-            </div>
-            <motion.div
-              variants={fieldVariants}
-              custom={0.1}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-            >
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-foreground/70 text-xs font-mono uppercase tracking-[0.15em] mb-2 block">
-                      <span className="text-primary mr-1">›</span> Identifier
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter your name"
-                        className={inputClasses}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className="text-xs font-mono" />
-                  </FormItem>
-                )}
-              />
-            </motion.div>
-
-            <motion.div
-              variants={fieldVariants}
-              custom={0.2}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-            >
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-foreground/70 text-xs font-mono uppercase tracking-[0.15em] mb-2 block">
-                      <span className="text-primary mr-1">›</span> Return Address
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder="your.email@domain.com"
-                        className={inputClasses}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className="text-xs font-mono" />
-                  </FormItem>
-                )}
-              />
-            </motion.div>
-
-            <motion.div
-              variants={fieldVariants}
-              custom={0.3}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-            >
-              <FormField
-                control={form.control}
-                name="message"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-foreground/70 text-xs font-mono uppercase tracking-[0.15em] mb-2 block">
-                      <span className="text-primary mr-1">›</span> Payload
-                    </FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Your message..."
-                        rows={4}
-                        className={`${inputClasses} resize-none`}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className="text-xs font-mono" />
-                  </FormItem>
-                )}
-              />
-            </motion.div>
-
-            <motion.div
-              variants={fieldVariants}
-              custom={0.4}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-            >
-              <Button
-                type="submit"
-                disabled={form.formState.isSubmitting || sent}
-                className={`
-                  group w-full relative overflow-hidden rounded-lg py-4 text-sm font-mono font-bold uppercase tracking-[0.2em]
-                  transition-all duration-500
-                  ${sent
-                    ? "bg-[hsl(var(--signal))]/20 border border-[hsl(var(--signal))]/50 text-[hsl(var(--signal))]"
-                    : "bg-primary/10 border border-primary/40 text-primary hover:bg-primary hover:text-background hover:shadow-[0_0_30px_hsl(24,95%,53%,0.3)]"
-                  }
-                  disabled:opacity-60 disabled:cursor-not-allowed
-                `}
-              >
-                {/* Hover sweep */}
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-
-                <span className="relative z-10 flex items-center justify-center gap-2">
-                  {form.formState.isSubmitting ? (
-                    <>
-                      <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                      Transmitting...
-                    </>
-                  ) : sent ? (
-                    <>
-                      <CheckCircle2 className="w-4 h-4" />
-                      Transmission Complete
-                    </>
-                  ) : (
-                    <>
-                      <Send className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                      Transmit Signal
-                      <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all duration-300 -ml-2 group-hover:ml-0" />
-                    </>
+          <div className="grid gap-5 sm:grid-cols-2">
+            {(["name", "email"] as const).map((n, i) => (
+              <motion.div key={n} variants={fieldVariants} custom={0.1 + i * 0.08} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+                <FormField
+                  control={form.control}
+                  name={n}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="mb-2 block text-sm text-muted-foreground">
+                        {n === "name" ? "Your name" : "Email"}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type={n === "email" ? "email" : "text"}
+                          placeholder={n === "name" ? "Jane Doe" : "jane@company.com"}
+                          className={inputClasses}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-xs" />
+                    </FormItem>
                   )}
-                </span>
-              </Button>
-            </motion.div>
+                />
+              </motion.div>
+            ))}
+          </div>
 
-            {/* Bottom readout */}
-            <div className="flex items-center justify-between pt-2">
-              <span className="font-mono text-[9px] tracking-[0.2em] text-muted-foreground/40 uppercase">
-                Protocol: EmailJS v4
+          <motion.div variants={fieldVariants} custom={0.3} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <FormField
+              control={form.control}
+              name="message"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="mb-2 block text-sm text-muted-foreground">Project or message</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Tell me what you're building…"
+                      rows={5}
+                      className={`${inputClasses} resize-none`}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="text-xs" />
+                </FormItem>
+              )}
+            />
+          </motion.div>
+
+          <motion.div
+            variants={fieldVariants}
+            custom={0.4}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="flex flex-wrap items-center justify-between gap-4 pt-1"
+          >
+            <Button
+              type="submit"
+              disabled={form.formState.isSubmitting || sent}
+              className="pill pill-dark pill-arrow h-auto hover:bg-ink disabled:opacity-60"
+            >
+              <span>{form.formState.isSubmitting ? "Sending…" : sent ? "Message sent" : "Send message"}</span>
+              <span className="pill-badge bg-white text-ink">
+                {sent ? <Check className="h-4 w-4" /> : <ArrowRight className="h-4 w-4" />}
               </span>
-              <span className="font-mono text-[9px] tracking-[0.2em] text-muted-foreground/40 uppercase flex items-center gap-1">
-                <span className="w-1 h-1 rounded-full bg-[hsl(var(--signal))] animate-pulse" />
-                Connected
-              </span>
-            </div>
-          </form>
-        </Form>
-      </div>
+            </Button>
+            <span className="text-xs text-muted-foreground">Usually replies within a day.</span>
+          </motion.div>
+        </form>
+      </Form>
     </div>
   );
 };

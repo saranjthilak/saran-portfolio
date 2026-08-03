@@ -20,11 +20,16 @@ export default {
 		},
 		extend: {
       fontFamily: {
-        sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
-        display: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-onest)', 'Onest', 'system-ui', 'sans-serif'],
+        display: ['var(--font-onest)', 'Onest', 'system-ui', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
 			colors: {
+				ink: 'hsl(var(--ink))',
+				surface: {
+					DEFAULT: 'hsl(var(--surface))',
+					2: 'hsl(var(--surface-2))'
+				},
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
