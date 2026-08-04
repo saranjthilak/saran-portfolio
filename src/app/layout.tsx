@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Onest } from 'next/font/google';
+import { Lora, Nunito_Sans } from 'next/font/google';
 import './globals.css';
 
 import { Toaster } from "@/components/ui/toaster";
@@ -7,7 +7,17 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import PageTransition from "@/components/ui/page-transition";
 
-const onest = Onest({ subsets: ['latin'], weight: ['400','500','600','700'], variable: '--font-onest' });
+const lora = Lora({
+  subsets: ['latin'],
+  variable: '--font-lora',
+  display: 'swap',
+});
+
+const nunitoSans = Nunito_Sans({
+  subsets: ['latin'],
+  variable: '--font-nunito-sans',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://saranjthilak.com'),
@@ -62,7 +72,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${onest.variable} font-sans antialiased`}>
+      <body className={`${lora.variable} ${nunitoSans.variable} font-sans antialiased`}>
         <TooltipProvider>
               <PageTransition>
                 {children}

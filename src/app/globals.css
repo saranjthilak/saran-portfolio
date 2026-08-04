@@ -4,45 +4,43 @@
 
 @layer base {
   :root {
-    /* Studio light palette */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 7%;
+    /* Paper & Ink palette */
+    --background: 40 27% 96%;          /* #F9F7F2 */
+    --foreground: 0 0% 10%;            /* #1A1A1A */
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 7%;
+    --card: 40 27% 96%;
+    --card-foreground: 0 0% 10%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 7%;
+    --popover: 40 27% 96%;
+    --popover-foreground: 0 0% 10%;
 
-    --primary: 0 0% 4%;            /* ink */
-    --primary-foreground: 0 0% 100%;
+    --primary: 0 0% 10%;               /* ink */
+    --primary-foreground: 40 27% 96%;
 
-    --secondary: 40 8% 94%;        /* surface #f1f0ee */
-    --secondary-foreground: 0 0% 7%;
+    --secondary: 40 18% 94%;           /* #F2F0EB */
+    --secondary-foreground: 0 0% 10%;
 
-    --muted: 40 8% 94%;
-    --muted-foreground: 0 0% 55%;  /* #8d8d8d */
+    --muted: 40 14% 88%;               /* #E5E2DD */
+    --muted-foreground: 0 0% 40%;      /* #666666 */
 
-    --accent: 24 60% 43%;          /* #b15f2c */
-    --accent-foreground: 0 0% 100%;
+    --accent: 0 0% 10%;
+    --accent-foreground: 40 27% 96%;
 
     --success: 152 40% 35%;
-    --success-foreground: 0 0% 100%;
+    --success-foreground: 40 27% 96%;
 
     --destructive: 0 65% 45%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive-foreground: 40 27% 96%;
 
-    --border: 40 9% 89%;           /* #e6e5e2 */
-    --input: 40 9% 89%;
-    --ring: 24 60% 43%;
+    --border: 40 14% 88%;              /* #E5E2DD */
+    --input: 40 14% 88%;
+    --ring: 0 0% 10%;
 
     --radius: 0.875rem;
 
-    --ink: 0 0% 4%;
-    --surface: 40 8% 94%;
-    --surface-2: 40 6% 88%;
-    --accent-from: 25 58% 55%;
-    --accent-to: 25 66% 35%;
+    --ink: 0 0% 10%;
+    --surface: 40 18% 94%;             /* #F2F0EB */
+    --surface-2: 40 14% 88%;           /* #E5E2DD */
   }
 }
 
@@ -54,11 +52,11 @@
     font-feature-settings: "ss01";
   }
   h1, h2, h3, h4, .font-display {
-    font-family: 'Onest', system-ui, sans-serif;
+    font-family: 'Lora', 'Georgia', serif;
     letter-spacing: -0.02em;
   }
-  ::selection { background: hsl(var(--accent) / 0.2); }
-  :focus-visible { outline: 2px solid hsl(var(--accent)); outline-offset: 2px; }
+  ::selection { background: hsl(var(--ink) / 0.12); }
+  :focus-visible { outline: 2px solid hsl(var(--ink)); outline-offset: 2px; }
 }
 
 @layer components {
@@ -94,12 +92,14 @@
     @apply inline-flex rounded-full border px-4 py-2 text-sm;
   }
   .hair { @apply border-t border-border; }
+  .card-ink { @apply rounded-[2rem] bg-ink text-white; }
+  .card-surface { @apply rounded-[2rem] bg-surface; }
 }
 
 @layer utilities {
   .text-watermark { font-size: 13rem; line-height: 1; }
   .tnum { font-variant-numeric: tabular-nums; }
-  .card-ink { @apply rounded-[2rem] bg-ink text-white; }
+  .vertical-text { writing-mode: vertical-rl; }
 }
 
 @media (prefers-reduced-motion: reduce) {
