@@ -10,7 +10,7 @@ const Experience = () => (
         <div>
           <Reveal><Eyebrow>Experience</Eyebrow></Reveal>
           <Reveal delay={80}>
-            <h2 className="mt-5 text-[clamp(2rem,4.2vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.03em]">
+            <h2 className="mt-5 font-display text-[clamp(2rem,4.2vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.03em]">
               Nine years, four teams.
             </h2>
           </Reveal>
@@ -23,8 +23,8 @@ const Experience = () => (
             <article className="group grid gap-4 border-b border-border py-9 md:grid-cols-[10rem_1fr_1.4fr] md:gap-10">
               <div className="text-sm text-muted-foreground">{e.period}</div>
               <div>
-                <h3 className="text-xl font-medium tracking-[-0.01em]">{e.company}</h3>
-                <p className="mt-1 text-sm text-accent">{e.role}</p>
+                <h3 className="text-xl font-medium tracking-[-0.01em] font-display">{e.company}</h3>
+                <p className="mt-1 text-sm text-foreground/70">{e.role}</p>
               </div>
               <p className="text-sm leading-relaxed text-muted-foreground">{e.description}</p>
             </article>

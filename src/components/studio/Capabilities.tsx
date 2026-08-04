@@ -22,7 +22,7 @@ const Capabilities = () => {
           <div>
             <Reveal><Eyebrow>Capabilities</Eyebrow></Reveal>
             <Reveal delay={80}>
-              <h2 className="mt-5 text-[clamp(2rem,4.2vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.03em]">
+              <h2 className="mt-5 font-display text-[clamp(2rem,4.2vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.03em]">
                 What I do
               </h2>
             </Reveal>
@@ -46,7 +46,7 @@ const Capabilities = () => {
                     >
                       <span className="flex items-baseline gap-5">
                         <span className="text-sm text-muted-foreground">0{i + 1}</span>
-                        <span className="text-2xl font-medium tracking-[-0.02em] transition-colors group-hover:text-accent sm:text-3xl">
+                        <span className="text-2xl font-medium tracking-[-0.02em] transition-colors group-hover:text-foreground/80 sm:text-3xl font-display">
                           {group}
                         </span>
                       </span>
