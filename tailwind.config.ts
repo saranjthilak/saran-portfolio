@@ -20,8 +20,8 @@ export default {
 		},
 		extend: {
       fontFamily: {
-        sans: ['var(--font-onest)', 'Onest', 'system-ui', 'sans-serif'],
-        display: ['var(--font-onest)', 'Onest', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-nunito-sans)', 'Nunito Sans', 'system-ui', 'sans-serif'],
+        display: ['var(--font-lora)', 'Lora', 'Georgia', 'serif'],
         mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
 			colors: {
@@ -81,20 +81,12 @@ export default {
 			},
 			keyframes: {
 				'accordion-down': {
-					from: {
-						height: '0'
-					},
-					to: {
-						height: 'var(--radix-accordion-content-height)'
-					}
+					from: { height: '0' },
+					to: { height: 'var(--radix-accordion-content-height)' }
 				},
 				'accordion-up': {
-					from: {
-						height: 'var(--radix-accordion-content-height)'
-					},
-					to: {
-						height: '0'
-					}
+					from: { height: 'var(--radix-accordion-content-height)' },
+					to: { height: '0' }
 				},
         'gradient-pan': {
           '0%': { backgroundPosition: '0% 50%' },

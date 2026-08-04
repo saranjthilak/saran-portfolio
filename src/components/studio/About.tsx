@@ -1,53 +1,94 @@
 "use client";
 
-import { Eyebrow, Globe, Reveal, WordReveal } from "./primitives";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 
-const FACTS = [
-  { k: "Based in", v: "Berlin, Germany" },
-  { k: "Focus", v: "RAG · Data Platforms · MLOps" },
-  { k: "Experience", v: "9 years in production systems" },
-  { k: "Published", v: "2 IEEE machine-learning papers" },
+const CAPABILITIES = [
+  "Data Engineering (ETL / ELT)",
+  "Large Language Model Ops",
+  "Distributed Systems Architecture",
+  "Scalable Vector Databases",
 ];
 
-const About = () => (
-  <section id="about" className="py-24 sm:py-32">
-    <div className="shell pad-x">
-      <Reveal><Eyebrow>About</Eyebrow></Reveal>
+const LEGACY = [
+  "Tesla — Data Systems",
+  "Huawei — R&D Engineering",
+  "Nokia — Network Data Analysis",
+];
 
-      <div className="mt-8 grid gap-14 lg:grid-cols-[1.2fr_0.8fr]">
-        <h2 className="text-[clamp(1.75rem,3.6vw,3.25rem)] font-semibold leading-[1.12] tracking-[-0.025em]">
-          <WordReveal
-            text="I build AI systems that survive contact with production — retrieval pipelines, guardrails and the data infrastructure that keeps them honest, reliable and fast."
-            mutedFrom={13}
-          />
-        </h2>
+const About = () => {
+  const ref = useRef<HTMLElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-10%" });
 
-        <div className="flex flex-col gap-6">
-          <Reveal delay={120}>
-            <div className="flex items-start gap-4 rounded-[1.5rem] bg-surface p-6">
-              <Globe className="mt-1 shrink-0 text-2xl text-accent" />
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                From 24×7 telecom operations at Nokia to cloud architecture at Huawei and
-                LLM tooling at Tesla, I&apos;ve spent my career on the parts of the stack
-                where uptime and accuracy actually matter.
-              </p>
+  const fadeUp = (delay: number) => ({
+    initial: { opacity: 0, y: 24 } as const,
+    animate: inView ? { opacity: 1, y: 0 } as const : ({} as const),
+    transition: { duration: 0.8, delay, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
+  });
+
+  return (
+    <section id="about" ref={ref} className="py-24 md:py-32">
+      <div className="shell pad-x">
+        <div className="grid gap-16 lg:grid-cols-12">
+          <div className="lg:col-span-5">
+            <motion.h2
+              {...fadeUp(0)}
+              className="font-display text-4xl italic leading-tight md:text-5xl"
+            >
+              The Approach
+            </motion.h2>
+            <motion.p
+              {...fadeUp(0.1)}
+              className="mt-8 text-xl leading-relaxed text-foreground/90"
+            >
+              I build systems that bridge the gap between raw data infrastructure and
+              cutting-edge artificial intelligence. My focus is on scalability,
+              reliability, and the operational excellence required for production-grade
+              GenAI.
+            </motion.p>
+          </div>
+
+          <div className="lg:col-span-7">
+            <div className="grid gap-12 md:grid-cols-2">
+              <motion.div
+                {...fadeUp(0.15)}
+                className="border-t border-border pt-6"
+              >
+                <h3 className="text-xs font-bold uppercase tracking-widest text-foreground/40">
+                  Core Capabilities
+                </h3>
+                <ul className="mt-6 space-y-3 text-sm font-medium text-foreground/80">
+                  {CAPABILITIES.map((item) => (
+                    <li key={item} className="flex items-start gap-3">
+                      <span className="mt-1.5 h-1 w-1 rounded-full bg-foreground/40" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+
+              <motion.div
+                {...fadeUp(0.25)}
+                className="border-t border-border pt-6"
+              >
+                <h3 className="text-xs font-bold uppercase tracking-widest text-foreground/40">
+                  Legacy
+                </h3>
+                <ul className="mt-6 space-y-3 text-sm font-medium text-foreground/80">
+                  {LEGACY.map((item) => (
+                    <li key={item} className="flex items-start gap-3">
+                      <span className="mt-1.5 h-1 w-1 rounded-full bg-foreground/40" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
             </div>
-          </Reveal>
-
-          <dl className="divide-y divide-border border-y border-border">
-            {FACTS.map((f, i) => (
-              <Reveal key={f.k} delay={160 + i * 80}>
-                <div className="flex items-baseline justify-between gap-6 py-4">
-                  <dt className="text-sm text-muted-foreground">{f.k}</dt>
-                  <dd className="text-right text-sm font-medium">{f.v}</dd>
-                </div>
-              </Reveal>
-            ))}
-          </dl>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 export default About;

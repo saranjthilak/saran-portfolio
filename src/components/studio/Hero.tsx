@@ -1,111 +1,135 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { useRef } from "react";
-import { CircleDot, Eyebrow, LineReveal, PillButton, Star } from "./primitives";
 
-const MARQUEE = ["RAG Systems", "Data Pipelines", "LLM Guardrails", "MLOps", "Cloud Architecture", "Vector Search"];
+interface HeroProps {
+  ready: boolean;
+  scrollToSection: (id: string) => void;
+  onResume: () => void;
+}
 
-const Hero = ({ ready, scrollToSection, onResume }: { ready: boolean; scrollToSection: (id: string) => void; onResume: () => void }) => {
+const ease = [0.16, 1, 0.3, 1] as [number, number, number, number];
+
+const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
   const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const imgY = useTransform(scrollYProgress, [0, 1], ["0%", "14%"]);
-  const fade = useTransform(scrollYProgress, [0, 0.9], [1, 0.25]);
+
+  const fadeUp = (delay: number) => ({
+    initial: { opacity: 0, y: 24 } as const,
+    animate: ready ? { opacity: 1, y: 0 } as const : ({} as const),
+    transition: { duration: 0.8, delay, ease },
+  });
 
   return (
-    <section ref={ref} id="home" className="relative overflow-hidden pt-28 sm:pt-32">
-      <div className="shell pad-x">
-        <div className="grid items-end gap-10 lg:grid-cols-[1.15fr_0.85fr]">
-          {/* Headline */}
-          <motion.div style={{ opacity: fade }} className="pb-4">
-            <motion.div initial={{ opacity: 0 }} animate={ready ? { opacity: 1 } : {}} transition={{ duration: 0.6, delay: 0.2 }}>
-              <Eyebrow bordered>Data Engineer & Generative AI Specialist</Eyebrow>
-            </motion.div>
+    <section
+      ref={ref}
+      id="home"
+      className="relative flex min-h-screen flex-col border-b border-border md:flex-row"
+    >
+      {/* Left: content */}
+      <div className="flex w-full flex-col justify-between border-r border-border p-8 md:w-1/2 md:p-16 lg:p-24">
+        <div className="space-y-12">
+          <motion.nav
+            {...fadeUp(0.2)}
+            className="flex items-center justify-between"
+          >
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-foreground/40">
+              Portfolio v.1.0
+            </span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-foreground">
+              Berlin, DE
+            </span>
+          </motion.nav>
 
-            <h1 className="mt-7 text-[clamp(2.75rem,8.2vw,7.5rem)] font-semibold leading-[0.92] tracking-[-0.035em]">
-              <LineReveal active={ready} delay={250} lines={["Systems that", "think, scale"]} />
-              <span className="flex flex-wrap items-baseline gap-x-5">
-                <LineReveal active={ready} delay={490} lines={["and ship."]} />
-                <motion.span
-                  initial={{ opacity: 0, scale: 0.6, rotate: -40 }}
-                  animate={ready ? { opacity: 1, scale: 1, rotate: 0 } : {}}
-                  transition={{ duration: 0.9, delay: 0.85, ease: [0.165, 0.84, 0.44, 1] }}
-                  className="text-accent"
-                >
-                  <Star className="text-[0.42em]" />
-                </motion.span>
-              </span>
-            </h1>
+          <div className="pt-6 md:pt-16">
+            <motion.h1
+              {...fadeUp(0.35)}
+              className="font-display text-6xl font-semibold leading-[0.9] tracking-tighter text-foreground md:text-7xl lg:text-8xl"
+            >
+              Saran Jaya
+              <br />
+              <span className="italic font-normal">Thilak</span>
+            </motion.h1>
 
             <motion.p
-              initial={{ opacity: 0, y: 18 }}
-              animate={ready ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.75 }}
-              className="mt-8 max-w-xl text-lg leading-relaxed text-muted-foreground"
+              {...fadeUp(0.5)}
+              className="mt-8 max-w-md text-lg leading-relaxed text-foreground/80 md:text-xl"
             >
-              I&apos;m Saran — I design retrieval-augmented AI products and the data
-              infrastructure underneath them. Nine years across Tesla, Huawei and Nokia,
-              now building from Berlin.
+              Data Engineer & Generative AI Specialist. Architecting intelligent
+              data systems with nearly a decade of experience at{" "}
+              <span className="underline decoration-1 underline-offset-4 opacity-100">
+                Tesla
+              </span>
+              ,{" "}
+              <span className="underline decoration-1 underline-offset-4 opacity-100">
+                Huawei
+              </span>
+              , and{" "}
+              <span className="underline decoration-1 underline-offset-4 opacity-100">
+                Nokia
+              </span>
+              .
             </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 18 }}
-              animate={ready ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.9 }}
-              className="mt-9 flex flex-wrap items-center gap-3"
-            >
-              <PillButton variant="dark" arrow="right" onClick={() => scrollToSection("works")}>
-                See selected work
-              </PillButton>
-              <PillButton variant="outline" onClick={onResume}>Download CV</PillButton>
-            </motion.div>
-          </motion.div>
-
-          {/* Portrait */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={ready ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 1, delay: 0.5, ease: [0.165, 0.84, 0.44, 1] }}
-            className="relative"
-          >
-            <div className="relative overflow-hidden rounded-[2rem] bg-surface">
-              <motion.img
-                style={{ y: imgY }}
-                src="/lovable-uploads/5881e7e5-f088-4e07-a79c-59eacb55eeb0.png"
-                alt="Portrait of Saran Jaya Thilak, Data Engineer and Generative AI Specialist"
-                className="aspect-[4/5] w-full scale-[1.06] object-cover object-[center_18%]"
-              />
-              <div className="absolute inset-x-4 bottom-4 flex items-center justify-between rounded-2xl bg-white/85 px-4 py-3 text-sm backdrop-blur">
-                <span className="font-medium">Saran Jaya Thilak</span>
-                <span className="flex items-center gap-2 text-muted-foreground">
-                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                  Open to work
-                </span>
-              </div>
-            </div>
-          </motion.div>
+          </div>
         </div>
+
+        <motion.div
+          {...fadeUp(0.65)}
+          className="flex flex-wrap gap-x-12 gap-y-4 pt-12 md:pt-0"
+        >
+          <div>
+            <span className="mb-2 block text-[9px] uppercase tracking-widest text-foreground/40">
+              Specialization
+            </span>
+            <span className="text-sm font-semibold italic font-display">
+              Generative AI & LLMOps
+            </span>
+          </div>
+          <div>
+            <span className="mb-2 block text-[9px] uppercase tracking-widest text-foreground/40">
+              Contact
+            </span>
+            <button
+              onClick={() => scrollToSection("contact")}
+              className="text-sm font-semibold underline underline-offset-2 transition-colors hover:text-foreground/70"
+            >
+              Get in touch
+            </button>
+          </div>
+          <div>
+            <span className="mb-2 block text-[9px] uppercase tracking-widest text-foreground/40">
+              Resume
+            </span>
+            <button
+              onClick={onResume}
+              className="text-sm font-semibold underline underline-offset-2 transition-colors hover:text-foreground/70"
+            >
+              Download CV
+            </button>
+          </div>
+        </motion.div>
       </div>
 
-      {/* Marquee strip */}
+      {/* Right: portrait */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={ready ? { opacity: 1 } : {}}
-        transition={{ duration: 0.8, delay: 1 }}
-        className="relative mt-16 overflow-hidden border-y border-border py-4"
+        initial={{ opacity: 0, scale: 1.02 }}
+        animate={ready ? { opacity: 1, scale: 1 } : {}}
+        transition={{ duration: 1.2, delay: 0.4, ease }}
+        className="relative w-full overflow-hidden bg-muted md:w-1/2"
       >
-        <motion.div
-          className="flex w-max gap-10 pr-10 text-sm uppercase tracking-[0.06em] text-muted-foreground"
-          animate={{ x: ["0%", "-50%"] }}
-          transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
-        >
-          {[...MARQUEE, ...MARQUEE, ...MARQUEE, ...MARQUEE].map((m, i) => (
-            <span key={m + i} className="flex shrink-0 items-center gap-10">
-              {m}
-              <CircleDot className="text-xs text-accent" />
-            </span>
-          ))}
-        </motion.div>
+        <div className="group relative h-full min-h-[50vh] md:min-h-screen">
+          <img
+            src="/lovable-uploads/5881e7e5-f088-4e07-a79c-59eacb55eeb0.png"
+            alt="Saran Jaya Thilak"
+            className="h-full w-full object-cover object-[center_20%] transition-transform duration-1000 group-hover:scale-[1.04]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-foreground/10 to-transparent" />
+        </div>
+        <div className="absolute bottom-8 right-8 text-foreground/80 mix-blend-multiply">
+          <p className="vertical-text text-[10px] font-bold uppercase tracking-[0.2em]">
+            9+ Years Experience
+          </p>
+        </div>
       </motion.div>
     </section>
   );

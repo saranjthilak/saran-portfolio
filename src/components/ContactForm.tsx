@@ -96,7 +96,7 @@ const ContactForm = () => {
   }
 
   const inputClasses =
-    "h-auto rounded-xl border-border bg-white px-4 py-3.5 text-base text-foreground placeholder:text-muted-foreground/60 focus-visible:ring-0 focus-visible:border-accent transition-colors";
+    "h-auto rounded-xl border-border bg-background px-4 py-3.5 text-base text-foreground placeholder:text-muted-foreground/60 focus-visible:ring-0 focus-visible:border-accent transition-colors";
 
   return (
     <div className="rounded-[1.75rem] bg-surface p-6 sm:p-8">
