@@ -41,7 +41,7 @@ const Work = () => {
                     src={p.image}
                     alt={`${p.title} preview`}
                     loading="lazy"
-                    className="h-full w-full object-cover opacity-90 transition-all duration-700 group-hover:scale-[1.04] group-hover:opacity-100"
+                    className="h-full w-full object-cover opacity-90 grayscale-[0.35] contrast-[0.92] transition-all duration-700 group-hover:scale-[1.04] group-hover:opacity-100 group-hover:grayscale-0 group-hover:contrast-100"
                   />
                 </div>
                 <div className="flex flex-1 flex-col gap-4 p-7">
