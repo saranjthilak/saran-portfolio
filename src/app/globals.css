@@ -100,6 +100,19 @@
   .text-watermark { font-size: 13rem; line-height: 1; }
   .tnum { font-variant-numeric: tabular-nums; }
   .vertical-text { writing-mode: vertical-rl; }
+
+  .link-sheen {
+    position: relative;
+    text-decoration-color: hsl(var(--foreground) / 0.35);
+    transition: text-decoration-color 0.4s ease, color 0.4s ease;
+  }
+  .link-sheen:hover { text-decoration-color: hsl(var(--foreground)); }
+
+  @keyframes scroll-tick {
+    0% { transform: translateY(-120%); }
+    100% { transform: translateY(320%); }
+  }
+  .scroll-tick { animation: scroll-tick 1.9s cubic-bezier(0.65, 0, 0.35, 1) infinite; }
 }
 
 @media (prefers-reduced-motion: reduce) {
