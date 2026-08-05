@@ -30,11 +30,13 @@ const Work = () => {
         <div className="mt-14 grid gap-6 md:grid-cols-2">
           {featured.map((p, i) => (
             <Reveal key={p.title} delay={i * 90} className={i === 0 ? "md:col-span-2" : ""}>
-              <a
+              <motion.a
                 href={p.url}
                 target="_blank"
                 rel="noreferrer"
-                className="group flex h-full flex-col overflow-hidden rounded-[2rem] border border-border bg-background transition-colors duration-500 hover:border-foreground/25"
+                whileHover={{ y: -6 }}
+                transition={{ type: "spring", stiffness: 260, damping: 24 }}
+                className="group flex h-full flex-col overflow-hidden rounded-[2rem] border border-border bg-background shadow-[0_1px_0_hsl(var(--border))] transition-[border-color,box-shadow] duration-500 hover:border-foreground/25 hover:shadow-[0_24px_60px_-30px_hsl(var(--foreground)/0.35)]"
               >
                 <div className={`overflow-hidden ${i === 0 ? "aspect-[16/7]" : "aspect-[16/10]"} bg-muted/50`}>
                   <motion.img
@@ -50,18 +52,18 @@ const Work = () => {
                       <h3 className="text-2xl font-semibold tracking-[-0.02em] font-display">{p.title}</h3>
                       <p className="mt-1 text-sm text-foreground/60">{p.source}</p>
                     </div>
-                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-border text-foreground/70 transition-all duration-300 group-hover:bg-ink group-hover:text-background">
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-border text-foreground/70 transition-all duration-300 group-hover:rotate-45 group-hover:border-foreground group-hover:bg-ink group-hover:text-background">
                       <ArrowUpRight />
                     </span>
                   </div>
                   <p className="max-w-2xl text-sm leading-relaxed text-foreground/55">{p.description}</p>
                   <div className="mt-auto flex flex-wrap gap-2 pt-2">
                     {p.skills.map((s) => (
-                      <span key={s} className="rounded-full border border-border px-3 py-1 text-xs text-foreground/60">{s}</span>
+                      <span key={s} className="rounded-full border border-border px-3 py-1 text-xs text-foreground/60 transition-colors duration-300 group-hover:border-foreground/25 group-hover:text-foreground/80">{s}</span>
                     ))}
                   </div>
                 </div>
-              </a>
+              </motion.a>
             </Reveal>
           ))}
         </div>
@@ -70,9 +72,9 @@ const Work = () => {
           {rest.map((p, i) => (
             <Reveal key={p.title} delay={i * 70}>
               <li>
-                <a href={p.url} target="_blank" rel="noreferrer" className="group flex flex-wrap items-center justify-between gap-4 py-6">
+                <a href={p.url} target="_blank" rel="noreferrer" className="group flex flex-wrap items-center justify-between gap-4 py-6 transition-[padding] duration-500 hover:pl-4">
                   <div className="flex flex-wrap items-baseline gap-x-5 gap-y-1">
-                    <h3 className="text-xl font-medium transition-colors group-hover:text-foreground/70 font-display">{p.title}</h3>
+                    <h3 className="font-display text-xl font-medium italic transition-colors duration-300 group-hover:text-foreground/60">{p.title}</h3>
                     <span className="text-sm text-foreground/40">{p.source}</span>
                   </div>
                   <span className="text-foreground/40 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-foreground">
