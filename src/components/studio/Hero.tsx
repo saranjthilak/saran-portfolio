@@ -2,6 +2,8 @@
 
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
+import EmbeddingField from "./EmbeddingField";
+import Magnetic from "./Magnetic";
 
 interface HeroProps {
   ready: boolean;
@@ -31,16 +33,24 @@ const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
     transition: { duration: 0.8, delay, ease },
   });
 
+  const words = (text: string) => text.split(" ");
+
   return (
     <section
       ref={ref}
       id="home"
       className="relative flex min-h-screen flex-col border-b border-border md:flex-row"
     >
+      {/* Embedding-space backdrop */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <EmbeddingField className="opacity-[0.55]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background/70" />
+      </div>
+
       {/* Left: content */}
       <motion.div
         style={{ y: contentY, opacity: contentOpacity }}
-        className="flex w-full flex-col justify-between border-r border-border p-8 md:w-1/2 md:p-16 lg:p-24"
+        className="relative z-10 flex w-full flex-col justify-between border-r border-border p-8 md:w-1/2 md:p-16 lg:p-24"
       >
         <div className="space-y-12">
           <motion.nav
@@ -59,22 +69,45 @@ const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
             <h1 className="font-display text-6xl font-semibold leading-[0.9] tracking-tighter text-foreground md:text-7xl lg:text-8xl">
               {["Saran Jaya", "Thilak"].map((line, i) => (
                 <span key={line} className="block overflow-hidden pb-[0.06em]">
-                  <motion.span
-                    className={`block ${i === 1 ? "italic font-normal" : ""}`}
-                    initial={{ y: "110%" }}
-                    animate={ready ? { y: "0%" } : {}}
-                    transition={{ duration: 1, delay: 0.35 + i * 0.12, ease }}
-                  >
-                    {line}
-                  </motion.span>
+                  <span className={`block ${i === 1 ? "italic font-normal" : ""}`}>
+                    {words(line).map((word, j) => (
+                      <motion.span
+                        key={word + j}
+                        className="inline-block"
+                        initial={{ y: "110%", opacity: 0 }}
+                        animate={ready ? { y: "0%", opacity: 1 } : {}}
+                        transition={{
+                          duration: 0.95,
+                          delay: 0.35 + i * 0.14 + j * 0.09,
+                          ease,
+                        }}
+                      >
+                        {word}
+                        {j < words(line).length - 1 ? "\u00A0" : ""}
+                      </motion.span>
+                    ))}
+                  </span>
                 </span>
               ))}
             </h1>
 
             <motion.p
-              {...fadeUp(0.5)}
+              {...fadeUp(0.62)}
               className="mt-8 max-w-md text-lg leading-relaxed text-foreground/80 md:text-xl"
             >
+              <span className="mb-4 block overflow-hidden text-sm font-semibold uppercase tracking-[0.28em] text-foreground/55">
+                {["Data", "Engineer", "&", "Generative", "AI", "Specialist"].map((w, i) => (
+                  <motion.span
+                    key={w + i}
+                    className="inline-block"
+                    initial={{ y: "110%", opacity: 0 }}
+                    animate={ready ? { y: "0%", opacity: 1 } : {}}
+                    transition={{ duration: 0.7, delay: 0.6 + i * 0.06, ease }}
+                  >
+                    {w}&nbsp;
+                  </motion.span>
+                ))}
+              </span>
               Data Engineer &amp; Generative AI Specialist. Architecting intelligent
               data systems with nearly a decade of experience at{" "}
               <span className="link-sheen underline decoration-1 underline-offset-4">
@@ -109,23 +142,27 @@ const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
             <span className="mb-2 block text-[9px] uppercase tracking-widest text-foreground/40">
               Contact
             </span>
-            <button
-              onClick={() => scrollToSection("contact")}
-              className="link-sheen text-sm font-semibold underline underline-offset-4 transition-colors hover:text-foreground/70"
-            >
-              Get in touch
-            </button>
+            <Magnetic>
+              <button
+                onClick={() => scrollToSection("contact")}
+                className="link-sheen text-sm font-semibold underline underline-offset-4 transition-colors hover:text-foreground/70"
+              >
+                Get in touch
+              </button>
+            </Magnetic>
           </div>
           <div>
             <span className="mb-2 block text-[9px] uppercase tracking-widest text-foreground/40">
               Resume
             </span>
-            <button
-              onClick={onResume}
-              className="link-sheen text-sm font-semibold underline underline-offset-4 transition-colors hover:text-foreground/70"
-            >
-              Download CV
-            </button>
+            <Magnetic>
+              <button
+                onClick={onResume}
+                className="link-sheen text-sm font-semibold underline underline-offset-4 transition-colors hover:text-foreground/70"
+              >
+                Download CV
+              </button>
+            </Magnetic>
           </div>
           <button
             onClick={() => scrollToSection("works")}
@@ -144,7 +181,7 @@ const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
         initial={{ opacity: 0, scale: 1.02 }}
         animate={ready ? { opacity: 1, scale: 1 } : {}}
         transition={{ duration: 1.2, delay: 0.4, ease }}
-        className="relative w-full overflow-hidden bg-muted md:w-1/2"
+        className="relative z-10 w-full overflow-hidden bg-muted md:w-1/2"
       >
         <div className="group relative h-full min-h-[50vh] overflow-hidden md:min-h-screen">
           <motion.img
