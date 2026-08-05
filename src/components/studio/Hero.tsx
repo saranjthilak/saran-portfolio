@@ -108,8 +108,8 @@ const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
                   </motion.span>
                 ))}
               </span>
-              Data Engineer &amp; Generative AI Specialist. Architecting intelligent
-              data systems with nearly a decade of experience at{" "}
+              Architecting intelligent data systems with nearly a decade of
+              experience at{" "}
               <span className="link-sheen underline decoration-1 underline-offset-4">
                 Tesla
               </span>
