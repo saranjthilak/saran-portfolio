@@ -115,7 +115,7 @@
     @apply inline-flex items-center gap-3 rounded-full text-sm font-medium transition-transform duration-300 ease-out will-change-transform;
   }
   .pill:hover { transform: scale(1.035); }
-  .pill-dark { @apply bg-ink text-white; }
+  .pill-dark { @apply bg-ink text-background; }
   .pill-light { @apply bg-surface text-foreground; }
   .pill-outline { @apply border border-border bg-transparent text-foreground; }
   .pill-arrow { @apply py-1.5 pl-6 pr-1.5; }
@@ -130,7 +130,7 @@
     @apply inline-flex rounded-full border px-4 py-2 text-sm;
   }
   .hair { @apply border-t border-border; }
-  .card-ink { @apply rounded-[2rem] bg-ink text-white; }
+  .card-ink { @apply rounded-[2rem] bg-ink text-background; }
   .card-surface { @apply rounded-[2rem] bg-surface; }
 }
 
