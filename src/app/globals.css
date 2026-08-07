@@ -42,6 +42,44 @@
     --surface: 40 18% 94%;             /* #F2F0EB */
     --surface-2: 40 14% 88%;           /* #E5E2DD */
   }
+
+  .dark {
+    /* Ink & Paper — inverted */
+    --background: 30 6% 8%;
+    --foreground: 40 20% 94%;
+
+    --card: 30 6% 8%;
+    --card-foreground: 40 20% 94%;
+
+    --popover: 30 6% 8%;
+    --popover-foreground: 40 20% 94%;
+
+    --primary: 40 20% 94%;
+    --primary-foreground: 30 6% 8%;
+
+    --secondary: 30 5% 12%;
+    --secondary-foreground: 40 20% 94%;
+
+    --muted: 30 5% 16%;
+    --muted-foreground: 40 8% 62%;
+
+    --accent: 40 20% 94%;
+    --accent-foreground: 30 6% 8%;
+
+    --success: 152 35% 45%;
+    --success-foreground: 30 6% 8%;
+
+    --destructive: 0 60% 52%;
+    --destructive-foreground: 40 20% 94%;
+
+    --border: 30 5% 18%;
+    --input: 30 5% 18%;
+    --ring: 40 20% 94%;
+
+    --ink: 40 20% 94%;
+    --surface: 30 5% 11%;
+    --surface-2: 30 5% 15%;
+  }
 }
 
 @layer base {
