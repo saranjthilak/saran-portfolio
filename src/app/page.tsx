@@ -13,6 +13,7 @@ import Stats from "@/components/studio/Stats";
 import Research from "@/components/studio/Research";
 import Contact from "@/components/studio/Contact";
 import SiteFooter from "@/components/studio/SiteFooter";
+import ScrollThread from "@/components/studio/ScrollThread";
 
 const Index = () => {
   useLenis();
@@ -37,6 +38,7 @@ const Index = () => {
       <PageLoader onDone={() => setReady(true)} />
       <div className="relative min-h-screen bg-background">
         <Header ready={ready} scrollToSection={scrollToSection} />
+        <ScrollThread />
         <main>
           <Hero ready={ready} scrollToSection={scrollToSection} onResume={handleDownloadResume} />
           <About />
