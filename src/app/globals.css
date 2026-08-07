@@ -153,6 +153,32 @@
   .scroll-tick { animation: scroll-tick 1.9s cubic-bezier(0.65, 0, 0.35, 1) infinite; }
 }
 
+/* Circular wipe for the theme toggle (View Transitions API) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) { z-index: 1; }
+::view-transition-new(root) { z-index: 2; }
+
+@keyframes theme-wipe {
+  from { clip-path: circle(0% at var(--wipe-x, 50%) var(--wipe-y, 50%)); }
+  to { clip-path: circle(var(--wipe-r, 150%) at var(--wipe-x, 50%) var(--wipe-y, 50%)); }
+}
+::view-transition-new(root) {
+  animation: theme-wipe 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Fallback wipe overlay for browsers without View Transitions */
+@keyframes theme-wipe-fallback {
+  from { clip-path: circle(0px at var(--wipe-x, 50%) var(--wipe-y, 50%)); opacity: 1; }
+  to { clip-path: circle(var(--wipe-r, 1200px) at var(--wipe-x, 50%) var(--wipe-y, 50%)); opacity: 1; }
+}
+.theme-wipe-fallback {
+  animation: theme-wipe-fallback 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
