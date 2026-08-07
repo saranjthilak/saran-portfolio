@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { CloseIcon, LogoMark, MenuIcon } from "./primitives";
+import ThemeToggle from "./ThemeToggle";
 
 const NAV = [
   { label: "Home", id: "home" },
@@ -81,6 +82,7 @@ const Header = ({ ready, scrollToSection }: { ready: boolean; scrollToSection: (
               <span className="text-foreground/30">•</span>
               <span className="font-medium">{date}</span>
             </div>
+            <ThemeToggle />
             <button
               onClick={() => setOpen(true)}
               className="rounded-[0.875rem] border border-border bg-background/60 backdrop-blur transition-colors hover:bg-background"
