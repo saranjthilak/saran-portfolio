@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { projects } from "@/data/portfolio";
 import { ArrowUpRight, Eyebrow, PillButton, Reveal } from "./primitives";
 import PipelineFlow, { type PipelineNode } from "./PipelineFlow";
+import ProjectCursor from "./ProjectCursor";
 
 const FeaturedCard = ({ p, wide }: { p: (typeof projects)[number]; wide: boolean }) => {
   const [hover, setHover] = useState(false);
@@ -23,7 +24,8 @@ const FeaturedCard = ({ p, wide }: { p: (typeof projects)[number]; wide: boolean
       onBlur={() => setHover(false)}
       whileHover={{ y: -6 }}
       transition={{ type: "spring", stiffness: 260, damping: 24 }}
-      className="group flex h-full flex-col overflow-hidden rounded-[2rem] border border-border bg-background shadow-[0_1px_0_hsl(var(--border))] transition-[border-color,box-shadow] duration-500 hover:border-foreground/25 hover:shadow-[0_24px_60px_-30px_hsl(var(--foreground)/0.35)]"
+      data-project-cursor
+      className="group flex h-full flex-col overflow-hidden rounded-[2rem] border border-border bg-background shadow-[0_1px_0_hsl(var(--border))] transition-[border-color,box-shadow] duration-500 hover:border-foreground/25 hover:shadow-[0_24px_60px_-30px_hsl(var(--foreground)/0.35)] md:cursor-none"
     >
       <div className={`overflow-hidden ${wide ? "aspect-[16/7]" : "aspect-[16/10]"} bg-muted/50`}>
         <motion.img
@@ -77,8 +79,9 @@ const Work = () => {
   const rest = projects.filter((p) => !p.featured);
 
   return (
-    <section id="works" className="bg-surface py-24 sm:py-32">
-      <div className="shell pad-x">
+    <ProjectCursor>
+      <section id="works" className="bg-surface py-24 sm:py-32">
+        <div className="shell pad-x">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <Reveal><Eyebrow>Selected work</Eyebrow></Reveal>
@@ -107,7 +110,7 @@ const Work = () => {
           {rest.map((p, i) => (
             <Reveal key={p.title} delay={i * 70}>
               <li>
-                <a href={p.url} target="_blank" rel="noreferrer" className="group flex flex-wrap items-center justify-between gap-4 py-6 transition-[padding] duration-500 hover:pl-4">
+                <a href={p.url} target="_blank" rel="noreferrer" data-project-cursor className="group flex flex-wrap items-center justify-between gap-4 py-6 transition-[padding] duration-500 hover:pl-4 md:cursor-none">
                   <div className="flex flex-wrap items-baseline gap-x-5 gap-y-1">
                     <h3 className="font-display text-xl font-medium italic transition-colors duration-300 group-hover:text-foreground/60">{p.title}</h3>
                     <span className="text-sm text-foreground/40">{p.source}</span>
@@ -120,8 +123,9 @@ const Work = () => {
             </Reveal>
           ))}
         </ul>
-      </div>
-    </section>
+        </div>
+      </section>
+    </ProjectCursor>
   );
 };
 
