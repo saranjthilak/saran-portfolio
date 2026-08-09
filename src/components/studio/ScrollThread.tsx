@@ -49,7 +49,7 @@ const ScrollThread = () => {
     >
       <div className="relative h-[46vh] w-px bg-border">
         <div
-          className="absolute left-0 top-0 w-px bg-ink transition-[height] duration-200 ease-out"
+          className="absolute left-0 top-0 w-px bg-accent transition-[height] duration-200 ease-out"
           style={{ height: `${progress * 100}%` }}
         />
         {NODES.map((n, i) => {
@@ -59,12 +59,12 @@ const ScrollThread = () => {
             <div key={n.id} className="absolute -left-[3px]" style={{ top: `${top}%` }}>
               <span className="relative block">
                 {isActive && (
-                  <span className="absolute -inset-[5px] animate-ping rounded-full bg-ink/25" />
+                  <span className="absolute -inset-[5px] animate-ping rounded-full bg-accent/25" />
                 )}
                 <span
                   className={`relative block h-[7px] w-[7px] rounded-full border transition-all duration-500 ${
                     isActive
-                      ? "scale-125 border-ink bg-ink"
+                      ? "scale-125 border-accent bg-accent"
                       : "border-border bg-background"
                   }`}
                 />
