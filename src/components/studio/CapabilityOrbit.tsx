@@ -128,7 +128,7 @@ const CapabilityOrbit = () => {
                 className={[
                   "block rounded-full border px-4 py-2 text-sm font-medium transition-colors duration-300 sm:px-5 sm:py-2.5",
                   isCur
-                    ? "border-foreground bg-foreground text-background shadow-md"
+                    ? "border-accent bg-accent text-accent-foreground shadow-md"
                     : isLinked
                       ? "border-foreground/40 bg-background text-foreground"
                       : "border-border bg-background text-muted-foreground",

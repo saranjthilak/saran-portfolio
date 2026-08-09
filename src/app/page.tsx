@@ -14,6 +14,7 @@ import Research from "@/components/studio/Research";
 import Contact from "@/components/studio/Contact";
 import SiteFooter from "@/components/studio/SiteFooter";
 import ScrollThread from "@/components/studio/ScrollThread";
+import BackgroundGrid from "@/components/studio/BackgroundGrid";
 
 const Index = () => {
   useLenis();
@@ -37,6 +38,8 @@ const Index = () => {
     <>
       <PageLoader onDone={() => setReady(true)} />
       <div className="relative min-h-screen bg-background">
+        <BackgroundGrid />
+        <div className="relative z-10">
         <Header ready={ready} scrollToSection={scrollToSection} />
         <ScrollThread />
         <main>
@@ -50,6 +53,7 @@ const Index = () => {
           <Contact />
         </main>
         <SiteFooter scrollToSection={scrollToSection} />
+        </div>
       </div>
     </>
   );

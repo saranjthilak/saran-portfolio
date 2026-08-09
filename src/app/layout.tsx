@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Lora, Nunito_Sans } from 'next/font/google';
+import { Space_Grotesk, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 
 import { Toaster } from "@/components/ui/toaster";
@@ -7,15 +7,15 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import PageTransition from "@/components/ui/page-transition";
 
-const lora = Lora({
+const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
-  variable: '--font-lora',
+  variable: '--font-space-grotesk',
   display: 'swap',
 });
 
-const nunitoSans = Nunito_Sans({
+const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
-  variable: '--font-nunito-sans',
+  variable: '--font-jetbrains-mono',
   display: 'swap',
 });
 
@@ -72,7 +72,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${lora.variable} ${nunitoSans.variable} font-sans antialiased`}>
+      <body className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
         <TooltipProvider>
               <PageTransition>
                 {children}

@@ -6,18 +6,19 @@ import { Moon, Sun } from "lucide-react";
 const STORAGE_KEY = "studio-theme";
 
 const ThemeToggle = ({ className = "" }: { className?: string }) => {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(true);
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
-    const prefers = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const isDark = stored ? stored === "dark" : prefers;
+    const isDark = stored ? stored === "dark" : true;
     document.documentElement.classList.toggle("dark", isDark);
+    document.documentElement.classList.toggle("light", !isDark);
     setDark(isDark);
   }, []);
 
   const apply = useCallback((next: boolean) => {
     document.documentElement.classList.toggle("dark", next);
+    document.documentElement.classList.toggle("light", !next);
     localStorage.setItem(STORAGE_KEY, next ? "dark" : "light");
     setDark(next);
   }, []);

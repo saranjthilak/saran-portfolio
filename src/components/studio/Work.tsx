@@ -41,7 +41,7 @@ const FeaturedCard = ({ p, wide }: { p: (typeof projects)[number]; wide: boolean
             <h3 className="text-2xl font-semibold tracking-[-0.02em] font-display">{p.title}</h3>
             <p className="mt-1 text-sm text-foreground/60">{p.source}</p>
           </div>
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-border text-foreground/70 transition-all duration-300 group-hover:rotate-45 group-hover:border-foreground group-hover:bg-ink group-hover:text-background">
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-border text-foreground/70 transition-all duration-300 group-hover:rotate-45 group-hover:border-accent group-hover:bg-accent group-hover:text-accent-foreground">
             <ArrowUpRight />
           </span>
         </div>

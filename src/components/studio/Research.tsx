@@ -29,7 +29,7 @@ const Research = () => (
                       <span className="text-xs uppercase tracking-[0.06em] text-foreground/50">{p.journal} · {p.date}</span>
                       <h3 className="mt-3 text-lg font-medium leading-snug tracking-[-0.01em] font-display">{p.title}</h3>
                     </div>
-                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-border text-muted-foreground transition-all duration-300 group-hover:bg-ink group-hover:text-background">
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-border text-muted-foreground transition-all duration-300 group-hover:bg-accent group-hover:text-accent-foreground">
                       <ArrowUpRight />
                     </span>
                   </div>

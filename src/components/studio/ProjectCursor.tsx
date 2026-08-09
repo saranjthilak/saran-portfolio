@@ -67,7 +67,7 @@ const ProjectCursor = ({
         className="pointer-events-none fixed left-0 top-0 z-[120] hidden md:block"
       >
         <span
-          className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-ink px-4 py-2 text-xs font-medium uppercase tracking-[0.08em] text-background shadow-[0_10px_30px_-12px_hsl(var(--foreground)/0.6)] transition-all duration-300 ease-out ${
+          className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-accent px-4 py-2 font-mono text-xs font-medium uppercase tracking-[0.08em] text-accent-foreground shadow-[0_10px_30px_-12px_hsl(var(--accent)/0.6)] transition-all duration-300 ease-out ${
             active ? "scale-100 opacity-100" : "scale-50 opacity-0"
           }`}
         >

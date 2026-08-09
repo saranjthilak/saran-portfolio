@@ -68,7 +68,7 @@ type PillProps = {
   className?: string;
 };
 export const PillButton = ({ children, variant = "dark", arrow = null, href, onClick, type = "button", className = "" }: PillProps) => {
-  const badge = variant === "dark" ? "bg-white text-ink" : "bg-ink text-white";
+  const badge = variant === "dark" ? "bg-accent-foreground text-accent" : "bg-accent text-accent-foreground";
   const content = (
     <>
       <span>{children}</span>
