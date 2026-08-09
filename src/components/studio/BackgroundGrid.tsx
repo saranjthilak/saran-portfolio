@@ -21,15 +21,16 @@ const BackgroundGrid = () => {
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-      <div
-        className="grid-drift absolute -inset-[60px]"
-        style={{
-          transform: `translate3d(0, ${-y}px, 0)`,
-          backgroundImage:
+      <div className="absolute -inset-[80px]" style={{ transform: `translate3d(0, ${-y}px, 0)` }}>
+        <div
+          className="grid-drift absolute inset-0"
+          style={{
+            backgroundImage:
             "linear-gradient(to right, hsl(var(--grid-line) / 0.06) 1px, transparent 1px), linear-gradient(to bottom, hsl(var(--grid-line) / 0.06) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
+            backgroundSize: "60px 60px",
+          }}
+        />
+      </div>
       <div
         className="absolute inset-0"
         style={{
