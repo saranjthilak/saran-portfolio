@@ -216,7 +216,7 @@ const HeroSection = ({ scrollToSection, handleDownloadResume }: HeroSectionProps
         className="mt-20 sm:mt-32 w-full max-w-5xl mx-auto px-6 relative z-10 flex flex-col items-center gap-8"
       >
         {/* Portrait Photo Card */}
-        <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 rounded-full overflow-hidden group">
+        <div className="relative w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 rounded-full overflow-hidden group">
           {/* Animated gradient border */}
           <div className="absolute -inset-[3px] rounded-full bg-gradient-to-br from-primary via-accent to-primary opacity-70 group-hover:opacity-100 transition-opacity duration-700 animate-spin-slow" style={{ animationDuration: '8s' }} />
           <div className="absolute inset-[3px] rounded-full overflow-hidden bg-transparent z-[1]">
