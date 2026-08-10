@@ -230,15 +230,12 @@ const DomainCard = ({
       />
 
       <div
-        className="relative rounded-2xl border overflow-hidden"
+        className="relative rounded-2xl glass-panel"
         style={{
-          background: "rgba(8,8,14,0.7)",
-          borderColor: isActive ? `${hub.color}40` : "rgba(255,255,255,0.06)",
+          borderColor: isActive ? `${hub.color}80` : undefined,
           boxShadow: isActive
             ? `0 0 40px ${hub.color}12, 0 20px 60px rgba(0,0,0,0.4)`
-            : "0 10px 40px rgba(0,0,0,0.3)",
-          backdropFilter: "blur(20px)",
-          transition: "border-color 500ms ease, box-shadow 500ms ease",
+            : undefined,
         }}
       >
         {/* Scanline overlay */}

@@ -57,8 +57,7 @@ const CertificationCard = ({ cert, index }: { cert: typeof certifications[0], in
           style={{ background: `linear-gradient(135deg, ${accent.glow}, transparent 60%)` }}
         />
 
-        <div className={`relative h-full rounded-[1.75rem] p-[1px] bg-gradient-to-br ${accent.color} opacity-30 group-hover:opacity-60 transition-opacity duration-500`}>
-          <div className="relative h-full rounded-[calc(1.75rem-1px)] bg-background/90 backdrop-blur-2xl p-6 sm:p-8 flex flex-col overflow-hidden">
+        <div className={`relative h-full rounded-[1.75rem] glass-panel p-6 sm:p-8 flex flex-col`}>
 
             {/* Holographic shimmer on hover */}
             <motion.div
@@ -152,7 +151,6 @@ const CertificationCard = ({ cert, index }: { cert: typeof certifications[0], in
               </div>
             </div>
           </div>
-        </div>
       </motion.div>
     </motion.div>
   );

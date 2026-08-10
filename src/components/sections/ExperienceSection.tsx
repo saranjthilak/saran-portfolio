@@ -33,7 +33,7 @@ const ExperienceCard = ({ job, index }: { job: typeof experience[0], index: numb
         </div>
 
         {/* Right Side (Role & Description) */}
-        <div className={`relative glass-panel p-6 sm:p-8 rounded-3xl border border-white/[0.05] group-hover:border-primary/20 transition-all duration-500 overflow-hidden bg-background/40 backdrop-blur-xl group-hover:-translate-y-1 ${index % 2 !== 0 ? 'md:order-1' : ''}`}>
+        <div className={`relative glass-panel p-6 sm:p-8 rounded-3xl group-hover:-translate-y-1 ${index % 2 !== 0 ? 'md:order-1' : ''}`}>
           <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-[40px] -translate-y-1/2 translate-x-1/2 group-hover:bg-primary/20 transition-colors duration-700 pointer-events-none" />
           
           <h4 className="text-lg font-semibold text-foreground mb-3 relative z-10">{job.role}</h4>

@@ -17,11 +17,11 @@ const ProjectCard = ({ project, index }: { project: typeof curatedProjects[0], i
       <TiltCard
         tiltMax={5}
         scaleOnHover={1.02}
-        className={`group relative rounded-3xl overflow-hidden flex flex-col h-full transition-all duration-500 border bg-background/50 backdrop-blur-xl ${
+        className={`glass-panel group relative rounded-3xl flex flex-col h-full ${
           isFeatured
-            ? "border-primary/20 hover:border-primary/40 shadow-[0_0_30px_rgba(59,130,246,0.08)]"
-            : "border-white/[0.05] hover:border-white/[0.15]"
-        } hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]`}
+            ? "border-primary/40 shadow-[0_0_30px_rgba(59,130,246,0.08)]"
+            : ""
+        }`}
       >
         {/* Ambient glow on hover */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[60px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
