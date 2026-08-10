@@ -42,8 +42,11 @@ const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
 
 const StatParticles = ({ seed = 0, shape }: { seed?: number; shape: number[] }) => {
   const ref = useRef<SVGSVGElement>(null);
+  const [mounted, setMounted] = useState(false);
   const [dots] = useState(() => buildDots(seed, shape));
   const [t, setT] = useState(0);
+
+  useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
     const el = ref.current;
@@ -83,7 +86,7 @@ const StatParticles = ({ seed = 0, shape }: { seed?: number; shape: number[] }) 
       aria-hidden
       className="pointer-events-none absolute bottom-0 right-0 h-14 w-40 opacity-[0.28]"
     >
-      {dots.map((d, i) => {
+      {mounted && dots.map((d, i) => {
         const local = Math.min(1, Math.max(0, (t * DURATION - d.d) / (DURATION - 220)));
         const e = easeOut(local);
         return (
