@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Onest } from 'next/font/google';
+import { Space_Grotesk, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 
 import { Toaster } from "@/components/ui/toaster";
@@ -7,7 +7,17 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import PageTransition from "@/components/ui/page-transition";
 
-const onest = Onest({ subsets: ['latin'], weight: ['400','500','600','700'], variable: '--font-onest' });
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-space-grotesk',
+  display: 'swap',
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jetbrains-mono',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://saranjthilak.com'),
@@ -62,7 +72,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${onest.variable} font-sans antialiased`}>
+      <body className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
         <TooltipProvider>
               <PageTransition>
                 {children}

@@ -17,7 +17,7 @@ const Contact = () => (
         <div>
           <Reveal><Eyebrow>Contact</Eyebrow></Reveal>
           <Reveal delay={80}>
-            <h2 className="mt-5 text-[clamp(2rem,4.4vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.03em]">
+            <h2 className="mt-5 font-display text-[clamp(2rem,4.4vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.03em]">
               Let&apos;s build<br />something reliable.
             </h2>
           </Reveal>
@@ -34,7 +34,7 @@ const Contact = () => (
                 <div className="flex items-baseline justify-between gap-6 py-4">
                   <dt className="text-sm text-muted-foreground">{l.label}</dt>
                   <dd>
-                    <a href={l.href} target={l.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className="text-sm font-medium transition-colors hover:text-accent">
+                    <a href={l.href} target={l.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className="text-sm font-medium transition-colors hover:text-foreground/70">
                       {l.value}
                     </a>
                   </dd>

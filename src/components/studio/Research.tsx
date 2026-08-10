@@ -10,7 +10,7 @@ const Research = () => (
         <div>
           <Reveal><Eyebrow>Research</Eyebrow></Reveal>
           <Reveal delay={80}>
-            <h2 className="mt-5 text-[clamp(2rem,4.2vw,3.25rem)] font-semibold leading-[1.05] tracking-[-0.03em]">
+            <h2 className="mt-5 font-display text-[clamp(2rem,4.2vw,3.25rem)] font-semibold leading-[1.05] tracking-[-0.03em]">
               Published machine learning work.
             </h2>
           </Reveal>
@@ -22,14 +22,14 @@ const Research = () => (
                   href={p.link}
                   target="_blank"
                   rel="noreferrer"
-                  className="group block rounded-[1.5rem] bg-white p-7 transition-transform duration-500 hover:-translate-y-1"
+                  className="group block rounded-[1.5rem] border border-border bg-background p-7 transition-transform duration-500 hover:-translate-y-1"
                 >
                   <div className="flex items-start justify-between gap-6">
                     <div>
-                      <span className="text-xs uppercase tracking-[0.06em] text-accent">{p.journal} · {p.date}</span>
-                      <h3 className="mt-3 text-lg font-medium leading-snug tracking-[-0.01em]">{p.title}</h3>
+                      <span className="text-xs uppercase tracking-[0.06em] text-foreground/50">{p.journal} · {p.date}</span>
+                      <h3 className="mt-3 text-lg font-medium leading-snug tracking-[-0.01em] font-display">{p.title}</h3>
                     </div>
-                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-border text-muted-foreground transition-all duration-300 group-hover:bg-ink group-hover:text-white">
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-border text-muted-foreground transition-all duration-300 group-hover:bg-accent group-hover:text-accent-foreground">
                       <ArrowUpRight />
                     </span>
                   </div>
@@ -53,7 +53,7 @@ const Research = () => (
             ))}
           </ul>
           <Reveal delay={340}>
-            <div className="mt-8 rounded-[1.5rem] bg-white p-6">
+            <div className="mt-8 rounded-[1.5rem] border border-border bg-background p-6">
               <span className="text-xs uppercase tracking-[0.06em] text-muted-foreground">Education</span>
               <p className="mt-3 text-sm font-medium">MSc Data Science & Artificial Intelligence</p>
               <p className="text-sm text-muted-foreground">Le Wagon · Berlin, Germany</p>

@@ -1,111 +1,202 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
-import { CircleDot, Eyebrow, LineReveal, PillButton, Star } from "./primitives";
+import EmbeddingField from "./EmbeddingField";
+import Magnetic from "./Magnetic";
 
-const MARQUEE = ["RAG Systems", "Data Pipelines", "LLM Guardrails", "MLOps", "Cloud Architecture", "Vector Search"];
+interface HeroProps {
+  ready: boolean;
+  scrollToSection: (id: string) => void;
+  onResume: () => void;
+}
 
-const Hero = ({ ready, scrollToSection, onResume }: { ready: boolean; scrollToSection: (id: string) => void; onResume: () => void }) => {
+const ease = [0.16, 1, 0.3, 1] as [number, number, number, number];
+
+const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
   const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const imgY = useTransform(scrollYProgress, [0, 1], ["0%", "14%"]);
-  const fade = useTransform(scrollYProgress, [0, 0.9], [1, 0.25]);
+  const reduce = useReducedMotion();
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+
+  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "12%"]);
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1, reduce ? 1 : 1.08]);
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -60]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.75], [1, reduce ? 1 : 0.15]);
+
+  const fadeUp = (delay: number) => ({
+    initial: { opacity: 0, y: 24 } as const,
+    animate: ready ? { opacity: 1, y: 0 } as const : ({} as const),
+    transition: { duration: 0.8, delay, ease },
+  });
+
+  const words = (text: string) => text.split(" ");
 
   return (
-    <section ref={ref} id="home" className="relative overflow-hidden pt-28 sm:pt-32">
-      <div className="shell pad-x">
-        <div className="grid items-end gap-10 lg:grid-cols-[1.15fr_0.85fr]">
-          {/* Headline */}
-          <motion.div style={{ opacity: fade }} className="pb-4">
-            <motion.div initial={{ opacity: 0 }} animate={ready ? { opacity: 1 } : {}} transition={{ duration: 0.6, delay: 0.2 }}>
-              <Eyebrow bordered>Data Engineer & Generative AI Specialist</Eyebrow>
-            </motion.div>
+    <section
+      ref={ref}
+      id="home"
+      className="relative flex min-h-screen flex-col border-b border-border md:flex-row"
+    >
+      {/* Embedding-space backdrop */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <EmbeddingField className="opacity-[0.55]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background/70" />
+      </div>
 
-            <h1 className="mt-7 text-[clamp(2.75rem,8.2vw,7.5rem)] font-semibold leading-[0.92] tracking-[-0.035em]">
-              <LineReveal active={ready} delay={250} lines={["Systems that", "think, scale"]} />
-              <span className="flex flex-wrap items-baseline gap-x-5">
-                <LineReveal active={ready} delay={490} lines={["and ship."]} />
-                <motion.span
-                  initial={{ opacity: 0, scale: 0.6, rotate: -40 }}
-                  animate={ready ? { opacity: 1, scale: 1, rotate: 0 } : {}}
-                  transition={{ duration: 0.9, delay: 0.85, ease: [0.165, 0.84, 0.44, 1] }}
-                  className="text-accent"
-                >
-                  <Star className="text-[0.42em]" />
-                </motion.span>
-              </span>
+      {/* Left: content */}
+      <motion.div
+        style={{ y: contentY, opacity: contentOpacity }}
+        className="relative z-10 flex w-full flex-col justify-between border-r border-border p-8 md:w-1/2 md:p-16 lg:p-24"
+      >
+        <div className="space-y-12">
+          <motion.nav
+            {...fadeUp(0.2)}
+            className="flex items-center justify-between"
+          >
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-foreground/40">
+              Portfolio v.1.0
+            </span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-foreground">
+              Berlin, DE
+            </span>
+          </motion.nav>
+
+          <div className="pt-6 md:pt-16">
+            <h1 className="font-display text-6xl font-semibold leading-[0.9] tracking-tighter text-foreground md:text-7xl lg:text-8xl">
+              {["Saran Jaya", "Thilak"].map((line, i) => (
+                <span key={line} className="block overflow-hidden pb-[0.06em]">
+                  <span className={`block ${i === 1 ? "italic font-normal" : ""}`}>
+                    {words(line).map((word, j) => (
+                      <motion.span
+                        key={word + j}
+                        className="inline-block"
+                        initial={{ y: "110%", opacity: 0 }}
+                        animate={ready ? { y: "0%", opacity: 1 } : {}}
+                        transition={{
+                          duration: 0.95,
+                          delay: 0.35 + i * 0.14 + j * 0.09,
+                          ease,
+                        }}
+                      >
+                        {word}
+                        {j < words(line).length - 1 ? "\u00A0" : ""}
+                      </motion.span>
+                    ))}
+                  </span>
+                </span>
+              ))}
             </h1>
 
             <motion.p
-              initial={{ opacity: 0, y: 18 }}
-              animate={ready ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.75 }}
-              className="mt-8 max-w-xl text-lg leading-relaxed text-muted-foreground"
+              {...fadeUp(0.62)}
+              className="mt-8 max-w-md text-lg leading-relaxed text-foreground/80 md:text-xl"
             >
-              I&apos;m Saran — I design retrieval-augmented AI products and the data
-              infrastructure underneath them. Nine years across Tesla, Huawei and Nokia,
-              now building from Berlin.
+              <span className="mb-4 block overflow-hidden text-sm font-semibold uppercase tracking-[0.28em] text-foreground/55">
+                {["Data", "Engineer", "&", "Generative", "AI", "Specialist"].map((w, i) => (
+                  <motion.span
+                    key={w + i}
+                    className="inline-block"
+                    initial={{ y: "110%", opacity: 0 }}
+                    animate={ready ? { y: "0%", opacity: 1 } : {}}
+                    transition={{ duration: 0.7, delay: 0.6 + i * 0.06, ease }}
+                  >
+                    {w}&nbsp;
+                  </motion.span>
+                ))}
+              </span>
+              Architecting intelligent data systems with nearly a decade of
+              experience at{" "}
+              <span className="link-sheen underline decoration-1 underline-offset-4">
+                Tesla
+              </span>
+              ,{" "}
+              <span className="link-sheen underline decoration-1 underline-offset-4">
+                Huawei
+              </span>
+              , and{" "}
+              <span className="link-sheen underline decoration-1 underline-offset-4">
+                Nokia
+              </span>
+              .
             </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 18 }}
-              animate={ready ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.9 }}
-              className="mt-9 flex flex-wrap items-center gap-3"
-            >
-              <PillButton variant="dark" arrow="right" onClick={() => scrollToSection("works")}>
-                See selected work
-              </PillButton>
-              <PillButton variant="outline" onClick={onResume}>Download CV</PillButton>
-            </motion.div>
-          </motion.div>
-
-          {/* Portrait */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={ready ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 1, delay: 0.5, ease: [0.165, 0.84, 0.44, 1] }}
-            className="relative"
-          >
-            <div className="relative overflow-hidden rounded-[2rem] bg-surface">
-              <motion.img
-                style={{ y: imgY }}
-                src="/lovable-uploads/5881e7e5-f088-4e07-a79c-59eacb55eeb0.png"
-                alt="Portrait of Saran Jaya Thilak, Data Engineer and Generative AI Specialist"
-                className="aspect-[4/5] w-full scale-[1.06] object-cover object-[center_18%]"
-              />
-              <div className="absolute inset-x-4 bottom-4 flex items-center justify-between rounded-2xl bg-white/85 px-4 py-3 text-sm backdrop-blur">
-                <span className="font-medium">Saran Jaya Thilak</span>
-                <span className="flex items-center gap-2 text-muted-foreground">
-                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                  Open to work
-                </span>
-              </div>
-            </div>
-          </motion.div>
+          </div>
         </div>
-      </div>
 
-      {/* Marquee strip */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={ready ? { opacity: 1 } : {}}
-        transition={{ duration: 0.8, delay: 1 }}
-        className="relative mt-16 overflow-hidden border-y border-border py-4"
-      >
         <motion.div
-          className="flex w-max gap-10 pr-10 text-sm uppercase tracking-[0.06em] text-muted-foreground"
-          animate={{ x: ["0%", "-50%"] }}
-          transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
+          {...fadeUp(0.65)}
+          className="flex flex-wrap items-end gap-x-12 gap-y-4 pt-12 md:pt-0"
         >
-          {[...MARQUEE, ...MARQUEE, ...MARQUEE, ...MARQUEE].map((m, i) => (
-            <span key={m + i} className="flex shrink-0 items-center gap-10">
-              {m}
-              <CircleDot className="text-xs text-accent" />
+          <div className="group">
+            <span className="mb-2 block text-[9px] uppercase tracking-widest text-foreground/40">
+              Specialization
             </span>
-          ))}
+            <span className="text-sm font-semibold italic font-display">
+              Generative AI & LLMOps
+            </span>
+          </div>
+          <div>
+            <span className="mb-2 block text-[9px] uppercase tracking-widest text-foreground/40">
+              Contact
+            </span>
+            <Magnetic>
+              <button
+                onClick={() => scrollToSection("contact")}
+                className="link-sheen text-sm font-semibold underline underline-offset-4 transition-colors hover:text-foreground/70"
+              >
+                Get in touch
+              </button>
+            </Magnetic>
+          </div>
+          <div>
+            <span className="mb-2 block text-[9px] uppercase tracking-widest text-foreground/40">
+              Resume
+            </span>
+            <Magnetic>
+              <button
+                onClick={onResume}
+                className="link-sheen text-sm font-semibold underline underline-offset-4 transition-colors hover:text-foreground/70"
+              >
+                Download CV
+              </button>
+            </Magnetic>
+          </div>
+          <button
+            onClick={() => scrollToSection("works")}
+            className="ml-auto hidden items-center gap-3 text-[10px] font-bold uppercase tracking-[0.25em] text-foreground/45 transition-colors hover:text-foreground md:flex"
+          >
+            Scroll
+            <span className="relative block h-8 w-px overflow-hidden bg-border">
+              <span className="scroll-tick absolute inset-x-0 top-0 h-3 bg-foreground" />
+            </span>
+          </button>
         </motion.div>
+      </motion.div>
+
+      {/* Right: portrait */}
+      <motion.div
+        initial={{ opacity: 0, scale: 1.02 }}
+        animate={ready ? { opacity: 1, scale: 1 } : {}}
+        transition={{ duration: 1.2, delay: 0.4, ease }}
+        className="relative z-10 w-full overflow-hidden bg-muted md:w-1/2"
+      >
+        <div className="group relative h-full min-h-[50vh] overflow-hidden md:min-h-screen">
+          <motion.img
+            style={{ y: imageY, scale: imageScale }}
+            src="/lovable-uploads/5881e7e5-f088-4e07-a79c-59eacb55eeb0.png"
+            alt="Saran Jaya Thilak — Data Engineer and Generative AI Specialist"
+            className="h-[112%] w-full object-cover object-[center_20%] grayscale-[0.2] transition-[filter,transform] duration-[1200ms] ease-out group-hover:grayscale-0"
+          />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-foreground/10 to-transparent transition-opacity duration-700 group-hover:opacity-60" />
+        </div>
+        <div className="absolute bottom-8 right-8 text-foreground/80 mix-blend-multiply">
+          <p className="vertical-text text-[10px] font-bold uppercase tracking-[0.2em]">
+            9+ Years Experience
+          </p>
+        </div>
       </motion.div>
     </section>
   );

@@ -39,6 +39,13 @@ export const projects = [
     image: "/images/projects/project-product-matching.png",
     url: "https://github.com/saranjthilak/ai_poduct_matching",
     featured: true,
+    pipeline: [
+      { label: "Image", icon: "image" },
+      { label: "CLIP", icon: "cpu" },
+      { label: "FAISS", icon: "search" },
+      { label: "Triton", icon: "server" },
+      { label: "MongoDB", icon: "database" },
+    ],
   },
   {
     title: "Car Manual RAG Assistant",
@@ -48,6 +55,13 @@ export const projects = [
     image: "/images/projects/project-knowledge-assistant.png",
     url: "https://github.com/saranjthilak/Car-Manual-RAG-Assistant",
     featured: true,
+    pipeline: [
+      { label: "Manual PDF", icon: "file" },
+      { label: "Chunk", icon: "layers" },
+      { label: "Embed", icon: "cpu" },
+      { label: "Vector DB", icon: "database" },
+      { label: "LLM", icon: "bot" },
+    ],
   },
   {
     title: "Divvy Bikes – End-to-End Data Pipeline",
@@ -57,6 +71,13 @@ export const projects = [
     image: "/images/projects/project-divvy-bikes.png",
     url: "https://github.com/saranjthilak/Divvy-Bike-Data-End-to-End-Pipeline",
     featured: true,
+    pipeline: [
+      { label: "GCS", icon: "cloud" },
+      { label: "Airflow", icon: "workflow" },
+      { label: "DBT", icon: "layers" },
+      { label: "BigQuery", icon: "database" },
+      { label: "Looker", icon: "chart" },
+    ],
   },
   {
     title: "Multimodal RAG System",
