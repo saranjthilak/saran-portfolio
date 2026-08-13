@@ -12,36 +12,46 @@ const SECTIONS = [
   { id: "contact",    label: "CON"  },
 ] as const;
 
-// ─── SVG geometry ────────────────────────────────────────────────────────────
-const W       = 52;
-const TRACE_X = 20;
-const DOT_R   = 4;
-const PAD_TOP = 32;
-const PAD_BOT = 32;
+// ─── SVG geometry ─────────────────────────────────────────────────────────────
+const W        = 56;        // total SVG width
+const TRACE_X  = 18;        // main vertical spine X
+const JOG_W    = 10;        // horizontal jog width (right-angle only)
+const DOT_R    = 4;         // radius of core dot
+const PAD_TOP  = 40;        // top padding
+const PAD_BOT  = 40;        // bottom padding
 
-function buildPath(nodeYs: number[], svgH: number): string {
+/**
+ * Builds a PCB-style path with strict 90° (right-angle) bends only.
+ * Between each node the path dips away and returns, like a real trace routing.
+ */
+function buildPCBPath(nodeYs: number[], svgH: number): string {
   if (nodeYs.length === 0) return "";
+
   const segs: string[] = [`M ${TRACE_X} 0`];
 
   for (let i = 0; i < nodeYs.length; i++) {
     const y   = nodeYs[i];
-    const dir = i % 2 === 0 ? 1 : -1;
-    const jx  = TRACE_X + dir * 10;
+    const dir = i % 2 === 0 ? 1 : -1;     // alternate jog directions
+    const jx  = TRACE_X + dir * JOG_W;
 
     if (i === 0) {
+      // Approach first node with a right-angle jog
       segs.push(
-        `L ${TRACE_X} ${y - 8}`,
-        `L ${jx} ${y - 4}`,
-        `L ${TRACE_X} ${y}`
+        `L ${TRACE_X} ${y - 12}`,   // drop vertically near node
+        `L ${jx} ${y - 12}`,        // horizontal jog (90°)
+        `L ${jx} ${y}`,             // vertical back to node y (90°)
+        `L ${TRACE_X} ${y}`         // horizontal back to spine (90°)
       );
     } else {
       const prevY = nodeYs[i - 1];
-      const mid   = prevY + (y - prevY) * 0.42;
+      const midY  = Math.round(prevY + (y - prevY) * 0.45);
+
       segs.push(
-        `L ${TRACE_X} ${mid}`,
-        `L ${jx} ${mid + 5}`,
-        `L ${TRACE_X} ${mid + 10}`,
-        `L ${TRACE_X} ${y}`
+        `L ${TRACE_X} ${midY}`,      // travel down to mid-point (vertical)
+        `L ${jx} ${midY}`,           // horizontal jog (90°)
+        `L ${jx} ${midY + 10}`,      // short vertical (90°)
+        `L ${TRACE_X} ${midY + 10}`, // horizontal back to spine (90°)
+        `L ${TRACE_X} ${y}`          // travel down to node (vertical)
       );
     }
   }
@@ -50,65 +60,63 @@ function buildPath(nodeYs: number[], svgH: number): string {
   return segs.join(" ");
 }
 
-// ─── Component ───────────────────────────────────────────────────────────────
+// ─── Component ────────────────────────────────────────────────────────────────
 const CircuitTrace = () => {
   const svgRef   = useRef<SVGSVGElement>(null);
   const ghostRef = useRef<SVGPathElement>(null);
 
-  const [svgH,     setSvgH]     = useState(640);
-  const [nodeYs,   setNodeYs]   = useState<number[]>([]);
-  const [progress, setProgress] = useState(0);
-  const [active,   setActive]   = useState<string>("home");
-  const [visible,  setVisible]  = useState(false);
-  const [pathLen,  setPathLen]  = useState(0);
+  const [svgH,        setSvgH]        = useState(680);
+  const [nodeYs,      setNodeYs]      = useState<number[]>([]);
+  const [progress,    setProgress]    = useState(0);
+  const [active,      setActive]      = useState<string>("home");
+  const [pastSet,     setPastSet]     = useState<Set<string>>(new Set(["home"]));
+  const [visible,     setVisible]     = useState(false);
+  const [pathLen,     setPathLen]     = useState(0);
 
-  // ── Compute node Y positions from document-space offsets (scroll-invariant)
-  // Uses el.offsetTop so it never needs to run on scroll — only on mount/resize.
+  // ── Compute node Y positions ─────────────────────────────────────────────
   const measure = useCallback(() => {
     const docH      = document.documentElement.scrollHeight;
     const maxScroll = Math.max(1, docH - window.innerHeight);
+    const trackH    = svgH - PAD_TOP - PAD_BOT;
 
     const ys = SECTIONS.map((s, i) => {
       const el = document.getElementById(s.id);
       if (!el) {
-        // Even fallback distribution
-        return PAD_TOP + (i / (SECTIONS.length - 1)) * (svgH - PAD_TOP - PAD_BOT);
+        return PAD_TOP + (i / (SECTIONS.length - 1)) * trackH;
       }
-      // Map section's page-top to a [0, 1] scroll fraction,
-      // then place its node in the SVG track proportionally.
       const frac = Math.max(0, Math.min(1, el.offsetTop / maxScroll));
-      return PAD_TOP + frac * (svgH - PAD_TOP - PAD_BOT);
+      return PAD_TOP + frac * trackH;
     });
 
     setNodeYs(ys);
   }, [svgH]);
 
-  // ── Keep SVG height at 76 % of viewport ─────────────────────────────────
+  // ── Keep SVG height = 78% viewport ──────────────────────────────────────
   useEffect(() => {
-    const upd = () => setSvgH(Math.round(window.innerHeight * 0.76));
+    const upd = () => setSvgH(Math.round(window.innerHeight * 0.78));
     upd();
     window.addEventListener("resize", upd);
     return () => window.removeEventListener("resize", upd);
   }, []);
 
-  // ── Re-measure on mount and whenever svgH changes.
-  //    NOT on scroll — section offsetTops are scroll-invariant.
+  // ── Re-measure on mount / svgH change ───────────────────────────────────
   useEffect(() => {
-    const t = setTimeout(measure, 80);
+    const t = setTimeout(measure, 100);
     return () => clearTimeout(t);
-  }, [measure]);   // measure identity only changes when svgH changes
+  }, [measure]);
 
   // ── Scroll: track progress and visibility ────────────────────────────────
   useEffect(() => {
     const onScroll = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(max > 0 ? Math.min(1, window.scrollY / max) : 0);
-      setVisible(window.scrollY > 80);
+      const p   = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+      setProgress(p);
+      setVisible(window.scrollY > 60);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);  // empty deps — handler never needs to change
+  }, []);
 
   // ── Active section (IntersectionObserver) ────────────────────────────────
   useEffect(() => {
@@ -116,10 +124,19 @@ const CircuitTrace = () => {
       .map((s) => document.getElementById(s.id))
       .filter(Boolean) as HTMLElement[];
     if (!els.length) return;
+
     const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && setActive(e.target.id)),
-      { rootMargin: "-28% 0px -62% 0px", threshold: 0 }
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            setActive(e.target.id);
+            setPastSet((prev) => new Set([...prev, e.target.id]));
+          }
+        });
+      },
+      { rootMargin: "-25% 0px -60% 0px", threshold: 0 }
     );
+
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
   }, []);
@@ -129,15 +146,15 @@ const CircuitTrace = () => {
     if (ghostRef.current) {
       setPathLen(ghostRef.current.getTotalLength());
     }
-  }, [nodeYs]);   // svgH is captured inside nodeYs already
+  }, [nodeYs]);
 
-  const pathD   = buildPath(nodeYs, svgH);
+  const pathD   = buildPCBPath(nodeYs, svgH);
   const dashOff = pathLen > 0 ? pathLen * (1 - progress) : pathLen;
 
   return (
     <div
       aria-hidden
-      className={`pointer-events-none fixed left-0 top-1/2 z-30 hidden -translate-y-1/2 transition-opacity duration-700 xl:block ${
+      className={`pointer-events-none fixed left-0 top-1/2 z-30 -translate-y-1/2 transition-opacity duration-700 hidden lg:block ${
         visible ? "opacity-100" : "opacity-0"
       }`}
       style={{ width: W, height: svgH }}
@@ -152,32 +169,55 @@ const CircuitTrace = () => {
         overflow="visible"
       >
         <defs>
-          <filter id="ct-trace-glow" x="-60%" y="-10%" width="220%" height="120%">
-            <feGaussianBlur stdDeviation="2" result="b" />
-            <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+          {/* Multi-layer trace glow (bloom effect) */}
+          <filter id="ct-trace-glow" x="-100%" y="-5%" width="300%" height="110%">
+            <feGaussianBlur stdDeviation="3" result="b1" />
+            <feGaussianBlur stdDeviation="6" result="b2" in="SourceGraphic" />
+            <feMerge>
+              <feMergeNode in="b2" />
+              <feMergeNode in="b1" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
           </filter>
+
+          {/* Node glow */}
           <filter id="ct-node-glow" x="-300%" y="-300%" width="700%" height="700%">
-            <feGaussianBlur stdDeviation="3" result="b" />
-            <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+            <feGaussianBlur stdDeviation="3.5" result="b" />
+            <feMerge>
+              <feMergeNode in="b" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
           </filter>
+
+          {/* Active node strong bloom */}
+          <filter id="ct-active-glow" x="-400%" y="-400%" width="900%" height="900%">
+            <feGaussianBlur stdDeviation="5.5" result="b1" />
+            <feGaussianBlur stdDeviation="2" result="b2" in="SourceGraphic" />
+            <feMerge>
+              <feMergeNode in="b1" />
+              <feMergeNode in="b2" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+
           <clipPath id="ct-clip">
             <rect x={0} y={0} width={W} height={svgH} />
           </clipPath>
         </defs>
 
-        {/* Ghost base trace */}
+        {/* ── Dim ghost trace ──────────────────────────────────── */}
         {pathD && (
           <path
             d={pathD}
-            stroke="hsl(var(--border))"
+            stroke="hsl(var(--accent) / 0.07)"
             strokeWidth={1}
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            strokeLinecap="square"
+            strokeLinejoin="miter"
             clipPath="url(#ct-clip)"
           />
         )}
 
-        {/* Invisible path — only for getTotalLength() */}
+        {/* ── Invisible ghost for getTotalLength() ────────────── */}
         {pathD && (
           <path
             ref={ghostRef}
@@ -188,92 +228,114 @@ const CircuitTrace = () => {
           />
         )}
 
-        {/* Glowing scroll-filled trace */}
+        {/* ── Glowing scroll-filled trace ──────────────────────── */}
         {pathD && pathLen > 0 && (
           <path
             d={pathD}
             stroke="hsl(var(--accent))"
             strokeWidth={1.5}
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            strokeLinecap="square"
+            strokeLinejoin="miter"
             strokeDasharray={pathLen}
             strokeDashoffset={dashOff}
             filter="url(#ct-trace-glow)"
             clipPath="url(#ct-clip)"
-            style={{ transition: "stroke-dashoffset 0.12s ease-out" }}
+            style={{ transition: "stroke-dashoffset 0.08s linear" }}
           />
         )}
 
-        {/* Section nodes */}
+        {/* ── Section marker nodes ─────────────────────────────── */}
         {nodeYs.map((y, i) => {
-          const s       = SECTIONS[i];
-          const isAct   = active === s.id;
-          const nodePct = nodeYs.length > 1 ? i / (nodeYs.length - 1) : 0;
-          const isLit   = progress >= nodePct - 0.03;
+          const s      = SECTIONS[i];
+          const isAct  = active === s.id;
+          const isLit  = pastSet.has(s.id);
+          const isPast = isLit && !isAct;
+
+          // Also use progress-based lit for nodes not yet visited but scrolled to
+          const nodePct  = nodeYs.length > 1 ? i / (nodeYs.length - 1) : 0;
+          const isScrollLit = progress >= nodePct - 0.02;
+          const finalLit    = isLit || isScrollLit;
 
           return (
             <g key={s.id}>
               {/* Square PCB land-pad outline */}
               <rect
-                x={TRACE_X - DOT_R - 3}
-                y={y - DOT_R - 3}
-                width={(DOT_R + 3) * 2}
-                height={(DOT_R + 3) * 2}
+                x={TRACE_X - DOT_R - 3.5}
+                y={y - DOT_R - 3.5}
+                width={(DOT_R + 3.5) * 2}
+                height={(DOT_R + 3.5) * 2}
                 rx={1}
-                stroke={isLit ? "hsl(var(--accent) / 0.3)" : "hsl(var(--border) / 0.5)"}
-                strokeWidth={0.5}
+                stroke={
+                  isAct       ? "hsl(var(--accent) / 0.55)"
+                  : finalLit  ? "hsl(var(--accent) / 0.22)"
+                  :             "hsl(var(--border) / 0.28)"
+                }
+                strokeWidth={0.6}
                 fill="none"
-                style={{ transition: "stroke 0.4s ease" }}
+                style={{ transition: "stroke 0.5s ease" }}
               />
 
-              {/* Active node pulse rings */}
+              {/* Pulse rings — active section */}
               {isAct && (
-                <circle
-                  cx={TRACE_X} cy={y} r={DOT_R + 5}
-                  fill="none"
-                  stroke="hsl(var(--accent))"
-                  strokeWidth={0.75}
-                  opacity={0.5}
-                  className="ct-ping"
-                />
-              )}
-              {isAct && (
-                <circle
-                  cx={TRACE_X} cy={y} r={DOT_R + 9}
-                  fill="none"
-                  stroke="hsl(var(--accent))"
-                  strokeWidth={0.5}
-                  opacity={0.25}
-                  className="ct-ping-slow"
-                />
+                <>
+                  <circle cx={TRACE_X} cy={y} r={DOT_R + 6}
+                    fill="none" stroke="hsl(var(--accent))" strokeWidth={0.8}
+                    opacity={0.5} className="ct-ping" />
+                  <circle cx={TRACE_X} cy={y} r={DOT_R + 11}
+                    fill="none" stroke="hsl(var(--accent))" strokeWidth={0.5}
+                    opacity={0.25} className="ct-ping-slow" />
+                  <circle cx={TRACE_X} cy={y} r={DOT_R + 17}
+                    fill="none" stroke="hsl(var(--accent))" strokeWidth={0.3}
+                    opacity={0.1} className="ct-ping-slowest" />
+                </>
               )}
 
               {/* Core dot */}
               <circle
                 cx={TRACE_X} cy={y} r={DOT_R}
-                fill={isLit ? "hsl(var(--accent))" : "hsl(var(--background))"}
-                stroke={isLit ? "hsl(var(--accent))" : "hsl(var(--border))"}
+                fill={
+                  isAct      ? "hsl(var(--accent))"
+                  : finalLit ? "hsl(var(--accent) / 0.45)"
+                  :            "hsl(var(--background))"
+                }
+                stroke={
+                  isAct      ? "hsl(var(--accent))"
+                  : finalLit ? "hsl(var(--accent) / 0.55)"
+                  :            "hsl(var(--border) / 0.45)"
+                }
                 strokeWidth={1}
-                filter={isLit ? "url(#ct-node-glow)" : undefined}
-                style={{ transition: "fill 0.5s ease, stroke 0.5s ease" }}
+                filter={
+                  isAct      ? "url(#ct-active-glow)"
+                  : finalLit ? "url(#ct-node-glow)"
+                  :            undefined
+                }
+                style={{ transition: "fill 0.4s ease, stroke 0.4s ease" }}
               />
 
-              {/* Bright centre for active lit node */}
-              {isAct && isLit && (
-                <circle cx={TRACE_X} cy={y} r={1.5} fill="white" opacity={0.9} />
+              {/* Bright center for active node */}
+              {isAct && (
+                <circle cx={TRACE_X} cy={y} r={1.8}
+                  fill="white" opacity={0.95}
+                  className="ct-center-pulse" />
               )}
 
-              {/* Monospace section label */}
+              {/* Half-lit center for past sections */}
+              {isPast && (
+                <circle cx={TRACE_X} cy={y} r={1.5}
+                  fill="hsl(var(--accent) / 0.65)" />
+              )}
+
+              {/* Monospace label */}
               <text
-                x={TRACE_X + 10} y={y}
+                x={TRACE_X + 11} y={y}
                 dominantBaseline="middle"
                 fontFamily="var(--font-jetbrains-mono), JetBrains Mono, monospace"
-                fontSize="6.5"
-                letterSpacing="0.13em"
+                fontSize="6"
+                letterSpacing="0.14em"
                 fill={
-                  isAct  ? "hsl(var(--accent))"
-                  : isLit ? "hsl(var(--foreground) / 0.4)"
-                  :          "hsl(var(--foreground) / 0.18)"
+                  isAct      ? "hsl(var(--accent))"
+                  : finalLit ? "hsl(var(--foreground) / 0.35)"
+                  :            "hsl(var(--foreground) / 0.12)"
                 }
                 style={{ transition: "fill 0.4s ease" }}
               >
@@ -285,19 +347,34 @@ const CircuitTrace = () => {
       </svg>
 
       <style>{`
+        /* ── Pulse ring animations ─────────────────────────── */
         .ct-ping {
           animation: ct-ring-expand 2s ease-out infinite;
           transform-box: fill-box;
           transform-origin: center;
         }
         .ct-ping-slow {
-          animation: ct-ring-expand 2s ease-out 0.5s infinite;
+          animation: ct-ring-expand 2.2s ease-out 0.55s infinite;
+          transform-box: fill-box;
+          transform-origin: center;
+        }
+        .ct-ping-slowest {
+          animation: ct-ring-expand 2.4s ease-out 1.1s infinite;
           transform-box: fill-box;
           transform-origin: center;
         }
         @keyframes ct-ring-expand {
-          0%   { transform: scale(0.6); opacity: 0.7; }
-          100% { transform: scale(1.6); opacity: 0;   }
+          0%   { transform: scale(0.55); opacity: 0.8; }
+          100% { transform: scale(1.7);  opacity: 0;   }
+        }
+
+        /* ── Center dot breathe ────────────────────────────── */
+        .ct-center-pulse {
+          animation: ct-breathe 1.8s ease-in-out infinite;
+        }
+        @keyframes ct-breathe {
+          0%, 100% { opacity: 0.95; }
+          50%       { opacity: 1;   }
         }
       `}</style>
     </div>
