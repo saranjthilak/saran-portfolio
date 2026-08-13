@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Download } from "lucide-react";
 import EmbeddingField from "./EmbeddingField";
 import Magnetic from "./Magnetic";
@@ -21,6 +21,122 @@ const stats = [
   { value: "3+", label: "Years Experience" },
 ];
 
+// ─── Terminal sequence timing ──────────────────────────────────────────────────
+const PROMPT_TEXT  = "> initializing_profile.exe";
+const NAME_TEXT    = "Saran Jaya Thilak";
+const TITLE_TEXT   = "Data Engineer & Generative AI Specialist";
+const PROMPT_SPEED = 38;   // ms per char — prompt line
+const NAME_SPEED   = 30;   // ms per char — name
+const TITLE_SPEED  = 22;   // ms per char — title
+const CLEAR_PAUSE  = 180;  // ms pause before clearing prompt
+const NAME_START_DELAY = 80; // ms after prompt fades before name starts
+
+// ─── Hook: one-per-session terminal typewriter ────────────────────────────────
+function useTerminalSequence(active: boolean, reduced: boolean) {
+  const SESSION_KEY = "hero_terminal_done";
+
+  // If already ran this session → skip straight to done
+  const alreadyRan = typeof window !== "undefined"
+    ? sessionStorage.getItem(SESSION_KEY) === "1"
+    : false;
+
+  const [promptText,   setPromptText]   = useState(alreadyRan ? ""  : "");
+  const [promptVisible,setPromptVisible]= useState(!alreadyRan);
+  const [nameText,     setNameText]     = useState(alreadyRan ? NAME_TEXT  : "");
+  const [titleText,    setTitleText]    = useState(alreadyRan ? TITLE_TEXT : "");
+  const [showCursor,   setShowCursor]   = useState(!alreadyRan);
+  const [cursorTarget, setCursorTarget] = useState<"prompt" | "name" | "title" | "none">("prompt");
+
+  useEffect(() => {
+    if (!active || alreadyRan || reduced) {
+      // Skip: show final state immediately
+      setPromptVisible(false);
+      setNameText(NAME_TEXT);
+      setTitleText(TITLE_TEXT);
+      setShowCursor(false);
+      return;
+    }
+
+    let cancelled = false;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+
+    const schedule = (fn: () => void, ms: number) => {
+      const t = setTimeout(() => { if (!cancelled) fn(); }, ms);
+      timers.push(t);
+      return ms;
+    };
+
+    // Type the prompt character by character
+    let elapsed = 0;
+    setCursorTarget("prompt");
+    setShowCursor(true);
+
+    for (let i = 0; i <= PROMPT_TEXT.length; i++) {
+      const captured = i;
+      elapsed += PROMPT_SPEED;
+      schedule(() => {
+        setPromptText(PROMPT_TEXT.slice(0, captured));
+      }, elapsed);
+    }
+
+    // Pause, then fade prompt out
+    elapsed += CLEAR_PAUSE;
+    schedule(() => {
+      setPromptVisible(false);
+      setPromptText("");
+    }, elapsed);
+
+    // Brief gap, then switch cursor target to name and start typing
+    elapsed += NAME_START_DELAY;
+    schedule(() => setCursorTarget("name"), elapsed);
+
+    for (let i = 0; i <= NAME_TEXT.length; i++) {
+      const captured = i;
+      elapsed += NAME_SPEED;
+      schedule(() => {
+        setNameText(NAME_TEXT.slice(0, captured));
+      }, elapsed);
+    }
+
+    // Then type title
+    elapsed += 40; // small gap between name and title
+    schedule(() => setCursorTarget("title"), elapsed);
+
+    for (let i = 0; i <= TITLE_TEXT.length; i++) {
+      const captured = i;
+      elapsed += TITLE_SPEED;
+      schedule(() => {
+        setTitleText(TITLE_TEXT.slice(0, captured));
+      }, elapsed);
+    }
+
+    // Done — hide cursor, mark session
+    elapsed += 200;
+    schedule(() => {
+      setShowCursor(false);
+      try { sessionStorage.setItem(SESSION_KEY, "1"); } catch {}
+    }, elapsed);
+
+    return () => {
+      cancelled = true;
+      timers.forEach(clearTimeout);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active]);
+
+  return { promptText, promptVisible, nameText, titleText, showCursor, cursorTarget };
+}
+
+// ─── Blinking block cursor ────────────────────────────────────────────────────
+const BlockCursor = () => (
+  <span
+    aria-hidden
+    className="inline-block w-[0.55em] h-[0.85em] align-middle bg-accent ml-[2px] hero-cursor"
+    style={{ verticalAlign: "middle" }}
+  />
+);
+
+// ─── Component ────────────────────────────────────────────────────────────────
 const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
@@ -30,9 +146,9 @@ const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
     offset: ["start start", "end start"],
   });
 
-  const contentY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -80]);
+  const contentY       = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -80]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, reduce ? 1 : 0]);
-  const contentScale = useTransform(scrollYProgress, [0, 1], [1, reduce ? 1 : 0.95]);
+  const contentScale   = useTransform(scrollYProgress, [0, 1], [1, reduce ? 1 : 0.95]);
 
   const fadeUp = (delay: number) => ({
     initial: { opacity: 0, y: 28 } as const,
@@ -40,7 +156,10 @@ const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
     transition: { duration: 0.85, delay, ease },
   });
 
-  const words = (text: string) => text.split(" ");
+  const {
+    promptText, promptVisible, nameText, titleText,
+    showCursor, cursorTarget,
+  } = useTerminalSequence(ready, !!reduce);
 
   return (
     <section
@@ -69,13 +188,9 @@ const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
           </span>
         </div>
         <div className="hidden items-center gap-6 sm:flex">
-          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/30">
-            v1.0
-          </span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/30">v1.0</span>
           <span className="h-3 w-px bg-foreground/10" />
-          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/30">
-            Berlin, DE
-          </span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/30">Berlin, DE</span>
           <span className="h-3 w-px bg-foreground/10" />
           <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/30">
             Data &middot; AI &middot; Engineering
@@ -89,11 +204,7 @@ const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
         className="relative z-10 flex w-full max-w-5xl flex-col items-center px-6 text-center sm:px-8 md:px-12"
       >
         {/* Avatar Badge */}
-        <motion.div
-          {...fadeUp(0.25)}
-          className="group relative mb-8"
-        >
-          {/* Rotating gradient ring */}
+        <motion.div {...fadeUp(0.25)} className="group relative mb-8">
           <div
             className="absolute -inset-[3px] rounded-full animate-spin-slow opacity-60 group-hover:opacity-100 transition-opacity duration-700"
             style={{
@@ -101,9 +212,7 @@ const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
               background: 'conic-gradient(from 0deg, hsl(var(--accent)), hsl(var(--primary)), hsl(var(--accent)))',
             }}
           />
-          {/* Glow pulse */}
           <div className="absolute -inset-2 rounded-full animate-avatar-pulse" />
-          {/* Photo */}
           <div className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-background z-[1]">
             <img
               src="/lovable-uploads/5881e7e5-f088-4e07-a79c-59eacb55eeb0.png"
@@ -121,32 +230,56 @@ const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
           </span>
         </motion.div>
 
-        {/* Name */}
-        <div className="relative mb-6">
+        {/* ── Terminal headline block ─────────────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={ready ? { opacity: 1 } : {}}
+          transition={{ duration: 0.4, delay: 0.3 }}
+          className="relative mb-6 w-full"
+        >
+          {/* Prompt line — above the name, fades once done */}
+          <div
+            aria-hidden
+            className="mb-3 flex justify-center transition-opacity duration-200"
+            style={{ opacity: promptVisible ? 1 : 0, minHeight: "1.4em" }}
+          >
+            <span className="font-mono text-xs tracking-[0.12em] text-accent/70 sm:text-sm">
+              {promptText}
+              {showCursor && cursorTarget === "prompt" && <BlockCursor />}
+            </span>
+          </div>
+
+          {/* Name — terminal typed */}
           <h1 className="font-display text-5xl font-semibold leading-[0.92] tracking-tighter text-foreground sm:text-7xl md:text-8xl lg:text-[6.5rem]">
-            {["Saran Jaya", "Thilak"].map((line, i) => (
-              <span key={line} className="block overflow-hidden pb-[0.06em]">
-                <span className={`block ${i === 1 ? "italic font-normal text-foreground/80" : ""}`}>
-                  {words(line).map((word, j) => (
-                    <motion.span
-                      key={word + j}
-                      className="inline-block"
-                      initial={{ y: "115%", opacity: 0 }}
-                      animate={ready ? { y: "0%", opacity: 1 } : {}}
-                      transition={{
-                        duration: 1,
-                        delay: 0.4 + i * 0.16 + j * 0.09,
-                        ease,
-                      }}
-                    >
-                      {word}
-                      {j < words(line).length - 1 ? "\u00A0" : ""}
-                    </motion.span>
-                  ))}
-                </span>
+            {/* Line 1 */}
+            <span className="block overflow-hidden pb-[0.06em]">
+              <span className="block">
+                {/* We split the typed name into line 1 / line 2 */}
+                {nameText.length <= "Saran Jaya".length
+                  ? nameText
+                  : "Saran Jaya"}
+                {showCursor && cursorTarget === "name" && nameText.length <= "Saran Jaya".length && <BlockCursor />}
               </span>
-            ))}
+            </span>
+            {/* Line 2 */}
+            <span className="block overflow-hidden pb-[0.06em]">
+              <span className="block italic font-normal text-foreground/80">
+                {nameText.length > "Saran Jaya ".length
+                  ? nameText.slice("Saran Jaya ".length)
+                  : ""}
+                {showCursor && cursorTarget === "name" && nameText.length > "Saran Jaya".length && <BlockCursor />}
+              </span>
+            </span>
           </h1>
+
+          {/* Title line — typed below name */}
+          <div className="mt-4 flex justify-center">
+            <span className="font-mono text-xs tracking-[0.12em] text-accent/60 sm:text-sm">
+              {titleText.length > 0 && <span className="text-accent/40 mr-1">//</span>}
+              {titleText}
+              {showCursor && cursorTarget === "title" && <BlockCursor />}
+            </span>
+          </div>
 
           {/* Scan beam */}
           {!reduce && (
@@ -160,7 +293,7 @@ const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
               />
             </div>
           )}
-        </div>
+        </motion.div>
 
         {/* Subtitle */}
         <motion.p
@@ -205,10 +338,7 @@ const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
         </motion.div>
 
         {/* Glassmorphic Stats Row */}
-        <motion.div
-          {...fadeUp(1.0)}
-          className="mt-16 w-full max-w-3xl"
-        >
+        <motion.div {...fadeUp(1.0)} className="mt-16 w-full max-w-3xl">
           <div className="glass-panel rounded-2xl p-6 sm:p-8">
             <div className="grid grid-cols-2 gap-6 md:grid-cols-4 md:gap-8">
               {stats.map((s, i) => (
@@ -247,6 +377,17 @@ const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
           </span>
         </button>
       </motion.div>
+
+      {/* Cursor blink keyframes */}
+      <style>{`
+        .hero-cursor {
+          animation: hero-blink 0.7s step-start infinite;
+        }
+        @keyframes hero-blink {
+          0%, 100% { opacity: 1; }
+          50%       { opacity: 0; }
+        }
+      `}</style>
     </section>
   );
 };
