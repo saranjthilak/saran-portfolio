@@ -94,8 +94,19 @@ const ContactForm = () => {
     <div className="rounded-[1.75rem] bg-surface p-6 sm:p-8">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-          {/* Honeypot field — hidden from real users, traps bots */}
-          <div className="absolute h-0 w-0 -z-10 opacity-0" aria-hidden="true">
+          {/* Honeypot — real users never see or tab to this; bots fill it and get silently dropped */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              left: "-9999px",
+              top: "auto",
+              width: "1px",
+              height: "1px",
+              overflow: "hidden",
+              pointerEvents: "none",
+            }}
+          >
             <label htmlFor="website">Website</label>
             <input
               type="text"
