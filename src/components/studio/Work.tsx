@@ -99,11 +99,14 @@ const Work = () => {
         </div>
 
         <div className="mt-14 grid gap-6 md:grid-cols-2">
-          {featured.map((p, i) => (
-            <Reveal key={p.title} delay={i * 90} className={i === 0 ? "md:col-span-2" : ""}>
-              <FeaturedCard p={p} wide={i === 0} />
-            </Reveal>
-          ))}
+          {featured.map((p, i) => {
+            const isWide = i === 0 || i === featured.length - 1;
+            return (
+              <Reveal key={p.title} delay={i * 90} className={isWide ? "md:col-span-2" : ""}>
+                <FeaturedCard p={p} wide={isWide} />
+              </Reveal>
+            );
+          })}
         </div>
 
         <ul className="mt-6 divide-y divide-border border-t border-border">
