@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import emailjs from "@emailjs/browser";
+
 import { toast } from "sonner";
 import { motion, type Variants } from "framer-motion";
 
@@ -64,33 +64,25 @@ const ContactForm = () => {
       return;
     }
 
-    const SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
-    const TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
-    const PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
-
-    if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
-      toast.error("Email service is not configured. Please try again later.");
-      return;
-    }
-
-    // Pass multiple common template variable names just in case the template uses them
-    const templateParams = {
-      ...values,
-      from_name: values.name,
-      reply_to: values.email,
-      user_name: values.name,
-      user_email: values.email,
-    };
-
     try {
-      await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, { publicKey: PUBLIC_KEY });
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data?.error ?? "Server error");
+      }
+
       toast.success("Message sent successfully! I'll get back to you soon.");
       setSent(true);
       setLastSubmitTime(Date.now());
       form.reset();
       setTimeout(() => setSent(false), 4000);
     } catch (error) {
-      console.error("EmailJS error:", error);
+      console.error("Contact form error:", error);
       toast.error("Failed to send message. Please try again.");
     }
   }
