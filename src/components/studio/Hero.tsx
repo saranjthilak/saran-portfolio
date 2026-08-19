@@ -24,7 +24,7 @@ const stats = [
 // ─── Terminal sequence timing ──────────────────────────────────────────────────
 const PROMPT_TEXT  = "> initializing_profile.exe";
 const NAME_TEXT    = "Saran Jaya Thilak";
-const TITLE_TEXT   = "Data Engineer & Generative AI Specialist";
+const TITLE_TEXT   = "RAG · Pipelines · Cloud · LLMs";
 const PROMPT_SPEED = 38;   // ms per char — prompt line
 const NAME_SPEED   = 30;   // ms per char — name
 const TITLE_SPEED  = 22;   // ms per char — title
@@ -300,9 +300,9 @@ const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
           {...fadeUp(0.7)}
           className="mb-10 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg md:text-xl"
         >
-          Architecting resilient data infrastructure and{" "}
-          <span className="text-foreground font-medium">LLM-powered systems</span>.{" "}
-          Building production-scale AI at{" "}
+          Reliable infrastructure that never sleeps,{" "}
+          <span className="text-foreground font-medium">AI products that ship</span>.{" "}
+          Proven at{" "}
           <span className="link-sheen font-medium text-foreground underline decoration-1 underline-offset-4">Tesla</span>,{" "}
           <span className="link-sheen font-medium text-foreground underline decoration-1 underline-offset-4">Huawei</span>, and{" "}
           <span className="link-sheen font-medium text-foreground underline decoration-1 underline-offset-4">Nokia</span>.
