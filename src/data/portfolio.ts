@@ -32,6 +32,22 @@ export const experience = [
 
 export const projects = [
   {
+    title: "Multimodal RAG System",
+    source: "Production RAG + Conversational AI",
+    description: "A production-ready Multimodal Retrieval-Augmented Generation system that supports conversational querying over text and image data. Handles chunking, embedding, reranking, and grounded LLM responses with citation traces — designed for real deployment, not demos.",
+    skills: ["RAG", "Multimodal", "LangChain", "Python", "LLMs", "Vector DB"],
+    image: "/images/projects/project-multimodal-rag.png",
+    url: "https://github.com/saranjthilak/Multimodel_RAG",
+    featured: true,
+    pipeline: [
+      { label: "Docs", icon: "file" },
+      { label: "Chunk", icon: "layers" },
+      { label: "Embed", icon: "cpu" },
+      { label: "Rerank", icon: "search" },
+      { label: "LLM", icon: "bot" },
+    ],
+  },
+  {
     title: "AI Product Matching System",
     source: "FAISS + Triton Inference + CLIP",
     description: "Developed an image-based product search engine using FAISS for vector similarity and a quantized CLIP model served via NVIDIA Triton Inference Server. Integrated MongoDB and Docker for fast, scalable product matching.",
@@ -80,14 +96,6 @@ export const projects = [
     ],
   },
   {
-    title: "Multimodal RAG System",
-    source: "Production RAG + Conversational AI",
-    description: "A production-ready Multimodal Retrieval-Augmented Generation (RAG) system that supports conversational querying over text data and is extendable to images.",
-    skills: ["RAG", "Multimodal", "LangChain", "Python", "LLMs"],
-    image: "/images/projects/project-multimodal-rag.png",
-    url: "https://github.com/saranjthilak/Multimodel_RAG",
-  },
-  {
     title: "German Learning App",
     source: "TypeScript | AI Tutor | A1–C1",
     description: "AI-powered German learning platform with interactive lessons, vocabulary practice, pronunciation support, quizzes, and personalized learning from A1 to C1.",
@@ -102,7 +110,7 @@ export const projects = [
     skills: ["Python", "FastAPI", "Docker", "Testing", "CI/CD"],
     image: "/images/projects/project-vanilla-steel.png",
     url: "https://github.com/saranjthilak/vanilla-steel-assessment",
-  }
+  },
 ];
 
 export const skills = {
