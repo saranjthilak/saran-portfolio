@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { Eyebrow, Reveal } from "./primitives";
 
 // ─── Stat data ───────────────────────────────────────────────────────────────
@@ -53,22 +53,43 @@ const RING_SIZE  = 88;   // px — the SVG viewport
 const RING_R     = 36;   // circle radius
 const RING_CIRC  = 2 * Math.PI * RING_R;
 
-// ─── Inline count-up that also exposes its 0-1 progress ─────────────────────
-const useCountUp = (target: number, once = true) => {
-  const ref  = useRef<HTMLSpanElement>(null);
-  const inV  = useInView(ref, { once, margin: "-15%" });
-  const mv   = useMotionValue(0);
-  const sp   = useSpring(mv, { stiffness: 55, damping: 20 });
-  const frac = useTransform(sp, (v) => v / target);
+// ─── RAF-based count-up — robust, no spring chain, with guaranteed fallback ──
+const DURATION_MS = 1400;
+const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+
+const useCountUp = (target: number, decimals: number) => {
+  // Ref goes on the CARD wrapper — large element = reliable IntersectionObserver
+  const ref  = useRef<HTMLDivElement>(null);
+  const inV  = useInView(ref, { once: true, amount: 0.25 });
   const [progress, setProgress] = useState(0);
+  const startedRef = useRef(false);
+  const rafRef     = useRef(0);
 
+  // Kick off the RAF loop as soon as the card enters the viewport
   useEffect(() => {
-    if (inV) mv.set(target);
-  }, [inV, mv, target]);
+    if (!inV || startedRef.current) return;
+    startedRef.current = true;
 
-  useEffect(() => frac.on("change", (v) => setProgress(Math.min(1, v))), [frac]);
+    const t0 = performance.now();
+    const tick = (now: number) => {
+      const t      = Math.min((now - t0) / DURATION_MS, 1);
+      const eased  = easeOutCubic(t);
+      setProgress(eased);
+      if (t < 1) rafRef.current = requestAnimationFrame(tick);
+      else        setProgress(1); // snap to exactly 1 at the end
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [inV]);
 
-  return { ref, progress, inV };
+  // Hard fallback — always reaches final value after 5 s even if IO never fires
+  useEffect(() => {
+    const id = setTimeout(() => setProgress(1), 5000);
+    return () => clearTimeout(id);
+  }, []);
+
+  const displayed = (target * progress).toFixed(decimals);
+  return { ref, progress, displayed };
 };
 
 // ─── Animated progress ring ─────────────────────────────────────────────────
@@ -164,24 +185,25 @@ const SparkBars = ({ shape, progress }: { shape: readonly number[]; progress: nu
   );
 };
 
-// ─── Single stat card ─────────────────────────────────────────────────────────
 const StatCard = ({
   value, decimals, suffix, ringFill, label, sublabel, trend, shape, delay,
 }: typeof STATS[number] & { delay: number }) => {
-  const { ref, progress, inV } = useCountUp(value);
-  const displayed = (value * progress).toFixed(decimals);
+  const { ref, progress, displayed } = useCountUp(value, decimals);
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-10%" }}
+      viewport={{ once: true, amount: 0.25 }}
       transition={{ duration: 0.55, delay: delay / 1000, ease: [0.22, 1, 0.36, 1] }}
       className="group relative flex flex-col overflow-hidden rounded-xl border border-accent/15 bg-background/60 p-5 backdrop-blur-md"
       style={{
         boxShadow: "0 0 0 1px hsl(185 100% 50% / 0.06), inset 0 1px 0 hsl(185 100% 50% / 0.08)",
       }}
     >
+      {/* useInView trigger — full-card div so IO has a large, reliable target */}
+      <div ref={ref} className="contents">
+
       {/* Hover glow overlay */}
       <div
         className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 rounded-xl"
@@ -201,16 +223,10 @@ const StatCard = ({
       {/* ── Ring + number ── */}
       <div className="relative my-4 flex items-center justify-center" style={{ height: RING_SIZE }}>
         <ProgressRing fill={ringFill} progress={progress} />
-        {/* Big number centred inside the ring */}
+        {/* Big number centred inside the ring — always visible, counts up from 0 */}
         <span
-          ref={ref}
           className="tnum relative z-10 font-mono font-bold text-foreground"
-          style={{
-            fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)",
-            letterSpacing: "-0.04em",
-            opacity: inV ? 1 : 0,
-            transition: "opacity 0.15s",
-          }}
+          style={{ fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)", letterSpacing: "-0.04em" }}
         >
           {displayed}{suffix}
         </span>
@@ -233,6 +249,7 @@ const StatCard = ({
         className="pointer-events-none absolute right-3 top-3 block h-3 w-3 border-r border-t border-accent/25"
         aria-hidden
       />
+      </div>
     </motion.div>
   );
 };
