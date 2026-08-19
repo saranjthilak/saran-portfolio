@@ -44,8 +44,8 @@ const PageLoader = ({ onDone }: { onDone: () => void }) => {
           </div>
 
           <div className="flex w-[min(22rem,72vw)] flex-col gap-3">
-            <div className="h-px w-full bg-border">
-              <div className="h-full bg-background transition-[width] duration-100 ease-out" style={{ width: `${progress}%` }} />
+            <div className="h-px w-full bg-border overflow-hidden">
+              <div className="h-full bg-accent transition-[width] duration-100 ease-out" style={{ width: `${progress}%` }} />
             </div>
             <div className="flex items-center justify-between text-xs font-medium uppercase tracking-[0.05em] text-muted-foreground">
               <span>Loading</span>

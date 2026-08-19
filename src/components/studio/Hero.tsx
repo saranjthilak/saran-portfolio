@@ -152,7 +152,7 @@ const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
 
   const fadeUp = (delay: number) => ({
     initial: { opacity: 0, y: 28 } as const,
-    animate: ready ? ({ opacity: 1, y: 0 } as const) : ({} as const),
+    animate: ready ? ({ opacity: 1, y: 0 } as const) : ({ opacity: 0, y: 28 } as const),
     transition: { duration: 0.85, delay, ease },
   });
 
@@ -233,7 +233,7 @@ const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
         {/* ── Terminal headline block ─────────────────────────────── */}
         <motion.div
           initial={{ opacity: 0 }}
-          animate={ready ? { opacity: 1 } : {}}
+          animate={ready ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 0.4, delay: 0.3 }}
           className="relative mb-6 w-full"
         >
@@ -345,7 +345,7 @@ const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
                 <motion.div
                   key={s.label}
                   initial={{ opacity: 0, y: 20 }}
-                  animate={ready ? { opacity: 1, y: 0 } : {}}
+                  animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                   transition={{ delay: 1.1 + i * 0.1, duration: 0.7, ease }}
                   className="flex flex-col items-center gap-1.5 text-center"
                 >

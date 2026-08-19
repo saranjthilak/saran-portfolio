@@ -168,7 +168,7 @@ const SparkBars = ({ shape, progress }: { shape: readonly number[]; progress: nu
 const StatCard = ({
   value, decimals, suffix, ringFill, label, sublabel, trend, shape, delay,
 }: typeof STATS[number] & { delay: number }) => {
-  const { ref, progress } = useCountUp(value);
+  const { ref, progress, inV } = useCountUp(value);
   const displayed = (value * progress).toFixed(decimals);
 
   return (
@@ -205,7 +205,12 @@ const StatCard = ({
         <span
           ref={ref}
           className="tnum relative z-10 font-mono font-bold text-foreground"
-          style={{ fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)", letterSpacing: "-0.04em" }}
+          style={{
+            fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)",
+            letterSpacing: "-0.04em",
+            opacity: inV ? 1 : 0,
+            transition: "opacity 0.15s",
+          }}
         >
           {displayed}{suffix}
         </span>
