@@ -29,9 +29,9 @@ const HeroSection = () => {
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-[0.12]"
+          className="absolute inset-0 w-full h-full object-cover opacity-[0.25]"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0C0C0C]/60 via-transparent to-[#0C0C0C]/90" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0C0C0C]/40 via-transparent to-[#0C0C0C]/70" />
       </div>
 
       {/* Navbar */}
