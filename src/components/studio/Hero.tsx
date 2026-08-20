@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
@@ -25,6 +25,14 @@ const stats = [
 const PROMPT_TEXT  = "> initializing_profile.exe";
 const NAME_TEXT    = "Saran Jaya Thilak";
 const TITLE_TEXT   = "RAG · Pipelines · Cloud · LLMs";
+
+// ═══ Mainframe-style cycling taglines ═══════════════════════════════════════
+const TAGLINES = [
+  "Building data infrastructure that never sleeps.",
+  "Shipping LLM products from prototype to production.",
+  "Turning raw pipelines into intelligent systems.",
+  "Code that scales · Systems that reason · Products that ship.",
+] as const;
 const PROMPT_SPEED = 38;   // ms per char — prompt line
 const NAME_SPEED   = 30;   // ms per char — name
 const TITLE_SPEED  = 22;   // ms per char — title
@@ -128,6 +136,49 @@ function useTerminalSequence(active: boolean, reduced: boolean) {
 }
 
 // ─── Blinking block cursor ────────────────────────────────────────────────────
+
+// === Cycling tagline hook ====================================================
+function useCyclingTagline() {
+  const TAGLINES = [
+    "Building data infrastructure that never sleeps.",
+    "Shipping LLM products from prototype to production.",
+    "Turning raw pipelines into intelligent systems.",
+    "Code that scales · Systems that reason · Products that ship.",
+  ];
+  const [index,     setIndex]     = useState(0);
+  const [displayed, setDisplayed] = useState("");
+  const [fadingOut, setFadingOut] = useState(false);
+  const SPEED = 28;
+
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval>;
+    let timeout: ReturnType<typeof setTimeout>;
+    let charIdx = 0;
+    const text = TAGLINES[index];
+
+    setDisplayed("");
+    charIdx = 0;
+    interval = setInterval(() => {
+      charIdx += 1;
+      setDisplayed(text.slice(0, charIdx));
+      if (charIdx >= text.length) clearInterval(interval);
+    }, SPEED);
+
+    const fullLen = text.length * SPEED;
+    timeout = setTimeout(() => {
+      setFadingOut(true);
+      setTimeout(() => {
+        setIndex(i => (i + 1) % TAGLINES.length);
+        setFadingOut(false);
+      }, 380);
+    }, fullLen + 3500);
+
+    return () => { clearInterval(interval); clearTimeout(timeout); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index]);
+
+  return { displayed, fadingOut };
+}
 const BlockCursor = () => (
   <span
     aria-hidden
@@ -160,6 +211,9 @@ const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
     promptText, promptVisible, nameText, titleText,
     showCursor, cursorTarget,
   } = useTerminalSequence(ready, !!reduce);
+
+  // Mainframe-style cycling tagline
+  const { displayed: taglineText, fadingOut: taglineFading } = useCyclingTagline();
 
   return (
     <section
@@ -308,6 +362,27 @@ const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
           <span className="link-sheen font-medium text-foreground underline decoration-1 underline-offset-4">Nokia</span>.
         </motion.p>
 
+        {/* ═══ Cycling tagline — Mainframe style ═══ */}
+        <motion.div
+          {...fadeUp(0.78)}
+          className="mb-8 h-[1.8em] overflow-hidden"
+        >
+          <motion.p
+            key={taglineText.slice(0, 12)}
+            animate={{ opacity: taglineFading ? 0 : 1, y: taglineFading ? -6 : 0 }}
+            transition={{ duration: 0.35, ease: "easeInOut" }}
+            className="font-mono text-[11px] tracking-[0.18em] uppercase text-accent/50 sm:text-xs"
+          >
+            {taglineText}
+            {!taglineFading && (
+              <span
+                aria-hidden
+                className="inline-block w-[0.45em] h-[0.75em] bg-accent/50 align-middle ml-[2px] hero-cursor"
+              />
+            )}
+          </motion.p>
+        </motion.div>
+
         {/* CTA Buttons */}
         <motion.div
           {...fadeUp(0.85)}
@@ -316,7 +391,17 @@ const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
           <Magnetic>
             <button
               onClick={() => scrollToSection("works")}
-              className="group inline-flex items-center gap-3 rounded-full bg-accent px-8 py-3.5 font-mono text-xs font-semibold uppercase tracking-[0.15em] text-accent-foreground transition-all hover:shadow-[0_0_30px_hsl(var(--accent)/0.4)] active:scale-95"
+              className="group inline-flex items-center gap-3 rounded-full bg-accent px-8 py-3.5 font-mono text-xs font-semibold uppercase tracking-[0.15em] text-accent-foreground transition-all active:scale-95"
+              onMouseEnter={e => {
+                const el = e.currentTarget;
+                el.style.transform = "scale(1.06) translateY(-2px)";
+                el.style.boxShadow = "0 8px 32px hsl(var(--accent) / 0.45)";
+              }}
+              onMouseLeave={e => {
+                const el = e.currentTarget;
+                el.style.transform = "";
+                el.style.boxShadow = "";
+              }}
             >
               <span className="text-accent-foreground/50">[</span>
               Explore Work
@@ -327,7 +412,21 @@ const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
           <Magnetic>
             <button
               onClick={onResume}
-              className="group inline-flex items-center gap-3 rounded-full border border-foreground/15 bg-foreground/5 px-8 py-3.5 font-mono text-xs font-semibold uppercase tracking-[0.15em] text-foreground/80 backdrop-blur-sm transition-all hover:border-foreground/30 hover:text-foreground active:scale-95"
+              className="group inline-flex items-center gap-3 rounded-full border border-foreground/15 bg-foreground/5 px-8 py-3.5 font-mono text-xs font-semibold uppercase tracking-[0.15em] text-foreground/80 backdrop-blur-sm transition-all active:scale-95"
+              onMouseEnter={e => {
+                const el = e.currentTarget;
+                el.style.transform = "scale(1.06) translateY(-2px)";
+                el.style.borderColor = "rgba(255,255,255,0.3)";
+                el.style.color = "#fff";
+                el.style.boxShadow = "0 8px 28px rgba(255,255,255,0.08)";
+              }}
+              onMouseLeave={e => {
+                const el = e.currentTarget;
+                el.style.transform = "";
+                el.style.borderColor = "";
+                el.style.color = "";
+                el.style.boxShadow = "";
+              }}
             >
               <span className="text-foreground/30">[</span>
               <Download className="w-3.5 h-3.5" />
@@ -393,3 +492,5 @@ const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
 };
 
 export default Hero;
+
+
