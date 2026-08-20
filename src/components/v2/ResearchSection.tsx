@@ -9,10 +9,11 @@ const ResearchSection = () => {
   return (
     <section
       id="research"
-      className="font-kanit"
+      className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-40"
       style={{
-        background: "#0C0C0C",
+        background: "#111111", // Slightly lighter to reveal the stacking overlap against Projects
         padding: "clamp(5rem, 9vw, 9rem) 1.25rem",
+        boxShadow: "0 -10px 40px rgba(0,0,0,0.5)", // Shadow to emphasize overlap
       }}
     >
       <div className="mx-auto max-w-6xl grid gap-14 lg:grid-cols-[1.35fr_0.65fr] items-start">

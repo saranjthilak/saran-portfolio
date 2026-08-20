@@ -39,10 +39,11 @@ const ServicesSection = () => {
   return (
     <section
       id="skills"
-      className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px]"
+      className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-20"
       style={{
         background: "#FFFFFF",
-        padding: "5rem 1.25rem clamp(5rem, 8vw, 8rem)",
+        padding: "clamp(5rem, 9vw, 9rem) 1.25rem",
+        boxShadow: "0 -10px 40px rgba(0,0,0,0.5)",
       }}
     >
       <div className="max-w-5xl mx-auto">

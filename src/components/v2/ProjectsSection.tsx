@@ -118,7 +118,7 @@ const ProjectsSection = () => {
     <section
       ref={containerRef}
       id="projects"
-      className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-10"
+      className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-30"
       style={{
         background: "#0C0C0C",
         padding: "clamp(4rem, 7vw, 7rem) 1.25rem clamp(6rem, 10vw, 10rem)",

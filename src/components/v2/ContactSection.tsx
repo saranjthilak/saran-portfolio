@@ -76,10 +76,11 @@ const ContactSection = () => {
   return (
     <section
       id="contact"
-      className="font-kanit"
+      className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-50"
       style={{
         background: "#0C0C0C",
         padding: "clamp(5rem, 9vw, 9rem) 1.25rem clamp(4rem, 6vw, 6rem)",
+        boxShadow: "0 -10px 40px rgba(0,0,0,0.5)", // Shadow to emphasize overlap
       }}
     >
       <div className="mx-auto max-w-6xl grid gap-14 lg:grid-cols-[0.9fr_1.1fr] items-start">
