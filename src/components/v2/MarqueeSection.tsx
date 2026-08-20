@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 const STACK_TILES = [
   { name: "LangChain", icon: "🔗" },
@@ -26,26 +26,21 @@ const STACK_TILES = [
   { name: "MLflow", icon: "🧪" },
 ];
 
-const ROW1 = STACK_TILES.slice(0, 11);
-const ROW2 = STACK_TILES.slice(11);
-
-// Triple for seamless infinite visual
-const tripled = <T,>(arr: T[]) => [...arr, ...arr, ...arr];
+// Quadruple for seamless infinite loop
+const looped = [...STACK_TILES, ...STACK_TILES, ...STACK_TILES, ...STACK_TILES];
 
 const TechTile = ({ name, icon }: { name: string; icon: string }) => (
   <div
-    className="flex-shrink-0 flex flex-col items-center justify-center gap-3 rounded-2xl select-none"
+    className="flex-shrink-0 flex items-center gap-2 rounded-full select-none px-5 py-2.5 opacity-40"
     style={{
-      width: 150,
-      height: 90,
       background: "linear-gradient(135deg, #161616 0%, #1e1e1e 100%)",
       border: "1px solid #2a2a2a",
     }}
   >
-    <span className="text-xl">{icon}</span>
+    <span className="text-base">{icon}</span>
     <span
       className="font-kanit font-medium uppercase tracking-wider text-[#D7E2EA]"
-      style={{ fontSize: "clamp(0.6rem, 1vw, 0.8rem)" }}
+      style={{ fontSize: "clamp(0.55rem, 0.9vw, 0.75rem)" }}
     >
       {name}
     </span>
@@ -54,40 +49,20 @@ const TechTile = ({ name, icon }: { name: string; icon: string }) => (
 
 const MarqueeSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const scrollOffset = useRef(0);
+  const rowRef = useRef<HTMLDivElement>(null);
   const autoOffset = useRef(0);
   const frameId = useRef(0);
-  const row1Ref = useRef<HTMLDivElement>(null);
-  const row2Ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (!sectionRef.current) return;
-      const rect = sectionRef.current.getBoundingClientRect();
-      const sectionTop = window.scrollY + rect.top;
-      scrollOffset.current = (window.scrollY - sectionTop + window.innerHeight) * 0.15;
-    };
-
     const tick = () => {
-      autoOffset.current += 0.5; // continuous auto-scroll speed
-      const total1 = autoOffset.current + scrollOffset.current;
-      const total2 = autoOffset.current - scrollOffset.current;
-      if (row1Ref.current) row1Ref.current.style.transform = `translateX(${-total1}px)`;
-      if (row2Ref.current) row2Ref.current.style.transform = `translateX(${total2 - 400}px)`;
+      autoOffset.current += 0.5;
+      if (rowRef.current) rowRef.current.style.transform = `translateX(${-autoOffset.current}px)`;
       frameId.current = requestAnimationFrame(tick);
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
     frameId.current = requestAnimationFrame(tick);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      cancelAnimationFrame(frameId.current);
-    };
+    return () => cancelAnimationFrame(frameId.current);
   }, []);
-
-  const row1Tiles = tripled(ROW1);
-  const row2Tiles = tripled(ROW2);
 
   return (
     <section
@@ -99,28 +74,14 @@ const MarqueeSection = () => {
         paddingBottom: "2.5rem",
       }}
     >
-      <div className="flex flex-col gap-2">
-        {/* Row 1 — runs right */}
-        <div
-          ref={row1Ref}
-          className="flex gap-2"
-          style={{ willChange: "transform" }}
-        >
-          {row1Tiles.map((tile, i) => (
-            <TechTile key={`r1-${i}`} {...tile} />
-          ))}
-        </div>
-
-        {/* Row 2 — runs left */}
-        <div
-          ref={row2Ref}
-          className="flex gap-2"
-          style={{ willChange: "transform" }}
-        >
-          {row2Tiles.map((tile, i) => (
-            <TechTile key={`r2-${i}`} {...tile} />
-          ))}
-        </div>
+      <div
+        ref={rowRef}
+        className="flex gap-2"
+        style={{ willChange: "transform" }}
+      >
+        {looped.map((tile, i) => (
+          <TechTile key={`t-${i}`} {...tile} />
+        ))}
       </div>
     </section>
   );
