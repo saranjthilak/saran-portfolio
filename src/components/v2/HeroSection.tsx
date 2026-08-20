@@ -66,25 +66,6 @@ const HeroSection = () => {
         </motion.h1>
       </div>
 
-      {/* Portrait — absolutely centered, magnetic */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9, delay: 0.6, ease }}
-        className="absolute left-1/2 -translate-x-1/2 z-10
-          top-1/2 -translate-y-1/2
-          sm:top-auto sm:translate-y-0 sm:bottom-0"
-      >
-        <Magnet padding={150} strength={3}>
-          <img
-            src="/lovable-uploads/5881e7e5-f088-4e07-a79c-59eacb55eeb0.png"
-            alt="Saran Jaya Thilak"
-            className="w-[280px] sm:w-[360px] md:w-[440px] lg:w-[520px] object-cover object-top select-none pointer-events-none"
-            draggable={false}
-          />
-        </Magnet>
-      </motion.div>
-
       {/* Bottom bar */}
       <div className="relative z-20 mt-auto flex justify-between items-end pb-7 sm:pb-8 md:pb-10 px-6 md:px-10">
         {/* Left text */}
