@@ -23,6 +23,7 @@ export default {
         sans: ['var(--font-space-grotesk)', 'Space Grotesk', 'system-ui', 'sans-serif'],
         display: ['var(--font-space-grotesk)', 'Space Grotesk', 'system-ui', 'sans-serif'],
         mono: ['var(--font-jetbrains-mono)', 'JetBrains Mono', 'ui-monospace', 'monospace'],
+        kanit: ['var(--font-kanit)', 'Kanit', 'sans-serif'],
       },
 			colors: {
 				ink: 'hsl(var(--ink))',

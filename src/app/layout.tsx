@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Space_Grotesk, JetBrains_Mono } from 'next/font/google';
+import { Space_Grotesk, JetBrains_Mono, Kanit } from 'next/font/google';
 import './globals.css';
 
 import { Toaster } from "@/components/ui/toaster";
@@ -17,6 +17,13 @@ const spaceGrotesk = Space_Grotesk({
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-jetbrains-mono',
+  display: 'swap',
+});
+
+const kanit = Kanit({
+  subsets: ['latin'],
+  variable: '--font-kanit',
+  weight: ['300', '400', '500', '600', '700', '800', '900'],
   display: 'swap',
 });
 
@@ -73,7 +80,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
+      <body className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${kanit.variable} font-sans antialiased`}>
         <TooltipProvider>
               <CustomCursor />
               <PageTransition>
