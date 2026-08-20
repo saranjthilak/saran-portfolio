@@ -83,7 +83,20 @@ const ContactSection = () => {
         boxShadow: "0 -10px 40px rgba(0,0,0,0.5)", // Shadow to emphasize overlap
       }}
     >
-      <div className="mx-auto max-w-6xl grid gap-14 lg:grid-cols-[0.9fr_1.1fr] items-start">
+      {/* Video background */}
+      <div className="absolute inset-0 z-0 overflow-hidden rounded-t-[inherit]">
+        <video
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_171521_25968ba2-b594-4b32-aab7-f6b69398a6fa.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover opacity-[0.08]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0C0C0C]/80 via-[#0C0C0C]/40 to-[#0C0C0C]/90" />
+      </div>
+
+      <div className="mx-auto max-w-6xl grid gap-14 lg:grid-cols-[0.9fr_1.1fr] items-start relative z-10">
 
         {/* ── Left column ─────────────────────────────────────────── */}
         <div>

@@ -21,6 +21,19 @@ const HeroSection = () => {
       className="relative flex flex-col h-screen font-kanit overflow-x-clip"
       style={{ background: "#0C0C0C" }}
     >
+      {/* Video background */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <video
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_171521_25968ba2-b594-4b32-aab7-f6b69398a6fa.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover opacity-[0.12]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0C0C0C]/60 via-transparent to-[#0C0C0C]/90" />
+      </div>
+
       {/* Navbar */}
       <motion.nav
         initial={{ opacity: 0, y: -20 }}

@@ -15,7 +15,20 @@ const ExperienceSection = () => {
         boxShadow: "0 -10px 40px rgba(0,0,0,0.5)",
       }}
     >
-      <div className="mx-auto max-w-6xl">
+      {/* Video background */}
+      <div className="absolute inset-0 z-0 overflow-hidden rounded-t-[inherit]">
+        <video
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_171521_25968ba2-b594-4b32-aab7-f6b69398a6fa.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover opacity-[0.07]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#080808]/80 via-[#080808]/40 to-[#080808]/90" />
+      </div>
+
+      <div className="mx-auto max-w-6xl relative z-10">
         {/* Eyebrow */}
         <FadeIn delay={0} y={20}>
           <p className="flex items-center gap-2 font-medium uppercase tracking-[0.25em] text-[#D7E2EA]/50 text-xs mb-5">
