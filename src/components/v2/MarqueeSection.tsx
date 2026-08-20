@@ -36,16 +36,16 @@ const TechTile = ({ name, icon }: { name: string; icon: string }) => (
   <div
     className="flex-shrink-0 flex flex-col items-center justify-center gap-3 rounded-2xl select-none"
     style={{
-      width: 220,
-      height: 140,
+      width: 150,
+      height: 90,
       background: "linear-gradient(135deg, #161616 0%, #1e1e1e 100%)",
       border: "1px solid #2a2a2a",
     }}
   >
-    <span className="text-3xl">{icon}</span>
+    <span className="text-xl">{icon}</span>
     <span
       className="font-kanit font-medium uppercase tracking-wider text-[#D7E2EA]"
-      style={{ fontSize: "clamp(0.7rem, 1.2vw, 0.95rem)" }}
+      style={{ fontSize: "clamp(0.6rem, 1vw, 0.8rem)" }}
     >
       {name}
     </span>
@@ -83,10 +83,10 @@ const MarqueeSection = () => {
         paddingBottom: "2.5rem",
       }}
     >
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-2">
         {/* Row 1 — moves right */}
         <div
-          className="flex gap-3"
+          className="flex gap-2"
           style={{
             transform: `translateX(${offset - 200}px)`,
             willChange: "transform",
@@ -99,7 +99,7 @@ const MarqueeSection = () => {
 
         {/* Row 2 — moves left */}
         <div
-          className="flex gap-3"
+          className="flex gap-2"
           style={{
             transform: `translateX(${-(offset - 200)}px)`,
             willChange: "transform",
