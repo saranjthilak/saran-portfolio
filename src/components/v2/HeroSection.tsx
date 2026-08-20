@@ -52,15 +52,14 @@ const HeroSection = () => {
         ))}
       </motion.nav>
 
-      {/* Hero Heading */}
-      <div className="overflow-hidden relative z-10">
+      {/* Hero Heading — fills remaining space, centered */}
+      <div className="flex-1 flex items-center justify-center overflow-hidden relative z-10 px-4">
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.85, delay: 0.15, ease }}
-          className="hero-heading font-black uppercase tracking-tight leading-none whitespace-nowrap w-full text-center
-            text-[14vw] sm:text-[15vw] md:text-[16vw] lg:text-[17.5vw]
-            mt-6 sm:mt-4 md:-mt-5"
+          className="hero-heading font-black uppercase tracking-tight leading-none w-full text-center"
+          style={{ fontSize: "clamp(3rem, 17.5vw, 22vw)" }}
         >
           Hi, i&apos;m saran
         </motion.h1>
