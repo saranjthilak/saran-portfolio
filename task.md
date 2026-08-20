@@ -1,0 +1,6 @@
+- `[x]` Replace `ResearchSection.tsx` content with the 3D carousel effect
+  - `[x]` Configure the container with stacking layout classes and `100vh` height
+  - `[x]` Map `publications` and `certifications` to `CARD_DETAILS` array
+  - `[x]` Implement exact 3D render loop and mouse parallax logic provided
+- `[ ]` Verify functionality by checking compilation and visually reviewing in dev server
+- `[ ]` Update walkthrough artifact
