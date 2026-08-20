@@ -54,20 +54,36 @@ const TechTile = ({ name, icon }: { name: string; icon: string }) => (
 
 const MarqueeSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [offset, setOffset] = useState(200);
+  const scrollOffset = useRef(0);
+  const autoOffset = useRef(0);
+  const frameId = useRef(0);
+  const row1Ref = useRef<HTMLDivElement>(null);
+  const row2Ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
       if (!sectionRef.current) return;
       const rect = sectionRef.current.getBoundingClientRect();
       const sectionTop = window.scrollY + rect.top;
-      const raw = (window.scrollY - sectionTop + window.innerHeight) * 0.3;
-      setOffset(raw);
+      scrollOffset.current = (window.scrollY - sectionTop + window.innerHeight) * 0.15;
+    };
+
+    const tick = () => {
+      autoOffset.current += 0.5; // continuous auto-scroll speed
+      const total1 = autoOffset.current + scrollOffset.current;
+      const total2 = autoOffset.current - scrollOffset.current;
+      if (row1Ref.current) row1Ref.current.style.transform = `translateX(${-total1}px)`;
+      if (row2Ref.current) row2Ref.current.style.transform = `translateX(${total2 - 400}px)`;
+      frameId.current = requestAnimationFrame(tick);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+    frameId.current = requestAnimationFrame(tick);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      cancelAnimationFrame(frameId.current);
+    };
   }, []);
 
   const row1Tiles = tripled(ROW1);
@@ -84,26 +100,22 @@ const MarqueeSection = () => {
       }}
     >
       <div className="flex flex-col gap-2">
-        {/* Row 1 — moves right */}
+        {/* Row 1 — runs right */}
         <div
+          ref={row1Ref}
           className="flex gap-2"
-          style={{
-            transform: `translateX(${offset - 200}px)`,
-            willChange: "transform",
-          }}
+          style={{ willChange: "transform" }}
         >
           {row1Tiles.map((tile, i) => (
             <TechTile key={`r1-${i}`} {...tile} />
           ))}
         </div>
 
-        {/* Row 2 — moves left */}
+        {/* Row 2 — runs left */}
         <div
+          ref={row2Ref}
           className="flex gap-2"
-          style={{
-            transform: `translateX(${-(offset - 200)}px)`,
-            willChange: "transform",
-          }}
+          style={{ willChange: "transform" }}
         >
           {row2Tiles.map((tile, i) => (
             <TechTile key={`r2-${i}`} {...tile} />
