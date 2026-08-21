@@ -134,7 +134,7 @@ export default function NexumHero() {
                     style={{
                       opacity: isMenuOpen ? 1 : 0,
                       transform: isMenuOpen ? "translateX(0)" : "translateX(24px)",
-                      transition: \`opacity 300ms ease \${(i + 1) * 60}ms, transform 300ms ease \${(i + 1) * 60}ms\`,
+                      transition: `opacity 300ms ease ${(i + 1) * 60}ms, transform 300ms ease ${(i + 1) * 60}ms`,
                     }}
                   >
                     {link.name}
