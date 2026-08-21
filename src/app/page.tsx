@@ -8,6 +8,7 @@ import ApproachSection from "@/components/v2/ApproachSection";
 import ServicesSection from "@/components/v2/ServicesSection";
 import ProjectsSection from "@/components/v2/ProjectsSection";
 import ResearchSection from "@/components/v2/ResearchSection";
+import CertificationsSection from "@/components/v2/CertificationsSection";
 import ContactSection from "@/components/v2/ContactSection";
 import V2Footer from "@/components/v2/V2Footer";
 
@@ -22,6 +23,7 @@ const Index = () => {
       <ServicesSection />
       <ProjectsSection />
       <ResearchSection />
+      <CertificationsSection />
       <ContactSection />
       <V2Footer />
     </div>
