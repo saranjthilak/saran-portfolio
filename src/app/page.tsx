@@ -9,6 +9,7 @@ import ServicesSection from "@/components/v2/ServicesSection";
 import ProjectsSection from "@/components/v2/ProjectsSection";
 import ResearchSection from "@/components/v2/ResearchSection";
 import CertificationsSection from "@/components/v2/CertificationsSection";
+import GithubSection from "@/components/v2/GithubSection";
 import ContactSection from "@/components/v2/ContactSection";
 import V2Footer from "@/components/v2/V2Footer";
 
@@ -24,6 +25,7 @@ const Index = () => {
       <ProjectsSection />
       <ResearchSection />
       <CertificationsSection />
+      <GithubSection />
       <ContactSection />
       <V2Footer />
     </div>
