@@ -20,7 +20,8 @@ export default {
 		},
 		extend: {
       fontFamily: {
-        sans: ['var(--font-space-grotesk)', 'Space Grotesk', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-sans)', 'var(--font-space-grotesk)', 'Space Grotesk', 'system-ui', 'sans-serif'],
+        serif: ['var(--font-serif)', 'serif'],
         display: ['var(--font-space-grotesk)', 'Space Grotesk', 'system-ui', 'sans-serif'],
         mono: ['var(--font-jetbrains-mono)', 'JetBrains Mono', 'ui-monospace', 'monospace'],
         kanit: ['var(--font-kanit)', 'Kanit', 'sans-serif'],
