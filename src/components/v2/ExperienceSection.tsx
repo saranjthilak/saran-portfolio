@@ -15,17 +15,18 @@ const ExperienceSection = () => {
         boxShadow: "0 -10px 40px rgba(0,0,0,0.5)",
       }}
     >
-      {/* Video background */}
-      <div className="absolute inset-0 z-0 overflow-hidden rounded-t-[inherit]">
+      {/* Video background (Vesper.ai style) */}
+      <div className="absolute inset-0 z-0 overflow-hidden rounded-t-[inherit] bg-black">
         <video
-          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_171521_25968ba2-b594-4b32-aab7-f6b69398a6fa.mp4"
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260818_072341_50851634-bbc3-4c33-9acc-7647d4db44aa.mp4"
           autoPlay
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-[0.07]"
+          className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#080808]/80 via-[#080808]/40 to-[#080808]/90" />
+        {/* Gradient overlay to ensure text is legible over the video */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/70 to-[#080808]" />
       </div>
 
       <div className="mx-auto max-w-6xl relative z-10">
