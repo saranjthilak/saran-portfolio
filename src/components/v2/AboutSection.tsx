@@ -16,7 +16,7 @@ const AboutSection = () => {
       <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500&display=swap" rel="stylesheet" />
       
       <section
-        id="approach"
+        id="about"
         className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-[15] overflow-hidden"
         style={{
           padding: "clamp(5rem, 9vw, 9rem) 1.25rem",
