@@ -36,7 +36,7 @@ const V2Footer = () => {
             LinkedIn
           </a>
           <a
-            href="mailto:saranjaya.thilak@gmail.com"
+            href="mailto:saranjthilak@gmail.com"
             className="hover:text-[#D7E2EA] transition-colors duration-200"
           >
             Email
