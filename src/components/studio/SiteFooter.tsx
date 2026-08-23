@@ -12,7 +12,7 @@ const SiteFooter = ({ scrollToSection: _scrollToSection }: { scrollToSection: (i
         <div className="flex flex-wrap gap-6">
           <a href="https://github.com/saranjthilak" target="_blank" rel="noreferrer" className="transition-colors hover:text-accent">GitHub</a>
           <a href="https://www.linkedin.com/in/saranjayathilak" target="_blank" rel="noreferrer" className="transition-colors hover:text-accent">LinkedIn</a>
-          <a href="mailto:saranjaya.thilak@gmail.com" className="transition-colors hover:text-accent">Email</a>
+          <a href="mailto:saranjthilak@gmail.com" className="transition-colors hover:text-accent">Email</a>
         </div>
         <span>© {new Date().getFullYear()} — Berlin, Germany</span>
       </div>

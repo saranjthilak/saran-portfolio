@@ -4,7 +4,7 @@ import ContactForm from "@/components/ContactForm";
 import { Eyebrow, Reveal } from "./primitives";
 
 const LINKS = [
-  { label: "Email", value: "saranjaya.thilak@gmail.com", href: "mailto:saranjaya.thilak@gmail.com" },
+  { label: "Email", value: "saranjthilak@gmail.com", href: "mailto:saranjthilak@gmail.com" },
   { label: "Phone", value: "+49 174 461 4592", href: "tel:+491744614592" },
   { label: "GitHub", value: "github.com/saranjthilak", href: "https://github.com/saranjthilak" },
   { label: "LinkedIn", value: "linkedin.com/in/saranjayathilak", href: "https://www.linkedin.com/in/saranjayathilak" },
