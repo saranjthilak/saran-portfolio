@@ -65,28 +65,28 @@ export default function ResearchSection() {
             {publications.length > 0 && (
               <div>
                 <h3 className="text-xl font-semibold text-white/90 mb-4 border-b border-white/10 pb-2">Publications</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex flex-col border-t border-white/10 mt-2">
                   {publications.map((pub, idx) => (
                     <a
                       key={idx}
                       href={pub.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group flex flex-col justify-between rounded-2xl bg-white/10 p-5 backdrop-blur-lg transition-colors hover:bg-white/15"
+                      className="group grid grid-cols-1 md:grid-cols-[1fr_3fr] gap-4 md:gap-8 py-6 md:py-8 border-b border-white/10 items-start hover:bg-white/[0.03] transition-colors px-4 -mx-4 rounded-xl"
                     >
                       <div>
-                        <div className="mb-3 flex items-center justify-between">
-                          <span className="text-xs font-bold text-white/60 uppercase tracking-wider">
-                            {pub.journal}
-                          </span>
-                          <span className="text-xs text-white/40">
-                            {pub.date}
-                          </span>
-                        </div>
-                        <h4 className="text-lg font-medium text-white mb-2 leading-tight group-hover:text-blue-200 transition-colors">
+                        <span className="text-sm font-semibold text-white/70 uppercase tracking-widest block mb-1">
+                          {pub.date}
+                        </span>
+                        <span className="text-xs text-white/40 uppercase tracking-wider">
+                          {pub.journal}
+                        </span>
+                      </div>
+                      <div>
+                        <h4 className="text-xl md:text-2xl font-medium text-white mb-3 leading-tight group-hover:text-blue-300 transition-colors">
                           {pub.title}
                         </h4>
-                        <p className="text-sm leading-relaxed text-white/70 line-clamp-3">
+                        <p className="text-sm md:text-base leading-relaxed text-white/60">
                           {pub.description}
                         </p>
                       </div>

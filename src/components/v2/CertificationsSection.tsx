@@ -50,18 +50,22 @@ export default function CertificationsSection() {
             {certifications.length > 0 && (
               <div className="animate-fade-up opacity-0" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
                 <h3 className="text-xl font-[450] text-white/90 mb-5 border-b border-white/10 pb-3">Professional Certifications</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div className="flex flex-col border-t border-white/10 mt-2">
                   {certifications.map((cert, idx) => (
                     <div
                       key={idx}
-                      className="flex flex-col rounded-[24px] bg-[rgba(17,16,15,0.35)] backdrop-blur-[20px] p-6 border border-white/[0.05] transition-colors hover:bg-[rgba(25,24,23,0.45)]"
+                      className="group grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-4 md:gap-8 py-6 md:py-8 border-b border-white/10 items-center hover:bg-white/[0.03] transition-colors px-4 -mx-4 rounded-xl"
                     >
-
-                      <div className="flex flex-col flex-1 justify-end">
-                        <span className="text-xs font-bold text-white/50 uppercase tracking-wider mb-2">
-                          {cert.issuer} • {cert.level}
+                      <div>
+                        <span className="text-sm font-semibold text-white/70 uppercase tracking-widest block mb-1">
+                          {cert.issuer}
                         </span>
-                        <h4 className="text-lg font-[450] text-white leading-tight">
+                        <span className="text-xs text-white/40 uppercase tracking-wider">
+                          {cert.level}
+                        </span>
+                      </div>
+                      <div>
+                        <h4 className="text-xl md:text-2xl font-[450] text-white leading-tight group-hover:text-amber-200 transition-colors">
                           {cert.title}
                         </h4>
                       </div>
