@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-
 const STACK_TILES = [
   { name: "LangChain", icon: "🔗" },
   { name: "Airflow", icon: "🌊" },
@@ -26,15 +24,17 @@ const STACK_TILES = [
   { name: "MLflow", icon: "🧪" },
 ];
 
-// Quadruple for seamless infinite loop
-const looped = [...STACK_TILES, ...STACK_TILES, ...STACK_TILES, ...STACK_TILES];
+// Split the tiles into two rows for a more dynamic layered effect
+const row1 = STACK_TILES.slice(0, 11);
+const row2 = STACK_TILES.slice(11);
 
 const TechTile = ({ name, icon }: { name: string; icon: string }) => (
   <div
-    className="flex-shrink-0 flex items-center gap-2 rounded-full select-none px-5 py-2.5 opacity-40"
+    className="flex-shrink-0 flex items-center gap-2 rounded-full select-none px-5 py-2.5 opacity-60 hover:opacity-100 transition-opacity duration-300"
     style={{
       background: "linear-gradient(135deg, #161616 0%, #1e1e1e 100%)",
       border: "1px solid #2a2a2a",
+      boxShadow: "0 4px 20px rgba(0,0,0,0.3)"
     }}
   >
     <span className="text-base">{icon}</span>
@@ -48,40 +48,62 @@ const TechTile = ({ name, icon }: { name: string; icon: string }) => (
 );
 
 const MarqueeSection = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const rowRef = useRef<HTMLDivElement>(null);
-  const autoOffset = useRef(0);
-  const frameId = useRef(0);
-
-  useEffect(() => {
-    const tick = () => {
-      autoOffset.current += 0.5;
-      if (rowRef.current) rowRef.current.style.transform = `translateX(${-autoOffset.current}px)`;
-      frameId.current = requestAnimationFrame(tick);
-    };
-
-    frameId.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frameId.current);
-  }, []);
-
   return (
     <section
-      ref={sectionRef}
-      className="overflow-hidden font-kanit"
+      className="overflow-hidden font-kanit relative"
       style={{
         background: "#0C0C0C",
-        paddingTop: "clamp(6rem, 10vw, 10rem)",
-        paddingBottom: "2.5rem",
+        paddingTop: "clamp(4rem, 8vw, 6rem)",
+        paddingBottom: "4rem",
       }}
     >
-      <div
-        ref={rowRef}
-        className="flex gap-2"
-        style={{ willChange: "transform" }}
-      >
-        {looped.map((tile, i) => (
-          <TechTile key={`t-${i}`} {...tile} />
-        ))}
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          @keyframes marquee-left {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          @keyframes marquee-right {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
+          }
+          .animate-marquee-left {
+            display: flex;
+            width: max-content;
+            animation: marquee-left 35s linear infinite;
+          }
+          .animate-marquee-right {
+            display: flex;
+            width: max-content;
+            animation: marquee-right 40s linear infinite;
+          }
+          .animate-marquee-left:hover, .animate-marquee-right:hover {
+            animation-play-state: paused;
+          }
+        `
+      }} />
+
+      {/* Edge Gradients for smooth fade in/out */}
+      <div className="absolute top-0 bottom-0 left-0 w-24 sm:w-40 z-10 bg-gradient-to-r from-[#0C0C0C] to-transparent pointer-events-none" />
+      <div className="absolute top-0 bottom-0 right-0 w-24 sm:w-40 z-10 bg-gradient-to-l from-[#0C0C0C] to-transparent pointer-events-none" />
+
+      <div className="flex flex-col gap-4 sm:gap-5 relative z-0">
+        
+        {/* Row 1: Moves Left */}
+        <div className="animate-marquee-left gap-4 sm:gap-5 pl-4 sm:pl-5">
+          {/* We repeat the array multiple times to ensure it's wide enough for the -50% translation to look seamless */}
+          {[...row1, ...row1, ...row1, ...row1, ...row1, ...row1].map((tile, i) => (
+            <TechTile key={`r1-${i}`} {...tile} />
+          ))}
+        </div>
+
+        {/* Row 2: Moves Right */}
+        <div className="animate-marquee-right gap-4 sm:gap-5 pl-4 sm:pl-5">
+          {[...row2, ...row2, ...row2, ...row2, ...row2, ...row2].map((tile, i) => (
+            <TechTile key={`r2-${i}`} {...tile} />
+          ))}
+        </div>
+
       </div>
     </section>
   );
