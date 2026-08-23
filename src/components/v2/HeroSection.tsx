@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import FadeIn from "./FadeIn";
 import Magnet from "./Magnet";
-import ContactButton from "./ContactButton";
+
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
 
@@ -66,27 +66,20 @@ const HeroSection = () => {
       </div>
 
       {/* Bottom bar */}
-      <div className="relative z-20 mt-auto flex justify-between items-end pb-7 sm:pb-8 md:pb-10 px-6 md:px-10">
-        {/* Left text */}
+      <div className="relative z-20 mt-auto flex justify-center items-end pb-10 sm:pb-12 md:pb-16 px-6 md:px-10">
+        {/* Centered subtext */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.35, ease }}
-          className="text-[#D7E2EA] font-light uppercase tracking-wide leading-snug
-            max-w-[160px] sm:max-w-[220px] md:max-w-[260px]"
-          style={{ fontSize: "clamp(0.75rem, 1.4vw, 1.5rem)" }}
+          className="text-[#D7E2EA] font-light uppercase tracking-wide leading-snug text-center
+            max-w-[280px] sm:max-w-[400px] md:max-w-[500px]"
+          style={{ fontSize: "clamp(0.85rem, 1.4vw, 1.5rem)" }}
         >
           a data engineer and genai specialist building rag systems, mlops pipelines, and ai-native products
         </motion.p>
 
-        {/* Contact button */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.5, ease }}
-        >
-          <ContactButton />
-        </motion.div>
+
       </div>
     </section>
   );
