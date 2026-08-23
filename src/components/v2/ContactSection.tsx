@@ -4,10 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
-import { motion } from "framer-motion";
-import { ArrowRight, Check } from "lucide-react";
+import { Check, Crown, ArrowUpRight } from "lucide-react";
 import { useState } from "react";
-import FadeIn from "./FadeIn";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -27,7 +25,7 @@ const LINKS = [
 const RATE_LIMIT_MS = 60_000;
 
 const inputBase =
-  "w-full rounded-xl bg-[#181818] border border-[#2a2a2a] px-4 py-3.5 text-[#D7E2EA] placeholder-[#D7E2EA]/30 font-kanit text-sm outline-none focus:border-[#D7E2EA]/40 transition-colors duration-200";
+  "w-full rounded bg-white/5 border border-white/20 px-4 py-3.5 text-white placeholder-white/30 font-inter text-sm outline-none focus:border-white/60 focus:bg-white/10 transition-colors duration-200 backdrop-blur-md";
 
 const ContactSection = () => {
   const [sent, setSent] = useState(false);
@@ -76,93 +74,84 @@ const ContactSection = () => {
   return (
     <section
       id="contact"
-      className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-50"
+      className="font-inter rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-50 min-h-[100svh] flex items-center"
       style={{
-        background: "#0C0C0C",
         padding: "clamp(5rem, 9vw, 9rem) 1.25rem clamp(4rem, 6vw, 6rem)",
-        boxShadow: "0 -10px 40px rgba(0,0,0,0.5)", // Shadow to emphasize overlap
+        boxShadow: "0 -10px 40px rgba(0,0,0,0.5)",
       }}
     >
       {/* Video background */}
       <div className="absolute inset-0 z-0 overflow-hidden rounded-t-[inherit]">
         <video
-          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_171521_25968ba2-b594-4b32-aab7-f6b69398a6fa.mp4"
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260606_154941_df1a96e1-a06f-450c-bd02-d863414cc1a0.mp4"
           autoPlay
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-[0.08]"
+          className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0C0C0C]/80 via-[#0C0C0C]/40 to-[#0C0C0C]/90" />
+        <div className="absolute inset-0 bg-black/50" />
       </div>
 
-      <div className="mx-auto max-w-6xl grid gap-14 lg:grid-cols-[0.9fr_1.1fr] items-start relative z-10">
+      <div className="mx-auto w-full max-w-6xl grid gap-14 lg:grid-cols-[1fr_1fr] items-center relative z-10">
 
         {/* ── Left column ─────────────────────────────────────────── */}
         <div>
           {/* Eyebrow */}
-          <FadeIn delay={0} y={20}>
-            <p className="flex items-center gap-2 font-medium uppercase tracking-[0.25em] text-[#D7E2EA]/50 text-xs mb-6">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#D7E2EA]/50 inline-block" />
-              Contact
+          <div className="animate-fade-up mb-6 lg:mb-8">
+            <p className="flex items-center gap-2 font-inter text-xs sm:text-sm uppercase tracking-[0.3em] text-white/70">
+              <Crown className="w-4 h-4 text-white/70" />
+              World-Class Digital Collective
             </p>
-          </FadeIn>
+          </div>
 
           {/* Heading */}
-          <FadeIn delay={0.08} y={30}>
+          <div className="animate-fade-up-delay-1">
             <h2
-              className="font-black leading-[1.02] tracking-tight text-[#D7E2EA]"
-              style={{ fontSize: "clamp(2.2rem, 5vw, 4rem)" }}
+              className="font-podium text-white uppercase leading-[0.92] tracking-tight"
+              style={{ fontSize: "clamp(2.8rem, 8vw, 7rem)" }}
             >
-              Let&apos;s build<br />something reliable.
+              Design.<br />Disrupt.<br />Conquer.
             </h2>
-          </FadeIn>
+          </div>
 
-          {/* Sub-text */}
-          <FadeIn delay={0.16} y={20}>
-            <p
-              className="mt-5 font-light text-[#D7E2EA]/50 leading-relaxed max-w-sm"
-              style={{ fontSize: "clamp(0.85rem, 1.5vw, 1rem)" }}
-            >
-              Available for data engineering and generative AI roles or collaborations,
-              on-site in Berlin or remote.
+          {/* Subtext */}
+          <div className="animate-fade-up-delay-2 mt-6 lg:mt-8">
+            <p className="font-inter text-white/70 text-sm sm:text-base leading-relaxed max-w-md">
+              We build reliable data engineering &amp; generative AI systems that don&apos;t just turn heads — <strong className="text-white">they lead.</strong>
             </p>
-          </FadeIn>
+          </div>
 
           {/* Links list */}
-          <FadeIn delay={0.24} y={20}>
-            <dl className="mt-10 border-t border-[#2a2a2a]">
+          <div className="animate-fade-up-delay-3">
+            <dl className="mt-10 border-t border-white/20">
               {LINKS.map((link, i) => (
-                <motion.div
+                <div
                   key={link.label}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.3 + i * 0.07, duration: 0.5 }}
-                  className="flex items-baseline justify-between gap-6 py-4 border-b border-[#2a2a2a]"
+                  className="flex items-baseline justify-between gap-6 py-4 border-b border-white/20"
                 >
-                  <dt className="text-sm text-[#D7E2EA]/40 font-light">{link.label}</dt>
+                  <dt className="text-sm text-white/50 font-light">{link.label}</dt>
                   <dd>
                     <a
                       href={link.href}
                       target={link.href.startsWith("http") ? "_blank" : undefined}
                       rel="noreferrer"
-                      className="text-sm font-medium text-[#D7E2EA] hover:opacity-60 transition-opacity duration-200"
+                      className="text-sm font-medium text-white hover:opacity-60 transition-opacity duration-200"
                     >
                       {link.value}
                     </a>
                   </dd>
-                </motion.div>
+                </div>
               ))}
             </dl>
-          </FadeIn>
+          </div>
         </div>
 
         {/* ── Right column — form ─────────────────────────────────── */}
-        <FadeIn delay={0.12} y={30}>
+        <div className="animate-fade-up-delay-4">
           <div
-            className="rounded-[1.75rem] p-6 sm:p-8"
-            style={{ background: "#141414", border: "1px solid #2a2a2a" }}
+            className="rounded-[1.75rem] p-6 sm:p-8 relative overflow-hidden backdrop-blur-md"
+            style={{ background: "rgba(20,20,20,0.4)", border: "1px solid rgba(255,255,255,0.15)" }}
           >
             {/* Honeypot */}
             <div aria-hidden="true" style={{ position: "absolute", left: "-9999px", width: 1, height: 1, overflow: "hidden", pointerEvents: "none" }}>
@@ -174,12 +163,12 @@ const ContactSection = () => {
               {/* Name + Email row */}
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
-                  <label className="block text-xs text-[#D7E2EA]/50 font-light mb-2 uppercase tracking-wider">Your name</label>
+                  <label className="block text-xs text-white/70 font-light mb-2 uppercase tracking-wider">Your name</label>
                   <input type="text" placeholder="Jane Doe" {...register("name")} className={inputBase} />
                   {errors.name && <p className="text-xs text-red-400 mt-1">{errors.name.message}</p>}
                 </div>
                 <div>
-                  <label className="block text-xs text-[#D7E2EA]/50 font-light mb-2 uppercase tracking-wider">Email</label>
+                  <label className="block text-xs text-white/70 font-light mb-2 uppercase tracking-wider">Email</label>
                   <input type="email" placeholder="jane@company.com" {...register("email")} className={inputBase} />
                   {errors.email && <p className="text-xs text-red-400 mt-1">{errors.email.message}</p>}
                 </div>
@@ -187,7 +176,7 @@ const ContactSection = () => {
 
               {/* Message */}
               <div>
-                <label className="block text-xs text-[#D7E2EA]/50 font-light mb-2 uppercase tracking-wider">Project or message</label>
+                <label className="block text-xs text-white/70 font-light mb-2 uppercase tracking-wider">Project or message</label>
                 <textarea
                   rows={5}
                   placeholder="Tell me what you're building…"
@@ -198,37 +187,30 @@ const ContactSection = () => {
               </div>
 
               {/* Submit row */}
-              <div className="flex flex-wrap items-center justify-between gap-4 pt-1">
+              <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
                 <button
                   type="submit"
                   disabled={submitting || sent}
-                  className="inline-flex items-center gap-0 rounded-full font-kanit font-medium uppercase tracking-[0.15em] text-sm disabled:opacity-60 transition-all duration-200 overflow-hidden"
-                  style={{
-                    background: "#D7E2EA",
-                    color: "#0C0C0C",
-                    paddingLeft: "2rem",
-                    paddingTop: "0.75rem",
-                    paddingBottom: "0.75rem",
-                  }}
+                  className="group flex items-center gap-3 bg-black hover:bg-neutral-900 border border-white/20 hover:border-white/40 px-5 sm:px-7 py-3 sm:py-4 text-[11px] sm:text-xs text-white tracking-widest uppercase transition-all duration-300 disabled:opacity-60"
                 >
-                  <span className="pr-3">
-                    {submitting ? "Sending…" : sent ? "Message sent" : "Send message"}
+                  <span>
+                    {submitting ? "Sending…" : sent ? "Message sent" : "Get In Touch"}
                   </span>
-                  <span
-                    className="grid place-items-center rounded-full bg-white ml-3 mr-1"
-                    style={{ width: 36, height: 36 }}
-                  >
-                    {sent ? <Check className="w-4 h-4 text-[#0C0C0C]" /> : <ArrowRight className="w-4 h-4 text-[#0C0C0C]" />}
-                  </span>
+                  {sent ? (
+                    <Check className="w-4 h-4 text-white" />
+                  ) : (
+                    <ArrowUpRight className="w-4 h-4 text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  )}
                 </button>
-                <span className="text-xs text-[#D7E2EA]/30 font-light">Usually replies within a day.</span>
+                <span className="text-xs text-white/50 font-light">Usually replies within a day.</span>
               </div>
             </form>
           </div>
-        </FadeIn>
+        </div>
       </div>
     </section>
   );
 };
 
 export default ContactSection;
+
