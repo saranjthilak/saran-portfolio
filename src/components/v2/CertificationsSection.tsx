@@ -6,32 +6,45 @@ import { certifications } from "@/data/portfolio";
 export default function CertificationsSection() {
   return (
     <>
-      <link href="https://db.onlinewebfonts.com/c/13ab13418f633c1b0516fed6e30bedbc?family=Suisse+Int%27l" rel="stylesheet" />
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet" />
       <style dangerouslySetInnerHTML={{
         __html: `
-          .font-suisse {
-            font-family: 'Suisse Intl', -apple-system, BlinkMacSystemFont, sans-serif;
+          .font-manrope {
+            font-family: 'Manrope', system-ui, -apple-system, sans-serif;
           }
         `
       }} />
 
-      <section id="certifications" className="relative w-full min-h-screen overflow-hidden bg-[#080A19] font-suisse z-40">
-        {/* Background Video (Fixed behind content) */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <section id="certifications" className="relative w-full min-h-screen overflow-hidden bg-[#050505] font-manrope z-40">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none bg-[#050505]">
           <video
-            className="absolute inset-0 w-full h-full object-cover opacity-80"
-            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260813_092641_de52eb87-daf2-41db-92cb-7a56eae012a5.mp4"
+            className="absolute left-1/2 top-0 w-full min-w-[1492px] h-full object-cover -translate-x-1/2"
+            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260808_112712_da9d53df-6d27-4b12-bdf6-aa9dc2622bdf.mp4"
             autoPlay
             loop
             muted
             playsInline
           />
-          {/* Subtle gradient overlay to ensure text readability */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/70" />
+          {/* Side letterbox overlay */}
+          <div 
+            className="absolute inset-0"
+            style={{
+              background: 'linear-gradient(to right, #050505 calc(50% - 746px), transparent calc(50% - 676px), transparent calc(50% + 676px), #050505 calc(50% + 746px))'
+            }}
+          />
+          {/* Bottom cinematic fade overlay */}
+          <div 
+            className="absolute inset-0"
+            style={{
+              background: 'linear-gradient(to bottom, rgba(5,5,5,0) 50%, rgba(5,5,5,.23) 60%, rgba(5,5,5,.45) 70%, rgba(5,5,5,.75) 80%, rgba(5,5,5,.96) 95%, #050505 100%)'
+            }}
+          />
         </div>
         
         {/* Content Wrapper */}
-        <div className="relative z-10 flex h-full flex-col p-6 md:p-12 max-w-7xl mx-auto w-full pb-20 pt-20">
+        <div className="relative z-10 flex flex-col pt-[20vh] pl-[6vw] md:pl-[8vw] pr-6 md:pr-12 max-w-4xl w-full">
           
           {/* Section Header */}
           <div className="mb-16">
