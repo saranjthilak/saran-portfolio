@@ -93,7 +93,7 @@ const ContactSection = () => {
         <div className="absolute inset-0 bg-black/50" />
       </div>
 
-      <div className="mx-auto w-full max-w-6xl grid gap-14 lg:grid-cols-[1fr_1fr] items-center relative z-10">
+      <div className="mr-auto ml-2 sm:ml-6 md:ml-[4vw] lg:ml-[6vw] w-full max-w-5xl grid gap-14 lg:grid-cols-[1fr_1fr] items-center relative z-10">
 
         {/* ── Left column ─────────────────────────────────────────── */}
         <div>
