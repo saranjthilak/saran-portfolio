@@ -12,10 +12,10 @@ const LiveProjectButton = ({ href, className = "" }: LiveProjectButtonProps) => 
       target="_blank"
       rel="noreferrer"
       className={`inline-block font-kanit font-medium uppercase tracking-widest rounded-full
-        border-2 border-[#D7E2EA] text-[#D7E2EA]
+        border-2 border-[#ffffff] text-[#ffffff]
         px-8 py-3 sm:px-10 sm:py-3.5
         text-sm sm:text-base
-        transition-all duration-200 hover:bg-[#D7E2EA]/10 active:scale-95
+        transition-all duration-200 hover:bg-[#ffffff]/10 active:scale-95
         ${className}`}
     >
       Live Project

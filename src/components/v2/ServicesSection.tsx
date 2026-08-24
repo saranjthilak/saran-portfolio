@@ -50,7 +50,7 @@ const ServicesSection = () => {
         {/* Heading */}
         <FadeIn y={30}>
           <h2
-            className="font-black uppercase text-center leading-none tracking-tight text-[#0C0C0C]"
+            className="font-black uppercase text-center leading-none tracking-tight text-[#0d1116]"
             style={{
               fontSize: "clamp(2.5rem, 8vw, 100px)",
               marginBottom: "clamp(2.5rem, 5vw, 4.5rem)",
@@ -76,7 +76,7 @@ const ServicesSection = () => {
               >
                 {/* Number */}
                 <span
-                  className="font-black text-[#0C0C0C] flex-shrink-0 leading-none"
+                  className="font-black text-[#0d1116] flex-shrink-0 leading-none"
                   style={{ fontSize: "clamp(2rem, 6vw, 80px)" }}
                 >
                   {item.number}
@@ -85,13 +85,13 @@ const ServicesSection = () => {
                 {/* Name + description */}
                 <div className="flex flex-col justify-center gap-2 pt-2 md:pt-4">
                   <h3
-                    className="font-medium uppercase text-[#0C0C0C] tracking-wide"
+                    className="font-medium uppercase text-[#0d1116] tracking-wide"
                     style={{ fontSize: "clamp(0.85rem, 1.8vw, 1.5rem)" }}
                   >
                     {item.name}
                   </h3>
                   <p
-                    className="font-light text-[#0C0C0C] leading-relaxed max-w-2xl"
+                    className="font-light text-[#0d1116] leading-relaxed max-w-2xl"
                     style={{
                       fontSize: "clamp(0.75rem, 1.2vw, 1rem)",
                       opacity: 0.6,

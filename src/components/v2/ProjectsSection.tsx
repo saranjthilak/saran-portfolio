@@ -31,7 +31,7 @@ const ProjectCard = ({ project, index, progress }: ProjectCardProps) => {
     >
       <motion.div
         style={{ scale }}
-        className="w-full h-full rounded-[40px] sm:rounded-[50px] md:rounded-[60px] border-2 border-[#D7E2EA] p-4 sm:p-6 md:p-8 flex flex-col gap-4"
+        className="w-full h-full rounded-[40px] sm:rounded-[50px] md:rounded-[60px] border-2 border-[#ffffff] p-4 sm:p-6 md:p-8 flex flex-col gap-4"
         layoutId={`project-card-${index}`}
         id={`project-${index}`}
         aria-label={project.title}
@@ -40,13 +40,13 @@ const ProjectCard = ({ project, index, progress }: ProjectCardProps) => {
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div className="flex items-center gap-4">
             <span
-              className="font-kanit font-black text-[#D7E2EA] leading-none"
+              className="font-kanit font-black text-[#ffffff] leading-none"
               style={{ fontSize: "clamp(1.4rem, 3vw, 2.5rem)" }}
             >
               {String(index + 1).padStart(2, "0")}
             </span>
             <span
-              className="font-kanit font-light uppercase tracking-widest text-[#D7E2EA]/50"
+              className="font-kanit font-light uppercase tracking-widest text-[#ffffff]/50"
               style={{ fontSize: "clamp(0.6rem, 1vw, 0.85rem)" }}
             >
               {project.source}
@@ -54,7 +54,7 @@ const ProjectCard = ({ project, index, progress }: ProjectCardProps) => {
           </div>
           <div className="flex items-center gap-4">
             <span
-              className="font-kanit font-medium uppercase tracking-wide text-[#D7E2EA]"
+              className="font-kanit font-medium uppercase tracking-wide text-[#ffffff]"
               style={{ fontSize: "clamp(0.85rem, 2vw, 1.5rem)" }}
             >
               {project.title}
@@ -120,7 +120,7 @@ const ProjectsSection = () => {
       id="projects"
       className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-30"
       style={{
-        background: "#0C0C0C",
+        background: "#0d1116",
         padding: "clamp(4rem, 7vw, 7rem) 1.25rem clamp(6rem, 10vw, 10rem)",
       }}
     >

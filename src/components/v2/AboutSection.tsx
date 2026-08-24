@@ -44,7 +44,7 @@ const AboutSection = () => {
           <div className="max-w-2xl">
             <FadeIn delay={0} y={20}>
               <h2
-                className="font-black italic leading-[1.02] tracking-tight text-[#D7E2EA] mb-6 sm:mb-8"
+                className="font-black italic leading-[1.02] tracking-tight text-[#ffffff] mb-6 sm:mb-8"
                 style={{ fontSize: "clamp(2.5rem, 6vw, 4.5rem)" }}
               >
                 About Me
@@ -52,7 +52,7 @@ const AboutSection = () => {
             </FadeIn>
             <FadeIn delay={0.1} y={20}>
               <p
-                className="text-[#D7E2EA]/90 font-light leading-relaxed bg-black/20 p-4 sm:p-6 rounded-xl backdrop-blur-sm"
+                className="text-[#ffffff]/90 font-light leading-relaxed bg-black/20 p-4 sm:p-6 rounded-xl backdrop-blur-sm"
                 style={{ fontSize: "clamp(1rem, 1.8vw, 1.2rem)" }}
               >
                 {ABOUT_TEXT}

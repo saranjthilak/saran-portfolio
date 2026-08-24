@@ -97,13 +97,7 @@ const ContactSection = () => {
 
         {/* ── Left column ─────────────────────────────────────────── */}
         <div>
-          {/* Eyebrow */}
-          <div className="animate-fade-up mb-6 lg:mb-8">
-            <p className="flex items-center gap-2 font-inter text-xs sm:text-sm uppercase tracking-[0.3em] text-white/70">
-              <Crown className="w-4 h-4 text-white/70" />
-              World-Class Digital Collective
-            </p>
-          </div>
+
 
           {/* Heading */}
           <div className="animate-fade-up-delay-1">

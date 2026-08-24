@@ -19,7 +19,7 @@ const ApproachSection = () => {
         <div>
           <FadeIn delay={0} y={20}>
             <h2
-              className="font-black italic leading-[1.02] tracking-tight text-[#D7E2EA] mb-6 sm:mb-8"
+              className="font-black italic leading-[1.02] tracking-tight text-[#ffffff] mb-6 sm:mb-8"
               style={{ fontSize: "clamp(2.5rem, 6vw, 4.5rem)" }}
             >
               The Approach
@@ -27,7 +27,7 @@ const ApproachSection = () => {
           </FadeIn>
           <FadeIn delay={0.1} y={20}>
             <p
-              className="text-[#D7E2EA]/70 font-light leading-relaxed max-w-lg"
+              className="text-[#ffffff]/70 font-light leading-relaxed max-w-lg"
               style={{ fontSize: "clamp(1rem, 1.8vw, 1.2rem)" }}
             >
               I build systems that bridge the gap between raw data infrastructure and cutting-edge artificial intelligence. My focus is on scalability, reliability, and the operational excellence required for production-grade GenAI.
@@ -40,7 +40,7 @@ const ApproachSection = () => {
           {/* Core Capabilities */}
           <div>
             <FadeIn delay={0.15} y={20}>
-              <h3 className="text-xs font-medium uppercase tracking-[0.2em] text-[#D7E2EA]/40 mb-6 border-t border-[#2a2a2a] pt-4">
+              <h3 className="text-xs font-medium uppercase tracking-[0.2em] text-[#ffffff]/40 mb-6 border-t border-[rgba(255, 255, 255, 0.1)] pt-4">
                 Core Capabilities
               </h3>
             </FadeIn>
@@ -57,9 +57,9 @@ const ApproachSection = () => {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.2 + i * 0.1, duration: 0.5 }}
-                  className="flex items-center gap-3 text-[#D7E2EA] font-light text-sm sm:text-base"
+                  className="flex items-center gap-3 text-[#ffffff] font-light text-sm sm:text-base"
                 >
-                  <span className="w-1 h-1 rounded-full bg-[#D7E2EA]/50 flex-shrink-0" />
+                  <span className="w-1 h-1 rounded-full bg-[#ffffff]/50 flex-shrink-0" />
                   {item}
                 </motion.li>
               ))}
@@ -69,7 +69,7 @@ const ApproachSection = () => {
           {/* Legacy */}
           <div>
             <FadeIn delay={0.2} y={20}>
-              <h3 className="text-xs font-medium uppercase tracking-[0.2em] text-[#D7E2EA]/40 mb-6 border-t border-[#2a2a2a] pt-4">
+              <h3 className="text-xs font-medium uppercase tracking-[0.2em] text-[#ffffff]/40 mb-6 border-t border-[rgba(255, 255, 255, 0.1)] pt-4">
                 Legacy
               </h3>
             </FadeIn>
@@ -85,9 +85,9 @@ const ApproachSection = () => {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.25 + i * 0.1, duration: 0.5 }}
-                  className="flex items-center gap-3 text-[#D7E2EA] font-light text-sm sm:text-base"
+                  className="flex items-center gap-3 text-[#ffffff] font-light text-sm sm:text-base"
                 >
-                  <span className="w-1 h-1 rounded-full bg-[#D7E2EA]/50 flex-shrink-0" />
+                  <span className="w-1 h-1 rounded-full bg-[#ffffff]/50 flex-shrink-0" />
                   <span>
                     <span className="font-medium">{item.company}</span> — {item.role}
                   </span>

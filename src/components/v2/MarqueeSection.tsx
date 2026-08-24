@@ -33,13 +33,13 @@ const TechTile = ({ name, icon }: { name: string; icon: string }) => (
     className="flex-shrink-0 flex items-center gap-2 rounded-full select-none px-5 py-2.5 opacity-60 hover:opacity-100 transition-opacity duration-300"
     style={{
       background: "linear-gradient(135deg, #161616 0%, #1e1e1e 100%)",
-      border: "1px solid #2a2a2a",
+      border: "1px solid rgba(255, 255, 255, 0.1)",
       boxShadow: "0 4px 20px rgba(0,0,0,0.3)"
     }}
   >
     <span className="text-base">{icon}</span>
     <span
-      className="font-kanit font-medium uppercase tracking-wider text-[#D7E2EA]"
+      className="font-kanit font-medium uppercase tracking-wider text-[#ffffff]"
       style={{ fontSize: "clamp(0.55rem, 0.9vw, 0.75rem)" }}
     >
       {name}
@@ -52,7 +52,7 @@ const MarqueeSection = () => {
     <section
       className="overflow-hidden font-kanit relative"
       style={{
-        background: "#0C0C0C",
+        background: "#0d1116",
         paddingTop: "clamp(4rem, 8vw, 6rem)",
         paddingBottom: "4rem",
       }}
@@ -84,8 +84,8 @@ const MarqueeSection = () => {
       }} />
 
       {/* Edge Gradients for smooth fade in/out */}
-      <div className="absolute top-0 bottom-0 left-0 w-24 sm:w-40 z-10 bg-gradient-to-r from-[#0C0C0C] to-transparent pointer-events-none" />
-      <div className="absolute top-0 bottom-0 right-0 w-24 sm:w-40 z-10 bg-gradient-to-l from-[#0C0C0C] to-transparent pointer-events-none" />
+      <div className="absolute top-0 bottom-0 left-0 w-24 sm:w-40 z-10 bg-gradient-to-r from-[#0d1116] to-transparent pointer-events-none" />
+      <div className="absolute top-0 bottom-0 right-0 w-24 sm:w-40 z-10 bg-gradient-to-l from-[#0d1116] to-transparent pointer-events-none" />
 
       <div className="flex flex-col gap-4 sm:gap-5 relative z-0">
         

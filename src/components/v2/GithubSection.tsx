@@ -24,7 +24,7 @@ export default function GithubSection() {
               <span className="w-1.5 h-1.5 rounded-full bg-white/50 inline-block" />
               Open Source
             </p>
-            <h2 className="font-kanit font-black italic leading-[1.02] tracking-tight text-[#D7E2EA]" style={{ fontSize: "clamp(2.5rem, 6vw, 4.5rem)" }}>
+            <h2 className="font-kanit font-black italic leading-[1.02] tracking-tight text-[#ffffff]" style={{ fontSize: "clamp(2.5rem, 6vw, 4.5rem)" }}>
               GitHub Contributions
             </h2>
           </div>
