@@ -47,7 +47,7 @@ export default function ResearchSection() {
         </div>
 
         {/* Content Wrapper */}
-        <div className="relative z-10 flex h-full flex-col p-6 md:p-12 max-w-7xl mx-auto w-full pb-20">
+        <div className="relative z-10 flex flex-col pt-12 md:pt-[20vh] pl-[6vw] md:pl-[8vw] pr-6 md:pr-12 max-w-4xl w-full pb-20">
           
           {/* Section Header */}
           <div className="mb-12">
