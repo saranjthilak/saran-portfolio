@@ -50,9 +50,9 @@ const ServicesSection = () => {
         {/* Heading */}
         <FadeIn y={30}>
           <h2
-            className="font-black uppercase text-center leading-none tracking-tight text-[#0d1116]"
+            className="font-black uppercase text-center leading-[1.02] tracking-tight text-[#0d1116]"
             style={{
-              fontSize: "clamp(2.5rem, 8vw, 100px)",
+              fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
               marginBottom: "clamp(2.5rem, 5vw, 4.5rem)",
             }}
           >
