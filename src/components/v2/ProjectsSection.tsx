@@ -63,43 +63,14 @@ const ProjectCard = ({ project, index, progress }: ProjectCardProps) => {
           </div>
         </div>
 
-        {/* Image grid */}
-        <div className="flex gap-4 flex-1 min-h-0">
-          {/* Left column — 40% width, 2 stacked images */}
-          <div className="flex flex-col gap-4" style={{ flex: "0 0 40%" }}>
-            <div
-              className="rounded-[40px] sm:rounded-[50px] md:rounded-[60px] overflow-hidden flex-shrink-0"
-              style={{ height: "clamp(130px, 16vw, 230px)" }}
-            >
-              <img
-                src={project.image}
-                alt={`${project.title} screenshot 1`}
-                className="w-full h-full object-cover object-top"
-                loading="lazy"
-              />
-            </div>
-            <div
-              className="rounded-[40px] sm:rounded-[50px] md:rounded-[60px] overflow-hidden flex-1"
-              style={{ height: "clamp(160px, 22vw, 340px)" }}
-            >
-              <img
-                src={project.image}
-                alt={`${project.title} screenshot 2`}
-                className="w-full h-full object-cover object-center"
-                loading="lazy"
-              />
-            </div>
-          </div>
-
-          {/* Right column — 60% width, 1 tall image */}
-          <div className="flex-1 rounded-[40px] sm:rounded-[50px] md:rounded-[60px] overflow-hidden">
-            <img
-              src={project.image}
-              alt={`${project.title} screenshot 3`}
-              className="w-full h-full object-cover object-bottom"
-              loading="lazy"
-            />
-          </div>
+        {/* Hero image */}
+        <div className="flex-1 min-h-0 rounded-[40px] sm:rounded-[50px] md:rounded-[60px] overflow-hidden">
+          <img
+            src={project.image}
+            alt={`${project.title} screenshot`}
+            className="w-full h-full object-cover object-center"
+            loading="lazy"
+          />
         </div>
       </motion.div>
     </div>
@@ -121,14 +92,14 @@ const ProjectsSection = () => {
       className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-30"
       style={{
         background: "#0d1116",
-        padding: "clamp(4rem, 7vw, 7rem) 1.25rem clamp(6rem, 10vw, 10rem)",
+        padding: "clamp(5rem, 9vw, 9rem) 1.25rem clamp(6rem, 10vw, 10rem)",
       }}
     >
       {/* Heading */}
       <div className="text-center mb-16 sm:mb-20">
         <h2
-          className="hero-heading font-black uppercase leading-none tracking-tight"
-          style={{ fontSize: "clamp(3rem, 12vw, 160px)" }}
+          className="hero-heading font-black uppercase leading-[1.02] tracking-tight"
+          style={{ fontSize: "clamp(2.5rem, 6vw, 4.5rem)" }}
         >
           Projects
         </h2>
