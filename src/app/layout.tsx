@@ -28,7 +28,7 @@ const kanit = Kanit({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://saranjthilak.com'),
+  metadataBase: new URL('https://saran.cloud'),
   title: {
     default: 'Saran Jaya Thilak — Data Engineer & Generative AI Specialist',
     template: '%s | Saran Jaya Thilak',
@@ -40,13 +40,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://saranjthilak.com',
+    url: 'https://saran.cloud',
     title: 'Saran Jaya Thilak — Data Engineer & Generative AI Specialist',
     description: 'Portfolio of Saran Jaya Thilak, an AI & Data Engineer specializing in RAG systems, scalable data pipelines, and cloud architecture.',
     siteName: 'Saran Jaya Thilak Portfolio',
     images: [
       {
-        url: '/og-image.png',
+        url: '/og-image.jpg',
         width: 1200,
         height: 630,
         alt: 'Saran Jaya Thilak - AI & Data Engineer',
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Saran Jaya Thilak — Data Engineer & Generative AI Specialist',
     description: 'Portfolio of Saran Jaya Thilak, an AI & Data Engineer specializing in RAG systems, scalable data pipelines, and cloud architecture.',
-    images: ['/og-image.png'],
+    images: ['/og-image.jpg'],
     creator: '@saranjthilak',
   },
   robots: {
