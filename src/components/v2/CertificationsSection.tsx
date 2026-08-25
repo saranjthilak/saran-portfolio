@@ -1,9 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
+import { useInView } from "framer-motion";
 import { certifications } from "@/data/portfolio";
 
 export default function CertificationsSection() {
+  const videoRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(videoRef, { once: true, margin: "200px" });
   return (
     <>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -18,15 +21,17 @@ export default function CertificationsSection() {
       }} />
 
       <section id="certifications" className="relative w-full min-h-screen overflow-hidden bg-[#050505] font-manrope z-40">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none bg-[#050505]">
-          <video
-            className="absolute left-1/2 top-0 w-full min-w-[1492px] h-full object-cover -translate-x-1/2"
-            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260808_112712_da9d53df-6d27-4b12-bdf6-aa9dc2622bdf.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-          />
+        <div ref={videoRef} className="absolute inset-0 overflow-hidden pointer-events-none bg-[#050505]">
+          {isInView && (
+            <video
+              className="absolute left-1/2 top-0 w-full min-w-[1492px] h-full object-cover -translate-x-1/2"
+              src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260808_112712_da9d53df-6d27-4b12-bdf6-aa9dc2622bdf.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+            />
+          )}
           {/* Side letterbox overlay */}
           <div 
             className="absolute inset-0"

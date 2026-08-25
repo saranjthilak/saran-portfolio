@@ -1,9 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
+import { useInView } from "framer-motion";
 import { publications } from "@/data/portfolio";
 
 export default function ResearchSection() {
+  const videoRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(videoRef, { once: true, margin: "200px" });
   return (
     <>
       <style dangerouslySetInnerHTML={{
@@ -33,15 +36,17 @@ export default function ResearchSection() {
 
       <section id="research" className="relative min-h-screen w-full font-geist z-40 bg-[#111111]">
         {/* Background Video (Fixed behind content) */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <video
-            className="absolute inset-0 h-full w-full object-cover opacity-80"
-            autoPlay
-            loop
-            muted
-            playsInline
-            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260803_192301_9231ed6b-c55c-4a48-909c-4ebe11cf2e11.mp4"
-          />
+        <div ref={videoRef} className="absolute inset-0 overflow-hidden pointer-events-none">
+          {isInView && (
+            <video
+              className="absolute inset-0 h-full w-full object-cover opacity-80"
+              autoPlay
+              loop
+              muted
+              playsInline
+              src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260803_192301_9231ed6b-c55c-4a48-909c-4ebe11cf2e11.mp4"
+            />
+          )}
           {/* Subtle gradient overlay to ensure text readability */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
         </div>

@@ -5,7 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
 import { Check, Crown, ArrowUpRight } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { useInView } from "framer-motion";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -28,6 +29,8 @@ const inputBase =
   "w-full rounded bg-white/5 border border-white/20 px-4 py-3.5 text-white placeholder-white/30 font-inter text-sm outline-none focus:border-white/60 focus:bg-white/10 transition-colors duration-200 backdrop-blur-md";
 
 const ContactSection = () => {
+  const videoRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(videoRef, { once: true, margin: "200px" });
   const [sent, setSent] = useState(false);
   const [honeypot, setHoneypot] = useState("");
   const [lastSubmit, setLastSubmit] = useState(0);
@@ -81,15 +84,17 @@ const ContactSection = () => {
       }}
     >
       {/* Video background */}
-      <div className="absolute inset-0 z-0 overflow-hidden rounded-t-[inherit]">
-        <video
-          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260606_154941_df1a96e1-a06f-450c-bd02-d863414cc1a0.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+      <div ref={videoRef} className="absolute inset-0 z-0 overflow-hidden rounded-t-[inherit]">
+        {isInView && (
+          <video
+            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260606_154941_df1a96e1-a06f-450c-bd02-d863414cc1a0.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        )}
         <div className="absolute inset-0 bg-black/50" />
       </div>
 
@@ -157,21 +162,23 @@ const ContactSection = () => {
               {/* Name + Email row */}
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
-                  <label className="block text-xs text-white/70 font-light mb-2 uppercase tracking-wider">Your name</label>
-                  <input type="text" placeholder="Jane Doe" {...register("name")} className={inputBase} />
+                  <label htmlFor="name" className="block text-xs text-white/70 font-light mb-2 uppercase tracking-wider">Your name</label>
+                  <input id="name" aria-label="Your name" type="text" placeholder="Jane Doe" {...register("name")} className={inputBase} />
                   {errors.name && <p className="text-xs text-red-400 mt-1">{errors.name.message}</p>}
                 </div>
                 <div>
-                  <label className="block text-xs text-white/70 font-light mb-2 uppercase tracking-wider">Email</label>
-                  <input type="email" placeholder="jane@company.com" {...register("email")} className={inputBase} />
+                  <label htmlFor="email" className="block text-xs text-white/70 font-light mb-2 uppercase tracking-wider">Email</label>
+                  <input id="email" aria-label="Email" type="email" placeholder="jane@company.com" {...register("email")} className={inputBase} />
                   {errors.email && <p className="text-xs text-red-400 mt-1">{errors.email.message}</p>}
                 </div>
               </div>
 
               {/* Message */}
               <div>
-                <label className="block text-xs text-white/70 font-light mb-2 uppercase tracking-wider">Project or message</label>
+                <label htmlFor="message" className="block text-xs text-white/70 font-light mb-2 uppercase tracking-wider">Project or message</label>
                 <textarea
+                  id="message"
+                  aria-label="Project or message"
                   rows={5}
                   placeholder="Tell me what you're building…"
                   {...register("message")}

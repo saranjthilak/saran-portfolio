@@ -5,7 +5,7 @@ import FadeIn from "./FadeIn";
 
 
 const ABOUT_TEXT =
-  "With an M.Sc. in Data Science and hands-on experience across cloud, networking, and AI engineering at companies like Tesla, Nokia, and Huawei, i focus on data pipelines, retrieval-augmented generation, and MLOps. i truly enjoy turning messy data and ambitious ideas into production-grade systems. Let's build something incredible together!";
+  "With an M.Sc. in Data Science and hands-on experience across cloud, networking, and AI engineering at companies like Tesla, Nokia, and Huawei, I focus on data pipelines, retrieval-augmented generation, and MLOps. I truly enjoy turning messy data and ambitious ideas into production-grade systems. Let's build something incredible together!";
 
 
 
@@ -25,18 +25,10 @@ const AboutSection = () => {
         }}
       >
         {/* Lumen Background Elements */}
-        <div className="absolute inset-0 z-0 bg-black">
-          <video
-            className="absolute inset-0 w-full h-full object-cover anim-fade-in"
-            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260813_115057_94c3699b-0fd1-4124-bcf3-3626bb8c1f77.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-          />
+        <div className="absolute inset-0 z-0 bg-black overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#121212] via-[#0d1116] to-[#0a0a0a] bg-[length:200%_200%] animate-gradient-pan" />
           {/* Subtle overlay to ensure text readability */}
           <div className="absolute inset-0 bg-black/40" />
-
         </div>
 
         {/* Existing Content */}

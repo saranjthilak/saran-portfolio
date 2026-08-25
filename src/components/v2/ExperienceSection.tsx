@@ -1,10 +1,13 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import { experience } from "@/data/portfolio";
 import FadeIn from "./FadeIn";
 
 const ExperienceSection = () => {
+  const videoRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(videoRef, { once: true, margin: "200px" });
   return (
     <section
       id="experience"
@@ -16,15 +19,17 @@ const ExperienceSection = () => {
       }}
     >
       {/* Video background (Vesper.ai style) */}
-      <div className="absolute inset-0 z-0 overflow-hidden rounded-t-[inherit] bg-black">
-        <video
-          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260818_072341_50851634-bbc3-4c33-9acc-7647d4db44aa.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+      <div ref={videoRef} className="absolute inset-0 z-0 overflow-hidden rounded-t-[inherit] bg-black">
+        {isInView && (
+          <video
+            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260818_072341_50851634-bbc3-4c33-9acc-7647d4db44aa.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        )}
         {/* Gradient overlay to ensure text is legible over the video */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/70 to-[#080808]" />
       </div>
