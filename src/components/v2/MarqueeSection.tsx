@@ -91,15 +91,15 @@ const MarqueeSection = () => {
         
         {/* Row 1: Moves Left */}
         <div className="animate-marquee-left gap-4 sm:gap-5 pl-4 sm:pl-5">
-          {/* We repeat the array multiple times to ensure it's wide enough for the -50% translation to look seamless */}
-          {[...row1, ...row1, ...row1, ...row1, ...row1, ...row1].map((tile, i) => (
+          {/* We repeat the array once (2 sets total) for a seamless 50% translation loop */}
+          {[...row1, ...row1].map((tile, i) => (
             <TechTile key={`r1-${i}`} {...tile} />
           ))}
         </div>
 
         {/* Row 2: Moves Right */}
         <div className="animate-marquee-right gap-4 sm:gap-5 pl-4 sm:pl-5">
-          {[...row2, ...row2, ...row2, ...row2, ...row2, ...row2].map((tile, i) => (
+          {[...row2, ...row2].map((tile, i) => (
             <TechTile key={`r2-${i}`} {...tile} />
           ))}
         </div>
