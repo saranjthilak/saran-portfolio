@@ -8,11 +8,7 @@
   :root {
     --font-sans: "Manrope", sans-serif;
     --font-serif: "Instrument Serif", serif;
-  }
-}
 
-@layer base {
-  :root {
     /* Systems dashboard — dark first */
     --background: 240 22% 5%;          /* #0a0a0f */
     --foreground: 220 14% 94%;         /* off-white */
