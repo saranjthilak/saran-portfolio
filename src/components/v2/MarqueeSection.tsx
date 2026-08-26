@@ -28,19 +28,16 @@ const STACK_TILES = [
 const row1 = STACK_TILES.slice(0, 11);
 const row2 = STACK_TILES.slice(11);
 
-const TechTile = ({ name, icon }: { name: string; icon: string }) => (
-  <div
-    className="flex-shrink-0 flex items-center gap-2 rounded-full select-none px-5 py-2.5 opacity-60 hover:opacity-100 transition-opacity duration-300"
-    style={{
-      background: "linear-gradient(135deg, #161616 0%, #1e1e1e 100%)",
-      border: "1px solid rgba(255, 255, 255, 0.1)",
-      boxShadow: "0 4px 20px rgba(0,0,0,0.3)"
-    }}
-  >
-    <span className="text-base">{icon}</span>
+const TechTile = ({ name, icon, isOutline }: { name: string; icon: string; isOutline?: boolean }) => (
+  <div className="flex-shrink-0 flex items-center gap-4 sm:gap-6 select-none opacity-60 hover:opacity-100 transition-opacity duration-300">
+    <span style={{ fontSize: "clamp(2.5rem, 6vw, 4rem)" }}>{icon}</span>
     <span
-      className="font-kanit font-medium uppercase tracking-wider text-[#ffffff]"
-      style={{ fontSize: "clamp(0.55rem, 0.9vw, 0.75rem)" }}
+      className="font-podium uppercase tracking-tighter"
+      style={{
+        fontSize: "clamp(4rem, 10vw, 8rem)",
+        color: isOutline ? "transparent" : "#ffffff",
+        WebkitTextStroke: isOutline ? "2px rgba(255,255,255,0.4)" : "none",
+      }}
     >
       {name}
     </span>
@@ -50,7 +47,7 @@ const TechTile = ({ name, icon }: { name: string; icon: string }) => (
 const MarqueeSection = () => {
   return (
     <section
-      className="overflow-hidden font-kanit relative"
+      className="overflow-hidden font-kanit relative flex items-center justify-center min-h-[50vh]"
       style={{
         background: "#0d1116",
         paddingTop: "clamp(4rem, 8vw, 6rem)",
@@ -87,20 +84,21 @@ const MarqueeSection = () => {
       <div className="absolute top-0 bottom-0 left-0 w-24 sm:w-40 z-10 bg-gradient-to-r from-[#0d1116] to-transparent pointer-events-none" />
       <div className="absolute top-0 bottom-0 right-0 w-24 sm:w-40 z-10 bg-gradient-to-l from-[#0d1116] to-transparent pointer-events-none" />
 
-      <div className="flex flex-col gap-4 sm:gap-5 relative z-0">
+      {/* Tilted Wrapper */}
+      <div className="flex flex-col gap-6 sm:gap-10 relative z-0 -rotate-3 scale-[1.15]">
         
         {/* Row 1: Moves Left */}
-        <div className="animate-marquee-left gap-4 sm:gap-5 pl-4 sm:pl-5">
+        <div className="animate-marquee-left gap-8 sm:gap-12 pl-8 sm:pl-12">
           {/* We repeat the array once (2 sets total) for a seamless 50% translation loop */}
           {[...row1, ...row1].map((tile, i) => (
-            <TechTile key={`r1-${i}`} {...tile} />
+            <TechTile key={`r1-${i}`} {...tile} isOutline={i % 2 !== 0} />
           ))}
         </div>
 
         {/* Row 2: Moves Right */}
-        <div className="animate-marquee-right gap-4 sm:gap-5 pl-4 sm:pl-5">
+        <div className="animate-marquee-right gap-8 sm:gap-12 pl-8 sm:pl-12">
           {[...row2, ...row2].map((tile, i) => (
-            <TechTile key={`r2-${i}`} {...tile} />
+            <TechTile key={`r2-${i}`} {...tile} isOutline={i % 2 === 0} />
           ))}
         </div>
 
