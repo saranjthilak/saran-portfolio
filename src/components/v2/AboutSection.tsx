@@ -4,20 +4,12 @@ import React from "react";
 import FadeIn from "./FadeIn";
 
 
-const ABOUT_TEXT =
-  "With an M.Sc. in Data Science and hands-on experience across cloud, networking, and AI engineering at companies like Tesla, Nokia, and Huawei, I focus on data pipelines, retrieval-augmented generation, and MLOps. I truly enjoy turning messy data and ambitious ideas into production-grade systems. Let's build something incredible together!";
-
-
-
-
 const AboutSection = () => {
   return (
     <>
-      <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500&display=swap" rel="stylesheet" />
-      
       <section
         id="about"
-        className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-[15] overflow-hidden"
+        className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-[15] overflow-hidden flex items-center"
         style={{
           padding: "clamp(5rem, 9vw, 9rem) 1.25rem",
           boxShadow: "0 -10px 40px rgba(0,0,0,0.5)",
@@ -29,28 +21,55 @@ const AboutSection = () => {
           <div className="absolute inset-0 bg-gradient-to-br from-[#121212] via-[#0d1116] to-[#0a0a0a] bg-[length:200%_200%] animate-gradient-pan" />
           {/* Subtle overlay to ensure text readability */}
           <div className="absolute inset-0 bg-black/40" />
+          
+          {/* Decorative Glowing Orbs */}
+          <div className="absolute top-[20%] right-[10%] w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-indigo-500/10 rounded-full blur-[100px] mix-blend-screen pointer-events-none" />
+          <div className="absolute bottom-[10%] left-[5%] w-[30vw] h-[30vw] max-w-[400px] max-h-[400px] bg-blue-500/10 rounded-full blur-[100px] mix-blend-screen pointer-events-none" />
         </div>
 
-        {/* Existing Content */}
-        <div className="relative z-10 w-full">
-          <div className="max-w-2xl">
+        {/* Content Wrapper */}
+        <div className="relative z-10 w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-20 items-center">
+          
+          {/* Left: The Hook */}
+          <div>
             <FadeIn delay={0} y={20}>
-              <h2
-                className="font-black italic leading-[1.02] tracking-tight text-[#ffffff] mb-6 sm:mb-8"
-                style={{ fontSize: "clamp(2.5rem, 6vw, 4.5rem)" }}
-              >
+              <p className="flex items-center gap-2 font-medium uppercase tracking-[0.25em] text-[#ffffff]/50 text-xs mb-5 sm:mb-8">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#ffffff]/50 inline-block" />
                 About Me
-              </h2>
-            </FadeIn>
-            <FadeIn delay={0.1} y={20}>
-              <p
-                className="text-[#ffffff]/90 font-light leading-relaxed bg-black/20 p-4 sm:p-6 rounded-xl backdrop-blur-sm"
-                style={{ fontSize: "clamp(1rem, 1.8vw, 1.2rem)" }}
-              >
-                {ABOUT_TEXT}
               </p>
             </FadeIn>
+            <FadeIn delay={0.1} y={20}>
+              <h2
+                className="font-podium uppercase leading-[0.95] tracking-tight text-white"
+                style={{ fontSize: "clamp(2.5rem, 5vw, 4.5rem)" }}
+              >
+                I engineer data<br />
+                and AI systems<br />
+                that scale.
+              </h2>
+            </FadeIn>
           </div>
+
+          {/* Right: The Details */}
+          <div>
+            <FadeIn delay={0.2} y={20}>
+              <div className="flex flex-col gap-6">
+                <p
+                  className="font-kanit font-light text-[#ffffff]/70 leading-relaxed"
+                  style={{ fontSize: "clamp(1rem, 1.5vw, 1.25rem)" }}
+                >
+                  From building the foundations at <strong className="text-white font-normal">Tesla</strong> and <strong className="text-white font-normal">Nokia</strong> to architecting the future of GenAI, I specialize in bridging the gap between raw data and production-grade intelligence.
+                </p>
+                <p
+                  className="font-kanit font-light text-[#ffffff]/50 leading-relaxed"
+                  style={{ fontSize: "clamp(0.9rem, 1.2vw, 1.1rem)" }}
+                >
+                  Armed with an M.Sc. in Data Science, I thrive on turning complex technical challenges into seamless, high-performance solutions. Whether it's designing robust data pipelines, implementing RAG systems, or deploying scalable MLOps architectures, my goal is simple: to build something incredible.
+                </p>
+              </div>
+            </FadeIn>
+          </div>
+          
         </div>
       </section>
     </>
