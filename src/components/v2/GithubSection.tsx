@@ -4,10 +4,29 @@ import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import FadeIn from "./FadeIn";
 
-// Disable SSR for the calendar to prevent hydration mismatch
+// Fix: next/dynamic with async factory correctly resolves named exports.
+// The old pattern `.then((mod) => mod.GitHubCalendar)` resolved to undefined
+// because next/dynamic couldn't unwrap a chained promise into a component.
 const GitHubCalendar = dynamic(
-  () => import("react-github-calendar").then((mod) => mod.GitHubCalendar),
-  { ssr: false }
+  async () => {
+    const mod = await import("react-github-calendar");
+    return mod.GitHubCalendar;
+  },
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full flex flex-col gap-3 animate-pulse">
+        <div className="h-4 w-40 bg-white/10 rounded mb-2" />
+        {Array.from({ length: 7 }).map((_, i) => (
+          <div key={i} className="flex gap-1">
+            {Array.from({ length: 53 }).map((_, j) => (
+              <div key={j} className="w-[14px] h-[14px] rounded-sm bg-white/5" />
+            ))}
+          </div>
+        ))}
+      </div>
+    ),
+  }
 );
 
 export default function GithubSection() {
@@ -17,7 +36,7 @@ export default function GithubSection() {
   return (
     <section id="github" className="relative w-full py-24 bg-[#0a0a0a] z-40 border-t border-white/5 overflow-hidden">
       <div className="mx-auto max-w-6xl px-6 md:px-12 relative z-10 flex flex-col items-center">
-        
+
         <FadeIn delay={0} y={20}>
           <div className="text-center mb-16">
             <p className="flex items-center justify-center gap-2 font-medium uppercase tracking-[0.25em] text-white/50 text-xs mb-3">
@@ -34,8 +53,8 @@ export default function GithubSection() {
           <div className="bg-[#111] border border-white/10 rounded-[24px] p-6 sm:p-10 w-full overflow-x-auto">
             <div className="min-w-[800px] flex justify-center">
               {mounted && (
-                <GitHubCalendar 
-                  username="saranjthilak" 
+                <GitHubCalendar
+                  username="saranjthilak"
                   colorScheme="dark"
                   theme={{
                     dark: ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353'],
