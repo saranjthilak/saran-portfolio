@@ -97,15 +97,8 @@ const ContactForm = () => {
           {/* Honeypot — real users never see or tab to this; bots fill it and get silently dropped */}
           <div
             aria-hidden="true"
-            style={{
-              position: "absolute",
-              left: "-9999px",
-              top: "auto",
-              width: "1px",
-              height: "1px",
-              overflow: "hidden",
-              pointerEvents: "none",
-            }}
+            className="hidden"
+            style={{ display: "none" }}
           >
             <label htmlFor="website">Website</label>
             <input

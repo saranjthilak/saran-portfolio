@@ -152,10 +152,22 @@ const ContactSection = () => {
             className="rounded-[1.75rem] p-6 sm:p-8 relative overflow-hidden backdrop-blur-md"
             style={{ background: "rgba(20,20,20,0.4)", border: "1px solid rgba(255,255,255,0.15)" }}
           >
-            {/* Honeypot */}
-            <div aria-hidden="true" style={{ position: "absolute", left: "-9999px", width: 1, height: 1, overflow: "hidden", pointerEvents: "none" }}>
+            {/* Honeypot — visually hidden from real users, bots fill it and get dropped */}
+            <div
+              aria-hidden="true"
+              className="hidden"
+              style={{ display: "none" }}
+            >
               <label htmlFor="v2-website">Website</label>
-              <input id="v2-website" type="text" name="website" tabIndex={-1} autoComplete="off" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} />
+              <input
+                id="v2-website"
+                type="text"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+              />
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
