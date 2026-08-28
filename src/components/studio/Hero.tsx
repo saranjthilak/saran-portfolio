@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
@@ -280,7 +280,7 @@ const Hero = ({ ready, scrollToSection, onResume }: HeroProps) => {
         <motion.div {...fadeUp(0.35)} className="mb-6">
           <span className="inline-flex items-center gap-2.5 rounded-full border border-accent/30 bg-accent/5 px-5 py-2 font-mono text-[10px] uppercase tracking-[0.25em] text-accent backdrop-blur-sm">
             <span className="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_8px_hsl(var(--accent)/0.8)]" />
-            Data Engineer &amp; Generative AI Specialist
+            Data Engineer &amp; GenAI Specialist
           </span>
         </motion.div>
 

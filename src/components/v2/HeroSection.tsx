@@ -134,7 +134,7 @@ const HeroSection = () => {
               {/* Card Bottom Details */}
               <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#14181f] via-[#14181f]/95 to-transparent flex flex-col justify-end p-6">
                 <h3 className="text-[1.35rem] font-black tracking-tighter text-white leading-tight">Saran Jaya Thilak</h3>
-                <p className="text-[#00df8f] text-xs uppercase tracking-widest font-semibold mt-1">AI Engineer</p>
+                <p className="text-[#00df8f] text-xs uppercase tracking-widest font-semibold mt-1">Data Engineer &amp; GenAI Specialist</p>
                 
                 {/* Barcode graphic */}
                 <div className="w-full h-6 mt-4 flex gap-[2px] opacity-40">
