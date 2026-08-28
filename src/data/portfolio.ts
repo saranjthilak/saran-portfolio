@@ -38,6 +38,7 @@ export const projects = [
     skills: ["RAG", "Multimodal", "LangChain", "Python", "LLMs", "Vector DB"],
     image: "/images/projects/project-multimodal-rag.png",
     url: "https://github.com/saranjthilak/Multimodel_RAG",
+    liveUrl: undefined as string | undefined, // set to a URL string when a hosted demo is available
     featured: true,
     pipeline: [
       { label: "Docs", icon: "file" },
@@ -54,6 +55,7 @@ export const projects = [
     skills: ["FAISS", "CLIP", "Triton", "MongoDB", "Docker"],
     image: "/images/projects/project-product-matching.png",
     url: "https://github.com/saranjthilak/ai_poduct_matching",
+    liveUrl: undefined as string | undefined,
     featured: true,
     pipeline: [
       { label: "Image", icon: "image" },
@@ -70,6 +72,7 @@ export const projects = [
     skills: ["RAG", "LangChain", "Embeddings", "LLMs", "Python"],
     image: "/images/projects/project-knowledge-assistant.png",
     url: "https://github.com/saranjthilak/Car-Manual-RAG-Assistant",
+    liveUrl: undefined as string | undefined,
     featured: true,
     pipeline: [
       { label: "Manual PDF", icon: "file" },

@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { projects } from "@/data/portfolio";
-import LiveProjectButton from "./LiveProjectButton";
+import ProjectLinks from "./LiveProjectButton";
 
 // Use first 3 featured projects from portfolio.ts
 const FEATURED = projects.filter((p) => p.featured).slice(0, 3);
@@ -59,7 +59,7 @@ const ProjectCard = ({ project, index, progress }: ProjectCardProps) => {
             >
               {project.title}
             </span>
-            <LiveProjectButton href={project.url} />
+            <ProjectLinks githubUrl={project.url} liveUrl={project.liveUrl} />
           </div>
         </div>
 
