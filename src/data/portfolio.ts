@@ -188,19 +188,33 @@ export const certifications = [
     logo: "☁️"
   },
   {
-    title: "SQL for Data Science",
-    issuer: "UC Davis",
-    logo: "🎓"
-  },
-  {
     title: "OCI 2025 Certified Generative AI Professional",
+    level: "Professional",
     issuer: "Oracle",
     logo: "🤖"
   },
   {
     title: "OCI 2025 Certified AI Foundations Associate",
+    level: "Associate",
     issuer: "Oracle",
     logo: "🧠"
+  },
+  {
+    title: "LangChain Application Development",
+    level: "Certificate",
+    issuer: "DeepLearning.AI / LangChain",
+    logo: "🔗"
+  },
+  {
+    title: "Terraform Basics",
+    level: "Certificate",
+    issuer: "HashiCorp",
+    logo: "🏗️"
+  },
+  {
+    title: "SQL for Data Science",
+    issuer: "UC Davis",
+    logo: "🎓"
   }
 ];
 
@@ -208,25 +222,25 @@ export const achievements = [
   {
     icon: "⚡",
     title: "40% Boost in RAG Processing",
-    description: "Implemented advanced RAG techniques that increased LLM processing capabilities.",
-    gradient: "from-green-500 to-emerald-600"
-  },
-  {
-    icon: "🚀",
-    title: "30% Embedding Pipeline Accuracy Gain",
-    description: "Improved embedding pipelines for superior real-time LLM performance.",
-    gradient: "from-blue-500 to-cyan-600"
+    description: "Engineered high-throughput RAG pipeline with optimized chunking and embedding retrieval.",
+    gradient: "from-amber-400 to-orange-500"
   },
   {
     icon: "🎯",
-    title: "25% Vector DB Efficiency Boost",
-    description: "Optimized vector database retrieval speed for AI systems.",
-    gradient: "from-purple-500 to-pink-600"
+    title: "30% Embedding Pipeline Accuracy Gain",
+    description: "Designed multimodal semantic search reducing query latency and improving match relevance.",
+    gradient: "from-emerald-400 to-teal-500"
   },
   {
-    icon: "🔬",
+    icon: "⚡",
+    title: "25% Vector DB Efficiency Boost",
+    description: "Implemented FAISS vector similarity search and quantized CLIP embeddings via NVIDIA Triton.",
+    gradient: "from-cyan-400 to-blue-500"
+  },
+  {
+    icon: "📄",
     title: "Two IEEE Machine Learning Publications",
-    description: "Authored and published innovative research in applied machine learning.",
+    description: "Published peer-reviewed research on solar power PR estimation and air ticket price prediction.",
     gradient: "from-pink-600 to-yellow-400"
   },
   {
@@ -249,8 +263,8 @@ export const achievements = [
   },
   {
     icon: "🏅",
-    title: "4 Professional AI & Cloud Certifications",
-    description: "AWS Solutions Architect, Oracle Gen AI Professional, Oracle AI Foundations, SQL for Data Science.",
+    title: "6 Professional AI & Cloud Certifications",
+    description: "AWS Solutions Architect, Oracle GenAI, LangChain, Terraform, Oracle AI Foundations, SQL for Data Science.",
     gradient: "from-yellow-400 to-amber-500"
   }
 ];
