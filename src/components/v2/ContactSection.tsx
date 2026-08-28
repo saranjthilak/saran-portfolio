@@ -110,14 +110,14 @@ const ContactSection = () => {
               className="font-podium text-white uppercase leading-[0.92] tracking-tight"
               style={{ fontSize: "clamp(2.8rem, 8vw, 7rem)" }}
             >
-              Design.<br />Disrupt.<br />Conquer.
+              Build.<br />Ship.<br />Scale.
             </h2>
           </div>
 
           {/* Subtext */}
           <div className="animate-fade-up-delay-2 mt-6 lg:mt-8">
             <p className="font-inter text-white/70 text-sm sm:text-base leading-relaxed max-w-md">
-              We build reliable data engineering &amp; generative AI systems that don&apos;t just turn heads — <strong className="text-white">they lead.</strong>
+              I design and deliver production-grade RAG systems, end-to-end MLOps pipelines, and scalable cloud data infrastructure — built to handle real workloads, not just demos. If you have a data or AI problem worth solving, <strong className="text-white">let&apos;s get to work.</strong>
             </p>
           </div>
 
