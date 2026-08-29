@@ -5,11 +5,11 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { projects } from "@/data/portfolio";
 import ProjectLinks from "./LiveProjectButton";
 
-// Use first 3 featured projects from portfolio.ts
-const FEATURED = projects.filter((p) => p.featured).slice(0, 3);
+// All featured projects from portfolio.ts
+const FEATURED = projects.filter((p) => p.featured);
 
 const CARD_SCALE_STEP = 0.03;
-const TOTAL_CARDS = 3;
+const TOTAL_CARDS = FEATURED.length;
 
 interface ProjectCardProps {
   project: (typeof FEATURED)[number];
