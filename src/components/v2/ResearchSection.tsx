@@ -34,12 +34,12 @@ export default function ResearchSection() {
         `
       }} />
 
-      <section id="research" className="relative min-h-screen w-full font-geist z-40 bg-[#111111]">
+      <section id="research" className="relative min-h-screen w-full font-geist z-40 bg-[#0d0d0d]">
         {/* Background Video (Fixed behind content) */}
         <div ref={videoRef} className="absolute inset-0 overflow-hidden pointer-events-none">
           {isInView && (
             <video
-              className="absolute inset-0 h-full w-full object-cover opacity-80"
+              className="absolute inset-0 h-full w-full object-cover opacity-30"
               autoPlay
               loop
               muted
@@ -48,7 +48,7 @@ export default function ResearchSection() {
             />
           )}
           {/* Subtle gradient overlay to ensure text readability */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/35 to-black/70" />
         </div>
 
         {/* Content Wrapper */}
