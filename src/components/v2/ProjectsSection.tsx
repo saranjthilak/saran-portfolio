@@ -31,7 +31,7 @@ const ProjectCard = ({ project, index, progress }: ProjectCardProps) => {
     >
       <motion.div
         style={{ scale }}
-        className="w-full h-full rounded-[40px] sm:rounded-[50px] md:rounded-[60px] border-2 border-[#ffffff] p-4 sm:p-6 md:p-8 flex flex-col gap-4"
+        className="w-full h-full rounded-[40px] sm:rounded-[50px] md:rounded-[60px] border-2 border-[#ffffff] p-4 sm:p-6 md:p-8 flex flex-col gap-3"
         layoutId={`project-card-${index}`}
         id={`project-${index}`}
         aria-label={project.title}
@@ -62,6 +62,60 @@ const ProjectCard = ({ project, index, progress }: ProjectCardProps) => {
             <ProjectLinks githubUrl={project.url} liveUrl={project.liveUrl} />
           </div>
         </div>
+
+        {/* ── Case Study Strip ── */}
+        {(project.problem || project.approach || project.result) && (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            {project.problem && (
+              <div className="flex flex-col gap-0.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl px-3 py-2">
+                <span
+                  className="font-kanit font-bold uppercase tracking-widest text-[#00df8f]"
+                  style={{ fontSize: "clamp(0.48rem, 0.7vw, 0.6rem)" }}
+                >
+                  Problem
+                </span>
+                <span
+                  className="font-kanit text-white/55 leading-snug"
+                  style={{ fontSize: "clamp(0.6rem, 0.85vw, 0.72rem)" }}
+                >
+                  {project.problem}
+                </span>
+              </div>
+            )}
+            {project.approach && (
+              <div className="flex flex-col gap-0.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl px-3 py-2">
+                <span
+                  className="font-kanit font-bold uppercase tracking-widest text-[#38bdf8]"
+                  style={{ fontSize: "clamp(0.48rem, 0.7vw, 0.6rem)" }}
+                >
+                  Approach
+                </span>
+                <span
+                  className="font-kanit text-white/55 leading-snug"
+                  style={{ fontSize: "clamp(0.6rem, 0.85vw, 0.72rem)" }}
+                >
+                  {project.approach}
+                </span>
+              </div>
+            )}
+            {project.result && (
+              <div className="flex flex-col gap-0.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl px-3 py-2">
+                <span
+                  className="font-kanit font-bold uppercase tracking-widest text-[#f59e0b]"
+                  style={{ fontSize: "clamp(0.48rem, 0.7vw, 0.6rem)" }}
+                >
+                  Result
+                </span>
+                <span
+                  className="font-kanit text-white/55 leading-snug"
+                  style={{ fontSize: "clamp(0.6rem, 0.85vw, 0.72rem)" }}
+                >
+                  {project.result}
+                </span>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Hero image */}
         <div className="flex-1 min-h-0 rounded-[40px] sm:rounded-[50px] md:rounded-[60px] overflow-hidden">
