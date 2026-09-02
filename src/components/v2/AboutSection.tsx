@@ -58,13 +58,13 @@ const AboutSection = () => {
                   className="font-kanit font-light text-[#ffffff]/70 leading-relaxed"
                   style={{ fontSize: "clamp(1rem, 1.5vw, 1.25rem)" }}
                 >
-                  From building the foundations at <strong className="text-white font-normal">Tesla</strong> and <strong className="text-white font-normal">Nokia</strong> to architecting the future of GenAI, I specialize in bridging the gap between raw data and production-grade intelligence.
+                  I spent nine years keeping mission-critical infrastructure alive — first at <strong className="text-white font-normal">Nokia</strong>, then at <strong className="text-white font-normal">Huawei</strong> — managing telecom and cloud systems at 99.9%+ uptime, 24×7, with no tolerance for failure. That decade of operational discipline shaped how I think about reliability, observability, and what "production-ready" actually means.
                 </p>
                 <p
                   className="font-kanit font-light text-[#ffffff]/50 leading-relaxed"
                   style={{ fontSize: "clamp(0.9rem, 1.2vw, 1.1rem)" }}
                 >
-                  Armed with an M.Sc. in Data Science, I thrive on turning complex technical challenges into seamless, high-performance solutions. Whether it's designing robust data pipelines, implementing RAG systems, or deploying scalable MLOps architectures, my goal is simple: to build something incredible.
+                  Now, with an M.Sc. in Data Science and hands-on work at <strong className="text-white font-normal">Tesla</strong> building RAG chatbots and Airflow pipelines, I bring that same infrastructure mindset to AI engineering. I build GenAI and data systems the way I once ran networks — with the assumption that they have to hold up under real load, not just in a notebook.
                 </p>
               </div>
             </FadeIn>
