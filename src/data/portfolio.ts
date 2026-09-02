@@ -40,6 +40,9 @@ export const projects = [
     url: "https://github.com/saranjthilak/Multimodel_RAG",
     liveUrl: undefined as string | undefined, // set to a URL string when a hosted demo is available
     featured: true,
+    problem: "LLMs hallucinate on private, mixed-media data. Needed a grounded, citation-backed system that works on both text and images without fine-tuning.",
+    approach: "Full pipeline — chunking, multimodal embeddings, FAISS retrieval, cross-encoder reranking, and grounded LLM generation via LangChain, prioritising retrieval over fine-tuning for data efficiency.",
+    result: "Production-ready system with citation traces; architecture mirrors the setup that drove a 25% improvement in customer query efficiency.",
     pipeline: [
       { label: "Docs", icon: "file" },
       { label: "Chunk", icon: "layers" },
@@ -57,6 +60,9 @@ export const projects = [
     url: "https://github.com/saranjthilak/ai_poduct_matching",
     liveUrl: undefined as string | undefined,
     featured: true,
+    problem: "Text-based search fails for visual product catalogues. Needed sub-second image similarity search at scale without a heavyweight vector DB.",
+    approach: "Quantized CLIP embeddings via NVIDIA Triton for low-latency inference; FAISS for ANN search to cut overhead vs. a full vector DB; MongoDB stores product metadata.",
+    result: "25% vector DB efficiency boost and 30% match-accuracy gain over keyword search baselines.",
     pipeline: [
       { label: "Image", icon: "image" },
       { label: "CLIP", icon: "cpu" },
@@ -74,6 +80,9 @@ export const projects = [
     url: "https://github.com/saranjthilak/Car-Manual-RAG-Assistant",
     liveUrl: undefined as string | undefined,
     featured: true,
+    problem: "Car manuals are dense PDFs users rarely consult. Needed a natural-language interface that surfaces the right section instantly without hallucinating.",
+    approach: "RAG over chunked PDF content — LangChain orchestration, sentence-transformer embeddings, and vector DB retrieval — so answers stay grounded in the manual, not LLM priors.",
+    result: "Accurate, context-aware Q&A on domain-constrained documents; proves RAG viability as a fine-tuning alternative for closed-domain assistants.",
     pipeline: [
       { label: "Manual PDF", icon: "file" },
       { label: "Chunk", icon: "layers" },
@@ -91,6 +100,9 @@ export const projects = [
     url: "https://github.com/saranjthilak/Divvy-Bike-Data-End-to-End-Pipeline",
     liveUrl: undefined as string | undefined,
     featured: true,
+    problem: "Raw bike-share trip data needed to move from cloud storage to a queryable, visualised layer reliably and repeatably — with no manual steps.",
+    approach: "Infrastructure-as-code via Terraform on GCP; Airflow for scheduled orchestration; DBT for SQL transforms and testing; BigQuery as the warehouse; Looker Studio for dashboards.",
+    result: "Fully automated end-to-end pipeline from raw GCS files to live dashboard; demonstrates production-grade data engineering discipline beyond just model code.",
     pipeline: [
       { label: "GCS", icon: "cloud" },
       { label: "Airflow", icon: "workflow" },
