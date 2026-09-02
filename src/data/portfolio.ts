@@ -32,26 +32,6 @@ export const experience = [
 
 export const projects = [
   {
-    title: "Multimodal RAG System",
-    source: "Production RAG + Conversational AI",
-    description: "A production-ready Multimodal Retrieval-Augmented Generation system that supports conversational querying over text and image data. Handles chunking, embedding, reranking, and grounded LLM responses with citation traces — designed for real deployment, not demos.",
-    skills: ["RAG", "Multimodal", "LangChain", "Python", "LLMs", "Vector DB"],
-    image: "/images/projects/project-multimodal-rag.webp",
-    url: "https://github.com/saranjthilak/Multimodel_RAG",
-    liveUrl: undefined as string | undefined, // set to a URL string when a hosted demo is available
-    featured: true,
-    problem: "LLMs hallucinate on private, mixed-media data. Needed a grounded, citation-backed system that works on both text and images without fine-tuning.",
-    approach: "Full pipeline — chunking, multimodal embeddings, FAISS retrieval, cross-encoder reranking, and grounded LLM generation via LangChain, prioritising retrieval over fine-tuning for data efficiency.",
-    result: "Production-ready system with citation traces; architecture mirrors the setup that drove a 25% improvement in customer query efficiency.",
-    pipeline: [
-      { label: "Docs", icon: "file" },
-      { label: "Chunk", icon: "layers" },
-      { label: "Embed", icon: "cpu" },
-      { label: "Rerank", icon: "search" },
-      { label: "LLM", icon: "bot" },
-    ],
-  },
-  {
     title: "AI Product Matching System",
     source: "FAISS + Triton Inference + CLIP",
     description: "Developed an image-based product search engine using FAISS for vector similarity and a quantized CLIP model served via NVIDIA Triton Inference Server. Integrated MongoDB and Docker for fast, scalable product matching.",
@@ -69,6 +49,26 @@ export const projects = [
       { label: "FAISS", icon: "search" },
       { label: "Triton", icon: "server" },
       { label: "MongoDB", icon: "database" },
+    ],
+  },
+  {
+    title: "Multimodal RAG System",
+    source: "Production RAG + Conversational AI",
+    description: "A production-ready Multimodal Retrieval-Augmented Generation system that supports conversational querying over text and image data. Handles chunking, embedding, reranking, and grounded LLM responses with citation traces — designed for real deployment, not demos.",
+    skills: ["RAG", "Multimodal", "LangChain", "Python", "LLMs", "Vector DB"],
+    image: "/images/projects/project-multimodal-rag.webp",
+    url: "https://github.com/saranjthilak/Multimodel_RAG",
+    liveUrl: undefined as string | undefined, // set to a URL string when a hosted demo is available
+    featured: true,
+    problem: "LLMs hallucinate on private, mixed-media data. Needed a grounded, citation-backed system that works on both text and images without fine-tuning.",
+    approach: "Full pipeline — chunking, multimodal embeddings, FAISS retrieval, cross-encoder reranking, and grounded LLM generation via LangChain, prioritising retrieval over fine-tuning for data efficiency.",
+    result: "Production-ready system with citation traces; architecture mirrors the setup that drove a 25% improvement in customer query efficiency.",
+    pipeline: [
+      { label: "Docs", icon: "file" },
+      { label: "Chunk", icon: "layers" },
+      { label: "Embed", icon: "cpu" },
+      { label: "Rerank", icon: "search" },
+      { label: "LLM", icon: "bot" },
     ],
   },
   {
@@ -111,6 +111,7 @@ export const projects = [
       { label: "Looker", icon: "chart" },
     ],
   },
+
   {
     title: "German Learning App",
     source: "TypeScript | AI Tutor | A1–C1",
