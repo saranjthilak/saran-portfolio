@@ -59,7 +59,7 @@ const ProjectCard = ({ project, index, progress }: ProjectCardProps) => {
             >
               {project.title}
             </span>
-            <ProjectLinks githubUrl={project.url} liveUrl={project.liveUrl} demoUrl={project.demoUrl} />
+            <ProjectLinks githubUrl={project.url} liveUrl={project.liveUrl} />
           </div>
         </div>
 
@@ -117,25 +117,14 @@ const ProjectCard = ({ project, index, progress }: ProjectCardProps) => {
           </div>
         )}
 
-        {/* Hero image or demo video */}
+        {/* Hero image */}
         <div className="flex-1 min-h-0 rounded-[40px] sm:rounded-[50px] md:rounded-[60px] overflow-hidden">
-          {project.demoVideo ? (
-            <video
-              src={project.demoVideo}
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-full object-cover object-center"
-            />
-          ) : (
-            <img
-              src={project.image}
-              alt={`${project.title} screenshot`}
-              className="w-full h-full object-cover object-center"
-              loading="lazy"
-            />
-          )}
+          <img
+            src={project.image}
+            alt={`${project.title} screenshot`}
+            className="w-full h-full object-cover object-center"
+            loading="lazy"
+          />
         </div>
       </motion.div>
     </div>
