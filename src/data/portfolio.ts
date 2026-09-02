@@ -73,8 +73,8 @@ export const projects = [
   },
   {
     title: "Car Manual RAG Assistant",
-    source: "RAG + Vector Embeddings + LLMs",
-    description: "AI-powered RAG assistant that answers car manual queries using semantic search, vector embeddings, and LLMs for accurate, context-aware responses.",
+    source: "Closed-Domain PDF QA",
+    description: "Domain-specific RAG over a single corpus of automotive PDFs. A focused proof-of-concept for constrained document QA — no multimodal retrieval, no general-purpose chat, just precise grounded answers from a closed source.",
     skills: ["RAG", "LangChain", "Embeddings", "LLMs", "Python"],
     image: "/images/projects/project-knowledge-assistant.webp",
     url: "https://github.com/saranjthilak/Car-Manual-RAG-Assistant",
