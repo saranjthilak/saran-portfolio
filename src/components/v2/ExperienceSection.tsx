@@ -49,7 +49,7 @@ const ExperienceSection = () => {
             className="font-black leading-[1.02] tracking-tight text-[#ffffff] mb-12 sm:mb-16 md:mb-20"
             style={{ fontSize: "clamp(2.5rem, 6vw, 4.5rem)" }}
           >
-            Nine years, four teams.
+            Nine years, <span className="accent-serif">four teams.</span>
           </h2>
         </FadeIn>
 

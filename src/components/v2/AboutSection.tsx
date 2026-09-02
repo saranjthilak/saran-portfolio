@@ -45,7 +45,7 @@ const AboutSection = () => {
               >
                 I engineer data<br />
                 and AI systems<br />
-                that scale.
+                that <span className="accent-serif">scale.</span>
               </h2>
             </FadeIn>
           </div>

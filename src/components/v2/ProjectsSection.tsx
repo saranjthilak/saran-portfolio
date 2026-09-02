@@ -155,7 +155,7 @@ const ProjectsSection = () => {
           className="hero-heading font-black uppercase leading-[1.02] tracking-tight"
           style={{ fontSize: "clamp(2.5rem, 6vw, 4.5rem)" }}
         >
-          Projects
+          Selected <span className="accent-serif">projects</span>
         </h2>
       </div>
 

@@ -105,6 +105,16 @@
     font-family: var(--font-kanit), 'Kanit', sans-serif;
     overflow-x: clip;
   }
+
+  /* Signature headline accent: italic serif word in brand green */
+  .accent-serif {
+    font-family: var(--font-serif), 'Instrument Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: -0.01em;
+    color: #00df8f;
+  }
 }
 
 @layer components {

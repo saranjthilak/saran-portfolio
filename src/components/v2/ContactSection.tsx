@@ -110,7 +110,7 @@ const ContactSection = () => {
               className="font-podium text-white uppercase leading-[0.92] tracking-tight"
               style={{ fontSize: "clamp(2.8rem, 8vw, 7rem)" }}
             >
-              Build.<br />Ship.<br />Scale.
+              Build.<br />Ship.<br /><span className="accent-serif">Scale.</span>
             </h2>
           </div>
 

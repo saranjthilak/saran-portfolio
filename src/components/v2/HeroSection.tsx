@@ -68,7 +68,7 @@ const HeroSection = () => {
               className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-black leading-[0.92] tracking-tighter mb-6"
             >
               I build AI systems<br/>
-              that hold up <span className="text-transparent" style={{ WebkitTextStroke: '2px #00df8f' }}>in production</span>
+              that hold up <span className="accent-serif">in production</span>
               <span className="text-[#00df8f]">.</span>
             </motion.h1>
             
