@@ -41,7 +41,7 @@ const HeroSection = () => {
 
       {/* Massive Typography Graphic */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-        <h1 className="text-[20vw] font-black opacity-[0.02] tracking-tighter">ENGINEER</h1>
+        <h1 className="text-[20vw] font-black opacity-[0.02] tracking-tighter">PRODUCTION</h1>
       </div>
 
       {/* Hero Content */}
@@ -65,10 +65,10 @@ const HeroSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ delay: 0.1 }}
-              className="text-6xl sm:text-7xl md:text-8xl lg:text-[7rem] font-black leading-[0.9] tracking-tighter mb-6"
+              className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-black leading-[0.92] tracking-tighter mb-6"
             >
-              AI-NATIVE<br/>
-              <span className="text-transparent" style={{ WebkitTextStroke: '2px #00df8f' }}>PRODUCTS</span>
+              I build AI systems<br/>
+              that hold up <span className="text-transparent" style={{ WebkitTextStroke: '2px #00df8f' }}>in production</span>
               <span className="text-[#00df8f]">.</span>
             </motion.h1>
             
@@ -77,9 +77,9 @@ const HeroSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ delay: 0.2 }}
-              className="text-gray-400 max-w-md text-lg leading-relaxed mb-10"
+              className="text-gray-400 max-w-lg text-base leading-relaxed mb-10"
             >
-              I build reliable RAG systems, scalable MLOps pipelines, and intelligent products that empower businesses to lead in the AI era.
+              RAG chatbots that cut support load by 25%. Airflow pipelines running at 99.9% reliability. I design and ship data&nbsp;+&nbsp;AI infrastructure that doesn&apos;t break under real workloads.
             </motion.p>
             
             <motion.div 
