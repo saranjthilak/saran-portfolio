@@ -157,6 +157,27 @@
 }
 
 @layer utilities {
+  /* Architectural Blueprint — dotted grid backdrop */
+  .blueprint-dots {
+    background-image: radial-gradient(rgba(0, 223, 143, 0.5) 0.5px, transparent 0.5px);
+    background-size: 30px 30px;
+  }
+  /* Blueprint CTA — offset frame, slides on hover */
+  .btn-frame {
+    position: relative;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn-frame::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    transform: translate(6px, 6px);
+    pointer-events: none;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn-frame:hover { transform: translate(3px, 3px); }
+  .btn-frame:hover::after { transform: translate(9px, 9px); }
   .text-watermark { font-size: 13rem; line-height: 1; }
   .tnum { font-variant-numeric: tabular-nums; font-family: var(--font-jetbrains-mono), 'JetBrains Mono', ui-monospace, monospace; }
   .vertical-text { writing-mode: vertical-rl; }
