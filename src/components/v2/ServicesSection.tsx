@@ -2,12 +2,19 @@
 
 import { motion } from "framer-motion";
 import FadeIn from "./FadeIn";
+import {
+  Database,
+  BrainCircuit,
+  GitBranch,
+  Cloud,
+  Monitor,
+} from "lucide-react";
 
 const EXPERTISE = [
   {
     number: "01",
     name: "Data Engineering",
-    icon: "⚙️",
+    icon: Database,
     description:
       "Designing and running production data pipelines with Airflow and DBT, moving and modeling data reliably at scale on BigQuery.",
     tags: ["Airflow", "DBT", "BigQuery", "ETL/ELT"],
@@ -15,7 +22,7 @@ const EXPERTISE = [
   {
     number: "02",
     name: "GenAI & RAG Systems",
-    icon: "🤖",
+    icon: BrainCircuit,
     description:
       "Building retrieval-augmented generation systems end to end — ingestion, embeddings, vector search, and streaming LLM responses — with LangChain and modern inference APIs.",
     tags: ["LangChain", "Vector DB", "LLMs", "Embeddings"],
@@ -23,7 +30,7 @@ const EXPERTISE = [
   {
     number: "03",
     name: "MLOps",
-    icon: "🔄",
+    icon: GitBranch,
     description:
       "Standing up model registries, experiment tracking, and versioned deployments so machine learning systems ship and stay reliable in production.",
     tags: ["MLflow", "CI/CD", "Model Registry", "Monitoring"],
@@ -31,7 +38,7 @@ const EXPERTISE = [
   {
     number: "04",
     name: "Cloud Architecture",
-    icon: "☁️",
+    icon: Cloud,
     description:
       "Designing secure, scalable infrastructure on AWS and GCP, drawing on prior cloud and networking engineering work at Tesla, Nokia, and Huawei.",
     tags: ["AWS", "GCP", "Terraform", "IaC"],
@@ -39,7 +46,7 @@ const EXPERTISE = [
   {
     number: "05",
     name: "Full-Stack Development",
-    icon: "🖥️",
+    icon: Monitor,
     description:
       "Shipping the frontend and backend both — from FastAPI services to React interfaces — so a system is usable end to end, not just functional.",
     tags: ["FastAPI", "React", "Docker", "REST APIs"],
@@ -96,71 +103,73 @@ const ServicesSection = () => {
           </div>
         </FadeIn>
 
-        {/* Cards grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5">
-          {EXPERTISE.map((item, i) => (
-            <motion.div
-              key={item.number}
-              custom={i}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
-              variants={cardVariants}
-              whileHover="hover"
-              className={`group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] p-7 sm:p-8 flex flex-col gap-5 overflow-hidden cursor-default transition-colors duration-300 hover:border-[#00df8f]/30 hover:bg-white/[0.05]
-                ${i === 4 ? "md:col-span-2" : ""}
-              `}
-            >
-              {/* Hover glow */}
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-3xl"
-                style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(0,223,143,0.07) 0%, transparent 70%)" }}
-              />
-
-              {/* Top row: number + icon */}
-              <div className="flex items-start justify-between">
-                <span
-                  className="font-black text-[#00df8f] leading-none select-none"
-                  style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)", opacity: 0.25 }}
-                >
-                  {item.number}
-                </span>
-                <span className="text-2xl opacity-60 group-hover:opacity-100 transition-opacity duration-300">
-                  {item.icon}
-                </span>
-              </div>
-
-              {/* Name */}
-              <h3
-                className="font-bold uppercase tracking-wide text-white leading-tight"
-                style={{ fontSize: "clamp(1rem, 2vw, 1.35rem)" }}
+        {/* Cards grid: 3 cols desktop, 2 tablet, 1 mobile */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5">
+          {EXPERTISE.map((item, i) => {
+            const Icon = item.icon;
+            return (
+              <motion.div
+                key={item.number}
+                custom={i}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-60px" }}
+                variants={cardVariants}
+                whileHover="hover"
+                className="group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] p-7 sm:p-8 flex flex-col gap-5 overflow-hidden cursor-default transition-all duration-300 hover:border-[#00df8f]/30 hover:bg-white/[0.05] hover:-translate-y-1"
               >
-                {item.name}
-              </h3>
+                {/* Hover glow */}
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-3xl"
+                  style={{
+                    background:
+                      "radial-gradient(ellipse at 50% 0%, rgba(0,223,143,0.07) 0%, transparent 70%)",
+                  }}
+                />
 
-              {/* Description */}
-              <p
-                className="font-light text-white/50 leading-relaxed flex-1"
-                style={{ fontSize: "clamp(0.8rem, 1.1vw, 0.95rem)" }}
-              >
-                {item.description}
-              </p>
-
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2 pt-1">
-                {item.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-[10px] font-semibold uppercase tracking-widest text-[#00df8f]/70 border border-[#00df8f]/20 rounded-full px-2.5 py-0.5 bg-[#00df8f]/[0.05]"
-                  >
-                    {tag}
+                {/* Top row: icon + number */}
+                <div className="flex items-start justify-between relative z-10">
+                  <div className="inline-flex items-center justify-center w-11 h-11 rounded-2xl border border-white/[0.08] bg-white/[0.04] text-[#00df8f] transition-colors duration-300 group-hover:border-[#00df8f]/30 group-hover:bg-[#00df8f]/[0.07]">
+                    <Icon className="w-5 h-5" strokeWidth={1.5} />
+                  </div>
+                  <span className="font-mono text-xs font-medium uppercase tracking-[0.14em] text-white/30 select-none">
+                    {item.number}
                   </span>
-                ))}
-              </div>
+                </div>
 
-              {/* Bottom accent line */}
-              <div className="absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full bg-gradient-to-r from-[#00df8f]/60 to-transparent transition-all duration-500 rounded-b-3xl" />
-            </motion.div>
-          ))}
+                {/* Name */}
+                <h3
+                  className="font-bold uppercase tracking-wide text-white leading-tight relative z-10"
+                  style={{ fontSize: "clamp(1rem, 2vw, 1.35rem)" }}
+                >
+                  {item.name}
+                </h3>
+
+                {/* Description */}
+                <p
+                  className="font-light text-white/50 leading-relaxed flex-1 relative z-10"
+                  style={{ fontSize: "clamp(0.8rem, 1.1vw, 0.95rem)" }}
+                >
+                  {item.description}
+                </p>
+
+                {/* Tags */}
+                <div className="flex flex-wrap gap-2 pt-1 relative z-10">
+                  {item.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-[10px] font-semibold uppercase tracking-widest text-[#00df8f]/70 border border-[#00df8f]/20 rounded-full px-2.5 py-0.5 bg-[#00df8f]/[0.05]"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Bottom accent line */}
+                <div className="absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full bg-gradient-to-r from-[#00df8f]/60 to-transparent transition-all duration-500 rounded-b-3xl" />
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
