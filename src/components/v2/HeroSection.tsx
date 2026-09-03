@@ -13,14 +13,8 @@ const navLinks = [
 const HeroSection = () => {
   return (
     <div className="relative bg-[#0d1116] min-h-screen overflow-hidden text-white font-sans">
-      {/* Grid Background Overlay */}
-      <div 
-        className="absolute inset-0 pointer-events-none" 
-        style={{
-          backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)',
-          backgroundSize: '40px 40px'
-        }}
-      />
+      {/* Blueprint dotted grid background */}
+      <div className="blueprint-dots absolute inset-0 pointer-events-none opacity-10" />
 
       {/* Navbar */}
       <nav className="fixed top-0 w-full h-24 z-50 bg-[#0f1115]/80 backdrop-blur-md border-b border-white/10 flex items-center justify-between px-6 md:px-12">
