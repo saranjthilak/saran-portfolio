@@ -48,10 +48,9 @@ const HeroSection = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
-              className="flex items-center gap-3 mb-6"
+              className="mb-6 inline-block px-3 py-1.5 border border-[#00df8f]/60 text-xs uppercase tracking-widest"
             >
-              <div className="w-2 h-2 rounded-full bg-[#00df8f]"></div>
-              <span className="text-xs uppercase tracking-widest text-gray-400 font-semibold">DATA ENGINEER & GENAI SPECIALIST</span>
+              <span className="text-[#00df8f] font-mono font-medium">DATA ENGINEER & GENAI SPECIALIST</span>
             </motion.div>
             
             <motion.h1 
@@ -83,12 +82,11 @@ const HeroSection = () => {
               transition={{ delay: 0.3 }}
               className="flex flex-wrap items-center gap-6"
             >
-              <a href="#projects" className="group flex items-center gap-3 bg-gradient-to-r from-[#00df8f] to-[#00b373] text-black px-8 py-4 rounded-full font-bold text-sm uppercase tracking-wider hover:scale-105 transition-transform duration-300">
+              <a href="#projects" className="btn-frame group flex items-center gap-3 bg-[#00df8f] text-[#0d1116] px-8 py-4 font-bold text-sm uppercase tracking-wider">
                 View My Work
                 <ArrowUpRight className="w-5 h-5 group-hover:rotate-45 transition-transform" />
               </a>
-              <a href="#contact" className="flex items-center gap-3 bg-[#14181f] border border-white/10 px-8 py-4 rounded-full font-bold text-sm uppercase tracking-wider text-white hover:bg-white/5 transition-colors">
-                <div className="w-2 h-2 rounded-full bg-[#00df8f]"></div>
+              <a href="#contact" className="btn-frame flex items-center gap-3 bg-transparent border border-white/25 px-8 py-4 font-bold text-sm uppercase tracking-wider text-white hover:border-[#00df8f] hover:text-[#00df8f] transition-colors">
                 Contact Me
               </a>
             </motion.div>
@@ -96,17 +94,17 @@ const HeroSection = () => {
 
           {/* Right Column - Interactive ID Card */}
           <div className="relative flex justify-center lg:justify-end items-center h-[500px]">
-            {/* Lanyard String */}
-            <div className="absolute top-[-250px] left-1/2 -translate-x-1/2 w-[12px] h-[350px] bg-gradient-to-b from-[#0d1116] via-[#14181f] to-[#2a303c] border-x border-white/5 z-0" />
-            
+            {/* Ambient green glow behind card */}
+            <div className="absolute w-[320px] h-[320px] bg-[#00df8f]/10 blur-3xl rounded-full -z-0" />
+
             <motion.div
               drag
               dragElastic={0.2}
               dragConstraints={{ top: -50, bottom: 50, left: -50, right: 50 }}
               dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
-              animate={{ y: [0, -15, 0], rotateZ: [-1, 1, -1] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              className="relative z-10 w-[300px] h-[420px] bg-[#14181f] rounded-3xl border border-white/10 overflow-hidden shadow-2xl shadow-black/80 cursor-grab active:cursor-grabbing"
+              initial={{ rotate: 3 }}
+              whileHover={{ rotate: 0 }}
+              className="relative z-10 w-[300px] h-[420px] bg-[#161b22] border border-white/15 overflow-hidden shadow-2xl shadow-black/80 cursor-grab active:cursor-grabbing"
             >
               {/* Card Header Hole */}
               <div className="absolute top-4 left-1/2 -translate-x-1/2 w-16 h-3 bg-[#0d1116] rounded-full border border-white/10 z-20 shadow-inner" />
