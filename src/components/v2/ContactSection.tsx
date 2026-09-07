@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { Check, Crown, ArrowUpRight } from "lucide-react";
 import { useState, useRef } from "react";
 import { useInView } from "framer-motion";
+import BlueprintSectionHeader from "./BlueprintSectionHeader";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -77,7 +78,7 @@ const ContactSection = () => {
   return (
     <section
       id="contact"
-      className="font-inter rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-50 min-h-[100svh] flex items-center"
+      className="blueprint-section font-inter rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-50 min-h-[100svh] flex items-center border-t border-accent/20"
       style={{
         padding: "clamp(5rem, 9vw, 9rem) 1.25rem clamp(4rem, 6vw, 6rem)",
         boxShadow: "0 -10px 40px rgba(0,0,0,0.5)",
@@ -98,7 +99,9 @@ const ContactSection = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/35 to-black/70" />
       </div>
 
-      <div className="mr-auto ml-2 sm:ml-6 md:ml-[4vw] lg:ml-[6vw] w-full max-w-5xl grid gap-14 lg:grid-cols-[1fr_1fr] items-center relative z-10">
+      <div className="mx-auto w-full max-w-6xl relative z-10">
+        <BlueprintSectionHeader index="SECTION_04" label="Contact">
+          <div className="grid gap-14 lg:grid-cols-[1fr_1fr] items-center">
 
         {/* ── Left column ─────────────────────────────────────────── */}
         <div>
@@ -219,7 +222,8 @@ const ContactSection = () => {
               </div>
             </form>
           </div>
-        </div>
+          </div>
+        </BlueprintSectionHeader>
       </div>
     </section>
   );

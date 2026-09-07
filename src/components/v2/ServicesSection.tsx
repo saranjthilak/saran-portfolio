@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import FadeIn from "./FadeIn";
+import BlueprintSectionHeader from "./BlueprintSectionHeader";
 import {
   Database,
   BrainCircuit,
@@ -66,41 +67,21 @@ const ServicesSection = () => {
   return (
     <section
       id="skills"
-      className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-20 overflow-hidden"
+      className="blueprint-section font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-20 overflow-hidden border-t border-accent/20"
       style={{
-        background: "#0d1116",
         padding: "clamp(5rem, 9vw, 9rem) 1.25rem",
         boxShadow: "0 -10px 40px rgba(0,0,0,0.5)",
       }}
     >
-      {/* Subtle grid background */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.03]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)",
-          backgroundSize: "40px 40px",
-        }}
-      />
-
-      {/* Glow orb */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] max-w-[700px] max-h-[700px] bg-[#00df8f]/[0.04] rounded-full blur-[120px] pointer-events-none" />
-
       <div className="relative z-10 max-w-6xl mx-auto">
-        {/* Heading */}
         <FadeIn y={30}>
-          <div className="flex flex-col items-center text-center mb-16 sm:mb-20">
-            <p className="flex items-center gap-2 font-medium uppercase tracking-[0.25em] text-[#ffffff]/40 text-xs mb-5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#00df8f] inline-block" />
-              What I do
-            </p>
-            <h2
-              className="font-black uppercase leading-[1.02] tracking-tight text-white"
-              style={{ fontSize: "clamp(2.5rem, 6vw, 4.5rem)" }}
-            >
-              Expertise
-            </h2>
-          </div>
+          <BlueprintSectionHeader index="SECTION_02" label="Capabilities" align="center">
+            <div className="mb-16 text-center sm:mb-20">
+              <h2 className="font-black uppercase leading-[1.02] tracking-tight text-foreground" style={{ fontSize: "clamp(2.5rem, 6vw, 4.5rem)" }}>
+                Expertise
+              </h2>
+            </div>
+          </BlueprintSectionHeader>
         </FadeIn>
 
         {/* Cards grid: 3 cols desktop, 2 tablet, 1 mobile */}
@@ -116,30 +97,29 @@ const ServicesSection = () => {
                 viewport={{ once: true, margin: "-60px" }}
                 variants={cardVariants}
                 whileHover="hover"
-                className="group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] p-7 sm:p-8 flex flex-col gap-5 overflow-hidden cursor-default transition-all duration-300 hover:border-[#00df8f]/30 hover:bg-white/[0.05] hover:-translate-y-1"
+                 className="blueprint-cell group relative rounded-none border p-7 sm:p-8 flex flex-col gap-5 overflow-hidden cursor-default transition-all duration-300 hover:border-accent/50 hover:-translate-y-1"
               >
                 {/* Hover glow */}
                 <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-3xl"
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                   style={{
-                    background:
-                      "radial-gradient(ellipse at 50% 0%, rgba(0,223,143,0.07) 0%, transparent 70%)",
+                     background: "radial-gradient(ellipse at 50% 0%, hsl(var(--accent) / 0.07) 0%, transparent 70%)",
                   }}
                 />
 
                 {/* Top row: icon + number */}
                 <div className="flex items-start justify-between relative z-10">
-                  <div className="inline-flex items-center justify-center w-11 h-11 rounded-2xl border border-white/[0.08] bg-white/[0.04] text-[#00df8f] transition-colors duration-300 group-hover:border-[#00df8f]/30 group-hover:bg-[#00df8f]/[0.07]">
+                   <div className="inline-flex items-center justify-center w-11 h-11 rounded-2xl border border-accent/30 bg-accent/[0.06] text-accent transition-colors duration-300 group-hover:border-accent group-hover:bg-accent/[0.12]">
                     <Icon className="w-5 h-5" strokeWidth={1.5} />
                   </div>
-                  <span className="font-mono text-xs font-medium uppercase tracking-[0.14em] text-white/30 select-none">
+                   <span className="font-mono text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground select-none">
                     {item.number}
                   </span>
                 </div>
 
                 {/* Name */}
                 <h3
-                  className="font-bold uppercase tracking-wide text-white leading-tight relative z-10"
+                   className="font-bold uppercase tracking-wide text-foreground leading-tight relative z-10"
                   style={{ fontSize: "clamp(1rem, 2vw, 1.35rem)" }}
                 >
                   {item.name}
@@ -147,7 +127,7 @@ const ServicesSection = () => {
 
                 {/* Description */}
                 <p
-                  className="font-light text-white/50 leading-relaxed flex-1 relative z-10"
+                   className="font-light text-muted-foreground leading-relaxed flex-1 relative z-10"
                   style={{ fontSize: "clamp(0.8rem, 1.1vw, 0.95rem)" }}
                 >
                   {item.description}
@@ -158,7 +138,7 @@ const ServicesSection = () => {
                   {item.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="text-[10px] font-semibold uppercase tracking-widest text-[#00df8f]/70 border border-[#00df8f]/20 rounded-full px-2.5 py-0.5 bg-[#00df8f]/[0.05]"
+                       className="text-[10px] font-semibold uppercase tracking-widest text-accent/80 border border-accent/20 rounded-full px-2.5 py-0.5 bg-accent/[0.05]"
                     >
                       {tag}
                     </span>
@@ -166,7 +146,7 @@ const ServicesSection = () => {
                 </div>
 
                 {/* Bottom accent line */}
-                <div className="absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full bg-gradient-to-r from-[#00df8f]/60 to-transparent transition-all duration-500 rounded-b-3xl" />
+                 <div className="absolute bottom-0 left-0 h-px w-0 group-hover:w-full bg-accent transition-all duration-500" />
               </motion.div>
             );
           })}
