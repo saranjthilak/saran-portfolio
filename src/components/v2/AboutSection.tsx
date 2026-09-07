@@ -63,6 +63,7 @@ const AboutSection = () => {
               </div>
             </FadeIn>
             </div>
+            </div>
           </BlueprintSectionHeader>
           
         </div>

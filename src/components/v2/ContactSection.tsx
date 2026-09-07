@@ -223,6 +223,7 @@ const ContactSection = () => {
             </form>
           </div>
           </div>
+          </div>
         </BlueprintSectionHeader>
       </div>
     </section>
