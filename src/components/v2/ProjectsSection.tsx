@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { projects } from "@/data/portfolio";
 import ProjectLinks from "./LiveProjectButton";
+import BlueprintSectionHeader from "./BlueprintSectionHeader";
 
 // All featured projects from portfolio.ts
 const FEATURED = projects.filter((p) => p.featured);
@@ -31,7 +32,7 @@ const ProjectCard = ({ project, index, progress }: ProjectCardProps) => {
     >
       <motion.div
         style={{ scale }}
-        className="w-full h-full rounded-[40px] sm:rounded-[50px] md:rounded-[60px] border-2 border-[#ffffff] p-4 sm:p-6 md:p-8 flex flex-col gap-3"
+        className="blueprint-cell w-full h-full rounded-none border p-4 sm:p-6 md:p-8 flex flex-col gap-3"
         layoutId={`project-card-${index}`}
         id={`project-${index}`}
         aria-label={project.title}
@@ -143,32 +144,26 @@ const ProjectsSection = () => {
     <section
       ref={containerRef}
       id="projects"
-      className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-30"
+      className="blueprint-section font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-30 border-t border-accent/20"
       style={{
-        background: "#0d1116",
         padding: "clamp(5rem, 9vw, 9rem) 1.25rem clamp(6rem, 10vw, 10rem)",
       }}
     >
-      {/* Heading */}
-      <div className="text-center mb-16 sm:mb-20">
-        <h2
-          className="hero-heading font-black uppercase leading-[1.02] tracking-tight"
-          style={{ fontSize: "clamp(2.5rem, 6vw, 4.5rem)" }}
-        >
-          Selected <span className="accent-serif">projects</span>
-        </h2>
-      </div>
+      <div className="mx-auto max-w-7xl">
+        <BlueprintSectionHeader index="SECTION_03" label="Selected work" align="center">
+          <div className="mb-16 text-center sm:mb-20">
+            <h2 className="hero-heading font-black uppercase leading-[1.02] tracking-tight" style={{ fontSize: "clamp(2.5rem, 6vw, 4.5rem)" }}>
+              Selected <span className="accent-serif">projects</span>
+            </h2>
+          </div>
+        </BlueprintSectionHeader>
 
-      {/* Sticky stacking cards */}
-      <div style={{ paddingBottom: `${TOTAL_CARDS * 120}px` }}>
-        {FEATURED.map((project, index) => (
-          <ProjectCard
-            key={project.title}
-            project={project}
-            index={index}
-            progress={scrollYProgress}
-          />
-        ))}
+        {/* Sticky stacking cards */}
+        <div style={{ paddingBottom: `${TOTAL_CARDS * 120}px` }}>
+          {FEATURED.map((project, index) => (
+            <ProjectCard key={project.title} project={project} index={index} progress={scrollYProgress} />
+          ))}
+        </div>
       </div>
     </section>
   );
