@@ -1,5 +1,7 @@
 "use client";
 
+import Marquee from "@/components/v2/Marquee";
+
 const STACK_TILES = [
   { name: "LangChain", icon: "🔗" },
   { name: "Airflow", icon: "🌊" },
@@ -54,54 +56,25 @@ const MarqueeSection = () => {
         paddingBottom: "4rem",
       }}
     >
-      <style dangerouslySetInnerHTML={{
-        __html: `
-          @keyframes marquee-left {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-          }
-          @keyframes marquee-right {
-            0% { transform: translateX(-50%); }
-            100% { transform: translateX(0); }
-          }
-          .animate-marquee-left {
-            display: flex;
-            width: max-content;
-            animation: marquee-left 35s linear infinite;
-          }
-          .animate-marquee-right {
-            display: flex;
-            width: max-content;
-            animation: marquee-right 40s linear infinite;
-          }
-          .animate-marquee-left:hover, .animate-marquee-right:hover {
-            animation-play-state: paused;
-          }
-        `
-      }} />
-
       {/* Edge Gradients for smooth fade in/out */}
       <div className="absolute top-0 bottom-0 left-0 w-24 sm:w-40 z-10 bg-gradient-to-r from-[#0d1116] to-transparent pointer-events-none" />
       <div className="absolute top-0 bottom-0 right-0 w-24 sm:w-40 z-10 bg-gradient-to-l from-[#0d1116] to-transparent pointer-events-none" />
 
       {/* Tilted Wrapper */}
       <div className="flex flex-col gap-6 sm:gap-10 relative z-0 -rotate-3 scale-[1.15]">
-        
-        {/* Row 1: Moves Left */}
-        <div className="animate-marquee-left gap-8 sm:gap-12 pl-8 sm:pl-12">
-          {/* We repeat the array once (2 sets total) for a seamless 50% translation loop */}
-          {[...row1, ...row1].map((tile, i) => (
-            <TechTile key={`r1-${i}`} {...tile} isOutline={i % 2 !== 0} />
+        {/* Row 1: Moves Left — each tile rendered once; Marquee duplicates it for the loop */}
+        <Marquee direction="left" speed={35} className="gap-8 sm:gap-12 pl-8 sm:pl-12">
+          {row1.map((tile, i) => (
+            <TechTile key={`r1-${tile.name}`} {...tile} isOutline={i % 2 !== 0} />
           ))}
-        </div>
+        </Marquee>
 
         {/* Row 2: Moves Right */}
-        <div className="animate-marquee-right gap-8 sm:gap-12 pl-8 sm:pl-12">
-          {[...row2, ...row2].map((tile, i) => (
-            <TechTile key={`r2-${i}`} {...tile} isOutline={i % 2 === 0} />
+        <Marquee direction="right" speed={40} className="gap-8 sm:gap-12 pl-8 sm:gap-12">
+          {row2.map((tile, i) => (
+            <TechTile key={`r2-${tile.name}`} {...tile} isOutline={i % 2 === 0} />
           ))}
-        </div>
-
+        </Marquee>
       </div>
     </section>
   );
