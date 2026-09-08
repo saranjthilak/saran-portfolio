@@ -188,6 +188,23 @@
     opacity: 1;
     animation: blueprint-scan 1.2s ease-out;
   }
+
+  /* Infinite-scroll marquee — content rendered once, duplicated by animation */
+  @keyframes marquee-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  @keyframes marquee-right {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+  }
+  .animate-marquee-left {
+    animation: marquee-left var(--marquee-duration, 35s) linear infinite;
+  }
+  .animate-marquee-right {
+    animation: marquee-right var(--marquee-duration, 40s) linear infinite;
+  }
+
   /* Blueprint CTA — offset frame, slides on hover */
   .btn-frame {
     position: relative;
