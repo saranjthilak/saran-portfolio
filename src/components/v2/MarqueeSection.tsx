@@ -70,7 +70,7 @@ const MarqueeSection = () => {
         </Marquee>
 
         {/* Row 2: Moves Right */}
-        <Marquee direction="right" speed={40} className="gap-8 sm:gap-12 pl-8 sm:gap-12">
+        <Marquee direction="right" speed={40} className="gap-8 sm:gap-12 pl-8 sm:pl-12">
           {row2.map((tile, i) => (
             <TechTile key={`r2-${tile.name}`} {...tile} isOutline={i % 2 === 0} />
           ))}
