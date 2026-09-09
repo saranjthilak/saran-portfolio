@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import FadeIn from "./FadeIn";
 import { projects } from "@/data/portfolio";
 import ProjectLinks from "./LiveProjectButton";
 import BlueprintSectionHeader from "./BlueprintSectionHeader";
@@ -9,31 +8,16 @@ import BlueprintSectionHeader from "./BlueprintSectionHeader";
 // All featured projects from portfolio.ts
 const FEATURED = projects.filter((p) => p.featured);
 
-const CARD_SCALE_STEP = 0.03;
-const TOTAL_CARDS = FEATURED.length;
-
 interface ProjectCardProps {
   project: (typeof FEATURED)[number];
   index: number;
-  progress: ReturnType<typeof useScroll>["scrollYProgress"];
 }
 
-const ProjectCard = ({ project, index, progress }: ProjectCardProps) => {
-  const targetScale = 1 - (TOTAL_CARDS - 1 - index) * CARD_SCALE_STEP;
-  const scale = useTransform(progress, [index / TOTAL_CARDS, 1], [1, targetScale]);
-
+const ProjectCard = ({ project, index }: ProjectCardProps) => {
   return (
-    <div
-      className="sticky"
-      style={{
-        top: `${96 + index * 28}px`,
-        height: "85vh",
-      }}
-    >
-      <motion.div
-        style={{ scale }}
-        className="blueprint-cell w-full h-full rounded-none border p-4 sm:p-6 md:p-8 flex flex-col gap-3"
-        layoutId={`project-card-${index}`}
+    <FadeIn delay={0.05} y={40}>
+      <div
+        className="blueprint-cell w-full rounded-2xl border p-5 sm:p-8 md:p-10 flex flex-col gap-5"
         id={`project-${index}`}
         aria-label={project.title}
       >
@@ -42,13 +26,13 @@ const ProjectCard = ({ project, index, progress }: ProjectCardProps) => {
           <div className="flex items-center gap-4">
             <span
               className="font-kanit font-black text-[#ffffff] leading-none"
-              style={{ fontSize: "clamp(1.4rem, 3vw, 2.5rem)" }}
+              style={{ fontSize: "clamp(1.6rem, 3vw, 2.5rem)" }}
             >
               {String(index + 1).padStart(2, "0")}
             </span>
             <span
               className="font-kanit font-light uppercase tracking-widest text-[#ffffff]/50"
-              style={{ fontSize: "clamp(0.6rem, 1vw, 0.85rem)" }}
+              style={{ fontSize: "clamp(0.7rem, 1vw, 0.9rem)" }}
             >
               {project.source}
             </span>
@@ -56,7 +40,7 @@ const ProjectCard = ({ project, index, progress }: ProjectCardProps) => {
           <div className="flex items-center gap-4">
             <span
               className="font-kanit font-medium uppercase tracking-wide text-[#ffffff]"
-              style={{ fontSize: "clamp(0.85rem, 2vw, 1.5rem)" }}
+              style={{ fontSize: "clamp(1rem, 2vw, 1.5rem)" }}
             >
               {project.title}
             </span>
@@ -66,51 +50,33 @@ const ProjectCard = ({ project, index, progress }: ProjectCardProps) => {
 
         {/* ── Case Study Strip ── */}
         {(project.problem || project.approach || project.result) && (
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {project.problem && (
-              <div className="flex flex-col gap-0.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl px-3 py-2">
-                <span
-                  className="font-kanit font-bold uppercase tracking-widest text-[#00df8f]"
-                  style={{ fontSize: "clamp(0.48rem, 0.7vw, 0.6rem)" }}
-                >
+              <div className="flex flex-col gap-1.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl px-4 py-3.5">
+                <span className="font-kanit font-bold uppercase tracking-widest text-[#00df8f] text-xs sm:text-sm">
                   Problem
                 </span>
-                <span
-                  className="font-kanit text-white/55 leading-snug"
-                  style={{ fontSize: "clamp(0.6rem, 0.85vw, 0.72rem)" }}
-                >
+                <span className="font-kanit text-white/75 leading-relaxed text-sm sm:text-[0.95rem]">
                   {project.problem}
                 </span>
               </div>
             )}
             {project.approach && (
-              <div className="flex flex-col gap-0.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl px-3 py-2">
-                <span
-                  className="font-kanit font-bold uppercase tracking-widest text-[#38bdf8]"
-                  style={{ fontSize: "clamp(0.48rem, 0.7vw, 0.6rem)" }}
-                >
+              <div className="flex flex-col gap-1.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl px-4 py-3.5">
+                <span className="font-kanit font-bold uppercase tracking-widest text-[#38bdf8] text-xs sm:text-sm">
                   Approach
                 </span>
-                <span
-                  className="font-kanit text-white/55 leading-snug"
-                  style={{ fontSize: "clamp(0.6rem, 0.85vw, 0.72rem)" }}
-                >
+                <span className="font-kanit text-white/75 leading-relaxed text-sm sm:text-[0.95rem]">
                   {project.approach}
                 </span>
               </div>
             )}
             {project.result && (
-              <div className="flex flex-col gap-0.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl px-3 py-2">
-                <span
-                  className="font-kanit font-bold uppercase tracking-widest text-[#f59e0b]"
-                  style={{ fontSize: "clamp(0.48rem, 0.7vw, 0.6rem)" }}
-                >
+              <div className="flex flex-col gap-1.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl px-4 py-3.5">
+                <span className="font-kanit font-bold uppercase tracking-widest text-[#f59e0b] text-xs sm:text-sm">
                   Result
                 </span>
-                <span
-                  className="font-kanit text-white/55 leading-snug"
-                  style={{ fontSize: "clamp(0.6rem, 0.85vw, 0.72rem)" }}
-                >
+                <span className="font-kanit text-white/75 leading-relaxed text-sm sm:text-[0.95rem]">
                   {project.result}
                 </span>
               </div>
@@ -119,7 +85,7 @@ const ProjectCard = ({ project, index, progress }: ProjectCardProps) => {
         )}
 
         {/* Hero image */}
-        <div className="flex-1 min-h-0 rounded-[40px] sm:rounded-[50px] md:rounded-[60px] overflow-hidden">
+        <div className="rounded-[24px] sm:rounded-[32px] md:rounded-[40px] overflow-hidden aspect-[16/9]">
           <img
             src={project.image}
             alt={`${project.title} screenshot`}
@@ -127,22 +93,14 @@ const ProjectCard = ({ project, index, progress }: ProjectCardProps) => {
             loading="lazy"
           />
         </div>
-      </motion.div>
-    </div>
+      </div>
+    </FadeIn>
   );
 };
 
 const ProjectsSection = () => {
-  const containerRef = useRef<HTMLElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
-
   return (
     <section
-      ref={containerRef}
       id="projects"
       className="blueprint-section font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-30 border-t border-accent/20"
       style={{
@@ -158,10 +116,10 @@ const ProjectsSection = () => {
           </div>
         </BlueprintSectionHeader>
 
-        {/* Sticky stacking cards */}
-        <div style={{ paddingBottom: `${TOTAL_CARDS * 120}px` }}>
+        {/* Scroll-reveal cards */}
+        <div className="flex flex-col gap-10 sm:gap-14">
           {FEATURED.map((project, index) => (
-            <ProjectCard key={project.title} project={project} index={index} progress={scrollYProgress} />
+            <ProjectCard key={project.title} project={project} index={index} />
           ))}
         </div>
       </div>
