@@ -19,9 +19,9 @@ type FormValues = z.infer<typeof formSchema>;
 
 const LINKS = [
   { label: "Email", value: "saranjthilak@gmail.com", href: "mailto:saranjthilak@gmail.com" },
-  { label: "Phone", value: "+49 174 461 4592", href: "tel:+491744614592" },
-  { label: "GitHub", value: "github.com/saranjthilak", href: "https://github.com/saranjthilak" },
   { label: "LinkedIn", value: "linkedin.com/in/saranjayathilak", href: "https://www.linkedin.com/in/saranjayathilak" },
+  { label: "GitHub", value: "github.com/saranjthilak", href: "https://github.com/saranjthilak" },
+  { label: "Calls", value: "Available for calls upon request", href: "" },
 ];
 
 const RATE_LIMIT_MS = 60_000;
