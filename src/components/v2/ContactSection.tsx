@@ -19,9 +19,9 @@ type FormValues = z.infer<typeof formSchema>;
 
 const LINKS = [
   { label: "Email", value: "saranjthilak@gmail.com", href: "mailto:saranjthilak@gmail.com" },
-  { label: "Phone", value: "+49 174 461 4592", href: "tel:+491744614592" },
-  { label: "GitHub", value: "github.com/saranjthilak", href: "https://github.com/saranjthilak" },
   { label: "LinkedIn", value: "linkedin.com/in/saranjayathilak", href: "https://www.linkedin.com/in/saranjayathilak" },
+  { label: "GitHub", value: "github.com/saranjthilak", href: "https://github.com/saranjthilak" },
+  { label: "Calls", value: "Available for calls upon request", href: "" },
 ];
 
 const RATE_LIMIT_MS = 60_000;
@@ -134,14 +134,20 @@ const ContactSection = () => {
                 >
                   <dt className="text-sm text-white/50 font-light">{link.label}</dt>
                   <dd>
-                    <a
-                      href={link.href}
-                      target={link.href.startsWith("http") ? "_blank" : undefined}
-                      rel="noreferrer"
-                      className="text-sm font-medium text-white hover:opacity-60 transition-opacity duration-200"
-                    >
-                      {link.value}
-                    </a>
+                    {link.href ? (
+                      <a
+                        href={link.href}
+                        target={link.href.startsWith("http") ? "_blank" : undefined}
+                        rel="noreferrer"
+                        className="text-sm font-medium text-white hover:opacity-60 transition-opacity duration-200"
+                      >
+                        {link.value}
+                      </a>
+                    ) : (
+                      <span className="text-sm font-medium text-white/70">
+                        {link.value}
+                      </span>
+                    )}
                   </dd>
                 </div>
               ))}
