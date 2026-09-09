@@ -134,14 +134,20 @@ const ContactSection = () => {
                 >
                   <dt className="text-sm text-white/50 font-light">{link.label}</dt>
                   <dd>
-                    <a
-                      href={link.href}
-                      target={link.href.startsWith("http") ? "_blank" : undefined}
-                      rel="noreferrer"
-                      className="text-sm font-medium text-white hover:opacity-60 transition-opacity duration-200"
-                    >
-                      {link.value}
-                    </a>
+                    {link.href ? (
+                      <a
+                        href={link.href}
+                        target={link.href.startsWith("http") ? "_blank" : undefined}
+                        rel="noreferrer"
+                        className="text-sm font-medium text-white hover:opacity-60 transition-opacity duration-200"
+                      >
+                        {link.value}
+                      </a>
+                    ) : (
+                      <span className="text-sm font-medium text-white/70">
+                        {link.value}
+                      </span>
+                    )}
                   </dd>
                 </div>
               ))}
