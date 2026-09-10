@@ -1,6 +1,6 @@
 # Saran Jaya Thilak — Portfolio
 
-> Personal portfolio of Saran Jaya Thilak, a Data Scientist and AI Infrastructure Engineer based in Berlin, specializing in machine learning, cloud infrastructure (AWS, GCP), and CI/CD automation.
+> Personal portfolio of Saran Jaya Thilak, a Data Engineer & GenAI Specialist based in Berlin, specializing in RAG systems, scalable data pipelines, and cloud architecture.
 
 ## Pages
 
