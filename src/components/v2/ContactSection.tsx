@@ -100,7 +100,7 @@ const ContactSection = () => {
       </div>
 
       <div className="mx-auto w-full max-w-6xl relative z-10">
-        <BlueprintSectionHeader index="SECTION_04" label="Contact">
+        <BlueprintSectionHeader>
           <div className="grid gap-14 lg:grid-cols-[1fr_1fr] items-center">
 
         {/* ── Left column ─────────────────────────────────────────── */}

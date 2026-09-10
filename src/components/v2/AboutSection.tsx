@@ -21,7 +21,7 @@ const AboutSection = () => {
 
         {/* Content Wrapper */}
         <div className="relative z-10 w-full max-w-7xl mx-auto">
-          <BlueprintSectionHeader index="SECTION_01" label="Profile">
+          <BlueprintSectionHeader>
             <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-20 items-center">
           
           {/* Left: The Hook */}
