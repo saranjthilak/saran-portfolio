@@ -2,9 +2,7 @@ import type { Metadata } from 'next';
 import { Space_Grotesk, JetBrains_Mono, Kanit } from 'next/font/google';
 import './globals.css';
 
-import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import PageTransition from "@/components/ui/page-transition";
 import CustomCursor from "@/components/ui/CustomCursor";
 
@@ -81,14 +79,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${kanit.variable} font-sans antialiased`}>
-        <TooltipProvider>
-              <CustomCursor />
-              <PageTransition>
-                {children}
-              </PageTransition>
-              <Toaster />
-              <Sonner />
-        </TooltipProvider>
+        <CustomCursor />
+        <PageTransition>
+          {children}
+        </PageTransition>
+        <Sonner />
       </body>
     </html>
   );
