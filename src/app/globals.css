@@ -171,10 +171,6 @@
     @apply inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground;
   }
   .blueprint-section-header { @apply relative; }
-  .blueprint-section-header::after {
-    content: "";
-    @apply absolute right-0 top-0 h-px w-16 bg-accent;
-  }
   .blueprint-cell {
     @apply relative border-border/70 bg-card/40;
   }
