@@ -1,23 +1,105 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import FadeIn from "./FadeIn";
 import BlueprintSectionHeader from "./BlueprintSectionHeader";
 
-
 const AboutSection = () => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const streamUrl =
+      "https://stream.mux.com/tLkHO1qZoaaQOUeVWo8hEBeGQfySP02EPS02BmnNFyXys.m3u8";
+    let hlsInstance: any = null;
+
+    import("hls.js")
+      .then(({ default: Hls }) => {
+        if (Hls && Hls.isSupported()) {
+          hlsInstance = new Hls({ enableWorker: false });
+          hlsInstance.loadSource(streamUrl);
+          hlsInstance.attachMedia(video);
+        } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+          video.src = streamUrl;
+        }
+      })
+      .catch(() => {
+        if (video.canPlayType("application/vnd.apple.mpegurl")) {
+          video.src = streamUrl;
+        }
+      });
+
+    return () => {
+      if (hlsInstance) {
+        hlsInstance.destroy();
+      }
+    };
+  }, []);
+
   return (
     <>
       <section
         id="about"
-        className="blueprint-section font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-[15] overflow-hidden flex items-center border-t border-accent/20"
+        className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-[15] overflow-hidden flex items-center border-t border-white/10 bg-[#070b0a]"
         style={{
           padding: "clamp(5rem, 9vw, 9rem) 1.25rem",
           boxShadow: "0 -10px 40px rgba(0,0,0,0.5)",
-          minHeight: "100vh"
+          minHeight: "100vh",
         }}
       >
-        <div className="blueprint-dots absolute inset-0 z-0 opacity-40" />
+        {/* ── Background Video & Overlays ── */}
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+          <video
+            ref={videoRef}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover pointer-events-none opacity-60"
+          />
+
+          {/* Left linear gradient (#070b0a to transparent) */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#070b0a] via-[#070b0a]/75 to-transparent" />
+
+          {/* Bottom-up gradient for readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#070b0a] via-[#070b0a]/50 to-transparent" />
+        </div>
+
+        {/* ── Central Glow (cyan/dark green hue with 25px Gaussian blur) ── */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none z-[4] w-[800px] max-w-full h-[320px] overflow-visible opacity-70">
+          <svg
+            className="w-full h-full"
+            viewBox="0 0 800 320"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <filter id="about-central-glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="25" />
+              </filter>
+              <linearGradient id="about-glow-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#00f0ff" stopOpacity="0.35" />
+                <stop offset="50%" stopColor="#5ed29c" stopOpacity="0.55" />
+                <stop offset="100%" stopColor="#00f0ff" stopOpacity="0.35" />
+              </linearGradient>
+            </defs>
+            <ellipse
+              cx="400"
+              cy="90"
+              rx="340"
+              ry="70"
+              fill="url(#about-glow-grad)"
+              filter="url(#about-central-glow)"
+            />
+          </svg>
+        </div>
+
+        {/* ── Grid System: thin vertical lines (white/10) at 25%, 50%, 75% ── */}
+        <div className="hidden md:block pointer-events-none absolute inset-y-0 left-1/4 w-px bg-white/10 z-[5]" />
+        <div className="hidden md:block pointer-events-none absolute inset-y-0 left-2/4 w-px bg-white/10 z-[5]" />
+        <div className="hidden md:block pointer-events-none absolute inset-y-0 left-3/4 w-px bg-white/10 z-[5]" />
 
         {/* Content Wrapper */}
         <div className="relative z-10 w-full max-w-7xl mx-auto">
