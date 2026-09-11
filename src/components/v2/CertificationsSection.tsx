@@ -1,67 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { certifications } from "@/data/portfolio";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const GREEN = "hsl(119,99%,46%)";
-
-// ── Canvas particle field ────────────────────────────────────────────────────
-function ParticleCanvas() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    let raf: number;
-    const particles: {
-      x: number; y: number; vx: number; vy: number;
-      r: number; alpha: number; pulse: number;
-    }[] = [];
-
-    const resize = () => {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-    };
-    resize();
-    window.addEventListener("resize", resize);
-
-    for (let i = 0; i < 80; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        r: Math.random() * 1.8 + 0.4,
-        alpha: Math.random() * 0.5 + 0.1,
-        pulse: Math.random() * Math.PI * 2,
-      });
-    }
-
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      raf = requestAnimationFrame(draw);
-    };
-    draw();
-
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("resize", resize);
-    };
-  }, []);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 w-full h-full"
-      aria-hidden="true"
-    />
-  );
-}
 
 // ── Main section ─────────────────────────────────────────────────────────────
 export default function CertificationsSection() {
