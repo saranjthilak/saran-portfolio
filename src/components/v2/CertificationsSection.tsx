@@ -11,7 +11,7 @@ export default function CertificationsSection() {
   return (
     <section
       id="certifications"
-      className="relative font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 z-40 overflow-hidden border-t border-white/10 min-h-screen flex flex-col justify-end bg-black"
+      className="relative font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 z-40 overflow-hidden border-t border-white/10 min-h-screen flex flex-col justify-center bg-black"
       style={{
         boxShadow: "0 -10px 40px rgba(0,0,0,0.6)",
       }}
@@ -38,31 +38,26 @@ export default function CertificationsSection() {
       </div>
 
       {/* ── Content ── */}
-      <div className="relative z-10 w-full max-w-6xl mx-auto px-6 md:px-10 pb-16 md:pb-24 pt-40">
-
-        {/* Section label */}
-        <motion.p
-          className="flex items-center gap-2 font-medium uppercase tracking-[0.25em] text-xs mb-4"
-          style={{ color: GREEN }}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: EASE }}
-        >
-          <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ background: GREEN }} />
-          Credentials
-        </motion.p>
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-6 md:px-10 pb-16 md:pb-24 pt-20 md:pt-24 my-auto">
 
         {/* Heading */}
         <motion.h2
-          className="font-black uppercase leading-[1.02] tracking-tight text-white mb-12"
-          style={{ fontSize: "clamp(2.5rem, 6vw, 4.5rem)" }}
+          className="font-black uppercase leading-[1.02] tracking-[-0.04em] text-white mb-12 text-center"
+          style={{ fontSize: "clamp(2.8rem, 7vw, 5.5rem)" }}
           initial={{ opacity: 0, y: 28, filter: "blur(4px)" }}
           whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
         >
-          Certifications.
+          <span
+            style={{
+              background: "linear-gradient(90deg, rgba(94,210,156,1), rgba(115,255,0,0.9), rgba(94,210,156,1))",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
+            Certifications.
+          </span>
         </motion.h2>
 
         {/* Cert list */}
