@@ -285,12 +285,31 @@ const ProjectsSection = () => {
   return (
     <section
       id="projects"
-      className="blueprint-section font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-30 border-t border-accent/20"
+      className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-30 overflow-hidden border-t border-white/10"
       style={{
+        background: "#010101",
         padding: "clamp(5rem, 9vw, 9rem) 1.25rem clamp(6rem, 10vw, 10rem)",
+        boxShadow: "0 -10px 40px rgba(0,0,0,0.5)",
       }}
     >
-      <div className="mx-auto max-w-7xl">
+      {/* ── Background Video ── */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover object-center pointer-events-none"
+          style={{ opacity: 0.55 }}
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4"
+        />
+
+        {/* Contrast overlay so cards, case studies, and text remain crisp and legible */}
+        <div className="absolute inset-0 bg-[#010101]/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#010101]/85 via-transparent to-[#010101]/90" />
+      </div>
+
+      <div className="mx-auto max-w-7xl relative z-10">
         <BlueprintSectionHeader align="center">
           <div className="mb-16 text-center sm:mb-20">
             {/* Word-by-word stagger heading */}
