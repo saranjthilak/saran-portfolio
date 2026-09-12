@@ -142,6 +142,61 @@ const AboutSection = () => {
                 >
                   Now, with an M.Sc. in Data Science and hands-on work at <strong className="text-white font-normal">Tesla</strong> building RAG chatbots and Airflow pipelines, I bring that same infrastructure mindset to AI engineering. I build GenAI and data systems the way I once ran networks — with the assumption that they have to hold up under real load, not just in a notebook.
                 </p>
+
+                {/* ── Resume Download Button ── */}
+                <div className="pt-2">
+                  <a
+                    href="/Saran-Jaya-Thilak-Resume.pdf"
+                    download="Saran-Jaya-Thilak-Resume.pdf"
+                    className="group relative inline-flex items-center gap-3 font-kanit font-light text-sm tracking-widest uppercase"
+                    style={{ color: "#5ed29c" }}
+                  >
+                    {/* Blueprint grid card */}
+                    <span
+                      className="relative flex items-center gap-3 px-6 py-3 transition-all duration-300"
+                      style={{
+                        border: "1px solid rgba(94,210,156,0.35)",
+                        background: "rgba(94,210,156,0.04)",
+                      }}
+                    >
+                      {/* Corner marks */}
+                      <span className="absolute top-0 left-0 w-2 h-2 border-t border-l transition-all duration-300 group-hover:w-3 group-hover:h-3" style={{ borderColor: "#5ed29c" }} />
+                      <span className="absolute top-0 right-0 w-2 h-2 border-t border-r transition-all duration-300 group-hover:w-3 group-hover:h-3" style={{ borderColor: "#5ed29c" }} />
+                      <span className="absolute bottom-0 left-0 w-2 h-2 border-b border-l transition-all duration-300 group-hover:w-3 group-hover:h-3" style={{ borderColor: "#5ed29c" }} />
+                      <span className="absolute bottom-0 right-0 w-2 h-2 border-b border-r transition-all duration-300 group-hover:w-3 group-hover:h-3" style={{ borderColor: "#5ed29c" }} />
+
+                      {/* Hover glow fill */}
+                      <span
+                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        style={{ background: "rgba(94,210,156,0.07)" }}
+                      />
+
+                      {/* Download icon */}
+                      <svg
+                        className="relative w-4 h-4 transition-transform duration-300 group-hover:translate-y-0.5"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M8 2v8M5 7l3 3 3-3" />
+                        <path d="M2 12h12" />
+                      </svg>
+
+                      <span className="relative">Download Résumé</span>
+
+                      {/* Mono label */}
+                      <span
+                        className="relative font-mono text-[10px] tracking-widest opacity-50"
+                        style={{ color: "#5ed29c" }}
+                      >
+                        PDF
+                      </span>
+                    </span>
+                  </a>
+                </div>
               </div>
             </FadeIn>
             </div>
