@@ -53,23 +53,14 @@ export default function ResearchSection() {
 
         {/* Main heading */}
         <motion.h2
-          className="font-black leading-[1.02] tracking-[-0.04em] text-white mb-8 uppercase text-center"
-          style={{ fontSize: "clamp(2.8rem, 7vw, 5.5rem)" }}
+          className="font-black leading-[0.92] tracking-tighter text-white mb-8 text-center"
+          style={{ fontSize: "clamp(2.6rem, 6.5vw, 4.8rem)" }}
           initial={{ opacity: 0, y: 28, filter: "blur(4px)" }}
           whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
         >
-          Published{" "}
-          <span
-            style={{
-              background: "linear-gradient(90deg, rgba(94,210,156,1), rgba(115,255,0,0.9), rgba(94,210,156,1))",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
-          >
-            work.
-          </span>
+          Published <span className="accent-serif">work</span><span className="text-[#00df8f]">.</span>
         </motion.h2>
 
         {/* Sub-line */}
