@@ -204,7 +204,7 @@ const ServicesSection = () => {
       id="skills"
       className="relative font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 z-20 overflow-hidden border-t border-white/10 bg-[#0c0c0c]"
       style={{
-        padding: "clamp(5rem, 8vw, 8rem) 1.25rem clamp(6rem, 9vw, 9rem)",
+        padding: "clamp(3rem, 5vw, 5rem) 1.25rem clamp(6rem, 9vw, 9rem)",
         boxShadow: "0 -10px 40px rgba(0,0,0,0.5)",
       }}
     >
@@ -230,42 +230,18 @@ const ServicesSection = () => {
 
       <div className="relative z-10 max-w-6xl mx-auto">
         <BlueprintSectionHeader align="center">
-          <div className="mb-14 text-center sm:mb-18">
-            {/* Section pill eyebrow */}
-            <motion.p
-              className="flex items-center justify-center gap-2 font-medium uppercase tracking-[0.25em] text-xs mb-4"
-              style={{ color: "rgba(94,210,156,0.85)" }}
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, ease: EASE }}
-            >
-              <span
-                className="w-1.5 h-1.5 rounded-full inline-block animate-pulse"
-                style={{ background: "rgba(94,210,156,1)", boxShadow: "0 0 8px rgba(94,210,156,0.8)" }}
-              />
-              System Architecture & Core Capabilities
-            </motion.p>
+          <div className="mb-12 text-center sm:mb-16 -mt-3 sm:-mt-5">
 
             {/* Main heading */}
             <motion.h2
-              className="font-black uppercase leading-[1.02] tracking-[-0.04em] text-white text-center"
+              className="font-black leading-[0.92] tracking-tighter text-white text-center"
               style={{ fontSize: "clamp(2.6rem, 6.5vw, 4.8rem)" }}
               initial={{ opacity: 0, y: 28, filter: "blur(4px)" }}
               whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
             >
-              My{" "}
-              <span
-                style={{
-                  background: "linear-gradient(90deg, rgba(94,210,156,1), rgba(115,255,0,0.9), rgba(94,210,156,1))",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                }}
-              >
-                Expertise.
-              </span>
+              My <span className="accent-serif">Expertise</span><span className="text-[#00df8f]">.</span>
             </motion.h2>
 
             {/* Sub-line */}
