@@ -110,10 +110,10 @@ const ContactSection = () => {
           {/* Heading */}
           <div className="animate-fade-up-delay-1">
             <h2
-              className="font-podium text-white uppercase leading-[0.92] tracking-tight"
+              className="font-black leading-[0.92] tracking-tighter text-white"
               style={{ fontSize: "clamp(2.8rem, 8vw, 7rem)" }}
             >
-              Build.<br />Ship.<br /><span className="accent-serif">Scale.</span>
+              Build<span className="text-[#00df8f]">.</span><br />Ship<span className="text-[#00df8f]">.</span><br /><span className="accent-serif">Scale</span><span className="text-[#00df8f]">.</span>
             </h2>
           </div>
 

@@ -43,8 +43,8 @@ export default function GithubSection() {
               <span className="w-1.5 h-1.5 rounded-full bg-white/50 inline-block" />
               Open Source
             </p>
-            <h2 className="font-kanit font-black italic leading-[1.02] tracking-tight text-[#ffffff]" style={{ fontSize: "clamp(2.5rem, 6vw, 4.5rem)" }}>
-              GitHub Contributions
+            <h2 className="font-black leading-[0.92] tracking-tighter text-white" style={{ fontSize: "clamp(2.6rem, 6.5vw, 4.8rem)" }}>
+              GitHub <span className="accent-serif">Contributions</span><span className="text-[#00df8f]">.</span>
             </h2>
           </div>
         </FadeIn>

@@ -46,10 +46,10 @@ const ExperienceSection = () => {
         {/* Heading */}
         <FadeIn delay={0.08} y={30}>
           <h2
-            className="font-black leading-[1.02] tracking-tight text-[#ffffff] mb-12 sm:mb-16 md:mb-20"
-            style={{ fontSize: "clamp(2.5rem, 6vw, 4.5rem)" }}
+            className="font-black leading-[0.92] tracking-tighter text-white mb-12 sm:mb-16 md:mb-20"
+            style={{ fontSize: "clamp(2.6rem, 6.5vw, 4.8rem)" }}
           >
-            Nine years, <span className="accent-serif">four teams.</span>
+            Nine years, <span className="accent-serif">four teams</span><span className="text-[#00df8f]">.</span>
           </h2>
         </FadeIn>
 
