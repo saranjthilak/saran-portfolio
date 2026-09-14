@@ -279,8 +279,6 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
 };
 
 // ── Section ──────────────────────────────────────────────────────────────────
-const HEADING_WORDS = ["Selected", "projects"];
-
 const ProjectsSection = () => {
   return (
     <section
@@ -312,40 +310,29 @@ const ProjectsSection = () => {
       <div className="mx-auto max-w-7xl relative z-10">
         <BlueprintSectionHeader align="center">
           <div className="mb-16 text-center sm:mb-20">
-            {/* Word-by-word stagger heading */}
+            {/* Main heading */}
             <motion.h2
-              className="hero-heading font-black uppercase leading-[1.02] tracking-tight"
-              style={{ fontSize: "clamp(2.5rem, 6vw, 4.5rem)" }}
-              initial="hidden"
-              whileInView="visible"
+              className="font-black leading-[0.92] tracking-tighter text-white text-center"
+              style={{ fontSize: "clamp(2.6rem, 6.5vw, 4.8rem)" }}
+              initial={{ opacity: 0, y: 28, filter: "blur(4px)" }}
+              whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               viewport={{ once: true, margin: "-60px" }}
-              variants={{ visible: { transition: { staggerChildren: 0.14 } } }}
+              transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
             >
-              {HEADING_WORDS.map((word, i) => (
-                <motion.span
-                  key={word}
-                  className={`inline-block mr-[0.25em] ${i === 1 ? "accent-serif" : ""}`}
-                  variants={{
-                    hidden: { opacity: 0, y: 40, skewY: 4 },
-                    visible: {
-                      opacity: 1, y: 0, skewY: 0,
-                      transition: { duration: 0.65, ease: EASE },
-                    },
-                  }}
-                >
-                  {word}
-                </motion.span>
-              ))}
+              Selected <span className="accent-serif">Projects</span><span className="text-[#00df8f]">.</span>
             </motion.h2>
 
             {/* Animated underline */}
             <motion.div
-              className="mx-auto mt-4 h-px bg-gradient-to-r from-transparent via-accent to-transparent"
+              className="mx-auto mt-6 h-px"
+              style={{
+                width: "min(200px, 40%)",
+                background: "linear-gradient(90deg, transparent, rgba(94,210,156,0.8), transparent)",
+              }}
               initial={{ scaleX: 0, opacity: 0 }}
               whileInView={{ scaleX: 1, opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.9, delay: 0.35, ease: EASE }}
-              style={{ width: "min(200px, 40%)" }}
             />
           </div>
         </BlueprintSectionHeader>
