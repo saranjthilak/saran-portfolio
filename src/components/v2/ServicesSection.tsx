@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useCallback } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import BlueprintSectionHeader from "./BlueprintSectionHeader";
 import {
   Database,
@@ -10,23 +10,36 @@ import {
   Cloud,
   Radio,
   Monitor,
+  Activity,
+  ShieldCheck,
+  Zap,
+  Cpu,
+  Server,
 } from "lucide-react";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
+type Category = "all" | "data-ai" | "cloud-sre" | "fullstack";
+
 interface ExpertiseItem {
   number: string;
+  category: "data-ai" | "cloud-sre" | "fullstack";
+  categoryLabel: string;
   name: string;
   spec: string;
   icon: typeof Database;
   description: string;
   pipeline: string[];
   tags: string[];
+  metrics: { label: string; value: string };
+  visualizerType: "data" | "ai" | "mlops" | "cloud" | "ops" | "ui";
 }
 
 const EXPERTISE: ExpertiseItem[] = [
   {
     number: "01",
+    category: "data-ai",
+    categoryLabel: "Data Engineering",
     name: "Production Data Engineering",
     spec: "99.9% RELIABILITY · PETABYTE SCALE",
     icon: Database,
@@ -34,9 +47,13 @@ const EXPERTISE: ExpertiseItem[] = [
       "Architecting fault-tolerant ETL/ELT pipelines with Apache Airflow & dbt. Delivering automated data contracts, strict idempotency schemas, and high-throughput ingestion into Snowflake & BigQuery designed to withstand massive real-time volume.",
     pipeline: ["Kafka Ingest", "Airflow DAG", "dbt Models", "BigQuery"],
     tags: ["Airflow", "dbt", "BigQuery", "Snowflake", "ETL/ELT"],
+    metrics: { label: "THROUGHPUT", value: "48.2 GB/s" },
+    visualizerType: "data",
   },
   {
     number: "02",
+    category: "data-ai",
+    categoryLabel: "GenAI & RAG",
     name: "Enterprise GenAI & RAG Systems",
     spec: "SUB-SECOND LATENCY · HYBRID RETRIEVAL",
     icon: BrainCircuit,
@@ -44,9 +61,13 @@ const EXPERTISE: ExpertiseItem[] = [
       "Engineering grounded conversational systems end-to-end with LangChain, FAISS, and hybrid sparse/dense vector search. Hardened with multi-stage hallucination guardrails, cross-encoder reranking, and verified citation traces.",
     pipeline: ["Vectorize", "FAISS Index", "Reranker", "Grounded LLM"],
     tags: ["LangChain", "Vector DB", "FAISS", "Guardrails", "Reranking"],
+    metrics: { label: "RETRIEVAL COSINE", value: "0.96 SCORE" },
+    visualizerType: "ai",
   },
   {
     number: "03",
+    category: "data-ai",
+    categoryLabel: "MLOps",
     name: "Production MLOps & Model Serving",
     spec: "AUTOMATED CI/CD · ZERO-DOWNTIME ROLLOUT",
     icon: GitBranch,
@@ -54,9 +75,13 @@ const EXPERTISE: ExpertiseItem[] = [
       "Deploying and serving optimized ML models via NVIDIA Triton & FastAPI with automated experiment tracking on MLflow. Implementing automated canary deployments, data drift detection, and quantized low-latency inference.",
     pipeline: ["Train/Log", "MLflow", "Triton Server", "Canary Route"],
     tags: ["MLflow", "Triton", "Quantization", "Docker", "Model Registry"],
+    metrics: { label: "INFERENCE P99", value: "8.4ms LATENCY" },
+    visualizerType: "mlops",
   },
   {
     number: "04",
+    category: "cloud-sre",
+    categoryLabel: "Cloud & IaC",
     name: "Cloud Topology & IaC",
     spec: "MULTI-CLOUD AWS/GCP · TERRAFORM AUTOMATION",
     icon: Cloud,
@@ -64,9 +89,13 @@ const EXPERTISE: ExpertiseItem[] = [
       "Provisioning secure, repeatable cloud infrastructure using Terraform and Kubernetes. Leveraging enterprise operational background at Tesla, Huawei, and Nokia to engineer cost-optimized architectures with 99.99% availability.",
     pipeline: ["Terraform HCL", "State Lock", "K8s Mesh", "Live Cluster"],
     tags: ["Terraform", "AWS", "GCP", "Kubernetes", "FinOps"],
+    metrics: { label: "ORCHESTRATION", value: "100% DECLARATIVE" },
+    visualizerType: "cloud",
   },
   {
     number: "05",
+    category: "cloud-sre",
+    categoryLabel: "Mission-Critical",
     name: "Mission-Critical Ops & High Availability",
     spec: "24/7 GOC SLA · ZERO SINGLE POINT OF FAILURE",
     icon: Radio,
@@ -74,9 +103,13 @@ const EXPERTISE: ExpertiseItem[] = [
       "Drawing on 5+ years directing enterprise NOC & telecom network backbones. Engineering distributed systems with self-healing failovers, real-time Prometheus/Grafana telemetry, and sub-minute incident remediation.",
     pipeline: ["Prometheus", "Telemetry", "Circuit Breaker", "Auto-Heal"],
     tags: ["High Availability", "Prometheus", "Grafana", "Incident SRE", "Failover"],
+    metrics: { label: "HISTORICAL UPTIME", value: "99.999% SLA" },
+    visualizerType: "ops",
   },
   {
     number: "06",
+    category: "fullstack",
+    categoryLabel: "Full-Stack AI",
     name: "Full-Stack AI Interfaces",
     spec: "REACTIVE STREAMING · ASYNC MICROSERVICES",
     icon: Monitor,
@@ -84,8 +117,170 @@ const EXPERTISE: ExpertiseItem[] = [
       "Bridging complex backend AI engines with high-fidelity, reactive client applications. Building low-latency asynchronous FastAPI microservices coupled with type-safe React, Next.js, and WebSocket streaming.",
     pipeline: ["FastAPI RPC", "WebSocket", "React State", "Edge Render"],
     tags: ["FastAPI", "React", "Next.js", "TypeScript", "WebSocket"],
+    metrics: { label: "STREAM SPEED", value: "85 TOKENS/SEC" },
+    visualizerType: "ui",
   },
 ];
+
+// ── Interactive Domain Micro-Visualizers ───────────────────────────────────────
+function DomainVisualizer({ type }: { type: ExpertiseItem["visualizerType"] }) {
+  if (type === "data") {
+    return (
+      <div className="rounded-lg bg-black/40 border border-white/[0.08] p-3 font-mono text-[11px] flex flex-col gap-2 overflow-hidden relative">
+        <div className="flex items-center justify-between text-white/50 text-[10px]">
+          <span className="flex items-center gap-1.5 text-[#5ed29c]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#5ed29c] animate-ping" />
+            STREAM INGESTION ENGINE
+          </span>
+          <span className="text-[#5ed29c]/90 font-semibold">48.2 GB/s</span>
+        </div>
+        <div className="grid grid-cols-3 gap-1.5 text-center">
+          <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5">
+            <div className="text-[9px] text-white/40">SCHEMA</div>
+            <div className="text-[#5ed29c] font-medium mt-0.5">ENFORCED</div>
+          </div>
+          <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5">
+            <div className="text-[9px] text-white/40">DROPPED</div>
+            <div className="text-white/80 font-medium mt-0.5">0.00%</div>
+          </div>
+          <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5">
+            <div className="text-[9px] text-white/40">LAG</div>
+            <div className="text-[#5ed29c] font-medium mt-0.5">&lt;14ms</div>
+          </div>
+        </div>
+        {/* Animated packet stream */}
+        <div className="relative h-1.5 w-full bg-white/[0.06] rounded-full overflow-hidden">
+          <motion.div
+            className="h-full bg-gradient-to-r from-transparent via-[#5ed29c] to-transparent w-24"
+            animate={{ x: ["-100%", "300%"] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: "linear" }}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  if (type === "ai") {
+    return (
+      <div className="rounded-lg bg-black/40 border border-white/[0.08] p-3 font-mono text-[11px] flex flex-col gap-2 overflow-hidden relative">
+        <div className="flex items-center justify-between text-white/50 text-[10px]">
+          <span className="flex items-center gap-1.5 text-[#5ed29c]">
+            <BrainCircuit className="w-3.5 h-3.5 text-[#5ed29c]" />
+            HYBRID RETRIEVAL & CITATION
+          </span>
+          <span className="text-emerald-400 font-semibold">cos: 0.96</span>
+        </div>
+        <div className="flex items-center justify-between gap-1 text-[10px] bg-white/[0.03] border border-white/[0.06] rounded p-1.5">
+          <span className="text-white/60">Top-k Embeddings</span>
+          <span className="text-white/90">FAISS Index / FlatIP</span>
+          <span className="text-[#5ed29c] flex items-center gap-1">
+            <ShieldCheck className="w-3 h-3" /> Grounded
+          </span>
+        </div>
+        <div className="flex items-center justify-between text-[10px] text-white/40 px-0.5">
+          <span>Guardrail check: Pass</span>
+          <span className="text-[#5ed29c]">Trace verified</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (type === "mlops") {
+    return (
+      <div className="rounded-lg bg-black/40 border border-white/[0.08] p-3 font-mono text-[11px] flex flex-col gap-2 overflow-hidden relative">
+        <div className="flex items-center justify-between text-white/50 text-[10px]">
+          <span className="flex items-center gap-1.5 text-[#5ed29c]">
+            <Cpu className="w-3.5 h-3.5 text-[#5ed29c]" />
+            TRITON INFERENCE SERVER
+          </span>
+          <span className="text-[#5ed29c] font-semibold">FP16 / INT8</span>
+        </div>
+        <div className="grid grid-cols-2 gap-1.5">
+          <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5 flex flex-col">
+            <span className="text-[9px] text-white/40">CANARY DEPLOY</span>
+            <div className="flex items-center justify-between mt-0.5 text-[10px]">
+              <span className="text-white/70">v2.4 (90%)</span>
+              <span className="text-[#5ed29c]">v2.5 (10%)</span>
+            </div>
+          </div>
+          <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5 flex flex-col">
+            <span className="text-[9px] text-white/40">DATA DRIFT</span>
+            <span className="text-[#5ed29c] mt-0.5 text-[10px] font-semibold">NORMAL (0.012)</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (type === "cloud") {
+    return (
+      <div className="rounded-lg bg-black/40 border border-white/[0.08] p-3 font-mono text-[11px] flex flex-col gap-2 overflow-hidden relative">
+        <div className="flex items-center justify-between text-white/50 text-[10px]">
+          <span className="flex items-center gap-1.5 text-[#5ed29c]">
+            <Server className="w-3.5 h-3.5 text-[#5ed29c]" />
+            TERRAFORM MESH ARCHITECTURE
+          </span>
+          <span className="text-white/70">AWS + GCP</span>
+        </div>
+        <div className="grid grid-cols-3 gap-1.5 text-center text-[10px]">
+          <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5">
+            <div className="text-[9px] text-white/40">TF STATE</div>
+            <div className="text-[#5ed29c] font-medium mt-0.5">SYNCED</div>
+          </div>
+          <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5">
+            <div className="text-[9px] text-white/40">K8S PODS</div>
+            <div className="text-white/90 font-medium mt-0.5">12/12 READY</div>
+          </div>
+          <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5">
+            <div className="text-[9px] text-white/40">VPC PEER</div>
+            <div className="text-[#5ed29c] font-medium mt-0.5">ACTIVE</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (type === "ops") {
+    return (
+      <div className="rounded-lg bg-black/40 border border-white/[0.08] p-3 font-mono text-[11px] flex flex-col gap-2 overflow-hidden relative">
+        <div className="flex items-center justify-between text-white/50 text-[10px]">
+          <span className="flex items-center gap-1.5 text-[#5ed29c]">
+            <Activity className="w-3.5 h-3.5 text-[#5ed29c]" />
+            PROMETHEUS SRE HEARTBEAT
+          </span>
+          <span className="text-[#5ed29c] font-semibold">99.999% SLA</span>
+        </div>
+        <div className="flex items-center justify-between bg-white/[0.03] border border-white/[0.06] rounded p-1.5 text-[10px]">
+          <div className="flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#5ed29c] animate-ping" />
+            <span className="text-white/80">Self-Healing Failover:</span>
+          </div>
+          <span className="text-[#5ed29c] font-semibold">ARMED (MTTR &lt; 45s)</span>
+        </div>
+      </div>
+    );
+  }
+
+  // UI / Full-stack
+  return (
+    <div className="rounded-lg bg-black/40 border border-white/[0.08] p-3 font-mono text-[11px] flex flex-col gap-2 overflow-hidden relative">
+      <div className="flex items-center justify-between text-white/50 text-[10px]">
+        <span className="flex items-center gap-1.5 text-[#5ed29c]">
+          <Zap className="w-3.5 h-3.5 text-[#5ed29c]" />
+          WEBSOCKET STREAM BUFFER
+        </span>
+        <span className="text-[#5ed29c] font-semibold">85 TOKENS/S</span>
+      </div>
+      <div className="flex items-center justify-between bg-white/[0.03] border border-white/[0.06] rounded p-1.5 text-[10px]">
+        <span className="text-white/60">FastAPI Async RPC</span>
+        <span className="text-[#5ed29c] flex items-center gap-1">
+          <span className="h-1 w-1 rounded-full bg-[#5ed29c]" /> 18ms Roundtrip
+        </span>
+        <span className="text-white/70">React UI</span>
+      </div>
+    </div>
+  );
+}
 
 // ── Micro Pipeline Component ──────────────────────────────────────────────────
 function PipelineFlow({ steps, delay = 0 }: { steps: string[]; delay?: number }) {
@@ -150,6 +345,7 @@ function BentoCard({ item, i }: { item: ExpertiseItem; i: number }) {
 
   return (
     <motion.div
+      layout
       className="h-full flex flex-col"
       initial={{ opacity: 0, y: 35, filter: "blur(6px)" }}
       whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
@@ -250,6 +446,11 @@ function BentoCard({ item, i }: { item: ExpertiseItem; i: number }) {
           {item.description}
         </p>
 
+        {/* Bespoke Interactive Domain Micro-Visualizer */}
+        <div className="relative z-10 pt-1">
+          <DomainVisualizer type={item.visualizerType} />
+        </div>
+
         {/* Pipeline Sequence */}
         <div className="relative z-10 mt-auto">
           <PipelineFlow steps={item.pipeline} delay={i * 0.25} />
@@ -274,6 +475,13 @@ function BentoCard({ item, i }: { item: ExpertiseItem; i: number }) {
 
 // ── Section ───────────────────────────────────────────────────────────────────
 const ServicesSection = () => {
+  const [activeTab, setActiveTab] = useState<Category>("all");
+
+  const filteredItems = EXPERTISE.filter((item) => {
+    if (activeTab === "all") return true;
+    return item.category === activeTab;
+  });
+
   return (
     <section
       id="skills"
@@ -347,15 +555,58 @@ const ServicesSection = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.9, delay: 0.35, ease: EASE }}
             />
+
+            {/* Interactive Domain Filter Tabs */}
+            <motion.div
+              className="flex items-center justify-center gap-2 mt-8 flex-wrap"
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
+              {[
+                { id: "all", label: "All Specializations", count: 6 },
+                { id: "data-ai", label: "Data & GenAI", count: 3 },
+                { id: "cloud-sre", label: "Cloud & SRE", count: 2 },
+                { id: "fullstack", label: "Full-Stack AI", count: 1 },
+              ].map((tab) => {
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id as Category)}
+                    className={`relative px-4 py-2 rounded-full text-xs font-mono uppercase tracking-wider transition-all duration-300 flex items-center gap-2 ${
+                      isActive
+                        ? "text-black font-semibold bg-[#00df8f] shadow-[0_0_20px_rgba(0,223,143,0.4)]"
+                        : "text-white/60 hover:text-white bg-white/[0.04] border border-white/[0.08] hover:border-white/20"
+                    }`}
+                  >
+                    <span>{tab.label}</span>
+                    <span
+                      className={`text-[10px] px-1.5 py-0.5 rounded-full ${
+                        isActive ? "bg-black/20 text-black font-bold" : "bg-white/10 text-white/60"
+                      }`}
+                    >
+                      {tab.count}
+                    </span>
+                  </button>
+                );
+              })}
+            </motion.div>
           </div>
         </BlueprintSectionHeader>
 
         {/* ── Perfectly Balanced Bento Grid (Zero Layout Holes) ── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6 auto-rows-fr">
-          {EXPERTISE.map((item, i) => (
-            <BentoCard key={item.number} item={item} i={i} />
-          ))}
-        </div>
+        <motion.div
+          layout
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6 auto-rows-fr"
+        >
+          <AnimatePresence mode="popLayout">
+            {filteredItems.map((item, i) => (
+              <BentoCard key={item.number} item={item} i={i} />
+            ))}
+          </AnimatePresence>
+        </motion.div>
 
         {/* Bottom architecture summary note */}
         <motion.div
