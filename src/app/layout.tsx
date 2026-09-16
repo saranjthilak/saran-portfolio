@@ -77,8 +77,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${kanit.variable} font-sans antialiased`}>
+    <html lang="en" suppressHydrationWarning>
+      <body suppressHydrationWarning className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${kanit.variable} font-sans antialiased`}>
         <CustomCursor />
         <PageTransition>
           {children}
