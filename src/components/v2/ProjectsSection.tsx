@@ -7,6 +7,9 @@ import {
   useTransform,
   useInView,
   animate,
+  useMotionValue,
+  useSpring,
+  useMotionTemplate,
 } from "framer-motion";
 import { projects } from "@/data/portfolio";
 import ProjectLinks from "./LiveProjectButton";
@@ -14,6 +17,38 @@ import BlueprintSectionHeader from "./BlueprintSectionHeader";
 
 const FEATURED = projects.filter((p) => p.featured);
 const EASE = [0.16, 1, 0.3, 1] as const;
+
+// ── Magnetic Wrapper ─────────────────────────────────────────────────────────
+const MagneticWrapper = ({ children }: { children: React.ReactNode }) => {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springX = useSpring(x, { damping: 15, stiffness: 150, mass: 0.1 });
+  const springY = useSpring(y, { damping: 15, stiffness: 150, mass: 0.1 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    x.set((e.clientX - centerX) * 0.45);
+    y.set((e.clientY - centerY) * 0.45);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.div
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ x: springX, y: springY }}
+      className="inline-block"
+    >
+      {children}
+    </motion.div>
+  );
+};
 
 // ── Animated number counter ──────────────────────────────────────────────────
 function CountUp({ to, duration = 0.8 }: { to: number; duration?: number }) {
@@ -50,8 +85,9 @@ interface StickyCardProps {
 const StickyCard = ({ project, index, total }: StickyCardProps) => {
   const wrapRef = useRef<HTMLDivElement>(null);
   const [imgHovered, setImgHovered] = useState(false);
-  const [shimmerPos, setShimmerPos] = useState({ x: 50, y: 50 });
+  const [isHovered, setIsHovered] = useState(false);
 
+  // Cinematic Focus: blur based on scroll
   const { scrollYProgress } = useScroll({
     target: wrapRef,
     offset: ["start start", "end start"],
@@ -59,6 +95,20 @@ const StickyCard = ({ project, index, total }: StickyCardProps) => {
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.88]);
   const cardOpacity = useTransform(scrollYProgress, [0, 0.55, 1], [1, 1, 0]);
   const yUp = useTransform(scrollYProgress, [0, 1], ["0%", "-5%"]);
+  const blurValue = useTransform(scrollYProgress, [0, 0.35, 1], ["blur(0px)", "blur(8px)", "blur(24px)"]);
+
+  // Spotlight mouse tracking
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const smoothX = useSpring(mouseX, { damping: 25, stiffness: 200 });
+  const smoothY = useSpring(mouseY, { damping: 25, stiffness: 200 });
+  const spotlightBackground = useMotionTemplate`radial-gradient(800px circle at ${smoothX}px ${smoothY}px, rgba(0, 223, 143, 0.15), transparent 50%)`;
+
+  const onCardMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    mouseX.set(e.clientX - rect.left);
+    mouseY.set(e.clientY - rect.top);
+  };
 
   const { scrollYProgress: imgScroll } = useScroll({
     target: wrapRef,
@@ -72,91 +122,87 @@ const StickyCard = ({ project, index, total }: StickyCardProps) => {
     { label: "Result", text: project.result, color: "#f59e0b" },
   ].filter((b) => b.text);
 
-  const onImageMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setShimmerPos({
-      x: ((e.clientX - rect.left) / rect.width) * 100,
-      y: ((e.clientY - rect.top) / rect.height) * 100,
-    });
-  };
-
   const isLast = index === total - 1;
 
   return (
     <div ref={wrapRef} className="relative" style={{ height: isLast ? "auto" : "200vh" }}>
       <div className={isLast ? "" : "sticky top-20 md:top-24"}>
         <motion.div
-          style={{ scale, opacity: cardOpacity, y: yUp }}
-          initial={{ opacity: 0, y: 70, filter: "blur(6px)" }}
+          initial={{ opacity: 0, y: 70, filter: "blur(8px)" }}
           whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.85, ease: EASE }}
         >
-          <div
-            id={`project-${index}`}
-            className="w-full rounded-2xl border border-white/[0.08] bg-[#0a0a0a]/90 backdrop-blur-md overflow-hidden"
-            style={{ boxShadow: "0 24px 80px rgba(0,0,0,0.55)" }}
-          >
-            {/* Top bar */}
-            <div className="flex items-center justify-between flex-wrap gap-3 px-6 sm:px-10 pt-6 sm:pt-8 pb-4 border-b border-white/[0.06]">
-              <div className="flex items-center gap-4">
-                <span
-                  className="font-kanit font-black text-white leading-none tabular-nums"
-                  style={{ fontSize: "clamp(1.5rem, 2.8vw, 2.2rem)" }}
+          <motion.div style={{ scale, opacity: cardOpacity, y: yUp, filter: blurValue }}>
+            <div
+              id={`project-${index}`}
+              className="w-full rounded-2xl border border-white/[0.08] bg-[#0a0a0a]/90 backdrop-blur-md overflow-hidden relative group"
+              style={{ boxShadow: "0 24px 80px rgba(0,0,0,0.55)" }}
+              onMouseMove={onCardMouseMove}
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
+              {/* Cinematic Spotlight overlay */}
+              <motion.div
+                className="absolute inset-0 pointer-events-none z-50"
+                animate={{ opacity: isHovered ? 1 : 0 }}
+                transition={{ duration: 0.4 }}
+                style={{ background: spotlightBackground }}
+              />
+
+              {/* Top bar */}
+              <div className="relative z-10 flex items-center justify-between flex-wrap gap-3 px-6 sm:px-10 pt-6 sm:pt-8 pb-4 border-b border-white/[0.06]">
+                <div className="flex items-center gap-4">
+                  <span
+                    className="font-kanit font-black text-white leading-none tabular-nums"
+                    style={{ fontSize: "clamp(1.5rem, 2.8vw, 2.2rem)" }}
+                  >
+                    <CountUp to={index + 1} duration={0.7} />
+                  </span>
+                  <span className="font-kanit font-light uppercase tracking-widest text-white/40 text-xs">
+                    {project.source}
+                  </span>
+                </div>
+                <div className="flex items-center gap-4">
+                  <span
+                    className="font-kanit font-medium uppercase tracking-wide text-white"
+                    style={{ fontSize: "clamp(0.85rem, 1.6vw, 1.3rem)" }}
+                  >
+                    {project.title}
+                  </span>
+                  <MagneticWrapper>
+                    <ProjectLinks githubUrl={project.url} liveUrl={project.liveUrl} />
+                  </MagneticWrapper>
+                </div>
+              </div>
+
+              {/* Body: image | details */}
+              <div className="relative z-10 grid grid-cols-1 md:grid-cols-[1.15fr_1fr]">
+
+                {/* Image */}
+                <div
+                  className="relative overflow-hidden aspect-[16/10] md:aspect-auto md:min-h-[380px] cursor-pointer"
+                  onMouseEnter={() => setImgHovered(true)}
+                  onMouseLeave={() => setImgHovered(false)}
                 >
-                  <CountUp to={index + 1} duration={0.7} />
-                </span>
-                <span className="font-kanit font-light uppercase tracking-widest text-white/40 text-xs">
-                  {project.source}
-                </span>
-              </div>
-              <div className="flex items-center gap-4">
-                <span
-                  className="font-kanit font-medium uppercase tracking-wide text-white"
-                  style={{ fontSize: "clamp(0.85rem, 1.6vw, 1.3rem)" }}
-                >
-                  {project.title}
-                </span>
-                <ProjectLinks githubUrl={project.url} liveUrl={project.liveUrl} />
-              </div>
-            </div>
+                  <motion.img
+                    src={project.image}
+                    alt={`${project.title} screenshot`}
+                    className="w-full h-full object-cover object-center scale-[1.12]"
+                    style={{ y: imageY }}
+                    animate={{ scale: imgHovered ? 1.18 : 1.12 }}
+                    transition={{ duration: 0.65, ease: EASE }}
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#0a0a0a]/80 pointer-events-none hidden md:block" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+                  <span className="absolute bottom-4 left-5 font-mono text-[10px] uppercase tracking-widest text-white/30 select-none">
+                    {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+                  </span>
+                </div>
 
-            {/* Body: image | details */}
-            <div className="grid grid-cols-1 md:grid-cols-[1.15fr_1fr]">
-
-              {/* Image */}
-              <div
-                className="relative overflow-hidden aspect-[16/10] md:aspect-auto md:min-h-[380px] cursor-pointer"
-                onMouseEnter={() => setImgHovered(true)}
-                onMouseLeave={() => setImgHovered(false)}
-                onMouseMove={onImageMouseMove}
-              >
-                <motion.img
-                  src={project.image}
-                  alt={`${project.title} screenshot`}
-                  className="w-full h-full object-cover object-center scale-[1.12]"
-                  style={{ y: imageY }}
-                  animate={{ scale: imgHovered ? 1.18 : 1.12 }}
-                  transition={{ duration: 0.65, ease: EASE }}
-                  loading="lazy"
-                />
-                <motion.div
-                  className="absolute inset-0 pointer-events-none"
-                  animate={{ opacity: imgHovered ? 1 : 0 }}
-                  transition={{ duration: 0.3 }}
-                  style={{
-                    background: `radial-gradient(circle 220px at ${shimmerPos.x}% ${shimmerPos.y}%, rgba(255,255,255,0.11), transparent 70%)`,
-                  }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#0a0a0a]/80 pointer-events-none hidden md:block" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-                <span className="absolute bottom-4 left-5 font-mono text-[10px] uppercase tracking-widest text-white/30 select-none">
-                  {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
-                </span>
-              </div>
-
-              {/* Details panel */}
-              <div className="flex flex-col gap-5 px-6 sm:px-8 py-7 sm:py-8">
+                {/* Details panel */}
+                <div className="flex flex-col gap-5 px-6 sm:px-8 py-7 sm:py-8">
                 {project.description && (
                   <p className="font-kanit font-light text-white/65 leading-relaxed text-sm sm:text-[0.95rem]">
                     {project.description}
@@ -213,6 +259,7 @@ const StickyCard = ({ project, index, total }: StickyCardProps) => {
             </div>
           </div>
         </motion.div>
+      </motion.div>
       </div>
     </div>
   );
