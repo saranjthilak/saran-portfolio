@@ -201,22 +201,60 @@ const StickyCard = ({ project, index, total }: StickyCardProps) => {
 
 // ── Section ───────────────────────────────────────────────────────────────────
 const ProjectsSection = () => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const streamUrl =
+      "https://stream.mux.com/tLkHO1qZoaaQOUeVWo8hEBeGQfySP02EPS02BmnNFyXys.m3u8";
+    let hlsInstance: any = null;
+
+    import("hls.js")
+      .then(({ default: Hls }) => {
+        if (Hls && Hls.isSupported()) {
+          hlsInstance = new Hls({ enableWorker: false });
+          hlsInstance.loadSource(streamUrl);
+          hlsInstance.attachMedia(video);
+        } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+          video.src = streamUrl;
+        }
+      })
+      .catch(() => {
+        if (video.canPlayType("application/vnd.apple.mpegurl")) {
+          video.src = streamUrl;
+        }
+      });
+
+    return () => {
+      if (hlsInstance) {
+        hlsInstance.destroy();
+      }
+    };
+  }, []);
+
   return (
     <section
       id="projects"
-      className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-30 border-t border-white/10"
+      className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-30 overflow-hidden border-t border-white/10"
       style={{ background: "#010101", boxShadow: "0 -10px 40px rgba(0,0,0,0.5)" }}
     >
-      {/* ── Background Video ── */}
+      {/* ── Full-Screen HLS Video Background & Glassmorphic Overlays ── */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <video
-          autoPlay loop muted playsInline
-          className="w-full h-full object-cover object-center pointer-events-none"
-          style={{ opacity: 0.35 }}
-          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4"
+          ref={videoRef}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover object-center pointer-events-none opacity-45"
         />
-        <div className="absolute inset-0 bg-[#010101]/65" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#010101]/90 via-transparent to-[#010101]/90" />
+        {/* Glassmorphic backdrop blur + depth contrast overlays */}
+        <div className="absolute inset-0 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 bg-[#010101]/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#010101]/90 via-transparent to-[#010101]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(0,223,143,0.12),transparent_65%)]" />
       </div>
 
       <div className="relative z-10">
