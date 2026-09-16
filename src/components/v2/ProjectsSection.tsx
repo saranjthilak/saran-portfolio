@@ -18,6 +18,11 @@ import BlueprintSectionHeader from "./BlueprintSectionHeader";
 const FEATURED = projects.filter((p) => p.featured);
 const EASE = [0.16, 1, 0.3, 1] as const;
 
+const itemVariants = {
+  hidden: { opacity: 0, y: 40, filter: "blur(8px)" },
+  visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: EASE } },
+};
+
 // ── Magnetic Wrapper ─────────────────────────────────────────────────────────
 const MagneticWrapper = ({ children }: { children: React.ReactNode }) => {
   const x = useMotionValue(0);
@@ -128,10 +133,22 @@ const StickyCard = ({ project, index, total }: StickyCardProps) => {
     <div ref={wrapRef} className="relative" style={{ height: isLast ? "auto" : "200vh" }}>
       <div className={isLast ? "" : "sticky top-20 md:top-24"}>
         <motion.div
-          initial={{ opacity: 0, y: 70, filter: "blur(8px)" }}
-          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.85, ease: EASE }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-25%" }}
+          variants={{
+            hidden: { opacity: 0, y: 100 },
+            visible: { 
+              opacity: 1, 
+              y: 0, 
+              transition: { 
+                duration: 0.9, 
+                ease: EASE,
+                staggerChildren: 0.15,
+                delayChildren: 0.1
+              } 
+            }
+          }}
         >
           <motion.div style={{ scale, opacity: cardOpacity, y: yUp, filter: blurValue }}>
             <div
@@ -151,7 +168,7 @@ const StickyCard = ({ project, index, total }: StickyCardProps) => {
               />
 
               {/* Top bar */}
-              <div className="relative z-10 flex items-center justify-between flex-wrap gap-3 px-6 sm:px-10 pt-6 sm:pt-8 pb-4 border-b border-white/[0.06]">
+              <motion.div variants={itemVariants} className="relative z-10 flex items-center justify-between flex-wrap gap-3 px-6 sm:px-10 pt-6 sm:pt-8 pb-4 border-b border-white/[0.06]">
                 <div className="flex items-center gap-4">
                   <span
                     className="font-kanit font-black text-white leading-none tabular-nums"
@@ -174,13 +191,14 @@ const StickyCard = ({ project, index, total }: StickyCardProps) => {
                     <ProjectLinks githubUrl={project.url} liveUrl={project.liveUrl} />
                   </MagneticWrapper>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Body: image | details */}
               <div className="relative z-10 grid grid-cols-1 md:grid-cols-[1.15fr_1fr]">
 
                 {/* Image */}
-                <div
+                <motion.div
+                  variants={itemVariants}
                   className="relative overflow-hidden aspect-[16/10] md:aspect-auto md:min-h-[380px] cursor-pointer"
                   onMouseEnter={() => setImgHovered(true)}
                   onMouseLeave={() => setImgHovered(false)}
@@ -199,10 +217,10 @@ const StickyCard = ({ project, index, total }: StickyCardProps) => {
                   <span className="absolute bottom-4 left-5 font-mono text-[10px] uppercase tracking-widest text-white/30 select-none">
                     {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
                   </span>
-                </div>
+                </motion.div>
 
                 {/* Details panel */}
-                <div className="flex flex-col gap-5 px-6 sm:px-8 py-7 sm:py-8">
+                <motion.div variants={itemVariants} className="flex flex-col gap-5 px-6 sm:px-8 py-7 sm:py-8">
                 {project.description && (
                   <p className="font-kanit font-light text-white/65 leading-relaxed text-sm sm:text-[0.95rem]">
                     {project.description}
@@ -255,7 +273,7 @@ const StickyCard = ({ project, index, total }: StickyCardProps) => {
                     ))}
                   </div>
                 )}
-              </div>
+              </motion.div>
             </div>
           </div>
         </motion.div>
