@@ -40,21 +40,21 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
       variants={containerVariants}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
-      className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-24 md:mb-40 last:mb-0"
+      className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 mb-24 md:mb-40 last:mb-0"
     >
       {/* ── IMAGE TILE (Main visual) ── */}
       <motion.div
         variants={itemVariants}
         className={`relative overflow-hidden rounded-[32px] border border-white/10 bg-[#0a0a0a] ${
-          isEven ? "md:col-span-2" : "md:col-span-2 md:order-2"
-        } min-h-[350px] md:min-h-[450px] group`}
+          isEven ? "md:col-span-2 md:row-span-2" : "md:col-span-2 md:row-span-2 md:col-start-3 md:row-start-1"
+        } min-h-[350px] md:min-h-0 h-full group`}
         style={{ boxShadow: "inset 0 0 40px rgba(0,0,0,0.8)" }}
       >
         <div className="absolute inset-0 bg-gradient-to-tr from-[#00df8f]/10 to-transparent mix-blend-overlay z-10" />
         <img
           src={project.image}
           alt={project.title}
-          className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000 ease-out"
+          className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000 ease-out"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#070b0a]/90 via-[#070b0a]/20 to-transparent opacity-80 z-10" />
         
@@ -72,7 +72,7 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
       <motion.div
         variants={itemVariants}
         className={`flex flex-col justify-between p-8 md:p-10 rounded-[32px] border border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent hover:bg-white/[0.06] transition-colors duration-500 relative overflow-hidden ${
-          isEven ? "md:col-span-1" : "md:col-span-1 md:order-1"
+          isEven ? "md:col-span-2 md:row-span-1" : "md:col-span-2 md:row-span-1 md:col-start-1 md:row-start-1"
         }`}
       >
         {/* Subtle glow */}
@@ -100,11 +100,46 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
         </div>
       </motion.div>
 
+      {/* ── CASE STUDY TILE ── */}
+      <motion.div
+        variants={itemVariants}
+        className={`p-8 md:p-10 rounded-[32px] border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] transition-colors duration-500 flex flex-col justify-center ${
+          isEven ? "md:col-span-1 md:row-span-1" : "md:col-span-1 md:row-span-1 md:col-start-1 md:row-start-2"
+        }`}
+      >
+        <div className="flex flex-col gap-5">
+          {project.problem && (
+            <div className="flex flex-col gap-1.5">
+              <span className="font-kanit text-[10px] uppercase tracking-widest text-[#ff4f4f] flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#ff4f4f]" /> Problem
+              </span>
+              <span className="text-sm text-white/70 leading-relaxed">{project.problem}</span>
+            </div>
+          )}
+          {project.approach && (
+            <div className="flex flex-col gap-1.5">
+              <span className="font-kanit text-[10px] uppercase tracking-widest text-[#38bdf8] flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#38bdf8]" /> Approach
+              </span>
+              <span className="text-sm text-white/70 leading-relaxed">{project.approach}</span>
+            </div>
+          )}
+          {project.result && (
+            <div className="flex flex-col gap-1.5">
+              <span className="font-kanit text-[10px] uppercase tracking-widest text-[#f59e0b] flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#f59e0b]" /> Result
+              </span>
+              <span className="text-sm text-white/70 leading-relaxed">{project.result}</span>
+            </div>
+          )}
+        </div>
+      </motion.div>
+
       {/* ── SKILLS TILE ── */}
       <motion.div
         variants={itemVariants}
         className={`p-8 md:p-10 rounded-[32px] border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] transition-colors duration-500 ${
-          isEven ? "md:col-span-1" : "md:col-span-2 md:order-4"
+          isEven ? "md:col-span-1 md:row-span-1" : "md:col-span-1 md:row-span-1 md:col-start-2 md:row-start-2"
         }`}
       >
         <h4 className="font-kanit text-xs uppercase tracking-widest text-white/30 mb-6 flex items-center gap-3">
@@ -119,41 +154,6 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
               {skill}
             </span>
           ))}
-        </div>
-      </motion.div>
-
-      {/* ── CASE STUDY TILE ── */}
-      <motion.div
-        variants={itemVariants}
-        className={`p-8 md:p-10 rounded-[32px] border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] transition-colors duration-500 flex flex-col justify-center ${
-          isEven ? "md:col-span-2" : "md:col-span-1 md:order-3"
-        }`}
-      >
-        <div className={`grid grid-cols-1 ${isEven ? 'sm:grid-cols-3' : 'sm:grid-cols-1'} gap-8`}>
-          {project.problem && (
-            <div className="flex flex-col gap-3">
-              <span className="font-kanit text-[10px] uppercase tracking-widest text-[#ff4f4f] flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#ff4f4f]" /> Problem
-              </span>
-              <span className="text-sm text-white/70 leading-relaxed">{project.problem}</span>
-            </div>
-          )}
-          {project.approach && (
-            <div className="flex flex-col gap-3">
-              <span className="font-kanit text-[10px] uppercase tracking-widest text-[#38bdf8] flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#38bdf8]" /> Approach
-              </span>
-              <span className="text-sm text-white/70 leading-relaxed">{project.approach}</span>
-            </div>
-          )}
-          {project.result && (
-            <div className="flex flex-col gap-3">
-              <span className="font-kanit text-[10px] uppercase tracking-widest text-[#f59e0b] flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#f59e0b]" /> Result
-              </span>
-              <span className="text-sm text-white/70 leading-relaxed">{project.result}</span>
-            </div>
-          )}
         </div>
       </motion.div>
     </motion.div>
