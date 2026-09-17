@@ -1,12 +1,7 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
-import {
-  motion,
-  useSpring,
-  useMotionValue,
-  AnimatePresence,
-} from "framer-motion";
+import { useRef, useEffect } from "react";
+import { motion, useInView } from "framer-motion";
 import { projects } from "@/data/portfolio";
 import ProjectLinks from "./LiveProjectButton";
 import BlueprintSectionHeader from "./BlueprintSectionHeader";
@@ -14,61 +9,161 @@ import BlueprintSectionHeader from "./BlueprintSectionHeader";
 const FEATURED = projects.filter((p) => p.featured);
 const EASE = [0.16, 1, 0.3, 1] as const;
 
-// ── Magnetic Wrapper ─────────────────────────────────────────────────────────
-const MagneticWrapper = ({ children }: { children: React.ReactNode }) => {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const springX = useSpring(x, { damping: 15, stiffness: 150, mass: 0.1 });
-  const springY = useSpring(y, { damping: 15, stiffness: 150, mass: 0.1 });
+// ── Bento Box Component ───────────────────────────────────────────────────────
+const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index: number }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isEven = index % 2 === 0;
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    x.set((e.clientX - centerX) * 0.45);
-    y.set((e.clientY - centerY) * 0.45);
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.15, delayChildren: 0.1 }
+    }
   };
 
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30, scale: 0.95, filter: "blur(4px)" },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      scale: 1, 
+      filter: "blur(0px)",
+      transition: { duration: 0.8, ease: EASE } 
+    }
   };
 
   return (
     <motion.div
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{ x: springX, y: springY }}
-      className="inline-block"
+      ref={ref}
+      variants={containerVariants}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-24 md:mb-40 last:mb-0"
     >
-      {children}
+      {/* ── IMAGE TILE (Main visual) ── */}
+      <motion.div
+        variants={itemVariants}
+        className={`relative overflow-hidden rounded-[32px] border border-white/10 bg-[#0a0a0a] ${
+          isEven ? "md:col-span-2" : "md:col-span-2 md:order-2"
+        } min-h-[350px] md:min-h-[450px] group`}
+        style={{ boxShadow: "inset 0 0 40px rgba(0,0,0,0.8)" }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-tr from-[#00df8f]/10 to-transparent mix-blend-overlay z-10" />
+        <img
+          src={project.image}
+          alt={project.title}
+          className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000 ease-out"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#070b0a]/90 via-[#070b0a]/20 to-transparent opacity-80 z-10" />
+        
+        {/* Floating index in the corner */}
+        <div className="absolute bottom-6 right-8 z-20 overflow-hidden">
+          <motion.span 
+            className="font-kanit font-black text-[120px] leading-none text-white/5 select-none translate-y-8 group-hover:translate-y-0 transition-transform duration-700 ease-out block"
+          >
+            0{index + 1}
+          </motion.span>
+        </div>
+      </motion.div>
+
+      {/* ── INFO TILE (Title, Desc, Links) ── */}
+      <motion.div
+        variants={itemVariants}
+        className={`flex flex-col justify-between p-8 md:p-10 rounded-[32px] border border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent hover:bg-white/[0.06] transition-colors duration-500 relative overflow-hidden ${
+          isEven ? "md:col-span-1" : "md:col-span-1 md:order-1"
+        }`}
+      >
+        {/* Subtle glow */}
+        <div className="absolute -top-20 -right-20 w-40 h-40 bg-[#00df8f]/20 blur-[60px] pointer-events-none" />
+
+        <div className="relative z-10">
+          <div className="flex justify-between items-start mb-6">
+            <span className="font-mono text-sm text-[#00df8f] bg-[#00df8f]/10 px-3 py-1 rounded-full border border-[#00df8f]/20">
+              Featured
+            </span>
+            <span className="font-kanit text-xs uppercase tracking-widest text-white/40">
+              {project.source}
+            </span>
+          </div>
+          <h3 className="text-3xl lg:text-4xl font-black uppercase tracking-wide text-white mb-4 leading-tight">
+            {project.title}
+          </h3>
+          <p className="text-white/60 text-sm leading-relaxed">
+            {project.description}
+          </p>
+        </div>
+        
+        <div className="mt-10 relative z-10">
+          <ProjectLinks githubUrl={project.url} liveUrl={project.liveUrl} />
+        </div>
+      </motion.div>
+
+      {/* ── SKILLS TILE ── */}
+      <motion.div
+        variants={itemVariants}
+        className={`p-8 md:p-10 rounded-[32px] border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] transition-colors duration-500 ${
+          isEven ? "md:col-span-1" : "md:col-span-2 md:order-4"
+        }`}
+      >
+        <h4 className="font-kanit text-xs uppercase tracking-widest text-white/30 mb-6 flex items-center gap-3">
+          <span className="w-2 h-2 rounded-full bg-white/20" /> Tech Stack
+        </h4>
+        <div className="flex flex-wrap gap-2">
+          {project.skills?.map((skill) => (
+            <span
+              key={skill}
+              className="px-4 py-2 rounded-full border border-white/10 text-white/70 text-xs font-mono bg-white/[0.02] hover:border-[#00df8f]/50 hover:text-[#00df8f] transition-colors duration-300 cursor-default"
+            >
+              {skill}
+            </span>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* ── CASE STUDY TILE ── */}
+      <motion.div
+        variants={itemVariants}
+        className={`p-8 md:p-10 rounded-[32px] border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] transition-colors duration-500 flex flex-col justify-center ${
+          isEven ? "md:col-span-2" : "md:col-span-1 md:order-3"
+        }`}
+      >
+        <div className={`grid grid-cols-1 ${isEven ? 'sm:grid-cols-3' : 'sm:grid-cols-1'} gap-8`}>
+          {project.problem && (
+            <div className="flex flex-col gap-3">
+              <span className="font-kanit text-[10px] uppercase tracking-widest text-[#ff4f4f] flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#ff4f4f]" /> Problem
+              </span>
+              <span className="text-sm text-white/70 leading-relaxed">{project.problem}</span>
+            </div>
+          )}
+          {project.approach && (
+            <div className="flex flex-col gap-3">
+              <span className="font-kanit text-[10px] uppercase tracking-widest text-[#38bdf8] flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#38bdf8]" /> Approach
+              </span>
+              <span className="text-sm text-white/70 leading-relaxed">{project.approach}</span>
+            </div>
+          )}
+          {project.result && (
+            <div className="flex flex-col gap-3">
+              <span className="font-kanit text-[10px] uppercase tracking-widest text-[#f59e0b] flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#f59e0b]" /> Result
+              </span>
+              <span className="text-sm text-white/70 leading-relaxed">{project.result}</span>
+            </div>
+          )}
+        </div>
+      </motion.div>
     </motion.div>
   );
 };
 
+// ── Section Component ────────────────────────────────────────────────────────
 export default function ProjectsSection() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  
-  // Mouse position for the floating image
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  
-  // Smooth spring for floating image
-  const springX = useSpring(mouseX, { stiffness: 150, damping: 25, mass: 0.1 });
-  const springY = useSpring(mouseY, { stiffness: 150, damping: 25, mass: 0.1 });
-
-  const sectionRef = useRef<HTMLElement>(null);
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!sectionRef.current) return;
-    const rect = sectionRef.current.getBoundingClientRect();
-    // Calculate mouse position relative to the section
-    mouseX.set(e.clientX - rect.left);
-    mouseY.set(e.clientY - rect.top);
-  };
-
-  // Video Background Logic
   const videoRef = useRef<HTMLVideoElement>(null);
+
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -103,9 +198,7 @@ export default function ProjectsSection() {
   return (
     <section
       id="projects"
-      ref={sectionRef}
-      onMouseMove={handleMouseMove}
-      className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-30 overflow-hidden border-t border-white/10 bg-[#070b0a] min-h-screen cursor-default"
+      className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-30 overflow-hidden border-t border-white/10 bg-[#070b0a]"
       style={{ boxShadow: "0 -10px 40px rgba(0,0,0,0.5)" }}
     >
       {/* ── Background Video & Overlays ── */}
@@ -116,115 +209,52 @@ export default function ProjectsSection() {
           loop
           muted
           playsInline
-          className="w-full h-full object-cover pointer-events-none opacity-60"
+          className="w-full h-full object-cover pointer-events-none opacity-40 mix-blend-screen"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#070b0a] via-[#070b0a]/75 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#070b0a] via-[#070b0a]/50 to-transparent" />
+        <div className="absolute inset-0 bg-[#070b0a]/80" />
+        {/* Subtle grid pattern overlay */}
+        <div 
+          className="absolute inset-0 opacity-[0.03]" 
+          style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px' }} 
+        />
       </div>
 
       <div className="relative z-10 pt-24 md:pt-32 pb-24 md:pb-40">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8">
+        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
           <BlueprintSectionHeader align="left">
-            <div className="mb-16 md:mb-24">
+            <div className="mb-20 md:mb-32">
               <motion.h2
                 className="font-black leading-[0.92] tracking-tighter text-white"
-                style={{ fontSize: "clamp(3rem, 7vw, 6rem)" }}
-                initial={{ opacity: 0, y: 28, filter: "blur(4px)" }}
+                style={{ fontSize: "clamp(3rem, 8vw, 6.5rem)" }}
+                initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
                 whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                 viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
+                transition={{ duration: 0.9, ease: EASE }}
               >
-                Selected <br className="hidden md:block" />
-                <span className="accent-serif italic font-light text-white/80">Work</span><span className="text-[#00df8f]">.</span>
+                Featured <br className="hidden md:block" />
+                <span className="accent-serif italic font-light text-white/80">Dashboard</span>
+                <span className="text-[#00df8f]">.</span>
               </motion.h2>
+              <motion.p 
+                className="mt-6 text-white/50 max-w-xl font-kanit font-light text-lg"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.3 }}
+              >
+                A curated selection of my most significant technical achievements, 
+                architected for performance and scale.
+              </motion.p>
             </div>
           </BlueprintSectionHeader>
 
-          {/* Roster List */}
-          <div className="flex flex-col border-t border-white/10 relative">
-            {FEATURED.map((project, index) => {
-              const isHovered = hoveredIndex === index;
-              return (
-                <div
-                  key={project.title}
-                  className="group relative flex flex-col md:flex-row md:items-center justify-between border-b border-white/10 py-8 md:py-12 px-2 transition-colors duration-500 hover:bg-white/[0.02]"
-                  onMouseEnter={() => setHoveredIndex(index)}
-                  onMouseLeave={() => setHoveredIndex(null)}
-                >
-                  <div className="flex items-center gap-6 md:gap-12 z-20 pointer-events-none md:pointer-events-auto">
-                    <span className="font-mono text-sm text-white/30 group-hover:text-[#00df8f] transition-colors duration-300">
-                      0{index + 1}
-                    </span>
-                    <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-wide text-white/70 group-hover:text-white transition-all duration-500 md:group-hover:translate-x-6 transform-gpu ease-out">
-                      {project.title}
-                    </h3>
-                  </div>
-
-                  <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-10 mt-6 md:mt-0 z-20 md:ml-auto">
-                    <div className="hidden lg:flex gap-2">
-                      {project.skills?.slice(0, 3).map((skill) => (
-                        <span key={skill} className="font-kanit text-[10px] uppercase tracking-widest px-3 py-1 rounded-full border border-white/10 text-white/40 group-hover:border-[#00df8f]/30 group-hover:text-[#00df8f] transition-colors duration-300">
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="flex items-center gap-4 w-full md:w-auto">
-                      {/* Mobile description */}
-                      <p className="text-sm text-white/50 md:hidden w-2/3 leading-relaxed">
-                        {project.description?.substring(0, 100)}...
-                      </p>
-                      <div className="ml-auto md:opacity-0 md:group-hover:opacity-100 transition-all duration-500 md:-translate-x-4 md:group-hover:translate-x-0 transform-gpu ease-out">
-                        <MagneticWrapper>
-                          <ProjectLinks githubUrl={project.url} liveUrl={project.liveUrl} />
-                        </MagneticWrapper>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Mobile Image (hidden on desktop) */}
-                  <div className="block md:hidden mt-8 overflow-hidden rounded-xl border border-white/10 w-full relative aspect-[16/10]">
-                     <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
-                     <div className="absolute inset-0 bg-black/20 pointer-events-none" />
-                  </div>
-                </div>
-              );
-            })}
+          {/* Bento Boxes */}
+          <div className="flex flex-col">
+            {FEATURED.map((project, index) => (
+              <ProjectBento key={project.title} project={project} index={index} />
+            ))}
           </div>
         </div>
-      </div>
-
-      {/* Floating Image (Desktop Only) */}
-      <div className="hidden md:block pointer-events-none absolute top-0 left-0 z-10 w-[500px] aspect-[16/10] overflow-visible">
-        <motion.div
-          className="w-full h-full absolute inset-0"
-          style={{
-            x: springX,
-            y: springY,
-            translateX: "-50%",
-            translateY: "-50%",
-          }}
-        >
-          <AnimatePresence mode="popLayout">
-            {hoveredIndex !== null && (
-              <motion.div
-                key={hoveredIndex}
-                initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
-                animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                exit={{ opacity: 0, scale: 0.8, rotate: 5 }}
-                transition={{ duration: 0.4, ease: EASE }}
-                className="w-full h-full absolute inset-0 rounded-2xl overflow-hidden border border-white/10"
-                style={{ boxShadow: "0 30px 80px rgba(0,0,0,0.6)" }}
-              >
-                <img
-                  src={FEATURED[hoveredIndex].image}
-                  alt={FEATURED[hoveredIndex].title}
-                  className="w-full h-full object-cover scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-tr from-[#00df8f]/10 to-transparent mix-blend-overlay" />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
       </div>
     </section>
   );
