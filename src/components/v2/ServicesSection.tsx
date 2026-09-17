@@ -1,7 +1,13 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useRef, useState, useCallback, useEffect } from "react";
+import {
+  motion,
+  AnimatePresence,
+  useMotionValue,
+  useSpring,
+  useInView,
+} from "framer-motion";
 import BlueprintSectionHeader from "./BlueprintSectionHeader";
 import {
   Database,
@@ -15,9 +21,23 @@ import {
   Zap,
   Cpu,
   Server,
+  RotateCcw,
 } from "lucide-react";
 
+// ── Constants ─────────────────────────────────────────────────────────────────
 const EASE = [0.16, 1, 0.3, 1] as const;
+
+// ── Domain Color System ───────────────────────────────────────────────────────
+// Each expertise domain gets a unique color identity instead of uniform green
+const DOMAIN_COLORS = {
+  data:  { primary: "#06b6d4", rgb: "6,182,212" },
+  ai:    { primary: "#a78bfa", rgb: "167,139,250" },
+  mlops: { primary: "#f59e0b", rgb: "245,158,11" },
+  cloud: { primary: "#38bdf8", rgb: "56,189,248" },
+  ops:   { primary: "#f43f5e", rgb: "244,63,94" },
+  ui:    { primary: "#10b981", rgb: "16,185,129" },
+} as const;
+type DomainColor = (typeof DOMAIN_COLORS)[keyof typeof DOMAIN_COLORS];
 
 type Category = "all" | "data-ai" | "cloud-sre" | "fullstack";
 
@@ -32,9 +52,11 @@ interface ExpertiseItem {
   pipeline: string[];
   tags: string[];
   metrics: { label: string; value: string };
-  visualizerType: "data" | "ai" | "mlops" | "cloud" | "ops" | "ui";
+  visualizerType: keyof typeof DOMAIN_COLORS;
+  heroSpan?: boolean;
 }
 
+// ── Expertise Data ────────────────────────────────────────────────────────────
 const EXPERTISE: ExpertiseItem[] = [
   {
     number: "01",
@@ -49,6 +71,7 @@ const EXPERTISE: ExpertiseItem[] = [
     tags: ["Airflow", "dbt", "BigQuery", "Snowflake", "ETL/ELT"],
     metrics: { label: "THROUGHPUT", value: "48.2 GB/s" },
     visualizerType: "data",
+    heroSpan: true,
   },
   {
     number: "02",
@@ -119,25 +142,183 @@ const EXPERTISE: ExpertiseItem[] = [
     tags: ["FastAPI", "React", "Next.js", "TypeScript", "WebSocket"],
     metrics: { label: "STREAM SPEED", value: "85 TOKENS/SEC" },
     visualizerType: "ui",
+    heroSpan: true,
   },
 ];
 
+// Connection definitions for SVG lines between related cards
+const CARD_CONNECTIONS = [
+  { from: "01", to: "03", key: "data" as const },
+  { from: "02", to: "06", key: "ai" as const },
+  { from: "03", to: "04", key: "mlops" as const },
+  { from: "04", to: "05", key: "cloud" as const },
+];
+
+// ── Corner Blueprint Ticks (reusable) ─────────────────────────────────────────
+function CornerTicks({ color, active }: { color?: string; active?: boolean }) {
+  const c = active && color ? color : "rgba(255,255,255,0.2)";
+  const base = "pointer-events-none absolute w-3 h-3 z-10 transition-colors duration-300";
+  return (
+    <>
+      <span className={`${base} top-0 left-0 border-t-2 border-l-2`} style={{ borderColor: c }} />
+      <span className={`${base} top-0 right-0 border-t-2 border-r-2`} style={{ borderColor: c }} />
+      <span className={`${base} bottom-0 left-0 border-b-2 border-l-2`} style={{ borderColor: c }} />
+      <span className={`${base} bottom-0 right-0 border-b-2 border-r-2`} style={{ borderColor: c }} />
+    </>
+  );
+}
+
+// ── Typewriter Title ──────────────────────────────────────────────────────────
+function TypewriterTitle() {
+  const ref = useRef<HTMLHeadingElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const word = "Expertise";
+  const typingEnd = 0.5 + word.length * 0.06;
+
+  return (
+    <motion.h2
+      ref={ref}
+      className="font-black leading-[0.92] tracking-tighter text-white text-center"
+      style={{ fontSize: "clamp(2.6rem, 6.5vw, 4.8rem)" }}
+    >
+      <motion.span
+        initial={{ opacity: 0, y: 20 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.5, ease: EASE }}
+      >
+        My{" "}
+      </motion.span>
+      <span className="accent-serif">
+        {word.split("").map((char, i) => (
+          <motion.span
+            key={i}
+            className="inline-block"
+            initial={{ opacity: 0, y: 10 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.05, delay: 0.5 + i * 0.06 }}
+          >
+            {char}
+          </motion.span>
+        ))}
+      </span>
+      <motion.span
+        className="text-[#00df8f] inline-block"
+        initial={{ opacity: 0, scale: 0, rotate: -20 }}
+        animate={inView ? { opacity: 1, scale: 1, rotate: 0 } : {}}
+        transition={{ type: "spring", stiffness: 500, damping: 12, delay: typingEnd + 0.15 }}
+      >
+        .
+      </motion.span>
+      {/* Blinking cursor */}
+      <motion.span
+        className="inline-block w-[3px] h-[0.8em] bg-[#00df8f] ml-1 align-middle rounded-full"
+        initial={{ opacity: 0 }}
+        animate={inView ? { opacity: [0, 1, 0] } : { opacity: 0 }}
+        transition={{ duration: 0.7, repeat: 5, delay: 0.4, repeatType: "loop" }}
+      />
+    </motion.h2>
+  );
+}
+
+// ── Magnetic Filter Tab ───────────────────────────────────────────────────────
+function MagneticTab({
+  tab,
+  isActive,
+  onClick,
+}: {
+  tab: { id: Category; label: string; count: number };
+  isActive: boolean;
+  onClick: () => void;
+}) {
+  const ref = useRef<HTMLButtonElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springX = useSpring(x, { stiffness: 300, damping: 20 });
+  const springY = useSpring(y, { stiffness: 300, damping: 20 });
+
+  const onMove = useCallback(
+    (e: React.MouseEvent) => {
+      const el = ref.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      x.set((e.clientX - (r.left + r.width / 2)) * 0.15);
+      y.set((e.clientY - (r.top + r.height / 2)) * 0.15);
+    },
+    [x, y],
+  );
+
+  const onLeave = useCallback(() => { x.set(0); y.set(0); }, [x, y]);
+
+  return (
+    <motion.button
+      ref={ref}
+      onClick={onClick}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      style={{ x: springX, y: springY }}
+      className={`relative px-4 py-2 rounded-full text-xs font-mono uppercase tracking-wider flex items-center gap-2 cursor-pointer ${
+        !isActive ? "bg-white/[0.04] border border-white/[0.08] hover:border-white/20" : ""
+      }`}
+    >
+      {isActive && (
+        <motion.div
+          layoutId="expertise-active-tab"
+          className="absolute inset-0 rounded-full bg-[#00df8f] shadow-[0_0_20px_rgba(0,223,143,0.4)]"
+          transition={{ type: "spring", stiffness: 380, damping: 30 }}
+        />
+      )}
+      <span className={`relative z-10 transition-colors duration-200 ${isActive ? "text-black font-semibold" : "text-white/60"}`}>
+        {tab.label}
+      </span>
+      <span className={`relative z-10 text-[10px] px-1.5 py-0.5 rounded-full transition-colors duration-200 ${
+        isActive ? "bg-black/20 text-black font-bold" : "bg-white/10 text-white/60"
+      }`}>
+        {tab.count}
+      </span>
+    </motion.button>
+  );
+}
+
+// ── Filter Tab Bar ────────────────────────────────────────────────────────────
+function FilterTabs({ activeTab, onTabChange }: { activeTab: Category; onTabChange: (t: Category) => void }) {
+  const tabs: { id: Category; label: string; count: number }[] = [
+    { id: "all", label: "All Specializations", count: 6 },
+    { id: "data-ai", label: "Data & GenAI", count: 3 },
+    { id: "cloud-sre", label: "Cloud & SRE", count: 2 },
+    { id: "fullstack", label: "Full-Stack AI", count: 1 },
+  ];
+
+  return (
+    <motion.div
+      className="flex items-center justify-center gap-2 mt-8 flex-wrap"
+      initial={{ opacity: 0, y: 15 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: 0.4 }}
+    >
+      {tabs.map((tab) => (
+        <MagneticTab key={tab.id} tab={tab} isActive={activeTab === tab.id} onClick={() => onTabChange(tab.id)} />
+      ))}
+    </motion.div>
+  );
+}
+
 // ── Interactive Domain Micro-Visualizers ───────────────────────────────────────
-function DomainVisualizer({ type }: { type: ExpertiseItem["visualizerType"] }) {
+function DomainVisualizer({ type, c }: { type: ExpertiseItem["visualizerType"]; c: DomainColor }) {
   if (type === "data") {
     return (
       <div className="rounded-lg bg-black/40 border border-white/[0.08] p-3 font-mono text-[11px] flex flex-col gap-2 overflow-hidden relative">
         <div className="flex items-center justify-between text-white/50 text-[10px]">
-          <span className="flex items-center gap-1.5 text-[#5ed29c]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#5ed29c] animate-ping" />
+          <span className="flex items-center gap-1.5" style={{ color: c.primary }}>
+            <span className="h-1.5 w-1.5 rounded-full animate-ping" style={{ backgroundColor: c.primary }} />
             STREAM INGESTION ENGINE
           </span>
-          <span className="text-[#5ed29c]/90 font-semibold">48.2 GB/s</span>
+          <span className="font-semibold" style={{ color: c.primary }}>48.2 GB/s</span>
         </div>
         <div className="grid grid-cols-3 gap-1.5 text-center">
           <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5">
             <div className="text-[9px] text-white/40">SCHEMA</div>
-            <div className="text-[#5ed29c] font-medium mt-0.5">ENFORCED</div>
+            <div className="font-medium mt-0.5" style={{ color: c.primary }}>ENFORCED</div>
           </div>
           <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5">
             <div className="text-[9px] text-white/40">DROPPED</div>
@@ -145,13 +326,13 @@ function DomainVisualizer({ type }: { type: ExpertiseItem["visualizerType"] }) {
           </div>
           <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5">
             <div className="text-[9px] text-white/40">LAG</div>
-            <div className="text-[#5ed29c] font-medium mt-0.5">&lt;14ms</div>
+            <div className="font-medium mt-0.5" style={{ color: c.primary }}>&lt;14ms</div>
           </div>
         </div>
-        {/* Animated packet stream */}
         <div className="relative h-1.5 w-full bg-white/[0.06] rounded-full overflow-hidden">
           <motion.div
-            className="h-full bg-gradient-to-r from-transparent via-[#5ed29c] to-transparent w-24"
+            className="h-full w-24"
+            style={{ background: `linear-gradient(90deg, transparent, ${c.primary}, transparent)` }}
             animate={{ x: ["-100%", "300%"] }}
             transition={{ duration: 1.8, repeat: Infinity, ease: "linear" }}
           />
@@ -164,22 +345,22 @@ function DomainVisualizer({ type }: { type: ExpertiseItem["visualizerType"] }) {
     return (
       <div className="rounded-lg bg-black/40 border border-white/[0.08] p-3 font-mono text-[11px] flex flex-col gap-2 overflow-hidden relative">
         <div className="flex items-center justify-between text-white/50 text-[10px]">
-          <span className="flex items-center gap-1.5 text-[#5ed29c]">
-            <BrainCircuit className="w-3.5 h-3.5 text-[#5ed29c]" />
+          <span className="flex items-center gap-1.5" style={{ color: c.primary }}>
+            <BrainCircuit className="w-3.5 h-3.5" style={{ color: c.primary }} />
             HYBRID RETRIEVAL & CITATION
           </span>
-          <span className="text-emerald-400 font-semibold">cos: 0.96</span>
+          <span className="font-semibold" style={{ color: c.primary }}>cos: 0.96</span>
         </div>
         <div className="flex items-center justify-between gap-1 text-[10px] bg-white/[0.03] border border-white/[0.06] rounded p-1.5">
           <span className="text-white/60">Top-k Embeddings</span>
           <span className="text-white/90">FAISS Index / FlatIP</span>
-          <span className="text-[#5ed29c] flex items-center gap-1">
+          <span className="flex items-center gap-1" style={{ color: c.primary }}>
             <ShieldCheck className="w-3 h-3" /> Grounded
           </span>
         </div>
         <div className="flex items-center justify-between text-[10px] text-white/40 px-0.5">
           <span>Guardrail check: Pass</span>
-          <span className="text-[#5ed29c]">Trace verified</span>
+          <span style={{ color: c.primary }}>Trace verified</span>
         </div>
       </div>
     );
@@ -189,23 +370,23 @@ function DomainVisualizer({ type }: { type: ExpertiseItem["visualizerType"] }) {
     return (
       <div className="rounded-lg bg-black/40 border border-white/[0.08] p-3 font-mono text-[11px] flex flex-col gap-2 overflow-hidden relative">
         <div className="flex items-center justify-between text-white/50 text-[10px]">
-          <span className="flex items-center gap-1.5 text-[#5ed29c]">
-            <Cpu className="w-3.5 h-3.5 text-[#5ed29c]" />
+          <span className="flex items-center gap-1.5" style={{ color: c.primary }}>
+            <Cpu className="w-3.5 h-3.5" style={{ color: c.primary }} />
             TRITON INFERENCE SERVER
           </span>
-          <span className="text-[#5ed29c] font-semibold">FP16 / INT8</span>
+          <span className="font-semibold" style={{ color: c.primary }}>FP16 / INT8</span>
         </div>
         <div className="grid grid-cols-2 gap-1.5">
           <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5 flex flex-col">
             <span className="text-[9px] text-white/40">CANARY DEPLOY</span>
             <div className="flex items-center justify-between mt-0.5 text-[10px]">
               <span className="text-white/70">v2.4 (90%)</span>
-              <span className="text-[#5ed29c]">v2.5 (10%)</span>
+              <span style={{ color: c.primary }}>v2.5 (10%)</span>
             </div>
           </div>
           <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5 flex flex-col">
             <span className="text-[9px] text-white/40">DATA DRIFT</span>
-            <span className="text-[#5ed29c] mt-0.5 text-[10px] font-semibold">NORMAL (0.012)</span>
+            <span className="mt-0.5 text-[10px] font-semibold" style={{ color: c.primary }}>NORMAL (0.012)</span>
           </div>
         </div>
       </div>
@@ -216,8 +397,8 @@ function DomainVisualizer({ type }: { type: ExpertiseItem["visualizerType"] }) {
     return (
       <div className="rounded-lg bg-black/40 border border-white/[0.08] p-3 font-mono text-[11px] flex flex-col gap-2 overflow-hidden relative">
         <div className="flex items-center justify-between text-white/50 text-[10px]">
-          <span className="flex items-center gap-1.5 text-[#5ed29c]">
-            <Server className="w-3.5 h-3.5 text-[#5ed29c]" />
+          <span className="flex items-center gap-1.5" style={{ color: c.primary }}>
+            <Server className="w-3.5 h-3.5" style={{ color: c.primary }} />
             TERRAFORM MESH ARCHITECTURE
           </span>
           <span className="text-white/70">AWS + GCP</span>
@@ -225,7 +406,7 @@ function DomainVisualizer({ type }: { type: ExpertiseItem["visualizerType"] }) {
         <div className="grid grid-cols-3 gap-1.5 text-center text-[10px]">
           <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5">
             <div className="text-[9px] text-white/40">TF STATE</div>
-            <div className="text-[#5ed29c] font-medium mt-0.5">SYNCED</div>
+            <div className="font-medium mt-0.5" style={{ color: c.primary }}>SYNCED</div>
           </div>
           <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5">
             <div className="text-[9px] text-white/40">K8S PODS</div>
@@ -233,7 +414,7 @@ function DomainVisualizer({ type }: { type: ExpertiseItem["visualizerType"] }) {
           </div>
           <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5">
             <div className="text-[9px] text-white/40">VPC PEER</div>
-            <div className="text-[#5ed29c] font-medium mt-0.5">ACTIVE</div>
+            <div className="font-medium mt-0.5" style={{ color: c.primary }}>ACTIVE</div>
           </div>
         </div>
       </div>
@@ -244,18 +425,18 @@ function DomainVisualizer({ type }: { type: ExpertiseItem["visualizerType"] }) {
     return (
       <div className="rounded-lg bg-black/40 border border-white/[0.08] p-3 font-mono text-[11px] flex flex-col gap-2 overflow-hidden relative">
         <div className="flex items-center justify-between text-white/50 text-[10px]">
-          <span className="flex items-center gap-1.5 text-[#5ed29c]">
-            <Activity className="w-3.5 h-3.5 text-[#5ed29c]" />
+          <span className="flex items-center gap-1.5" style={{ color: c.primary }}>
+            <Activity className="w-3.5 h-3.5" style={{ color: c.primary }} />
             PROMETHEUS SRE HEARTBEAT
           </span>
-          <span className="text-[#5ed29c] font-semibold">99.999% SLA</span>
+          <span className="font-semibold" style={{ color: c.primary }}>99.999% SLA</span>
         </div>
         <div className="flex items-center justify-between bg-white/[0.03] border border-white/[0.06] rounded p-1.5 text-[10px]">
           <div className="flex items-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#5ed29c] animate-ping" />
+            <span className="h-1.5 w-1.5 rounded-full animate-ping" style={{ backgroundColor: c.primary }} />
             <span className="text-white/80">Self-Healing Failover:</span>
           </div>
-          <span className="text-[#5ed29c] font-semibold">ARMED (MTTR &lt; 45s)</span>
+          <span className="font-semibold" style={{ color: c.primary }}>ARMED (MTTR &lt; 45s)</span>
         </div>
       </div>
     );
@@ -265,16 +446,16 @@ function DomainVisualizer({ type }: { type: ExpertiseItem["visualizerType"] }) {
   return (
     <div className="rounded-lg bg-black/40 border border-white/[0.08] p-3 font-mono text-[11px] flex flex-col gap-2 overflow-hidden relative">
       <div className="flex items-center justify-between text-white/50 text-[10px]">
-        <span className="flex items-center gap-1.5 text-[#5ed29c]">
-          <Zap className="w-3.5 h-3.5 text-[#5ed29c]" />
+        <span className="flex items-center gap-1.5" style={{ color: c.primary }}>
+          <Zap className="w-3.5 h-3.5" style={{ color: c.primary }} />
           WEBSOCKET STREAM BUFFER
         </span>
-        <span className="text-[#5ed29c] font-semibold">85 TOKENS/S</span>
+        <span className="font-semibold" style={{ color: c.primary }}>85 TOKENS/S</span>
       </div>
       <div className="flex items-center justify-between bg-white/[0.03] border border-white/[0.06] rounded p-1.5 text-[10px]">
         <span className="text-white/60">FastAPI Async RPC</span>
-        <span className="text-[#5ed29c] flex items-center gap-1">
-          <span className="h-1 w-1 rounded-full bg-[#5ed29c]" /> 18ms Roundtrip
+        <span className="flex items-center gap-1" style={{ color: c.primary }}>
+          <span className="h-1 w-1 rounded-full" style={{ backgroundColor: c.primary }} /> 18ms Roundtrip
         </span>
         <span className="text-white/70">React UI</span>
       </div>
@@ -283,14 +464,14 @@ function DomainVisualizer({ type }: { type: ExpertiseItem["visualizerType"] }) {
 }
 
 // ── Micro Pipeline Component ──────────────────────────────────────────────────
-function PipelineFlow({ steps, delay = 0 }: { steps: string[]; delay?: number }) {
+function PipelineFlow({ steps, c, delay = 0 }: { steps: string[]; c: DomainColor; delay?: number }) {
   return (
     <div className="relative pt-2.5 pb-1 border-t border-white/[0.06] mt-auto">
       <div className="flex items-center justify-between text-[10px] font-mono tracking-wider text-white/40 mb-2">
-        <span className="flex items-center gap-1.5 text-[#5ed29c]">
+        <span className="flex items-center gap-1.5" style={{ color: c.primary }}>
           <span className="relative flex h-1.5 w-1.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#5ed29c] opacity-75" />
-            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#5ed29c]" />
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: c.primary }} />
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5" style={{ backgroundColor: c.primary }} />
           </span>
           PIPELINE SEQUENCE
         </span>
@@ -298,23 +479,19 @@ function PipelineFlow({ steps, delay = 0 }: { steps: string[]; delay?: number })
       </div>
 
       <div className="relative flex items-center justify-between gap-1 py-1.5 px-2 rounded-lg bg-black/30 border border-white/[0.06] overflow-hidden">
-        {/* Animated luminous pulse sweep */}
         <motion.div
           className="absolute inset-y-0 w-20 pointer-events-none"
-          style={{
-            background: "linear-gradient(90deg, transparent, rgba(94,210,156,0.22), transparent)",
-          }}
+          style={{ background: `linear-gradient(90deg, transparent, rgba(${c.rgb},0.22), transparent)` }}
           animate={{ x: ["-100%", "450%"] }}
           transition={{ duration: 3.2, repeat: Infinity, ease: "linear", delay }}
         />
-
         {steps.map((step, idx) => (
           <div key={step} className="flex items-center gap-1 relative z-10">
-            <span className="px-1.5 py-0.5 rounded text-[9.5px] font-mono tracking-tight text-white/80 bg-white/[0.04] border border-white/[0.08] group-hover:border-[rgba(94,210,156,0.35)] group-hover:text-white transition-colors duration-200">
+            <span className="px-1.5 py-0.5 rounded text-[9.5px] font-mono tracking-tight text-white/80 bg-white/[0.04] border border-white/[0.08] transition-colors duration-200">
               {step}
             </span>
             {idx < steps.length - 1 && (
-              <span className="text-[9px] text-[#5ed29c]/60 font-mono select-none">→</span>
+              <span className="text-[9px] font-mono select-none" style={{ color: `rgba(${c.rgb},0.6)` }}>→</span>
             )}
           </div>
         ))}
@@ -323,164 +500,465 @@ function PipelineFlow({ steps, delay = 0 }: { steps: string[]; delay?: number })
   );
 }
 
-// ── Bento Card Component ───────────────────────────────────────────────────────
-function BentoCard({ item, i }: { item: ExpertiseItem; i: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+// ── Flip Card Component ───────────────────────────────────────────────────────
+function FlipCard({
+  item,
+  i,
+  isAllView,
+  cardMapRef,
+}: {
+  item: ExpertiseItem;
+  i: number;
+  isAllView: boolean;
+  cardMapRef: React.MutableRefObject<Map<string, HTMLDivElement>>;
+}) {
+  const [isFlipped, setIsFlipped] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [hovered, setHovered] = useState(false);
+  const outerRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(outerRef, { once: true, margin: "-60px" });
 
-  const onMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const el = ref.current;
+  const color = DOMAIN_COLORS[item.visualizerType];
+  const Icon = item.icon;
+
+  // Register card element for ConnectionLines measurement
+  useEffect(() => {
+    const el = outerRef.current;
+    if (el) cardMapRef.current.set(item.number, el);
+    return () => { cardMapRef.current.delete(item.number); };
+  }, [item.number, cardMapRef]);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const el = outerRef.current;
     if (!el) return;
-    const { left, top, width, height } = el.getBoundingClientRect();
-    setTilt({
-      x: ((e.clientX - left) / width - 0.5) * 5,
-      y: -((e.clientY - top) / height - 0.5) * 5,
-    });
-    setMousePos({ x: e.clientX - left, y: e.clientY - top });
+    const r = el.getBoundingClientRect();
+    setMousePos({ x: e.clientX - r.left, y: e.clientY - r.top });
   }, []);
 
-  const Icon = item.icon;
+  const handleFlip = useCallback(() => setIsFlipped((f) => !f), []);
+  const handleKey = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setIsFlipped((f) => !f); }
+  }, []);
+
+  const spanClass = isAllView && item.heroSpan ? "lg:col-span-2" : "";
 
   return (
     <motion.div
+      ref={outerRef}
       layout
-      className="h-full flex flex-col"
-      initial={{ opacity: 0, y: 35, filter: "blur(6px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.65, delay: i * 0.08, ease: EASE }}
+      className={`h-full ${spanClass}`}
+      initial={{ opacity: 0, y: 50, filter: "blur(8px)" }}
+      animate={inView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
+      exit={{ opacity: 0, scale: 0.92, filter: "blur(6px)" }}
+      transition={{ duration: 0.7, delay: i * 0.12, ease: EASE }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => { setHovered(false); setMousePos({ x: 0, y: 0 }); }}
     >
-      <motion.div
-        ref={ref}
-        className="group relative h-full rounded-2xl bg-[#0a0e14]/90 backdrop-blur-xl border border-white/[0.08] p-6 sm:p-7 flex flex-col gap-4 overflow-hidden cursor-default transition-shadow duration-300"
-        style={{
-          perspective: "1000px",
-          transformStyle: "preserve-3d",
-          boxShadow: hovered
-            ? "0 20px 50px -10px rgba(0,0,0,0.8), 0 0 30px -5px rgba(94,210,156,0.15)"
-            : "0 10px 30px -10px rgba(0,0,0,0.5)",
-        }}
-        animate={{ rotateX: tilt.y, rotateY: tilt.x, scale: hovered ? 1.015 : 1 }}
-        transition={{ type: "spring", stiffness: 280, damping: 24 }}
-        onMouseMove={onMouseMove}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => {
-          setTilt({ x: 0, y: 0 });
-          setHovered(false);
-        }}
+      <div
+        role="button"
+        tabIndex={0}
+        aria-label={`${item.name} – ${isFlipped ? "click to see overview" : "click to explore details"}`}
+        className="relative min-h-[420px] w-full cursor-pointer select-none outline-none"
+        style={{ perspective: "1200px" }}
+        onClick={handleFlip}
+        onKeyDown={handleKey}
       >
-        {/* Subtle grid pattern background */}
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.035] group-hover:opacity-[0.06] transition-opacity duration-500"
-          style={{
-            backgroundImage: `radial-gradient(rgba(255,255,255,0.4) 1px, transparent 1px)`,
-            backgroundSize: "16px 16px",
-          }}
-        />
-
-        {/* Cursor spotlight */}
-        <div
-          className="pointer-events-none absolute inset-0 rounded-2xl z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-          style={{
-            background: `radial-gradient(400px circle at ${mousePos.x}px ${mousePos.y}px, rgba(94,210,156,0.12), transparent 70%)`,
-          }}
-        />
-
-        {/* Animated border glow */}
         <motion.div
-          className="pointer-events-none absolute inset-0 rounded-2xl z-0"
-          animate={{
-            boxShadow: hovered
-              ? "inset 0 0 0 1px rgba(94,210,156,0.5), 0 16px 40px -10px rgba(94,210,156,0.18)"
-              : "inset 0 0 0 1px rgba(255,255,255,0.07)",
-          }}
-          transition={{ duration: 0.3 }}
-        />
-
-        {/* Bottom sweep */}
-        <div className="absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full bg-gradient-to-r from-transparent via-[#5ed29c] to-transparent transition-all duration-500 pointer-events-none z-20" />
-
-        {/* Corner blueprint ticks */}
-        <span className="pointer-events-none absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-white/20 group-hover:border-[#5ed29c] transition-colors duration-300 z-10" />
-        <span className="pointer-events-none absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-white/20 group-hover:border-[#5ed29c] transition-colors duration-300 z-10" />
-        <span className="pointer-events-none absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-white/20 group-hover:border-[#5ed29c] transition-colors duration-300 z-10" />
-        <span className="pointer-events-none absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-white/20 group-hover:border-[#5ed29c] transition-colors duration-300 z-10" />
-
-        {/* Top bar */}
-        <div className="flex items-start justify-between relative z-10">
-          <motion.div
-            className="inline-flex items-center justify-center w-11 h-11 rounded-xl border border-[rgba(94,210,156,0.25)] bg-[rgba(94,210,156,0.06)] text-[#5ed29c] transition-all duration-300 group-hover:border-[rgba(94,210,156,0.7)] group-hover:bg-[rgba(94,210,156,0.15)] group-hover:shadow-[0_0_24px_rgba(94,210,156,0.3)]"
-            animate={hovered ? { scale: [1, 1.12, 1] } : { scale: 1 }}
-            transition={{ duration: 0.35 }}
+          className="relative w-full min-h-[420px]"
+          style={{ transformStyle: "preserve-3d" }}
+          animate={{ rotateY: isFlipped ? 180 : 0 }}
+          transition={{ type: "spring", stiffness: 200, damping: 26 }}
+        >
+          {/* ────────────── FRONT FACE ────────────── */}
+          <div
+            className="absolute inset-0 rounded-2xl bg-[#0a0e14]/90 backdrop-blur-xl border border-white/[0.08] p-6 sm:p-7 flex flex-col gap-3 overflow-hidden"
+            style={{ backfaceVisibility: "hidden" }}
           >
-            <Icon className="w-5 h-5" strokeWidth={1.75} />
-          </motion.div>
+            {/* Grid dot pattern */}
+            <div
+              className="pointer-events-none absolute inset-0 transition-opacity duration-500"
+              style={{
+                backgroundImage: "radial-gradient(rgba(255,255,255,0.4) 1px, transparent 1px)",
+                backgroundSize: "16px 16px",
+                opacity: hovered ? 0.06 : 0.035,
+              }}
+            />
 
-          <div className="flex flex-col items-end gap-0.5">
-            <span className="font-mono text-xs font-bold tracking-[0.2em] text-[#5ed29c] select-none">
-              {item.number}
-            </span>
-            <span className="text-[9px] font-mono tracking-widest text-white/40 uppercase select-none">
-              SYS.ARCH.v{i + 1}
-            </span>
-          </div>
-        </div>
+            {/* Cursor spotlight */}
+            <div
+              className="pointer-events-none absolute inset-0 rounded-2xl z-0 transition-opacity duration-500"
+              style={{
+                background: `radial-gradient(400px circle at ${mousePos.x}px ${mousePos.y}px, rgba(${color.rgb},0.12), transparent 70%)`,
+                opacity: hovered ? 1 : 0,
+              }}
+            />
 
-        {/* Spec Pill */}
-        <div className="relative z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[rgba(94,210,156,0.06)] border border-[rgba(94,210,156,0.2)] w-fit">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#5ed29c] animate-pulse" />
-          <span className="text-[9.5px] font-mono font-medium tracking-wider text-[#5ed29c] uppercase">
-            {item.spec}
-          </span>
-        </div>
+            {/* Glow border */}
+            <motion.div
+              className="pointer-events-none absolute inset-0 rounded-2xl z-0"
+              animate={{
+                boxShadow: hovered
+                  ? `inset 0 0 0 1px rgba(${color.rgb},0.5), 0 16px 40px -10px rgba(${color.rgb},0.18)`
+                  : "inset 0 0 0 1px rgba(255,255,255,0.07)",
+              }}
+              transition={{ duration: 0.3 }}
+            />
 
-        {/* Title */}
-        <h3 className="font-bold tracking-tight text-white leading-tight relative z-10 group-hover:text-[#5ed29c] transition-colors duration-300 text-lg">
-          {item.name}
-        </h3>
+            {/* Bottom sweep line */}
+            <div
+              className="absolute bottom-0 left-0 h-[2px] pointer-events-none z-20 transition-all duration-500"
+              style={{
+                width: hovered ? "100%" : "0%",
+                background: `linear-gradient(90deg, transparent, ${color.primary}, transparent)`,
+              }}
+            />
 
-        {/* Description */}
-        <p className="font-light text-white/65 leading-relaxed relative z-10 text-sm">
-          {item.description}
-        </p>
+            <CornerTicks color={color.primary} active={hovered} />
 
-        {/* Bespoke Interactive Domain Micro-Visualizer */}
-        <div className="relative z-10 pt-1">
-          <DomainVisualizer type={item.visualizerType} />
-        </div>
+            {/* Top bar: icon + number */}
+            <div className="flex items-start justify-between relative z-10">
+              <motion.div
+                className="inline-flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-300"
+                style={{
+                  border: `1px solid rgba(${color.rgb},${hovered ? 0.7 : 0.25})`,
+                  backgroundColor: `rgba(${color.rgb},${hovered ? 0.15 : 0.06})`,
+                  color: color.primary,
+                  boxShadow: hovered ? `0 0 24px rgba(${color.rgb},0.3)` : "none",
+                }}
+                animate={hovered ? { scale: [1, 1.12, 1] } : { scale: 1 }}
+                transition={{ duration: 0.35 }}
+              >
+                <Icon className="w-5 h-5" strokeWidth={1.75} />
+              </motion.div>
+              <div className="flex flex-col items-end gap-0.5">
+                <span className="font-mono text-xs font-bold tracking-[0.2em] select-none" style={{ color: color.primary }}>
+                  {item.number}
+                </span>
+                <span className="text-[9px] font-mono tracking-widest text-white/40 uppercase select-none">
+                  SYS.ARCH.v{parseInt(item.number)}
+                </span>
+              </div>
+            </div>
 
-        {/* Pipeline Sequence */}
-        <div className="relative z-10 mt-auto">
-          <PipelineFlow steps={item.pipeline} delay={i * 0.25} />
-        </div>
-
-        {/* Tech Stack Tags */}
-        <div className="flex flex-wrap gap-1.5 pt-2 relative z-10 border-t border-white/[0.05]">
-          {item.tags.map((tag) => (
-            <motion.span
-              key={tag}
-              className="text-[10px] font-mono font-medium tracking-wider text-white/60 border border-white/10 rounded px-2 py-0.5 bg-white/[0.02] group-hover:border-[rgba(94,210,156,0.35)] group-hover:text-white/90 transition-all duration-200 cursor-default"
-              whileHover={{ scale: 1.05 }}
+            {/* Spec pill */}
+            <div
+              className="relative z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-md w-fit"
+              style={{ backgroundColor: `rgba(${color.rgb},0.06)`, border: `1px solid rgba(${color.rgb},0.2)` }}
             >
-              {tag}
-            </motion.span>
-          ))}
-        </div>
-      </motion.div>
+              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: color.primary }} />
+              <span className="text-[9.5px] font-mono font-medium tracking-wider uppercase" style={{ color: color.primary }}>
+                {item.spec}
+              </span>
+            </div>
+
+            {/* Title */}
+            <h3
+              className="font-bold tracking-tight leading-tight relative z-10 text-lg transition-colors duration-300"
+              style={{ color: hovered ? color.primary : "white" }}
+            >
+              {item.name}
+            </h3>
+
+            {/* Description preview (truncated) */}
+            <p className="font-light text-white/65 leading-relaxed relative z-10 text-sm line-clamp-2">
+              {item.description}
+            </p>
+
+            {/* Tags */}
+            <div className="flex flex-wrap gap-1.5 relative z-10 mt-auto">
+              {item.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="text-[10px] font-mono font-medium tracking-wider rounded px-2 py-0.5 bg-white/[0.02] transition-all duration-200 cursor-default"
+                  style={{
+                    border: `1px solid ${hovered ? `rgba(${color.rgb},0.35)` : "rgba(255,255,255,0.1)"}`,
+                    color: hovered ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.6)",
+                  }}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            {/* Flip hint */}
+            <div className="relative z-10 flex items-center justify-center gap-2 pt-3 border-t border-white/[0.06] text-white/30 text-[10px] font-mono tracking-wider">
+              <motion.div
+                animate={{ rotate: [0, -15, 0] }}
+                transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+              >
+                <RotateCcw className="w-3 h-3" />
+              </motion.div>
+              <span>TAP TO EXPLORE</span>
+            </div>
+          </div>
+
+          {/* ────────────── BACK FACE ────────────── */}
+          <div
+            className="absolute inset-0 rounded-2xl bg-[#0a0e14]/95 backdrop-blur-xl p-6 sm:p-7 flex flex-col gap-3 overflow-y-auto"
+            style={{
+              backfaceVisibility: "hidden",
+              transform: "rotateY(180deg)",
+              border: `1px solid rgba(${color.rgb},0.15)`,
+            }}
+          >
+            {/* Subtle top gradient */}
+            <div
+              className="pointer-events-none absolute inset-0 rounded-2xl"
+              style={{ background: `linear-gradient(180deg, rgba(${color.rgb},0.06) 0%, transparent 40%)` }}
+            />
+
+            {/* Grid dot pattern */}
+            <div
+              className="pointer-events-none absolute inset-0 opacity-[0.04]"
+              style={{
+                backgroundImage: "radial-gradient(rgba(255,255,255,0.4) 1px, transparent 1px)",
+                backgroundSize: "16px 16px",
+              }}
+            />
+
+            <CornerTicks color={color.primary} active />
+
+            {/* Header */}
+            <div className="flex items-center justify-between relative z-10">
+              <span className="text-xs font-mono tracking-wider uppercase font-semibold" style={{ color: color.primary }}>
+                {item.categoryLabel}
+              </span>
+              <span className="text-[10px] font-mono text-white/40 flex items-center gap-1.5">
+                <RotateCcw className="w-3 h-3" />
+                FLIP BACK
+              </span>
+            </div>
+
+            {/* Full description */}
+            <p className="font-light text-white/75 leading-relaxed relative z-10 text-sm">
+              {item.description}
+            </p>
+
+            {/* Domain visualizer */}
+            <div className="relative z-10">
+              <DomainVisualizer type={item.visualizerType} c={color} />
+            </div>
+
+            {/* Pipeline flow */}
+            <div className="relative z-10">
+              <PipelineFlow steps={item.pipeline} c={color} delay={i * 0.25} />
+            </div>
+
+            {/* Metrics bar */}
+            <div className="flex items-center justify-between pt-2 border-t border-white/[0.06] relative z-10 mt-auto">
+              <span className="text-[10px] font-mono text-white/40 tracking-wider">{item.metrics.label}</span>
+              <span className="text-sm font-mono font-semibold" style={{ color: color.primary }}>{item.metrics.value}</span>
+            </div>
+          </div>
+        </motion.div>
+      </div>
     </motion.div>
   );
 }
 
-// ── Section ───────────────────────────────────────────────────────────────────
+// ── Architecture Summary Card (fills grid gap on "all" view) ──────────────────
+function ArchSummaryCard({ i }: { i: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+
+  return (
+    <motion.div
+      ref={ref}
+      layout
+      initial={{ opacity: 0, y: 30, filter: "blur(6px)" }}
+      animate={inView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
+      exit={{ opacity: 0, scale: 0.92, filter: "blur(6px)" }}
+      transition={{ duration: 0.65, delay: i * 0.12, ease: EASE }}
+      className="h-full min-h-[420px] hidden lg:flex"
+    >
+      <div className="relative w-full rounded-2xl bg-[#0a0e14]/70 backdrop-blur-xl border border-white/[0.08] p-6 sm:p-7 flex flex-col items-center justify-center gap-4 overflow-hidden">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.035]"
+          style={{
+            backgroundImage: "radial-gradient(rgba(255,255,255,0.4) 1px, transparent 1px)",
+            backgroundSize: "16px 16px",
+          }}
+        />
+        <CornerTicks />
+
+        <div className="text-center relative z-10 flex flex-col items-center gap-3">
+          <div className="inline-flex items-center gap-2 text-[10px] font-mono tracking-widest text-[#00df8f] uppercase">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#00df8f] animate-pulse" />
+            SYSTEM STATUS
+          </div>
+
+          <div className="text-4xl font-black text-white tracking-tight">
+            6<span className="text-[#00df8f]">.</span>
+          </div>
+          <div className="text-xs font-mono text-white/50 tracking-wider uppercase">
+            Expertise Domains
+          </div>
+
+          <div className="h-px w-16 bg-gradient-to-r from-transparent via-white/20 to-transparent my-1" />
+
+          <div className="flex flex-col gap-1.5 text-[10px] font-mono text-white/40 tracking-wider text-center">
+            <span>5+ YEARS PRODUCTION</span>
+            <span>99.999% UPTIME TRACK</span>
+          </div>
+
+          <div className="mt-2 px-4 py-2 rounded-lg border border-[rgba(0,223,143,0.15)] bg-[rgba(0,223,143,0.04)]">
+            <span className="text-[9px] font-mono tracking-wider text-[#00df8f]/80 font-semibold">
+              ARCHITECTURE READY
+            </span>
+          </div>
+
+          <div className="mt-1 flex flex-wrap justify-center gap-x-2 gap-y-1">
+            {["TESLA", "NOKIA", "HUAWEI"].map((co) => (
+              <span key={co} className="text-[9px] font-mono tracking-widest text-white/30">{co}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+// ── Connection Lines (SVG overlay between related cards) ──────────────────────
+interface ConnectionPath {
+  d: string;
+  color: string;
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+}
+
+function ConnectionLines({
+  gridRef,
+  cardMapRef,
+  visible,
+}: {
+  gridRef: React.RefObject<HTMLDivElement | null>;
+  cardMapRef: React.MutableRefObject<Map<string, HTMLDivElement>>;
+  visible: boolean;
+}) {
+  const [paths, setPaths] = useState<ConnectionPath[]>([]);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const inView = useInView(svgRef, { once: true, margin: "-100px" });
+
+  useEffect(() => {
+    if (!visible) {
+      setPaths([]);
+      return;
+    }
+
+    const measure = () => {
+      const grid = gridRef.current;
+      const cards = cardMapRef.current;
+      if (!grid || !cards || cards.size < 6) return;
+
+      const gr = grid.getBoundingClientRect();
+      const result: ConnectionPath[] = [];
+
+      for (const conn of CARD_CONNECTIONS) {
+        const fromEl = cards.get(conn.from);
+        const toEl = cards.get(conn.to);
+        if (!fromEl || !toEl) continue;
+
+        const fr = fromEl.getBoundingClientRect();
+        const tr = toEl.getBoundingClientRect();
+        const sameRow = Math.abs(fr.top - tr.top) < fr.height * 0.5;
+
+        let x1: number, y1: number, x2: number, y2: number, d: string;
+
+        if (sameRow) {
+          x1 = fr.right - gr.left;
+          y1 = fr.top + fr.height / 2 - gr.top;
+          x2 = tr.left - gr.left;
+          y2 = tr.top + tr.height / 2 - gr.top;
+          const gap = (x2 - x1) * 0.4;
+          d = `M ${x1} ${y1} C ${x1 + gap} ${y1}, ${x2 - gap} ${y2}, ${x2} ${y2}`;
+        } else {
+          x1 = fr.left + fr.width / 2 - gr.left;
+          y1 = fr.bottom - gr.top;
+          x2 = tr.left + tr.width / 2 - gr.left;
+          y2 = tr.top - gr.top;
+          const my = (y1 + y2) / 2;
+          d = `M ${x1} ${y1} C ${x1} ${my}, ${x2} ${my}, ${x2} ${y2}`;
+        }
+
+        result.push({ d, color: DOMAIN_COLORS[conn.key].primary, x1, y1, x2, y2 });
+      }
+
+      setPaths(result);
+    };
+
+    const timer = setTimeout(measure, 1400);
+    const ro = new ResizeObserver(() => requestAnimationFrame(measure));
+    if (gridRef.current) ro.observe(gridRef.current);
+
+    return () => {
+      clearTimeout(timer);
+      ro.disconnect();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visible]);
+
+  if (!paths.length) return null;
+
+  return (
+    <svg
+      ref={svgRef}
+      className="absolute inset-0 w-full h-full pointer-events-none z-[1] hidden lg:block"
+      style={{ overflow: "visible" }}
+    >
+      {paths.map((p, i) => (
+        <g key={i}>
+          <motion.path
+            d={p.d}
+            stroke={p.color}
+            strokeWidth="1"
+            strokeDasharray="4 4"
+            strokeOpacity="0.3"
+            fill="none"
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={inView ? { pathLength: 1, opacity: 1 } : {}}
+            transition={{ duration: 1.8, delay: i * 0.3, ease: EASE }}
+          />
+          <motion.circle
+            cx={p.x1}
+            cy={p.y1}
+            r="2.5"
+            fill={p.color}
+            fillOpacity="0.4"
+            initial={{ scale: 0 }}
+            animate={inView ? { scale: 1 } : {}}
+            transition={{ delay: i * 0.3 + 0.5, type: "spring", stiffness: 300 }}
+          />
+          <motion.circle
+            cx={p.x2}
+            cy={p.y2}
+            r="2.5"
+            fill={p.color}
+            fillOpacity="0.4"
+            initial={{ scale: 0 }}
+            animate={inView ? { scale: 1 } : {}}
+            transition={{ delay: i * 0.3 + 1.2, type: "spring", stiffness: 300 }}
+          />
+        </g>
+      ))}
+    </svg>
+  );
+}
+
+// ── Main Section ──────────────────────────────────────────────────────────────
 const ServicesSection = () => {
   const [activeTab, setActiveTab] = useState<Category>("all");
+  const gridRef = useRef<HTMLDivElement>(null);
+  const cardMapRef = useRef<Map<string, HTMLDivElement>>(new Map());
 
   const filteredItems = EXPERTISE.filter((item) => {
     if (activeTab === "all") return true;
     return item.category === activeTab;
   });
+
+  const isAllView = activeTab === "all";
 
   return (
     <section
@@ -501,12 +979,8 @@ const ServicesSection = () => {
           className="w-full h-full object-cover pointer-events-none opacity-40"
           src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260508_064122_c4750c0e-7476-4b44-94a2-a85a65c63bf2.mp4"
         />
-
-        {/* Ambient radial lighting */}
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-[#00df8f]/[0.07] rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-10 left-1/3 w-[500px] h-[250px] bg-[#38bdf8]/[0.05] rounded-full blur-[100px] pointer-events-none" />
-
-        {/* Gradient dark overlays */}
         <div className="absolute inset-0 bg-[#090d12]/75" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#090d12] via-transparent to-[#090d12]" />
       </div>
@@ -518,18 +992,7 @@ const ServicesSection = () => {
       <div className="relative z-10 max-w-7xl mx-auto">
         <BlueprintSectionHeader align="center">
           <div className="mb-8 text-center sm:mb-12 -mt-3 sm:-mt-5">
-            {/* Main heading */}
-            <motion.h2
-              className="font-black leading-[0.92] tracking-tighter text-white text-center"
-              style={{ fontSize: "clamp(2.6rem, 6.5vw, 4.8rem)" }}
-              initial={{ opacity: 0, y: 28, filter: "blur(4px)" }}
-              whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
-            >
-              My <span className="accent-serif">Expertise</span>
-              <span className="text-[#00df8f]">.</span>
-            </motion.h2>
+            <TypewriterTitle />
 
             {/* Sub-line */}
             <motion.p
@@ -556,69 +1019,46 @@ const ServicesSection = () => {
               transition={{ duration: 0.9, delay: 0.35, ease: EASE }}
             />
 
-            {/* Interactive Domain Filter Tabs */}
-            <motion.div
-              className="flex items-center justify-center gap-2 mt-8 flex-wrap"
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-            >
-              {[
-                { id: "all", label: "All Specializations", count: 6 },
-                { id: "data-ai", label: "Data & GenAI", count: 3 },
-                { id: "cloud-sre", label: "Cloud & SRE", count: 2 },
-                { id: "fullstack", label: "Full-Stack AI", count: 1 },
-              ].map((tab) => {
-                const isActive = activeTab === tab.id;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id as Category)}
-                    className={`relative px-4 py-2 rounded-full text-xs font-mono uppercase tracking-wider transition-all duration-300 flex items-center gap-2 ${
-                      isActive
-                        ? "text-black font-semibold bg-[#00df8f] shadow-[0_0_20px_rgba(0,223,143,0.4)]"
-                        : "text-white/60 hover:text-white bg-white/[0.04] border border-white/[0.08] hover:border-white/20"
-                    }`}
-                  >
-                    <span>{tab.label}</span>
-                    <span
-                      className={`text-[10px] px-1.5 py-0.5 rounded-full ${
-                        isActive ? "bg-black/20 text-black font-bold" : "bg-white/10 text-white/60"
-                      }`}
-                    >
-                      {tab.count}
-                    </span>
-                  </button>
-                );
-              })}
-            </motion.div>
+            <FilterTabs activeTab={activeTab} onTabChange={setActiveTab} />
           </div>
         </BlueprintSectionHeader>
 
-        {/* ── Perfectly Balanced Bento Grid (Zero Layout Holes) ── */}
-        <motion.div
-          layout
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6 auto-rows-fr"
-        >
-          <AnimatePresence mode="popLayout">
-            {filteredItems.map((item, i) => (
-              <BentoCard key={item.number} item={item} i={i} />
-            ))}
-          </AnimatePresence>
-        </motion.div>
+        {/* ── Card Grid with Connection Lines ── */}
+        <div ref={gridRef} className="relative">
+          <ConnectionLines gridRef={gridRef} cardMapRef={cardMapRef} visible={isAllView} />
 
-        {/* Bottom architecture summary note */}
-        <motion.div
-          className="mt-12 text-center text-xs font-mono text-white/40 tracking-wider flex items-center justify-center gap-2"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-[#00df8f]" />
-          <span>PRODUCTION-PROVEN ARCHITECTURE STACK · TESLA / NOKIA / HUAWEI / ENTERPRISE SLA</span>
-        </motion.div>
+          <motion.div
+            layout
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6 relative z-10"
+          >
+            <AnimatePresence mode="popLayout">
+              {filteredItems.map((item, i) => (
+                <FlipCard
+                  key={item.number}
+                  item={item}
+                  i={i}
+                  isAllView={isAllView}
+                  cardMapRef={cardMapRef}
+                />
+              ))}
+              {isAllView && <ArchSummaryCard key="arch-summary" i={filteredItems.length} />}
+            </AnimatePresence>
+          </motion.div>
+        </div>
+
+        {/* Bottom architecture summary note (shown when filtered) */}
+        {!isAllView && (
+          <motion.div
+            className="mt-12 text-center text-xs font-mono text-white/40 tracking-wider flex items-center justify-center gap-2"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[#00df8f]" />
+            <span>PRODUCTION-PROVEN ARCHITECTURE STACK · TESLA / NOKIA / HUAWEI / ENTERPRISE SLA</span>
+          </motion.div>
+        )}
       </div>
     </section>
   );
