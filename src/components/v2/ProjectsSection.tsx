@@ -45,9 +45,9 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
       {/* ── IMAGE TILE (Main visual) ── */}
       <motion.div
         variants={itemVariants}
-        className={`relative overflow-hidden rounded-[32px] border border-white/10 bg-[#0a0a0a] ${
+        className={`relative overflow-hidden rounded-[32px] border border-white/10 hover:border-white/20 bg-[#0a0a0a] backdrop-blur-sm ${
           isEven ? "md:col-span-2 md:row-span-2" : "md:col-span-2 md:row-span-2 md:col-start-3 md:row-start-1"
-        } min-h-[350px] md:min-h-0 h-full group`}
+        } min-h-[350px] md:min-h-0 h-full group transition-colors duration-500 shadow-xl`}
         style={{ boxShadow: "inset 0 0 40px rgba(0,0,0,0.8)" }}
       >
         <div className="absolute inset-0 bg-gradient-to-tr from-[#00df8f]/10 to-transparent mix-blend-overlay z-10" />
@@ -71,7 +71,7 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
       {/* ── INFO TILE (Title, Desc, Links) ── */}
       <motion.div
         variants={itemVariants}
-        className={`flex flex-col justify-between p-8 md:p-10 rounded-[32px] border border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent hover:bg-white/[0.06] transition-colors duration-500 relative overflow-hidden ${
+        className={`flex flex-col justify-between p-8 md:p-10 rounded-[32px] border border-white/10 hover:border-white/20 bg-gradient-to-b from-white/[0.05] to-white/[0.01] hover:from-white/[0.08] hover:to-white/[0.02] backdrop-blur-xl shadow-2xl transition-all duration-500 relative overflow-hidden ${
           isEven ? "md:col-span-2 md:row-span-1" : "md:col-span-2 md:row-span-1 md:col-start-1 md:row-start-1"
         }`}
       >
@@ -103,7 +103,7 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
       {/* ── CASE STUDY TILE ── */}
       <motion.div
         variants={itemVariants}
-        className={`p-8 md:p-10 rounded-[32px] border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] transition-colors duration-500 flex flex-col justify-center ${
+        className={`p-8 md:p-10 rounded-[32px] border border-white/10 hover:border-white/20 bg-white/[0.02] hover:bg-white/[0.05] backdrop-blur-lg shadow-lg transition-all duration-500 flex flex-col justify-center ${
           isEven ? "md:col-span-1 md:row-span-1" : "md:col-span-1 md:row-span-1 md:col-start-1 md:row-start-2"
         }`}
       >
@@ -138,7 +138,7 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
       {/* ── SKILLS TILE ── */}
       <motion.div
         variants={itemVariants}
-        className={`p-8 md:p-10 rounded-[32px] border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] transition-colors duration-500 ${
+        className={`p-8 md:p-10 rounded-[32px] border border-white/10 hover:border-white/20 bg-white/[0.02] hover:bg-white/[0.05] backdrop-blur-lg shadow-lg transition-all duration-500 ${
           isEven ? "md:col-span-1 md:row-span-1" : "md:col-span-1 md:row-span-1 md:col-start-2 md:row-start-2"
         }`}
       >
@@ -149,7 +149,7 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
           {project.skills?.map((skill) => (
             <span
               key={skill}
-              className="px-4 py-2 rounded-full border border-white/10 text-white/70 text-xs font-mono bg-white/[0.02] hover:border-[#00df8f]/50 hover:text-[#00df8f] transition-colors duration-300 cursor-default"
+              className="px-4 py-2 rounded-full border border-white/10 text-white/70 text-xs font-mono bg-white/[0.02] backdrop-blur-md hover:border-[#00df8f]/50 hover:text-[#00df8f] transition-all duration-300 cursor-default"
             >
               {skill}
             </span>
