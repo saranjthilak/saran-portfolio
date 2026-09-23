@@ -66,7 +66,7 @@ const EXPERTISE: ExpertiseItem[] = [
     spec: "99.9% RELIABILITY · PETABYTE SCALE",
     icon: Database,
     description:
-      "Architecting fault-tolerant ETL/ELT pipelines with Apache Airflow & dbt. Delivering automated data contracts, strict idempotency schemas, and high-throughput ingestion into Snowflake & BigQuery designed to withstand massive real-time volume.",
+      "48 GB/s throughput, zero data loss. Designing ultra-reliable, petabyte-scale ETL/ELT pipelines with Apache Airflow & dbt — automated data contracts, strict idempotency, and high-throughput ingestion into Snowflake & BigQuery.",
     pipeline: ["Kafka Ingest", "Airflow DAG", "dbt Models", "BigQuery"],
     tags: ["Airflow", "dbt", "BigQuery", "Snowflake", "ETL/ELT"],
     metrics: { label: "THROUGHPUT", value: "48.2 GB/s" },
@@ -81,7 +81,7 @@ const EXPERTISE: ExpertiseItem[] = [
     spec: "SUB-SECOND LATENCY · HYBRID RETRIEVAL",
     icon: BrainCircuit,
     description:
-      "Engineering grounded conversational systems end-to-end with LangChain, FAISS, and hybrid sparse/dense vector search. Hardened with multi-stage hallucination guardrails, cross-encoder reranking, and verified citation traces.",
+      "0.96 cosine similarity, grounded citations. Building enterprise-grade GenAI & RAG platforms with sub-second latency, hybrid retrieval, and robust hallucination guardrails using LangChain, FAISS, and cross-encoder reranking.",
     pipeline: ["Vectorize", "FAISS Index", "Reranker", "Grounded LLM"],
     tags: ["LangChain", "Vector DB", "FAISS", "Guardrails", "Reranking"],
     metrics: { label: "RETRIEVAL COSINE", value: "0.96 SCORE" },
@@ -95,7 +95,7 @@ const EXPERTISE: ExpertiseItem[] = [
     spec: "AUTOMATED CI/CD · ZERO-DOWNTIME ROLLOUT",
     icon: GitBranch,
     description:
-      "Deploying and serving optimized ML models via NVIDIA Triton & FastAPI with automated experiment tracking on MLflow. Implementing automated canary deployments, data drift detection, and quantized low-latency inference.",
+      "8.4ms P99 latency in production. Operating ML model serving pipelines with zero-downtime canary deployments, real-time drift detection, and quantized inference via NVIDIA Triton, MLflow, and FastAPI.",
     pipeline: ["Train/Log", "MLflow", "Triton Server", "Canary Route"],
     tags: ["MLflow", "Triton", "Quantization", "Docker", "Model Registry"],
     metrics: { label: "INFERENCE P99", value: "8.4ms LATENCY" },
@@ -109,7 +109,7 @@ const EXPERTISE: ExpertiseItem[] = [
     spec: "MULTI-CLOUD AWS/GCP · TERRAFORM AUTOMATION",
     icon: Cloud,
     description:
-      "Provisioning secure, repeatable cloud infrastructure using Terraform and Kubernetes. Leveraging enterprise operational background at Tesla, Huawei, and Nokia to engineer cost-optimized architectures with 99.99% availability.",
+      "100% declarative, multi-cloud ready. Provisioning secure, cost-optimized infrastructure with Terraform & Kubernetes — battle-tested across Tesla, Huawei, and Nokia for 99.99% availability.",
     pipeline: ["Terraform HCL", "State Lock", "K8s Mesh", "Live Cluster"],
     tags: ["Terraform", "AWS", "GCP", "Kubernetes", "FinOps"],
     metrics: { label: "ORCHESTRATION", value: "100% DECLARATIVE" },
@@ -123,7 +123,7 @@ const EXPERTISE: ExpertiseItem[] = [
     spec: "24/7 GOC SLA · ZERO SINGLE POINT OF FAILURE",
     icon: Radio,
     description:
-      "Drawing on 5+ years directing enterprise NOC & telecom network backbones. Engineering distributed systems with self-healing failovers, real-time Prometheus/Grafana telemetry, and sub-minute incident remediation.",
+      "99.999% SLA, sub-minute MTTR. 5+ years directing enterprise NOC & telecom backbones — self-healing failovers, real-time Prometheus/Grafana telemetry, and circuit-breaker remediation at scale.",
     pipeline: ["Prometheus", "Telemetry", "Circuit Breaker", "Auto-Heal"],
     tags: ["High Availability", "Prometheus", "Grafana", "Incident SRE", "Failover"],
     metrics: { label: "HISTORICAL UPTIME", value: "99.999% SLA" },
@@ -137,7 +137,7 @@ const EXPERTISE: ExpertiseItem[] = [
     spec: "REACTIVE STREAMING · ASYNC MICROSERVICES",
     icon: Monitor,
     description:
-      "Bridging complex backend AI engines with high-fidelity, reactive client applications. Building low-latency asynchronous FastAPI microservices coupled with type-safe React, Next.js, and WebSocket streaming.",
+      "85 tokens/sec streaming, 18ms roundtrip. Bridging AI backends with reactive client apps via FastAPI async microservices, type-safe React/Next.js frontends, and real-time WebSocket streaming.",
     pipeline: ["FastAPI RPC", "WebSocket", "React State", "Edge Render"],
     tags: ["FastAPI", "React", "Next.js", "TypeScript", "WebSocket"],
     metrics: { label: "STREAM SPEED", value: "85 TOKENS/SEC" },
