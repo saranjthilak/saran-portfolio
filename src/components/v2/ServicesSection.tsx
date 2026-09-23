@@ -28,14 +28,14 @@ import {
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 // ── Domain Color System ───────────────────────────────────────────────────────
-// Each expertise domain gets a unique color identity instead of uniform green
+// Each expertise domain gets a unique color identity with a secondary for gradients
 const DOMAIN_COLORS = {
-  data:  { primary: "#06b6d4", rgb: "6,182,212" },
-  ai:    { primary: "#a78bfa", rgb: "167,139,250" },
-  mlops: { primary: "#f59e0b", rgb: "245,158,11" },
-  cloud: { primary: "#38bdf8", rgb: "56,189,248" },
-  ops:   { primary: "#f43f5e", rgb: "244,63,94" },
-  ui:    { primary: "#10b981", rgb: "16,185,129" },
+  data:  { primary: "#06b6d4", secondary: "#0891b2", rgb: "6,182,212" },
+  ai:    { primary: "#a78bfa", secondary: "#8b5cf6", rgb: "167,139,250" },
+  mlops: { primary: "#f59e0b", secondary: "#d97706", rgb: "245,158,11" },
+  cloud: { primary: "#38bdf8", secondary: "#0ea5e9", rgb: "56,189,248" },
+  ops:   { primary: "#f43f5e", secondary: "#e11d48", rgb: "244,63,94" },
+  ui:    { primary: "#10b981", secondary: "#059669", rgb: "16,185,129" },
 } as const;
 type DomainColor = (typeof DOMAIN_COLORS)[keyof typeof DOMAIN_COLORS];
 
