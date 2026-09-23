@@ -550,10 +550,11 @@ function FlipCard({
       ref={outerRef}
       layout
       className={`h-full ${spanClass}`}
-      initial={{ opacity: 0, y: 50, filter: "blur(8px)" }}
-      animate={inView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
+      initial={{ opacity: 0, y: 50, rotateX: -5, filter: "blur(8px)" }}
+      animate={inView ? { opacity: 1, y: 0, rotateX: 0, filter: "blur(0px)" } : {}}
       exit={{ opacity: 0, scale: 0.92, filter: "blur(6px)" }}
       transition={{ duration: 0.7, delay: i * 0.12, ease: EASE }}
+      style={{ perspective: "800px" }}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => { setHovered(false); setMousePos({ x: 0, y: 0 }); }}
@@ -602,10 +603,10 @@ function FlipCard({
               className="pointer-events-none absolute inset-0 rounded-2xl z-0"
               animate={{
                 boxShadow: hovered
-                  ? `inset 0 0 0 1px rgba(${color.rgb},0.5), 0 16px 40px -10px rgba(${color.rgb},0.18)`
+                  ? `inset 0 0 0 1px rgba(${color.rgb},0.6), 0 20px 50px -10px rgba(${color.rgb},0.25), 0 0 80px -20px rgba(${color.rgb},0.15)`
                   : "inset 0 0 0 1px rgba(255,255,255,0.07)",
               }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.35 }}
             />
 
             {/* Bottom sweep line */}
@@ -647,7 +648,7 @@ function FlipCard({
             {/* Spec pill */}
             <div
               className="relative z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-md w-fit"
-              style={{ backgroundColor: `rgba(${color.rgb},0.06)`, border: `1px solid rgba(${color.rgb},0.2)` }}
+              style={{ background: `linear-gradient(135deg, rgba(${color.rgb},0.12), rgba(${color.rgb},0.03))`, border: `1px solid rgba(${color.rgb},0.25)` }}
             >
               <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: color.primary }} />
               <span className="text-[9.5px] font-mono font-medium tracking-wider uppercase" style={{ color: color.primary }}>
@@ -751,7 +752,17 @@ function FlipCard({
             {/* Metrics bar */}
             <div className="flex items-center justify-between pt-2 border-t border-white/[0.06] relative z-10 mt-auto">
               <span className="text-[10px] font-mono text-white/40 tracking-wider">{item.metrics.label}</span>
-              <span className="text-sm font-mono font-semibold" style={{ color: color.primary }}>{item.metrics.value}</span>
+              <span
+                className="text-base font-mono font-bold tracking-tight"
+                style={{
+                  background: `linear-gradient(135deg, ${color.primary}, #00df8f)`,
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  filter: `drop-shadow(0 0 8px rgba(${color.rgb},0.4))`,
+                }}
+              >
+                {item.metrics.value}
+              </span>
             </div>
           </div>
         </motion.div>
