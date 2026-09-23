@@ -8,6 +8,7 @@ import {
   useSpring,
   useInView,
 } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 import BlueprintSectionHeader from "./BlueprintSectionHeader";
 import {
   Database,
@@ -997,6 +998,14 @@ const ServicesSection = () => {
         <div className="absolute bottom-10 left-1/3 w-[500px] h-[250px] bg-[#38bdf8]/[0.05] rounded-full blur-[100px] pointer-events-none" />
         <div className="absolute inset-0 bg-[#090d12]/75" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#090d12] via-transparent to-[#090d12]" />
+        {/* Subtle grid texture overlay */}
+        <div
+          className="absolute inset-0 opacity-[0.04] pointer-events-none"
+          style={{
+            backgroundImage: "radial-gradient(rgba(255,255,255,0.5) 1px, transparent 1px)",
+            backgroundSize: "24px 24px",
+          }}
+        />
       </div>
 
       {/* Guide lines at container edges */}
@@ -1073,6 +1082,48 @@ const ServicesSection = () => {
             <span>PRODUCTION-PROVEN ARCHITECTURE STACK · TESLA / NOKIA / HUAWEI / ENTERPRISE SLA</span>
           </motion.div>
         )}
+
+        {/* ── Explore Projects CTA ── */}
+        <motion.div
+          className="mt-16 flex justify-center"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.6, ease: EASE }}
+        >
+          <motion.a
+            href="#projects"
+            className="group relative inline-flex items-center gap-3 px-8 py-3.5 rounded-full font-mono text-sm font-semibold tracking-wider uppercase overflow-hidden cursor-pointer"
+            style={{
+              border: "1.5px solid rgba(0,223,143,0.4)",
+              background: "rgba(0,223,143,0.06)",
+              color: "#00df8f",
+            }}
+            whileHover={{
+              boxShadow: "0 0 30px rgba(0,223,143,0.25), inset 0 0 30px rgba(0,223,143,0.08)",
+              borderColor: "rgba(0,223,143,0.7)",
+              scale: 1.04,
+            }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+          >
+            <span className="relative z-10">Explore My Projects</span>
+            <motion.span
+              className="relative z-10"
+              animate={{ x: [0, 4, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <ArrowRight className="w-4 h-4" />
+            </motion.span>
+            {/* Animated sweep */}
+            <motion.div
+              className="absolute inset-0 pointer-events-none"
+              style={{ background: "linear-gradient(90deg, transparent, rgba(0,223,143,0.1), transparent)" }}
+              animate={{ x: ["-100%", "200%"] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+            />
+          </motion.a>
+        </motion.div>
       </div>
     </section>
   );
