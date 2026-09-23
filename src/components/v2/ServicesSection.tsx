@@ -178,17 +178,18 @@ function TypewriterTitle() {
   return (
     <motion.h2
       ref={ref}
-      className="font-black leading-[0.92] tracking-tighter text-white text-center"
+      className="font-black leading-[0.92] tracking-tighter text-center"
       style={{ fontSize: "clamp(2.6rem, 6.5vw, 4.8rem)" }}
     >
       <motion.span
+        className="text-white"
         initial={{ opacity: 0, y: 20 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.5, ease: EASE }}
       >
         My{" "}
       </motion.span>
-      <span className="accent-serif">
+      <span className="accent-serif bg-gradient-to-r from-[#06b6d4] via-[#a78bfa] to-[#f59e0b] bg-clip-text text-transparent">
         {word.split("").map((char, i) => (
           <motion.span
             key={i}
@@ -202,7 +203,8 @@ function TypewriterTitle() {
         ))}
       </span>
       <motion.span
-        className="text-[#00df8f] inline-block"
+        className="inline-block"
+        style={{ background: "linear-gradient(135deg, #00df8f, #06b6d4)", WebkitBackgroundClip: "text", color: "transparent" }}
         initial={{ opacity: 0, scale: 0, rotate: -20 }}
         animate={inView ? { opacity: 1, scale: 1, rotate: 0 } : {}}
         transition={{ type: "spring", stiffness: 500, damping: 12, delay: typingEnd + 0.15 }}
@@ -211,7 +213,8 @@ function TypewriterTitle() {
       </motion.span>
       {/* Blinking cursor */}
       <motion.span
-        className="inline-block w-[3px] h-[0.8em] bg-[#00df8f] ml-1 align-middle rounded-full"
+        className="inline-block w-[3px] h-[0.8em] ml-1 align-middle rounded-full"
+        style={{ background: "linear-gradient(180deg, #06b6d4, #a78bfa)" }}
         initial={{ opacity: 0 }}
         animate={inView ? { opacity: [0, 1, 0] } : { opacity: 0 }}
         transition={{ duration: 0.7, repeat: 5, delay: 0.4, repeatType: "loop" }}
