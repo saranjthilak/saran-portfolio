@@ -1,43 +1,10 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import FadeIn from "./FadeIn";
 import BlueprintSectionHeader from "./BlueprintSectionHeader";
 
 const AboutSection = () => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    const streamUrl =
-      "https://stream.mux.com/tLkHO1qZoaaQOUeVWo8hEBeGQfySP02EPS02BmnNFyXys.m3u8";
-    let hlsInstance: any = null;
-
-    import("hls.js")
-      .then(({ default: Hls }) => {
-        if (Hls && Hls.isSupported()) {
-          hlsInstance = new Hls({ enableWorker: false });
-          hlsInstance.loadSource(streamUrl);
-          hlsInstance.attachMedia(video);
-        } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-          video.src = streamUrl;
-        }
-      })
-      .catch(() => {
-        if (video.canPlayType("application/vnd.apple.mpegurl")) {
-          video.src = streamUrl;
-        }
-      });
-
-    return () => {
-      if (hlsInstance) {
-        hlsInstance.destroy();
-      }
-    };
-  }, []);
-
   return (
     <>
       <section
@@ -49,15 +16,13 @@ const AboutSection = () => {
           minHeight: "100vh",
         }}
       >
-        {/* ── Background Video & Overlays ── */}
+        {/* ── Lightweight Background (replaces HLS video) ── */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-          <video
-            ref={videoRef}
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover pointer-events-none opacity-60"
+          <div
+            className="absolute inset-0 opacity-40"
+            style={{
+              background: "radial-gradient(ellipse 70% 50% at 70% 40%, rgba(0,223,143,0.07) 0%, transparent 70%), radial-gradient(ellipse 50% 40% at 30% 60%, rgba(0,240,255,0.05) 0%, transparent 60%)"
+            }}
           />
 
           {/* Left linear gradient (#070b0a to transparent) */}
