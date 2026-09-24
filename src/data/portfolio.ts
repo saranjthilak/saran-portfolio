@@ -112,22 +112,7 @@ export const projects = [
     ],
   },
 
-  {
-    title: "German Learning App",
-    source: "TypeScript | AI Tutor | A1–C1",
-    description: "AI-powered German learning platform with interactive lessons, vocabulary practice, pronunciation support, quizzes, and personalized learning from A1 to C1.",
-    skills: ["TypeScript", "AI", "NLP", "React"],
-    image: "/images/projects/project-german-app.webp",
-    url: "https://github.com/saranjthilak/German-Learning-APP",
-  },
-  {
-    title: "Vanilla Steel Assessment",
-    source: "Full-stack | APIs | Docker",
-    description: "A full-stack assessment project demonstrating modern software engineering practices, including backend development, APIs, testing, containerization, and deployment.",
-    skills: ["Python", "FastAPI", "Docker", "Testing", "CI/CD"],
-    image: "/images/projects/project-vanilla-steel.webp",
-    url: "https://github.com/saranjthilak/vanilla-steel-assessment",
-  },
+
 ];
 
 export const publications = [
