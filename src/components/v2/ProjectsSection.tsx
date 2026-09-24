@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { projects } from "@/data/portfolio";
 import ProjectLinks from "./LiveProjectButton";
@@ -12,25 +12,24 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 // ── Bento Box Component ───────────────────────────────────────────────────────
 const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index: number }) => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
   const isEven = index % 2 === 0;
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.15, delayChildren: 0.1 }
+      transition: { staggerChildren: 0.12, delayChildren: 0.05 }
     }
   };
 
+  // Lightweight variants: only opacity + translateY (GPU-composited, no filter/scale)
   const itemVariants = {
-    hidden: { opacity: 0, y: 30, scale: 0.95, filter: "blur(4px)" },
+    hidden: { opacity: 0, y: 24 },
     visible: { 
       opacity: 1, 
       y: 0, 
-      scale: 1, 
-      filter: "blur(0px)",
-      transition: { duration: 0.8, ease: EASE } 
+      transition: { duration: 0.6, ease: EASE } 
     }
   };
 
@@ -45,38 +44,39 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
       {/* ── IMAGE TILE (Main visual) ── */}
       <motion.div
         variants={itemVariants}
-        className={`relative overflow-hidden rounded-[32px] border border-white/10 hover:border-white/20 bg-[#0a0a0a] backdrop-blur-sm ${
+        className={`relative overflow-hidden rounded-[32px] border border-white/10 hover:border-white/20 bg-[#0a0a0a] ${
           isEven ? "md:col-span-2 md:row-span-2" : "md:col-span-2 md:row-span-2 md:col-start-3 md:row-start-1"
-        } min-h-[350px] md:min-h-0 h-full group transition-colors duration-500 shadow-xl`}
-        style={{ boxShadow: "inset 0 0 40px rgba(0,0,0,0.8)" }}
+        } min-h-[350px] md:min-h-0 h-full group transition-colors duration-500`}
       >
-        <div className="absolute inset-0 bg-gradient-to-tr from-[#00df8f]/10 to-transparent mix-blend-overlay z-10" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-[#00df8f]/8 to-transparent z-10" />
         <img
           src={project.image}
           alt={project.title}
-          className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000 ease-out"
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out will-change-transform"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#070b0a]/90 via-[#070b0a]/20 to-transparent opacity-80 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#070b0a]/90 via-[#070b0a]/20 to-transparent z-10" />
         
         {/* Floating index in the corner */}
         <div className="absolute bottom-6 right-8 z-20 overflow-hidden">
-          <motion.span 
+          <span 
             className="font-kanit font-black text-[120px] leading-none text-white/5 select-none translate-y-8 group-hover:translate-y-0 transition-transform duration-700 ease-out block"
           >
             0{index + 1}
-          </motion.span>
+          </span>
         </div>
       </motion.div>
 
       {/* ── INFO TILE (Title, Desc, Links) ── */}
       <motion.div
         variants={itemVariants}
-        className={`flex flex-col justify-between p-8 md:p-10 rounded-[32px] border border-white/10 hover:border-white/20 bg-gradient-to-b from-white/[0.05] to-white/[0.01] hover:from-white/[0.08] hover:to-white/[0.02] backdrop-blur-xl shadow-2xl transition-all duration-500 relative overflow-hidden ${
+        className={`flex flex-col justify-between p-8 md:p-10 rounded-[32px] border border-white/10 hover:border-white/20 bg-gradient-to-b from-white/[0.05] to-white/[0.01] hover:from-white/[0.08] hover:to-white/[0.02] transition-all duration-500 relative overflow-hidden ${
           isEven ? "md:col-span-2 md:row-span-1" : "md:col-span-2 md:row-span-1 md:col-start-1 md:row-start-1"
         }`}
       >
-        {/* Subtle glow */}
-        <div className="absolute -top-20 -right-20 w-40 h-40 bg-[#00df8f]/20 blur-[60px] pointer-events-none" />
+        {/* Subtle glow — static, no blur compositing cost */}
+        <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-[#00df8f]/10 pointer-events-none" style={{ filter: "blur(60px)" }} />
 
         <div className="relative z-10">
           <div className="flex justify-between items-start mb-6">
@@ -103,7 +103,7 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
       {/* ── CASE STUDY TILE ── */}
       <motion.div
         variants={itemVariants}
-        className={`p-8 md:p-10 rounded-[32px] border border-white/10 hover:border-white/20 bg-white/[0.02] hover:bg-white/[0.05] backdrop-blur-lg shadow-lg transition-all duration-500 flex flex-col justify-center ${
+        className={`p-8 md:p-10 rounded-[32px] border border-white/10 hover:border-white/20 bg-[#0d1210] hover:bg-[#111916] transition-colors duration-500 flex flex-col justify-center ${
           isEven ? "md:col-span-1 md:row-span-1" : "md:col-span-1 md:row-span-1 md:col-start-1 md:row-start-2"
         }`}
       >
@@ -138,7 +138,7 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
       {/* ── SKILLS TILE ── */}
       <motion.div
         variants={itemVariants}
-        className={`p-8 md:p-10 rounded-[32px] border border-white/10 hover:border-white/20 bg-white/[0.02] hover:bg-white/[0.05] backdrop-blur-lg shadow-lg transition-all duration-500 ${
+        className={`p-8 md:p-10 rounded-[32px] border border-white/10 hover:border-white/20 bg-[#0d1210] hover:bg-[#111916] transition-colors duration-500 ${
           isEven ? "md:col-span-1 md:row-span-1" : "md:col-span-1 md:row-span-1 md:col-start-2 md:row-start-2"
         }`}
       >
@@ -149,7 +149,7 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
           {project.skills?.map((skill) => (
             <span
               key={skill}
-              className="px-4 py-2 rounded-full border border-white/10 text-white/70 text-xs font-mono bg-white/[0.02] backdrop-blur-md hover:border-[#00df8f]/50 hover:text-[#00df8f] transition-all duration-300 cursor-default"
+              className="px-4 py-2 rounded-full border border-white/10 text-white/70 text-xs font-mono bg-white/[0.03] hover:border-[#00df8f]/50 hover:text-[#00df8f] transition-colors duration-300 cursor-default"
             >
               {skill}
             </span>
@@ -162,57 +162,23 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
 
 // ── Section Component ────────────────────────────────────────────────────────
 export default function ProjectsSection() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    const streamUrl =
-      "https://stream.mux.com/tLkHO1qZoaaQOUeVWo8hEBeGQfySP02EPS02BmnNFyXys.m3u8";
-    let hlsInstance: any = null;
-
-    import("hls.js")
-      .then(({ default: Hls }) => {
-        if (Hls && Hls.isSupported()) {
-          hlsInstance = new Hls({ enableWorker: false });
-          hlsInstance.loadSource(streamUrl);
-          hlsInstance.attachMedia(video);
-        } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-          video.src = streamUrl;
-        }
-      })
-      .catch(() => {
-        if (video.canPlayType("application/vnd.apple.mpegurl")) {
-          video.src = streamUrl;
-        }
-      });
-
-    return () => {
-      if (hlsInstance) {
-        hlsInstance.destroy();
-      }
-    };
-  }, []);
-
   return (
     <section
       id="projects"
       className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-30 overflow-hidden border-t border-white/10 bg-[#070b0a]"
       style={{ boxShadow: "0 -10px 40px rgba(0,0,0,0.5)" }}
     >
-      {/* ── Background Video & Overlays ── */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        <video
-          ref={videoRef}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-full h-full object-cover pointer-events-none opacity-40 mix-blend-screen"
+      {/* ── Lightweight Background (replaces HLS video) ── */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        {/* Ambient gradient glow — pure CSS, zero JS */}
+        <div
+          className="absolute inset-0 opacity-30"
+          style={{
+            background: "radial-gradient(ellipse 80% 50% at 50% 20%, rgba(0,223,143,0.08) 0%, transparent 70%), radial-gradient(ellipse 60% 40% at 80% 80%, rgba(56,189,248,0.05) 0%, transparent 60%)"
+          }}
         />
-        <div className="absolute inset-0 bg-[#070b0a]/80" />
-        {/* Subtle grid pattern overlay */}
+        <div className="absolute inset-0 bg-[#070b0a]/60" />
+        {/* Subtle dot grid pattern */}
         <div 
           className="absolute inset-0 opacity-[0.03]" 
           style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px' }} 
@@ -226,10 +192,10 @@ export default function ProjectsSection() {
               <motion.h2
                 className="font-black leading-[0.92] tracking-tighter text-white"
                 style={{ fontSize: "clamp(3rem, 8vw, 6.5rem)" }}
-                initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
-                whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.9, ease: EASE }}
+                transition={{ duration: 0.7, ease: EASE }}
               >
                 Featured <br className="hidden md:block" />
                 <span className="accent-serif italic font-light text-white/80">Dashboard</span>
@@ -240,7 +206,7 @@ export default function ProjectsSection() {
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 1, delay: 0.3 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
               >
                 A curated selection of my most significant technical achievements, 
                 architected for performance and scale.
@@ -259,3 +225,4 @@ export default function ProjectsSection() {
     </section>
   );
 }
+
