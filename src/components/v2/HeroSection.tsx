@@ -12,24 +12,24 @@ const navLinks = [
 
 const HeroSection = () => {
   return (
-    <div className="relative bg-[#0d1116] min-h-screen overflow-hidden text-white font-sans">
+    <div className="relative bg-v2-raised min-h-screen overflow-hidden text-white font-sans">
       {/* Blueprint dotted grid background */}
       <div className="blueprint-dots absolute inset-0 pointer-events-none opacity-10" />
 
       {/* Navbar */}
-      <nav className="fixed top-0 w-full h-24 z-50 bg-[#0f1115]/80 backdrop-blur-md border-b border-white/10 flex items-center justify-between px-6 md:px-12">
+      <nav className="fixed top-0 w-full h-24 z-50 bg-v2-raised/80 backdrop-blur-md border-b border-white/10 flex items-center justify-between px-6 md:px-12">
         <a href="#home" className="text-2xl font-black tracking-tighter">
-          SARAN<span className="text-[#00df8f]">.</span>
+          SARAN<span className="text-accent">.</span>
         </a>
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
-            <a key={link.label} href={link.href} className="text-sm font-semibold text-gray-300 uppercase hover:text-[#00df8f] transition-colors">
+            <a key={link.label} href={link.href} className="text-sm font-semibold text-gray-300 uppercase hover:text-accent transition-colors">
               {link.label}
             </a>
           ))}
         </div>
-        <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:border-[#00df8f] transition-colors cursor-pointer">
-          <div className="w-2 h-2 rounded-full bg-[#00df8f]"></div>
+        <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:border-accent transition-colors cursor-pointer">
+          <div className="w-2 h-2 rounded-full bg-accent"></div>
         </div>
       </nav>
 
@@ -48,9 +48,9 @@ const HeroSection = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
-              className="mb-6 inline-block px-3 py-1.5 border border-[#00df8f]/60 text-xs uppercase tracking-widest"
+              className="mb-6 inline-block px-3 py-1.5 border border-accent/60 text-xs uppercase tracking-widest"
             >
-              <span className="text-[#00df8f] font-mono font-medium">DATA ENGINEER & GENAI SPECIALIST</span>
+              <span className="text-accent font-mono font-medium">DATA ENGINEER & GENAI SPECIALIST</span>
             </motion.div>
             
             <motion.h1 
@@ -62,7 +62,7 @@ const HeroSection = () => {
             >
               I build AI systems<br/>
               that hold up <span className="accent-serif">in production</span>
-              <span className="text-[#00df8f]">.</span>
+              <span className="text-accent">.</span>
             </motion.h1>
             
             <motion.p 
@@ -82,11 +82,11 @@ const HeroSection = () => {
               transition={{ delay: 0.3 }}
               className="flex flex-wrap items-center gap-6"
             >
-              <a href="#projects" className="btn-frame group flex items-center gap-3 bg-[#00df8f] text-[#0d1116] px-8 py-4 font-bold text-sm uppercase tracking-wider">
+              <a href="#projects" className="btn-frame group flex items-center gap-3 bg-accent text-accent-foreground px-8 py-4 font-bold text-sm uppercase tracking-wider">
                 View My Work
                 <ArrowUpRight className="w-5 h-5 group-hover:rotate-45 transition-transform" />
               </a>
-              <a href="#contact" className="btn-frame flex items-center gap-3 bg-transparent border border-white/25 px-8 py-4 font-bold text-sm uppercase tracking-wider text-white hover:border-[#00df8f] hover:text-[#00df8f] transition-colors">
+              <a href="#contact" className="btn-frame flex items-center gap-3 bg-transparent border border-white/25 px-8 py-4 font-bold text-sm uppercase tracking-wider text-white hover:border-accent hover:text-accent transition-colors">
                 Contact Me
               </a>
             </motion.div>
@@ -95,7 +95,7 @@ const HeroSection = () => {
           {/* Right Column - Interactive ID Card */}
           <div className="relative flex justify-center lg:justify-end items-center h-[500px]">
             {/* Ambient green glow behind card */}
-            <div className="absolute w-[320px] h-[320px] bg-[#00df8f]/10 blur-3xl rounded-full -z-0" />
+            <div className="absolute w-[320px] h-[320px] bg-accent/10 blur-3xl rounded-full -z-0" />
 
             <motion.div
               drag
@@ -107,11 +107,11 @@ const HeroSection = () => {
               className="relative z-10 w-[300px] h-[420px] bg-[#161b22] border border-white/15 overflow-hidden shadow-2xl shadow-black/80 cursor-grab active:cursor-grabbing"
             >
               {/* Card Header Hole */}
-              <div className="absolute top-4 left-1/2 -translate-x-1/2 w-16 h-3 bg-[#0d1116] rounded-full border border-white/10 z-20 shadow-inner" />
+              <div className="absolute top-4 left-1/2 -translate-x-1/2 w-16 h-3 bg-v2-raised rounded-full border border-white/10 z-20 shadow-inner" />
               
               {/* ID Portrait */}
               <div className="absolute inset-0 p-3 pb-24">
-                <div className="w-full h-full bg-[#0d1116] rounded-2xl overflow-hidden relative">
+                <div className="w-full h-full bg-v2-raised rounded-2xl overflow-hidden relative">
                   <img 
                     src="/lovable-uploads/5881e7e5-f088-4e07-a79c-59eacb55eeb0.png" 
                     alt="Saran Portrait" 
@@ -119,14 +119,14 @@ const HeroSection = () => {
                     draggable={false}
                   />
                   {/* Inner neon border effect */}
-                  <div className="absolute inset-0 border border-[#00df8f]/30 rounded-2xl pointer-events-none" />
+                  <div className="absolute inset-0 border border-accent/30 rounded-2xl pointer-events-none" />
                 </div>
               </div>
               
               {/* Card Bottom Details */}
               <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#14181f] via-[#14181f]/95 to-transparent flex flex-col justify-end p-6">
                 <h3 className="text-[1.35rem] font-black tracking-tighter text-white leading-tight">Saran Jaya Thilak</h3>
-                <p className="text-[#00df8f] text-xs uppercase tracking-widest font-semibold mt-1">Data Engineer &amp; GenAI Specialist</p>
+                <p className="text-accent text-xs uppercase tracking-widest font-semibold mt-1">Data Engineer &amp; GenAI Specialist</p>
                 
                 {/* Barcode graphic */}
                 <div className="w-full h-6 mt-4 flex gap-[2px] opacity-40">

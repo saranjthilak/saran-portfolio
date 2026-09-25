@@ -44,11 +44,11 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
       {/* ── IMAGE TILE (Main visual) ── */}
       <motion.div
         variants={itemVariants}
-        className={`relative overflow-hidden rounded-[32px] border border-white/10 hover:border-white/20 bg-[#0a0a0a] ${
+        className={`relative overflow-hidden rounded-[32px] border border-white/10 hover:border-white/20 bg-v2-base ${
           isEven ? "md:col-span-2 md:row-span-2" : "md:col-span-2 md:row-span-2 md:col-start-3 md:row-start-1"
         } min-h-[350px] md:min-h-0 h-full group transition-colors duration-500`}
       >
-        <div className="absolute inset-0 bg-gradient-to-tr from-[#00df8f]/8 to-transparent z-10" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-accent/[0.08] to-transparent z-10" />
         <img
           src={project.image}
           alt={project.title}
@@ -56,7 +56,7 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
           decoding="async"
           className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out will-change-transform"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#070b0a]/90 via-[#070b0a]/20 to-transparent z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-v2-base/90 via-v2-base/20 to-transparent z-10" />
         
         {/* Floating index in the corner */}
         <div className="absolute bottom-6 right-8 z-20 overflow-hidden">
@@ -76,11 +76,11 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
         }`}
       >
         {/* Subtle glow — static, no blur compositing cost */}
-        <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-[#00df8f]/10 pointer-events-none" style={{ filter: "blur(60px)" }} />
+        <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-accent/10 pointer-events-none" style={{ filter: "blur(60px)" }} />
 
         <div className="relative z-10">
           <div className="flex justify-between items-start mb-6">
-            <span className="font-mono text-sm text-[#00df8f] bg-[#00df8f]/10 px-3 py-1 rounded-full border border-[#00df8f]/20">
+            <span className="font-mono text-sm text-accent bg-accent/10 px-3 py-1 rounded-full border border-accent/20">
               Featured
             </span>
             <span className="font-kanit text-xs uppercase tracking-widest text-white/40">
@@ -103,7 +103,7 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
       {/* ── CASE STUDY TILE ── */}
       <motion.div
         variants={itemVariants}
-        className={`p-8 md:p-10 rounded-[32px] border border-white/10 hover:border-white/20 bg-[#0d1210] hover:bg-[#111916] transition-colors duration-500 flex flex-col justify-center ${
+        className={`p-8 md:p-10 rounded-[32px] border border-white/10 hover:border-white/20 bg-v2-raised hover:bg-[#111916] transition-colors duration-500 flex flex-col justify-center ${
           isEven ? "md:col-span-1 md:row-span-1" : "md:col-span-1 md:row-span-1 md:col-start-1 md:row-start-2"
         }`}
       >
@@ -138,7 +138,7 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
       {/* ── SKILLS TILE ── */}
       <motion.div
         variants={itemVariants}
-        className={`p-8 md:p-10 rounded-[32px] border border-white/10 hover:border-white/20 bg-[#0d1210] hover:bg-[#111916] transition-colors duration-500 ${
+        className={`p-8 md:p-10 rounded-[32px] border border-white/10 hover:border-white/20 bg-v2-raised hover:bg-[#111916] transition-colors duration-500 ${
           isEven ? "md:col-span-1 md:row-span-1" : "md:col-span-1 md:row-span-1 md:col-start-2 md:row-start-2"
         }`}
       >
@@ -149,7 +149,7 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
           {project.skills?.map((skill) => (
             <span
               key={skill}
-              className="px-4 py-2 rounded-full border border-white/10 text-white/70 text-xs font-mono bg-white/[0.03] hover:border-[#00df8f]/50 hover:text-[#00df8f] transition-colors duration-300 cursor-default"
+              className="px-4 py-2 rounded-full border border-white/10 text-white/70 text-xs font-mono bg-white/[0.03] hover:border-accent/50 hover:text-accent transition-colors duration-300 cursor-default"
             >
               {skill}
             </span>
@@ -165,7 +165,7 @@ export default function ProjectsSection() {
   return (
     <section
       id="projects"
-      className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-30 overflow-hidden border-t border-white/10 bg-[#070b0a]"
+      className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-30 overflow-hidden border-t border-white/10 bg-v2-base"
       style={{ boxShadow: "0 -10px 40px rgba(0,0,0,0.5)" }}
     >
       {/* ── Lightweight Background (replaces HLS video) ── */}
@@ -177,7 +177,7 @@ export default function ProjectsSection() {
             background: "radial-gradient(ellipse 80% 50% at 50% 20%, rgba(0,223,143,0.08) 0%, transparent 70%), radial-gradient(ellipse 60% 40% at 80% 80%, rgba(56,189,248,0.05) 0%, transparent 60%)"
           }}
         />
-        <div className="absolute inset-0 bg-[#070b0a]/60" />
+        <div className="absolute inset-0 bg-v2-base/60" />
         {/* Subtle dot grid pattern */}
         <div 
           className="absolute inset-0 opacity-[0.03]" 
@@ -199,7 +199,7 @@ export default function ProjectsSection() {
               >
                 Featured <br className="hidden md:block" />
                 <span className="accent-serif italic font-light text-white/80">Dashboard</span>
-                <span className="text-[#00df8f]">.</span>
+                <span className="text-accent">.</span>
               </motion.h2>
               <motion.p 
                 className="mt-6 text-white/50 max-w-xl font-kanit font-light text-lg"

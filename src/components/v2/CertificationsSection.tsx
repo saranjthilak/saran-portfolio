@@ -49,7 +49,7 @@ export default function CertificationsSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
         >
-          My <span className="accent-serif">Certifications</span><span className="text-[#00df8f]">.</span>
+          My <span className="accent-serif">Certifications</span><span className="text-accent">.</span>
         </motion.h2>
 
         {/* Cert list */}

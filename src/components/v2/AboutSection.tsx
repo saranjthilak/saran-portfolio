@@ -9,7 +9,7 @@ const AboutSection = () => {
     <>
       <section
         id="about"
-        className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-[15] overflow-hidden flex items-center border-t border-white/10 bg-[#070b0a]"
+        className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-[15] overflow-hidden flex items-center border-t border-white/10 bg-v2-base"
         style={{
           padding: "clamp(5rem, 9vw, 9rem) 1.25rem",
           boxShadow: "0 -10px 40px rgba(0,0,0,0.5)",
@@ -25,11 +25,11 @@ const AboutSection = () => {
             }}
           />
 
-          {/* Left linear gradient (#070b0a to transparent) */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#070b0a] via-[#070b0a]/75 to-transparent" />
+          {/* Left linear gradient (bg-base to transparent) */}
+          <div className="absolute inset-0 bg-gradient-to-r from-v2-base via-v2-base/75 to-transparent" />
 
           {/* Bottom-up gradient for readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#070b0a] via-[#070b0a]/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-v2-base via-v2-base/50 to-transparent" />
         </div>
 
         {/* ── Central Glow (cyan/dark green hue with 25px Gaussian blur) ── */}

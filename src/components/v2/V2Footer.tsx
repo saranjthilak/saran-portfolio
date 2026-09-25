@@ -22,11 +22,11 @@ const SOCIAL_LINKS = [
 
 const V2Footer = () => {
   return (
-    <footer className="w-full bg-[#090b0e] border-t border-white/5 py-8 px-6 sm:px-12 font-sans relative z-40">
+    <footer className="w-full bg-v2-base border-t border-white/5 py-8 px-6 sm:px-12 font-sans relative z-40">
       <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
         {/* Branding */}
         <div className="flex items-center gap-2 text-white/50 font-medium">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#00df8f]" aria-hidden="true" />
+          <span className="w-1.5 h-1.5 rounded-full bg-accent" aria-hidden="true" />
           <span>Saran Jaya Thilak</span>
         </div>
 

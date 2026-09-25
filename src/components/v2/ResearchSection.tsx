@@ -13,7 +13,7 @@ export default function ResearchSection() {
       id="research"
       className="relative font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 z-[35] overflow-hidden min-h-screen flex flex-col justify-center"
       style={{
-        background: "#080c10",
+        background: "hsl(212, 18%, 5%)",
         boxShadow: "0 -10px 40px rgba(0,0,0,0.5)",
       }}
     >
@@ -42,7 +42,7 @@ export default function ResearchSection() {
 
         {/* Vignette */}
         <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 110% 110% at 50% 50%, transparent 35%, rgba(0,0,0,0.65) 100%)" }} />
-        <div className="absolute bottom-0 left-0 w-full h-32" style={{ background: "linear-gradient(to top, #080c10, transparent)" }} />
+        <div className="absolute bottom-0 left-0 w-full h-32" style={{ background: "linear-gradient(to top, hsl(212, 18%, 5%), transparent)" }} />
       </div>
 
 
@@ -60,7 +60,7 @@ export default function ResearchSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
         >
-          Published <span className="accent-serif">work</span><span className="text-[#00df8f]">.</span>
+          Published <span className="accent-serif">work</span><span className="text-accent">.</span>
         </motion.h2>
 
         {/* Sub-line */}

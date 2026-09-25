@@ -113,7 +113,7 @@ const ContactSection = () => {
               className="font-black leading-[0.92] tracking-tighter text-white"
               style={{ fontSize: "clamp(2.8rem, 8vw, 7rem)" }}
             >
-              Build<span className="text-[#00df8f]">.</span><br />Ship<span className="text-[#00df8f]">.</span><br /><span className="accent-serif">Scale</span><span className="text-[#00df8f]">.</span>
+              Build<span className="text-accent">.</span><br />Ship<span className="text-accent">.</span><br /><span className="accent-serif">Scale</span><span className="text-accent">.</span>
             </h2>
           </div>
 

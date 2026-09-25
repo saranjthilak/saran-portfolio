@@ -137,12 +137,12 @@ export default function GithubSection() {
     <section
       ref={sectionRef}
       id="github"
-      className="font-kanit relative w-full py-24 md:py-32 bg-[#0a0a0a] z-40 border-t border-white/5 overflow-hidden"
+      className="font-kanit relative w-full py-24 md:py-32 bg-v2-base z-40 border-t border-white/5 overflow-hidden"
     >
       {/* ── Background Effects ── */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Radial glow behind the card */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-[#00df8f]/[0.04] rounded-full blur-[120px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-accent/[0.04] rounded-full blur-[120px]" />
         {/* Grid pattern */}
         <div
           className="absolute inset-0 opacity-[0.025]"
@@ -164,7 +164,7 @@ export default function GithubSection() {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, ease: EASE }}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#00df8f] animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
               Open Source
             </motion.p>
             <motion.h2
@@ -178,7 +178,7 @@ export default function GithubSection() {
               <span className="accent-serif italic font-light text-white/80">
                 Contributions
               </span>
-              <span className="text-[#00df8f]">.</span>
+              <span className="text-accent">.</span>
             </motion.h2>
             <motion.p
               className="mt-5 text-white/40 max-w-md mx-auto font-kanit font-light text-base"
@@ -210,7 +210,7 @@ export default function GithubSection() {
                     <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
                   </svg>
                 }
-                accentColor="#00df8f"
+                accentColor="hsl(158, 100%, 44%)"
                 delay={0.1}
               />
               <div ref={contributions.ref} />
@@ -272,9 +272,9 @@ export default function GithubSection() {
           }}
         >
           {/* Top-left accent line */}
-          <div className="absolute top-0 left-8 w-20 h-[1px] bg-gradient-to-r from-[#00df8f]/60 to-transparent" />
+          <div className="absolute top-0 left-8 w-20 h-[1px] bg-gradient-to-r from-accent/60 to-transparent" />
           {/* Bottom-right accent line */}
-          <div className="absolute bottom-0 right-8 w-20 h-[1px] bg-gradient-to-l from-[#00df8f]/40 to-transparent" />
+          <div className="absolute bottom-0 right-8 w-20 h-[1px] bg-gradient-to-l from-accent/40 to-transparent" />
 
           {/* Calendar */}
           <div className="min-w-[800px] flex justify-center overflow-x-auto">
@@ -315,7 +315,7 @@ export default function GithubSection() {
               href={`https://github.com/${GITHUB_USERNAME}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="group/btn flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/10 hover:border-[#00df8f]/40 bg-white/[0.03] hover:bg-[#00df8f]/10 text-white/60 hover:text-[#00df8f] text-sm font-mono transition-all duration-300"
+              className="group/btn flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/10 hover:border-accent/40 bg-white/[0.03] hover:bg-accent/10 text-white/60 hover:text-accent text-sm font-mono transition-all duration-300"
             >
               View Profile
               <svg

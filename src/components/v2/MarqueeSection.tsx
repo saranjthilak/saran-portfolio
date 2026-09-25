@@ -51,14 +51,14 @@ const MarqueeSection = () => {
     <section
       className="overflow-hidden font-kanit relative flex items-center justify-center min-h-[50vh]"
       style={{
-        background: "#0d1116",
+        background: "hsl(213, 16%, 6%)",
         paddingTop: "clamp(4rem, 8vw, 6rem)",
         paddingBottom: "4rem",
       }}
     >
       {/* Edge Gradients for smooth fade in/out */}
-      <div className="absolute top-0 bottom-0 left-0 w-24 sm:w-40 z-10 bg-gradient-to-r from-[#0d1116] to-transparent pointer-events-none" />
-      <div className="absolute top-0 bottom-0 right-0 w-24 sm:w-40 z-10 bg-gradient-to-l from-[#0d1116] to-transparent pointer-events-none" />
+      <div className="absolute top-0 bottom-0 left-0 w-24 sm:w-40 z-10 bg-gradient-to-r from-v2-raised to-transparent pointer-events-none" />
+      <div className="absolute top-0 bottom-0 right-0 w-24 sm:w-40 z-10 bg-gradient-to-l from-v2-raised to-transparent pointer-events-none" />
 
       {/* Tilted Wrapper */}
       <div className="flex flex-col gap-6 sm:gap-10 relative z-0 -rotate-3 scale-[1.15]">

@@ -205,7 +205,7 @@ function TypewriterTitle() {
       </span>
       <motion.span
         className="inline-block"
-        style={{ background: "linear-gradient(135deg, #00df8f, #06b6d4)", WebkitBackgroundClip: "text", color: "transparent" }}
+        style={{ background: "linear-gradient(135deg, hsl(158,100%,44%), #06b6d4)", WebkitBackgroundClip: "text", color: "transparent" }}
         initial={{ opacity: 0, scale: 0, rotate: -20 }}
         animate={inView ? { opacity: 1, scale: 1, rotate: 0 } : {}}
         transition={{ type: "spring", stiffness: 500, damping: 12, delay: typingEnd + 0.15 }}
@@ -267,7 +267,7 @@ function MagneticTab({
       {isActive && (
         <motion.div
           layoutId="expertise-active-tab"
-          className="absolute inset-0 rounded-full bg-[#00df8f] shadow-[0_0_20px_rgba(0,223,143,0.4)]"
+          className="absolute inset-0 rounded-full bg-accent shadow-[0_0_20px_rgba(0,223,143,0.4)]"
           transition={{ type: "spring", stiffness: 380, damping: 30 }}
         />
       )}
@@ -577,7 +577,7 @@ function FlipCard({
         >
           {/* ────────────── FRONT FACE ────────────── */}
           <div
-            className="absolute inset-0 rounded-2xl bg-[#0a0e14]/90 backdrop-blur-xl border border-white/[0.08] p-6 sm:p-7 flex flex-col gap-3 overflow-hidden"
+            className="absolute inset-0 rounded-2xl bg-v2-recessed/90 backdrop-blur-xl border border-white/[0.08] p-6 sm:p-7 flex flex-col gap-3 overflow-hidden"
             style={{ backfaceVisibility: "hidden" }}
           >
             {/* Grid dot pattern */}
@@ -700,7 +700,7 @@ function FlipCard({
 
           {/* ────────────── BACK FACE ────────────── */}
           <div
-            className="absolute inset-0 rounded-2xl bg-[#0a0e14]/95 backdrop-blur-xl p-6 sm:p-7 flex flex-col gap-3 overflow-y-auto"
+            className="absolute inset-0 rounded-2xl bg-v2-recessed/95 backdrop-blur-xl p-6 sm:p-7 flex flex-col gap-3 overflow-y-auto"
             style={{
               backfaceVisibility: "hidden",
               transform: "rotateY(180deg)",
@@ -756,7 +756,7 @@ function FlipCard({
               <span
                 className="text-base font-mono font-bold tracking-tight"
                 style={{
-                  background: `linear-gradient(135deg, ${color.primary}, #00df8f)`,
+                  background: `linear-gradient(135deg, ${color.primary}, hsl(158,100%,44%))`,
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   filter: `drop-shadow(0 0 8px rgba(${color.rgb},0.4))`,
@@ -787,7 +787,7 @@ function ArchSummaryCard({ i }: { i: number }) {
       transition={{ duration: 0.65, delay: i * 0.12, ease: EASE }}
       className="h-full min-h-[420px] hidden lg:flex"
     >
-      <div className="relative w-full rounded-2xl bg-[#0a0e14]/70 backdrop-blur-xl border border-white/[0.08] p-6 sm:p-7 flex flex-col items-center justify-center gap-4 overflow-hidden">
+      <div className="relative w-full rounded-2xl bg-v2-recessed/70 backdrop-blur-xl border border-white/[0.08] p-6 sm:p-7 flex flex-col items-center justify-center gap-4 overflow-hidden">
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.035]"
           style={{
@@ -798,13 +798,13 @@ function ArchSummaryCard({ i }: { i: number }) {
         <CornerTicks />
 
         <div className="text-center relative z-10 flex flex-col items-center gap-3">
-          <div className="inline-flex items-center gap-2 text-[10px] font-mono tracking-widest text-[#00df8f] uppercase">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#00df8f] animate-pulse" />
+          <div className="inline-flex items-center gap-2 text-[10px] font-mono tracking-widest text-accent uppercase">
+            <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
             SYSTEM STATUS
           </div>
 
           <div className="text-4xl font-black text-white tracking-tight">
-            6<span className="text-[#00df8f]">.</span>
+            6<span className="text-accent">.</span>
           </div>
           <div className="text-xs font-mono text-white/50 tracking-wider uppercase">
             Expertise Domains
@@ -818,7 +818,7 @@ function ArchSummaryCard({ i }: { i: number }) {
           </div>
 
           <div className="mt-2 px-4 py-2 rounded-lg border border-[rgba(0,223,143,0.15)] bg-[rgba(0,223,143,0.04)]">
-            <span className="text-[9px] font-mono tracking-wider text-[#00df8f]/80 font-semibold">
+            <span className="text-[9px] font-mono tracking-wider text-accent/80 font-semibold">
               ARCHITECTURE READY
             </span>
           </div>
@@ -978,7 +978,7 @@ const ServicesSection = () => {
   return (
     <section
       id="skills"
-      className="relative font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 z-20 overflow-hidden border-t border-white/10 bg-[#090d12]"
+      className="relative font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 z-20 overflow-hidden border-t border-white/10 bg-v2-recessed"
       style={{
         padding: "clamp(4rem, 6vw, 6rem) 1.25rem clamp(6rem, 9vw, 9rem)",
         boxShadow: "0 -10px 40px rgba(0,0,0,0.6)",
@@ -994,10 +994,10 @@ const ServicesSection = () => {
           className="w-full h-full object-cover pointer-events-none opacity-40"
           src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260508_064122_c4750c0e-7476-4b44-94a2-a85a65c63bf2.mp4"
         />
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-[#00df8f]/[0.07] rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-accent/[0.07] rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-10 left-1/3 w-[500px] h-[250px] bg-[#38bdf8]/[0.05] rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute inset-0 bg-[#090d12]/75" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#090d12] via-transparent to-[#090d12]" />
+        <div className="absolute inset-0 bg-v2-recessed/75" />
+        <div className="absolute inset-0 bg-gradient-to-b from-v2-recessed via-transparent to-v2-recessed" />
         {/* Subtle grid texture overlay */}
         <div
           className="absolute inset-0 opacity-[0.04] pointer-events-none"
@@ -1078,7 +1078,7 @@ const ServicesSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.5 }}
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-[#00df8f]" />
+            <span className="w-1.5 h-1.5 rounded-full bg-accent" />
             <span>PRODUCTION-PROVEN ARCHITECTURE STACK · TESLA / NOKIA / HUAWEI / ENTERPRISE SLA</span>
           </motion.div>
         )}
@@ -1097,7 +1097,7 @@ const ServicesSection = () => {
             style={{
               border: "1.5px solid rgba(0,223,143,0.4)",
               background: "rgba(0,223,143,0.06)",
-              color: "#00df8f",
+              color: "hsl(158, 100%, 44%)",
             }}
             whileHover={{
               boxShadow: "0 0 30px rgba(0,223,143,0.25), inset 0 0 30px rgba(0,223,143,0.08)",

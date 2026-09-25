@@ -13,7 +13,7 @@ const ExperienceSection = () => {
       id="experience"
       className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-10"
       style={{
-        background: "#080808", // Very dark to contrast slightly
+        background: "hsl(212, 18%, 5%)",  // --bg-recessed
         padding: "clamp(5rem, 9vw, 9rem) 1.25rem",
         boxShadow: "0 -10px 40px rgba(0,0,0,0.5)",
       }}
@@ -31,7 +31,7 @@ const ExperienceSection = () => {
           />
         )}
         {/* Gradient overlay to ensure text is legible over the video */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/70 to-[#080808]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/70" style={{ backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.7), hsl(212, 18%, 5%))" }} />
       </div>
 
       <div className="mx-auto max-w-6xl relative z-10">
@@ -49,7 +49,7 @@ const ExperienceSection = () => {
             className="font-black leading-[0.92] tracking-tighter text-white mb-12 sm:mb-16 md:mb-20"
             style={{ fontSize: "clamp(2.6rem, 6.5vw, 4.8rem)" }}
           >
-            Nine years, <span className="accent-serif">four teams</span><span className="text-[#00df8f]">.</span>
+            Nine years, <span className="accent-serif">four teams</span><span className="text-accent">.</span>
           </h2>
         </FadeIn>
 
