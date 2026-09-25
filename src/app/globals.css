@@ -19,7 +19,7 @@
     --popover: 240 18% 7%;
     --popover-foreground: 220 14% 94%;
 
-    --primary: 185 100% 50%;           /* electric cyan #00f0ff */
+    --primary: 158 100% 44%;           /* brand green #00df8f */
     --primary-foreground: 240 22% 5%;
 
     --secondary: 240 14% 10%;
@@ -28,7 +28,7 @@
     --muted: 240 12% 13%;
     --muted-foreground: 220 8% 62%;
 
-    --accent: 185 100% 50%;
+    --accent: 158 100% 44%;
     --accent-foreground: 240 22% 5%;
 
     --success: 158 64% 45%;
@@ -39,7 +39,7 @@
 
     --border: 240 12% 16%;
     --input: 240 12% 16%;
-    --ring: 185 100% 50%;
+    --ring: 158 100% 44%;
 
     --radius: 0.5rem;
 
@@ -47,7 +47,12 @@
     --surface: 240 16% 8%;
     --surface-2: 240 14% 11%;
 
-    --grid-line: 185 100% 50%;
+    --grid-line: 158 100% 44%;
+
+    /* Background step tokens — consolidates near-black values across v2 sections */
+    --bg-base: 215 14% 4%;              /* #090b0e — deepest (footer, main section bg) */
+    --bg-raised: 213 16% 6%;            /* #0d1116 — slightly elevated (hero, marquee) */
+    --bg-recessed: 212 18% 5%;          /* #090d12 — recessed panels & overlays */
   }
 
   .light {
@@ -60,7 +65,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 240 20% 10%;
 
-    --primary: 190 95% 34%;
+    --primary: 158 90% 32%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 220 16% 95%;
@@ -69,18 +74,22 @@
     --muted: 220 14% 92%;
     --muted-foreground: 240 6% 42%;
 
-    --accent: 190 95% 34%;
+    --accent: 158 90% 32%;
     --accent-foreground: 0 0% 100%;
 
     --border: 220 14% 88%;
     --input: 220 14% 88%;
-    --ring: 190 95% 34%;
+    --ring: 158 90% 32%;
 
     --ink: 240 20% 10%;
     --surface: 220 16% 95%;
     --surface-2: 220 14% 90%;
 
     --grid-line: 240 20% 10%;
+
+    --bg-base: 220 12% 95%;
+    --bg-raised: 220 14% 97%;
+    --bg-recessed: 220 10% 92%;
   }
 }
 
@@ -101,7 +110,7 @@
 
   /* V2 portfolio — Kanit-based dark design */
   .v2-page {
-    background: #0d1116;
+    background: hsl(var(--bg-raised));
     font-family: var(--font-kanit), 'Kanit', sans-serif;
     overflow-x: clip;
   }
@@ -113,7 +122,7 @@
     font-weight: 400;
     text-transform: none;
     letter-spacing: -0.01em;
-    color: #00df8f;
+    color: hsl(var(--accent));
   }
 }
 
