@@ -113,7 +113,7 @@ const HeroSection = () => {
               <div className="absolute inset-0 p-3 pb-24">
                 <div className="w-full h-full bg-v2-raised rounded-2xl overflow-hidden relative">
                   <img 
-                    src="/lovable-uploads/5881e7e5-f088-4e07-a79c-59eacb55eeb0.png" 
+                    src="/images/profile.png" 
                     alt="Saran Portrait" 
                     className="w-full h-full object-cover opacity-80"
                     draggable={false}
