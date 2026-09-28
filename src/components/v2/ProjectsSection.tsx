@@ -45,7 +45,7 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
       {/* ── IMAGE TILE (Main visual) ── */}
       <motion.div
         variants={itemVariants}
-        className={`relative overflow-hidden rounded-[32px] border border-white/10 hover:border-white/20 bg-v2-base ${
+        className={`relative overflow-hidden rounded-card border border-white/10 hover:border-white/20 bg-v2-base ${
           isEven ? "md:col-span-2 md:row-span-2" : "md:col-span-2 md:row-span-2 md:col-start-3 md:row-start-1"
         } min-h-[350px] md:min-h-0 h-full group transition-colors duration-500`}
       >
@@ -72,7 +72,7 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
       {/* ── INFO TILE (Title, Desc, Links) ── */}
       <motion.div
         variants={itemVariants}
-        className={`flex flex-col justify-between p-8 md:p-10 rounded-[32px] border border-white/10 hover:border-white/20 bg-gradient-to-b from-white/[0.05] to-white/[0.01] hover:from-white/[0.08] hover:to-white/[0.02] transition-all duration-500 relative overflow-hidden ${
+        className={`flex flex-col justify-between p-8 md:p-10 rounded-card border border-white/10 hover:border-white/20 bg-gradient-to-b from-white/[0.05] to-white/[0.01] hover:from-white/[0.08] hover:to-white/[0.02] transition-all duration-500 relative overflow-hidden ${
           isEven ? "md:col-span-2 md:row-span-1" : "md:col-span-2 md:row-span-1 md:col-start-1 md:row-start-1"
         }`}
       >
@@ -104,7 +104,7 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
       {/* ── CASE STUDY TILE ── */}
       <motion.div
         variants={itemVariants}
-        className={`p-8 md:p-10 rounded-[32px] border border-white/10 hover:border-white/20 bg-v2-raised hover:bg-v2-base transition-colors duration-500 flex flex-col justify-center ${
+        className={`p-8 md:p-10 rounded-card border border-white/10 hover:border-white/20 bg-v2-raised hover:bg-v2-base transition-colors duration-500 flex flex-col justify-center ${
           isEven ? "md:col-span-1 md:row-span-1" : "md:col-span-1 md:row-span-1 md:col-start-1 md:row-start-2"
         }`}
       >
@@ -139,7 +139,7 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
       {/* ── SKILLS TILE ── */}
       <motion.div
         variants={itemVariants}
-        className={`p-8 md:p-10 rounded-[32px] border border-white/10 hover:border-white/20 bg-v2-raised hover:bg-v2-base transition-colors duration-500 ${
+        className={`p-8 md:p-10 rounded-card border border-white/10 hover:border-white/20 bg-v2-raised hover:bg-v2-base transition-colors duration-500 ${
           isEven ? "md:col-span-1 md:row-span-1" : "md:col-span-1 md:row-span-1 md:col-start-2 md:row-start-2"
         }`}
       >
@@ -166,7 +166,7 @@ export default function ProjectsSection() {
   return (
     <section
       id="projects"
-      className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-30 overflow-hidden border-t border-white/10 bg-v2-base"
+      className="font-kanit rounded-t-section -mt-10 sm:-mt-12 md:-mt-14 relative z-30 overflow-hidden border-t border-white/10 bg-v2-base"
       style={{ boxShadow: "0 -10px 40px rgba(0,0,0,0.5)" }}
     >
       {/* ── Lightweight Background (replaces HLS video) ── */}

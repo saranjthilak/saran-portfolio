@@ -978,7 +978,7 @@ const ServicesSection = () => {
   return (
     <section
       id="skills"
-      className="relative font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 z-20 overflow-hidden border-t border-white/10 bg-v2-recessed"
+      className="relative font-kanit rounded-t-section -mt-10 sm:-mt-12 md:-mt-14 z-20 overflow-hidden border-t border-white/10 bg-v2-recessed"
       style={{
         padding: "clamp(4rem, 6vw, 6rem) 1.25rem clamp(6rem, 9vw, 9rem)",
         boxShadow: "0 -10px 40px rgba(0,0,0,0.6)",

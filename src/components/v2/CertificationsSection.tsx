@@ -12,7 +12,7 @@ export default function CertificationsSection() {
   return (
     <section
       id="certifications"
-      className="relative font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 z-40 overflow-hidden border-t border-white/10 min-h-screen flex flex-col justify-center bg-black"
+      className="relative font-kanit rounded-t-section -mt-10 sm:-mt-12 md:-mt-14 z-40 overflow-hidden border-t border-white/10 min-h-screen flex flex-col justify-center bg-black"
       style={{
         boxShadow: "0 -10px 40px rgba(0,0,0,0.6)",
       }}

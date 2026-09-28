@@ -10,7 +10,7 @@ const AboutSection = () => {
     <>
       <section
         id="about"
-        className="font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-[15] overflow-hidden flex items-center border-t border-white/10 bg-v2-base"
+        className="font-kanit rounded-t-section -mt-10 sm:-mt-12 md:-mt-14 relative z-[15] overflow-hidden flex items-center border-t border-white/10 bg-v2-base"
         style={{
           padding: "clamp(5rem, 9vw, 9rem) 1.25rem",
           boxShadow: "0 -10px 40px rgba(0,0,0,0.5)",

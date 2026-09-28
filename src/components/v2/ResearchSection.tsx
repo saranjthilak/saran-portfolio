@@ -12,7 +12,7 @@ export default function ResearchSection() {
   return (
     <section
       id="research"
-      className="relative font-kanit rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 z-[35] overflow-hidden min-h-screen flex flex-col justify-center"
+      className="relative font-kanit rounded-t-section -mt-10 sm:-mt-12 md:-mt-14 z-[35] overflow-hidden min-h-screen flex flex-col justify-center"
       style={{
         background: "hsl(212, 18%, 5%)",
         boxShadow: "0 -10px 40px rgba(0,0,0,0.5)",

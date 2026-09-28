@@ -56,7 +56,7 @@ const StatCard = ({ label, value, icon, accentColor, delay, loading }: StatCardP
       initial={{ opacity: 0, y: 24, scale: 0.95 }}
       animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
       transition={{ duration: 0.7, delay, ease: EASE }}
-      className="relative group flex-1 min-w-[160px] p-5 sm:p-6 rounded-[20px] border border-white/10 hover:border-white/20 bg-white/[0.03] backdrop-blur-xl transition-all duration-500 overflow-hidden"
+      className="relative group flex-1 min-w-[160px] p-5 sm:p-6 rounded-stat border border-white/10 hover:border-white/20 bg-white/[0.03] backdrop-blur-xl transition-all duration-500 overflow-hidden"
     >
       {/* Ambient glow on hover */}
       <div
@@ -259,7 +259,7 @@ export default function GithubSection() {
           initial={{ opacity: 0, y: 30, scale: 0.98 }}
           animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
           transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
-          className="relative rounded-[28px] border border-white/10 hover:border-white/15 bg-gradient-to-b from-white/[0.04] to-white/[0.01] backdrop-blur-2xl p-6 sm:p-10 overflow-hidden transition-all duration-500 group"
+          className="relative rounded-panel border border-white/10 hover:border-white/15 bg-gradient-to-b from-white/[0.04] to-white/[0.01] backdrop-blur-2xl p-6 sm:p-10 overflow-hidden transition-all duration-500 group"
           style={{
             boxShadow:
               "0 0 80px rgba(0,223,143,0.03), 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)",

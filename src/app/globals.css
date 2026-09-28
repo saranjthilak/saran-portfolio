@@ -53,6 +53,12 @@
     --bg-base: 215 14% 4%;              /* #090b0e — deepest (footer, main section bg) */
     --bg-raised: 213 16% 6%;            /* #0d1116 — slightly elevated (hero, marquee) */
     --bg-recessed: 212 18% 5%;          /* #090d12 — recessed panels & overlays */
+
+    /* Radius step tokens — consolidates ad-hoc rounded-[Xpx] values across v2 */
+    --radius-section: clamp(2.5rem, 5vw, 3.75rem); /* 40px → 60px: section stacking corners */
+    --radius-card:    2rem;                         /* 32px: large bento / project cards */
+    --radius-panel:   1.75rem;                      /* 28px: medium panels (GitHub, Contact) */
+    --radius-stat:    1.25rem;                      /* 20px: small stat / chip cards */
   }
 
   .light {
@@ -90,6 +96,11 @@
     --bg-base: 220 12% 95%;
     --bg-raised: 220 14% 97%;
     --bg-recessed: 220 10% 92%;
+
+    --radius-section: clamp(2.5rem, 5vw, 3.75rem);
+    --radius-card:    2rem;
+    --radius-panel:   1.75rem;
+    --radius-stat:    1.25rem;
   }
 }
 

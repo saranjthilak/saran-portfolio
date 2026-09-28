@@ -84,7 +84,12 @@ export default {
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				sm: 'calc(var(--radius) - 4px)',
+				// v2 radius step tokens
+				section: 'var(--radius-section)',
+				card:    'var(--radius-card)',
+				panel:   'var(--radius-panel)',
+				stat:    'var(--radius-stat)',
 			},
 			keyframes: {
 				'accordion-down': {

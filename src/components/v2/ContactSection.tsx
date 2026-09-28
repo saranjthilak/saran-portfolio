@@ -78,7 +78,7 @@ const ContactSection = () => {
   return (
     <section
       id="contact"
-      className="blueprint-section font-inter rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-50 min-h-[100svh] flex items-center border-t border-accent/20"
+      className="blueprint-section font-inter rounded-t-section -mt-10 sm:-mt-12 md:-mt-14 relative z-50 min-h-[100svh] flex items-center border-t border-accent/20"
       style={{
         padding: "clamp(5rem, 9vw, 9rem) 1.25rem clamp(4rem, 6vw, 6rem)",
         boxShadow: "0 -10px 40px rgba(0,0,0,0.5)",
@@ -158,7 +158,7 @@ const ContactSection = () => {
         {/* ── Right column — form ─────────────────────────────────── */}
         <div className="animate-fade-up-delay-4">
           <div
-            className="rounded-[1.75rem] p-6 sm:p-8 relative overflow-hidden backdrop-blur-md"
+            className="rounded-panel p-6 sm:p-8 relative overflow-hidden backdrop-blur-md"
             style={{ background: "rgba(20,20,20,0.4)", border: "1px solid rgba(255,255,255,0.15)" }}
           >
             {/* Honeypot — visually hidden from real users, bots fill it and get dropped */}
