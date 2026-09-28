@@ -37,8 +37,8 @@ const ExperienceSection = () => {
       <div className="mx-auto max-w-6xl relative z-10">
         {/* Eyebrow */}
         <FadeIn delay={0} y={20}>
-          <p className="flex items-center gap-2 font-medium uppercase tracking-[0.25em] text-[#ffffff]/50 text-xs mb-5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#ffffff]/50 inline-block" />
+          <p className="flex items-center gap-2 font-medium uppercase tracking-[0.25em] text-white/50 text-xs mb-5">
+            <span className="w-1.5 h-1.5 rounded-full bg-white/50 inline-block" />
             Experience
           </p>
         </FadeIn>
@@ -65,23 +65,23 @@ const ExperienceSection = () => {
               className="grid grid-cols-1 md:grid-cols-[1fr_2fr_3fr] gap-6 md:gap-8 py-8 md:py-12 border-b border-[rgba(255, 255, 255, 0.1)] items-start"
             >
               {/* Period */}
-              <div className="text-[#ffffff]/50 font-light text-sm md:text-base tracking-wider mt-1">
+              <div className="text-white/50 font-light text-sm md:text-base tracking-wider mt-1">
                 {item.period}
               </div>
 
               {/* Company & Role */}
               <div>
-                <h3 className="text-[#ffffff] font-medium text-xl md:text-2xl mb-1">
+                <h3 className="text-white font-medium text-xl md:text-2xl mb-1">
                   {item.company}
                 </h3>
-                <p className="text-[#ffffff]/50 font-light text-sm md:text-base">
+                <p className="text-white/50 font-light text-sm md:text-base">
                   {item.role}
                 </p>
               </div>
 
               {/* Description */}
               <div
-                className="text-[#ffffff]/40 font-light leading-relaxed mt-1"
+                className="text-white/40 font-light leading-relaxed mt-1"
                 style={{ fontSize: "clamp(0.85rem, 1.3vw, 1rem)" }}
               >
                 {item.description}

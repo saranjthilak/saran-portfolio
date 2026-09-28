@@ -46,7 +46,7 @@ const AboutSection = () => {
               </filter>
               <linearGradient id="about-glow-grad" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stopColor="#00f0ff" stopOpacity="0.35" />
-                <stop offset="50%" stopColor="#5ed29c" stopOpacity="0.55" />
+                <stop offset="50%" stopColor="hsl(var(--accent))" stopOpacity="0.55" />
                 <stop offset="100%" stopColor="#00f0ff" stopOpacity="0.35" />
               </linearGradient>
             </defs>
@@ -114,26 +114,26 @@ const AboutSection = () => {
                     href="/Saran-Jaya-Thilak-Resume.pdf"
                     download="Saran-Jaya-Thilak-Resume.pdf"
                     className="group relative inline-flex items-center gap-3 font-kanit font-light text-sm tracking-widest uppercase"
-                    style={{ color: "#5ed29c" }}
+                    style={{ color: "hsl(var(--accent))" }}
                   >
                     {/* Blueprint grid card */}
                     <span
                       className="relative flex items-center gap-3 px-6 py-3 transition-all duration-300"
                       style={{
-                        border: "1px solid rgba(94,210,156,0.35)",
-                        background: "rgba(94,210,156,0.04)",
+                        border: "1px solid hsl(var(--accent) / 0.35)",
+                        background: "hsl(var(--accent) / 0.04)",
                       }}
                     >
                       {/* Corner marks */}
-                      <span className="absolute top-0 left-0 w-2 h-2 border-t border-l transition-all duration-300 group-hover:w-3 group-hover:h-3" style={{ borderColor: "#5ed29c" }} />
-                      <span className="absolute top-0 right-0 w-2 h-2 border-t border-r transition-all duration-300 group-hover:w-3 group-hover:h-3" style={{ borderColor: "#5ed29c" }} />
-                      <span className="absolute bottom-0 left-0 w-2 h-2 border-b border-l transition-all duration-300 group-hover:w-3 group-hover:h-3" style={{ borderColor: "#5ed29c" }} />
-                      <span className="absolute bottom-0 right-0 w-2 h-2 border-b border-r transition-all duration-300 group-hover:w-3 group-hover:h-3" style={{ borderColor: "#5ed29c" }} />
+                      <span className="absolute top-0 left-0 w-2 h-2 border-t border-l transition-all duration-300 group-hover:w-3 group-hover:h-3" style={{ borderColor: "hsl(var(--accent))" }} />
+                      <span className="absolute top-0 right-0 w-2 h-2 border-t border-r transition-all duration-300 group-hover:w-3 group-hover:h-3" style={{ borderColor: "hsl(var(--accent))" }} />
+                      <span className="absolute bottom-0 left-0 w-2 h-2 border-b border-l transition-all duration-300 group-hover:w-3 group-hover:h-3" style={{ borderColor: "hsl(var(--accent))" }} />
+                      <span className="absolute bottom-0 right-0 w-2 h-2 border-b border-r transition-all duration-300 group-hover:w-3 group-hover:h-3" style={{ borderColor: "hsl(var(--accent))" }} />
 
                       {/* Hover glow fill */}
                       <span
                         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                        style={{ background: "rgba(94,210,156,0.07)" }}
+                        style={{ background: "hsl(var(--accent) / 0.07)" }}
                       />
 
                       {/* Download icon */}
@@ -155,7 +155,7 @@ const AboutSection = () => {
                       {/* Mono label */}
                       <span
                         className="relative font-mono text-[10px] tracking-widest opacity-50"
-                        style={{ color: "#5ed29c" }}
+                        style={{ color: "hsl(var(--accent))" }}
                       >
                         PDF
                       </span>

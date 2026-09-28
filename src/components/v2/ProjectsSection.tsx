@@ -103,7 +103,7 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
       {/* ── CASE STUDY TILE ── */}
       <motion.div
         variants={itemVariants}
-        className={`p-8 md:p-10 rounded-[32px] border border-white/10 hover:border-white/20 bg-v2-raised hover:bg-[#111916] transition-colors duration-500 flex flex-col justify-center ${
+        className={`p-8 md:p-10 rounded-[32px] border border-white/10 hover:border-white/20 bg-v2-raised hover:bg-v2-base transition-colors duration-500 flex flex-col justify-center ${
           isEven ? "md:col-span-1 md:row-span-1" : "md:col-span-1 md:row-span-1 md:col-start-1 md:row-start-2"
         }`}
       >
@@ -138,7 +138,7 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
       {/* ── SKILLS TILE ── */}
       <motion.div
         variants={itemVariants}
-        className={`p-8 md:p-10 rounded-[32px] border border-white/10 hover:border-white/20 bg-v2-raised hover:bg-[#111916] transition-colors duration-500 ${
+        className={`p-8 md:p-10 rounded-[32px] border border-white/10 hover:border-white/20 bg-v2-raised hover:bg-v2-base transition-colors duration-500 ${
           isEven ? "md:col-span-1 md:row-span-1" : "md:col-span-1 md:row-span-1 md:col-start-2 md:row-start-2"
         }`}
       >

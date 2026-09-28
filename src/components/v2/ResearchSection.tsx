@@ -35,8 +35,8 @@ export default function ResearchSection() {
 
 
         {/* Orb glows */}
-        <div className="absolute top-[8%] left-[4%] w-[520px] h-[520px] rounded-full" style={{ background: "radial-gradient(circle, rgba(94,210,156,0.08) 0%, transparent 70%)" }} />
-        <div className="absolute bottom-[6%] right-[5%] w-[380px] h-[380px] rounded-full" style={{ background: "radial-gradient(circle, rgba(94,210,156,0.06) 0%, transparent 70%)" }} />
+        <div className="absolute top-[8%] left-[4%] w-[520px] h-[520px] rounded-full" style={{ background: "radial-gradient(circle, hsl(var(--accent) / 0.08) 0%, transparent 70%)" }} />
+        <div className="absolute bottom-[6%] right-[5%] w-[380px] h-[380px] rounded-full" style={{ background: "radial-gradient(circle, hsl(var(--accent) / 0.06) 0%, transparent 70%)" }} />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full" style={{ background: "radial-gradient(ellipse, rgba(115,255,0,0.03) 0%, transparent 65%)" }} />
 
 
@@ -93,7 +93,7 @@ export default function ResearchSection() {
               >
                 {/* Date + journal */}
                 <div>
-                  <span className="text-sm font-semibold uppercase tracking-widest block mb-1" style={{ color: "rgba(94,210,156,0.85)" }}>
+                  <span className="text-sm font-semibold uppercase tracking-widest block mb-1" style={{ color: "hsl(var(--accent) / 0.85)" }}>
                     {pub.date}
                   </span>
                   <span className="text-xs uppercase tracking-wider text-white/40">
@@ -103,7 +103,7 @@ export default function ResearchSection() {
 
                 {/* Title + description */}
                 <div>
-                  <h3 className="text-lg md:text-xl font-semibold text-white mb-2 leading-snug transition-colors duration-300 group-hover:text-[#5ed29c]">
+                  <h3 className="text-lg md:text-xl font-semibold text-white mb-2 leading-snug transition-colors duration-300 group-hover:text-accent">
                     {pub.title}
                   </h3>
                   <p className="text-sm leading-relaxed text-white/60">
@@ -115,7 +115,7 @@ export default function ResearchSection() {
                 <div className="hidden md:flex items-start pt-1">
                   <svg
                     className="w-5 h-5 transition-all duration-300 opacity-25 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                    style={{ color: "#5ed29c" }}
+                    style={{ color: "hsl(var(--accent))" }}
                     viewBox="0 0 16 16" fill="none"
                     stroke="currentColor" strokeWidth="1.5"
                     strokeLinecap="round" strokeLinejoin="round"
