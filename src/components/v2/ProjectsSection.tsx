@@ -5,6 +5,7 @@ import { motion, useInView } from "framer-motion";
 import { projects } from "@/data/portfolio";
 import ProjectLinks from "./LiveProjectButton";
 import BlueprintSectionHeader from "./BlueprintSectionHeader";
+import SectionHeading from "./SectionHeading";
 
 const FEATURED = projects.filter((p) => p.featured);
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -189,18 +190,13 @@ export default function ProjectsSection() {
         <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
           <BlueprintSectionHeader align="left">
             <div className="mb-20 md:mb-32">
-              <motion.h2
-                className="font-black leading-[0.92] tracking-tighter text-white"
-                style={{ fontSize: "clamp(3rem, 8vw, 6.5rem)" }}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.7, ease: EASE }}
-              >
-                Featured <br className="hidden md:block" />
-                <span className="accent-serif italic font-light text-white/80">Dashboard</span>
-                <span className="text-accent">.</span>
-              </motion.h2>
+              <SectionHeading
+                prefix="Featured "
+                accentWord="Dashboard"
+                gradient="projects"
+                align="left"
+                fontSize="clamp(3rem, 8vw, 6.5rem)"
+              />
               <motion.p 
                 className="mt-6 text-white/50 max-w-xl font-kanit font-light text-lg"
                 initial={{ opacity: 0 }}

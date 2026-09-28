@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { certifications } from "@/data/portfolio";
+import SectionHeading from "./SectionHeading";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const GREEN = "hsl(119,99%,46%)";
@@ -41,16 +42,13 @@ export default function CertificationsSection() {
       <div className="relative z-10 w-full max-w-6xl mx-auto px-6 md:px-10 pb-16 md:pb-24 pt-20 md:pt-24 my-auto">
 
         {/* Heading */}
-        <motion.h2
-          className="font-black leading-[0.92] tracking-tighter text-white mb-12 text-center"
-          style={{ fontSize: "clamp(2.6rem, 6.5vw, 4.8rem)" }}
-          initial={{ opacity: 0, y: 28, filter: "blur(4px)" }}
-          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
-        >
-          My <span className="accent-serif">Certifications</span><span className="text-accent">.</span>
-        </motion.h2>
+        <SectionHeading
+          prefix="My "
+          accentWord="Certifications"
+          gradient="certifications"
+          align="center"
+          className="mb-12"
+        />
 
         {/* Cert list */}
         {certifications.length > 0 && (

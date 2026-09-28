@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef } from "react";
 import BlueprintSectionHeader from "./BlueprintSectionHeader";
+import SectionHeading from "./SectionHeading";
 import { fetchGitHubStats, type GitHubStats } from "@/lib/github-stats";
 
 // Fix: next/dynamic with async factory correctly resolves named exports.
@@ -167,19 +168,12 @@ export default function GithubSection() {
               <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
               Open Source
             </motion.p>
-            <motion.h2
-              className="font-black leading-[0.92] tracking-tighter text-white"
-              style={{ fontSize: "clamp(2.6rem, 6.5vw, 5.2rem)" }}
-              initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
-              animate={isInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
-              transition={{ duration: 0.9, ease: EASE }}
-            >
-              GitHub{" "}
-              <span className="accent-serif italic font-light text-white/80">
-                Contributions
-              </span>
-              <span className="text-accent">.</span>
-            </motion.h2>
+            <SectionHeading
+              prefix="GitHub "
+              accentWord="Contributions"
+              gradient="github"
+              align="center"
+            />
             <motion.p
               className="mt-5 text-white/40 max-w-md mx-auto font-kanit font-light text-base"
               initial={{ opacity: 0 }}

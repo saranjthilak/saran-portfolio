@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { publications } from "@/data/portfolio";
+import SectionHeading from "./SectionHeading";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -52,16 +53,13 @@ export default function ResearchSection() {
 
 
         {/* Main heading */}
-        <motion.h2
-          className="font-black leading-[0.92] tracking-tighter text-white mb-8 text-center"
-          style={{ fontSize: "clamp(2.6rem, 6.5vw, 4.8rem)" }}
-          initial={{ opacity: 0, y: 28, filter: "blur(4px)" }}
-          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
-        >
-          Published <span className="accent-serif">work</span><span className="text-accent">.</span>
-        </motion.h2>
+        <SectionHeading
+          prefix="Published "
+          accentWord="work"
+          gradient="research"
+          align="center"
+          className="mb-8"
+        />
 
         {/* Sub-line */}
         <motion.p

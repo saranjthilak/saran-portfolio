@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { experience } from "@/data/portfolio";
 import FadeIn from "./FadeIn";
+import SectionHeading from "./SectionHeading";
 
 const ExperienceSection = () => {
   const videoRef = useRef<HTMLDivElement>(null);
@@ -45,12 +46,13 @@ const ExperienceSection = () => {
 
         {/* Heading */}
         <FadeIn delay={0.08} y={30}>
-          <h2
-            className="font-black leading-[0.92] tracking-tighter text-white mb-12 sm:mb-16 md:mb-20"
-            style={{ fontSize: "clamp(2.6rem, 6.5vw, 4.8rem)" }}
-          >
-            Nine years, <span className="accent-serif">four teams</span><span className="text-accent">.</span>
-          </h2>
+          <SectionHeading
+            prefix="Nine years, "
+            accentWord="four teams"
+            gradient="experience"
+            align="left"
+            className="mb-12 sm:mb-16 md:mb-20"
+          />
         </FadeIn>
 
         {/* Experience List */}
