@@ -1084,6 +1084,37 @@ const ServicesSection = () => {
               transition={{ duration: 0.9, delay: 0.35, ease: EASE }}
             />
 
+            {/* ── Architecture Telemetry Metrics HUD ── */}
+            <motion.div
+              className="mt-8 max-w-4xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 px-2"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.35, ease: EASE }}
+            >
+              {[
+                { label: "DATA INGESTION", val: "48.2 GB/s", color: DOMAIN_COLORS.data.primary },
+                { label: "RETRIEVAL COSINE", val: "0.96 SCORE", color: DOMAIN_COLORS.ai.primary },
+                { label: "INFERENCE P99", val: "8.4ms LATENCY", color: DOMAIN_COLORS.mlops.primary },
+                { label: "HISTORICAL UPTIME", val: "99.999% SLA", color: DOMAIN_COLORS.ops.primary },
+              ].map((m, i) => (
+                <div
+                  key={i}
+                  className="relative group overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.02] backdrop-blur-md p-3 text-left transition-all duration-300 hover:border-white/25 hover:bg-white/[0.05] hover:shadow-[0_8px_24px_rgba(0,0,0,0.4)]"
+                >
+                  <div
+                    className="absolute top-0 left-0 right-0 h-[2px] opacity-70 transition-opacity duration-300 group-hover:opacity-100"
+                    style={{ background: `linear-gradient(90deg, transparent, ${m.color}, transparent)` }}
+                  />
+                  <div className="text-[9px] font-mono tracking-widest text-white/40 uppercase truncate">{m.label}</div>
+                  <div className="mt-1 text-sm sm:text-base font-mono font-bold tracking-tight text-white flex items-center justify-between">
+                    <span style={{ color: m.color }}>{m.val}</span>
+                    <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: m.color }} />
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+
             <FilterTabs activeTab={activeTab} onTabChange={setActiveTab} />
           </div>
         </BlueprintSectionHeader>
