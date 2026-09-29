@@ -199,7 +199,21 @@ function TypewriterTitle() {
         style={{
           background: "radial-gradient(circle, rgba(167,139,250,0.35) 0%, rgba(6,182,212,0.22) 50%, transparent 80%)",
         }}
-      />
+      {/* ── Architectural Status HUD Kicker ── */}
+      <motion.div
+        className="relative z-10 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/10 bg-white/[0.03] backdrop-blur-md mb-4 text-[10.5px] font-mono tracking-widest uppercase shadow-[0_0_25px_rgba(0,223,143,0.12)]"
+        initial={{ opacity: 0, y: -10 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.5, ease: EASE }}
+      >
+        <span className="relative flex h-2 w-2">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
+        </span>
+        <span className="font-semibold text-accent">SYSTEM CLUSTER</span>
+        <span className="text-white/20">•</span>
+        <span className="text-white/60">06 PRODUCTION DOMAINS</span>
+      </motion.div>
 
       <motion.h2
         ref={ref}
