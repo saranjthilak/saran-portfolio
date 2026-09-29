@@ -867,7 +867,14 @@ function ArchSummaryCard({ i }: { i: number }) {
       transition={{ duration: 0.65, delay: i * 0.12, ease: EASE }}
       className="h-full min-h-[420px] hidden lg:flex"
     >
-      <div className="relative w-full rounded-2xl bg-v2-recessed/70 backdrop-blur-xl border border-white/[0.08] p-6 sm:p-7 flex flex-col items-center justify-center gap-4 overflow-hidden">
+      <div className="relative w-full rounded-2xl bg-v2-recessed/80 backdrop-blur-xl border border-white/[0.08] p-6 sm:p-7 flex flex-col items-center justify-center gap-4 overflow-hidden shadow-[0_12px_36px_rgba(0,0,0,0.4)]">
+        {/* Holographic top rim light */}
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-accent/70 to-transparent pointer-events-none z-20" />
+
+        {/* Ambient center radar glow */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-44 h-44 rounded-full bg-accent/[0.06] blur-[40px] pointer-events-none" />
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 rounded-full border border-accent/10 pointer-events-none" />
+
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.035]"
           style={{
@@ -875,37 +882,37 @@ function ArchSummaryCard({ i }: { i: number }) {
             backgroundSize: "16px 16px",
           }}
         />
-        <CornerTicks />
+        <CornerTicks color="hsl(158,100%,44%)" active />
 
         <div className="text-center relative z-10 flex flex-col items-center gap-3">
-          <div className="inline-flex items-center gap-2 text-[10px] font-mono tracking-widest text-accent uppercase">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent/25 bg-accent/[0.06] text-[10px] font-mono tracking-widest text-accent uppercase shadow-[0_0_15px_rgba(0,223,143,0.15)]">
             <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
             SYSTEM STATUS
           </div>
 
           <div className="text-4xl font-black text-white tracking-tight">
-            6<span className="text-accent">.</span>
+            6<span className="text-accent drop-shadow-[0_0_12px_rgba(0,223,143,0.8)]">.</span>
           </div>
           <div className="text-xs font-mono text-white/50 tracking-wider uppercase">
             Expertise Domains
           </div>
 
-          <div className="h-px w-16 bg-gradient-to-r from-transparent via-white/20 to-transparent my-1" />
+          <div className="h-px w-20 bg-gradient-to-r from-transparent via-accent/30 to-transparent my-1" />
 
-          <div className="flex flex-col gap-1.5 text-[10px] font-mono text-white/40 tracking-wider text-center">
+          <div className="flex flex-col gap-1.5 text-[10px] font-mono text-white/50 tracking-wider text-center">
             <span>5+ YEARS PRODUCTION</span>
             <span>99.999% UPTIME TRACK</span>
           </div>
 
-          <div className="mt-2 px-4 py-2 rounded-lg border border-[rgba(0,223,143,0.15)] bg-[rgba(0,223,143,0.04)]">
-            <span className="text-[9px] font-mono tracking-wider text-accent/80 font-semibold">
+          <div className="mt-2 px-4 py-2 rounded-lg border border-[rgba(0,223,143,0.25)] bg-[rgba(0,223,143,0.06)] shadow-[0_0_20px_rgba(0,223,143,0.1)]">
+            <span className="text-[9px] font-mono tracking-wider text-accent font-semibold">
               ARCHITECTURE READY
             </span>
           </div>
 
           <div className="mt-1 flex flex-wrap justify-center gap-x-2 gap-y-1">
             {["TESLA", "NOKIA", "HUAWEI"].map((co) => (
-              <span key={co} className="text-[9px] font-mono tracking-widest text-white/30">{co}</span>
+              <span key={co} className="text-[9px] font-mono tracking-widest text-white/40">{co}</span>
             ))}
           </div>
         </div>
