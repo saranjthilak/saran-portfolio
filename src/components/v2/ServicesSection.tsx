@@ -652,6 +652,15 @@ function FlipCard({
               transition={{ duration: 0.35 }}
             />
 
+            {/* Top rim accent glow */}
+            <div
+              className="absolute top-0 left-0 right-0 h-[2px] pointer-events-none z-20 transition-opacity duration-500"
+              style={{
+                background: `linear-gradient(90deg, transparent 5%, ${color.primary} 50%, transparent 95%)`,
+                opacity: hovered ? 1 : 0.45,
+              }}
+            />
+
             {/* Bottom sweep line */}
             <div
               className="absolute bottom-0 left-0 h-[2px] pointer-events-none z-20 transition-all duration-500"
@@ -711,6 +720,26 @@ function FlipCard({
             <p className="font-light text-white/65 leading-relaxed relative z-10 text-sm line-clamp-2">
               {item.description}
             </p>
+
+            {/* Primary Metric Mini-Display on Front Face */}
+            <div
+              className="relative z-10 flex items-center justify-between px-3 py-2 rounded-lg transition-all duration-300 mt-0.5"
+              style={{
+                backgroundColor: `rgba(${color.rgb}, ${hovered ? 0.08 : 0.035})`,
+                border: `1px solid rgba(${color.rgb}, ${hovered ? 0.35 : 0.15})`,
+              }}
+            >
+              <div className="flex items-center gap-2">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: color.primary }} />
+                  <span className="relative inline-flex rounded-full h-2 w-2" style={{ backgroundColor: color.primary }} />
+                </span>
+                <span className="text-[10px] font-mono tracking-widest text-white/50 uppercase">{item.metrics.label}</span>
+              </div>
+              <span className="font-mono text-xs font-bold tracking-tight" style={{ color: color.primary }}>
+                {item.metrics.value}
+              </span>
+            </div>
 
             {/* Tags */}
             <div className="flex flex-wrap gap-1.5 relative z-10 mt-auto">
