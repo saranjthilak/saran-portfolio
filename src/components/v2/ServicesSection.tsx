@@ -199,6 +199,8 @@ function TypewriterTitle() {
         style={{
           background: "radial-gradient(circle, rgba(167,139,250,0.35) 0%, rgba(6,182,212,0.22) 50%, transparent 80%)",
         }}
+      />
+
       {/* ── Architectural Status HUD Kicker ── */}
       <motion.div
         className="relative z-10 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/10 bg-white/[0.03] backdrop-blur-md mb-4 text-[10.5px] font-mono tracking-widest uppercase shadow-[0_0_25px_rgba(0,223,143,0.12)]"
