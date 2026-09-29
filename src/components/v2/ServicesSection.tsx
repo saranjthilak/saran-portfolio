@@ -757,15 +757,24 @@ function FlipCard({
               ))}
             </div>
 
-            {/* Flip hint */}
-            <div className="relative z-10 flex items-center justify-center gap-2 pt-3 border-t border-white/[0.06] text-white/30 text-[10px] font-mono tracking-wider">
-              <motion.div
-                animate={{ rotate: [0, -15, 0] }}
-                transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+            {/* Flip hint with interactive glowing button */}
+            <div className="relative z-10 flex items-center justify-between pt-3 border-t border-white/[0.06]">
+              <div className="flex items-center gap-1.5 text-[9px] font-mono text-white/35 tracking-wider">
+                <span className="w-1 h-1 rounded-full bg-white/30" />
+                <span>SYS ARCHITECTURE</span>
+              </div>
+              <div
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-semibold transition-all duration-300"
+                style={{
+                  border: `1px solid ${hovered ? color.primary : "rgba(255,255,255,0.12)"}`,
+                  backgroundColor: hovered ? `rgba(${color.rgb}, 0.16)` : "rgba(255,255,255,0.03)",
+                  color: hovered ? "#fff" : "rgba(255,255,255,0.6)",
+                  boxShadow: hovered ? `0 0 16px rgba(${color.rgb}, 0.35)` : "none",
+                }}
               >
-                <RotateCcw className="w-3 h-3" />
-              </motion.div>
-              <span>TAP TO EXPLORE</span>
+                <RotateCcw className={`w-3 h-3 transition-transform duration-500 ${hovered ? "-rotate-180" : ""}`} />
+                <span>INSPECT PIPELINE</span>
+              </div>
             </div>
           </div>
 
