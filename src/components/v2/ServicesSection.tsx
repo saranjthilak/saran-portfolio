@@ -177,50 +177,75 @@ function TypewriterTitle() {
   const typingEnd = 0.5 + word.length * 0.06;
 
   return (
-    <motion.h2
-      ref={ref}
-      className="font-black leading-[0.92] tracking-tighter text-center"
-      style={{ fontSize: "clamp(2.6rem, 6.5vw, 4.8rem)" }}
-    >
-      <motion.span
-        className="text-white"
-        initial={{ opacity: 0, y: 20 }}
-        animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.5, ease: EASE }}
+    <div className="relative flex flex-col items-center justify-center">
+      {/* ── Giant Atmospheric Architectural Ghost Watermark ── */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none select-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[clamp(4.5rem,14vw,11rem)] font-black tracking-[0.22em] uppercase leading-none opacity-[0.035] blur-[0.5px] z-0 whitespace-nowrap"
+        style={{
+          WebkitTextStroke: "1.5px rgba(255,255,255,0.7)",
+          color: "transparent",
+          maskImage: "radial-gradient(ellipse 65% 55% at 50% 50%, black 25%, transparent 80%)",
+          WebkitMaskImage: "radial-gradient(ellipse 65% 55% at 50% 50%, black 25%, transparent 80%)",
+        }}
       >
-        My{" "}
-      </motion.span>
-      <span className="accent-serif bg-gradient-to-r from-[#06b6d4] via-[#a78bfa] to-[#f59e0b] bg-clip-text text-transparent">
-        {word.split("").map((char, i) => (
-          <motion.span
-            key={i}
-            className="inline-block"
-            initial={{ opacity: 0, y: 10 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.05, delay: 0.5 + i * 0.06 }}
-          >
-            {char}
-          </motion.span>
-        ))}
-      </span>
-      <motion.span
-        className="inline-block"
-        style={{ background: "linear-gradient(135deg, hsl(158,100%,44%), #06b6d4)", WebkitBackgroundClip: "text", color: "transparent" }}
-        initial={{ opacity: 0, scale: 0, rotate: -20 }}
-        animate={inView ? { opacity: 1, scale: 1, rotate: 0 } : {}}
-        transition={{ type: "spring", stiffness: 500, damping: 12, delay: typingEnd + 0.15 }}
-      >
-        .
-      </motion.span>
-      {/* Blinking cursor */}
-      <motion.span
-        className="inline-block w-[3px] h-[0.8em] ml-1 align-middle rounded-full"
-        style={{ background: "linear-gradient(180deg, #06b6d4, #a78bfa)" }}
-        initial={{ opacity: 0 }}
-        animate={inView ? { opacity: [0, 1, 0] } : { opacity: 0 }}
-        transition={{ duration: 0.7, repeat: 5, delay: 0.4, repeatType: "loop" }}
+        EXPERTISE
+      </div>
+
+      {/* ── Ambient Radial Bloom Glow ── */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] h-[180px] rounded-full blur-[85px] opacity-40 z-0"
+        style={{
+          background: "radial-gradient(circle, rgba(167,139,250,0.35) 0%, rgba(6,182,212,0.22) 50%, transparent 80%)",
+        }}
       />
-    </motion.h2>
+
+      <motion.h2
+        ref={ref}
+        className="relative z-10 font-black leading-[0.92] tracking-tighter text-center"
+        style={{ fontSize: "clamp(2.6rem, 6.5vw, 4.8rem)" }}
+      >
+        <motion.span
+          className="text-white"
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, ease: EASE }}
+        >
+          My{" "}
+        </motion.span>
+        <span className="accent-serif bg-gradient-to-r from-[#06b6d4] via-[#a78bfa] to-[#f59e0b] bg-clip-text text-transparent">
+          {word.split("").map((char, i) => (
+            <motion.span
+              key={i}
+              className="inline-block"
+              initial={{ opacity: 0, y: 10 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.05, delay: 0.5 + i * 0.06 }}
+            >
+              {char}
+            </motion.span>
+          ))}
+        </span>
+        <motion.span
+          className="inline-block"
+          style={{ background: "linear-gradient(135deg, hsl(158,100%,44%), #06b6d4)", WebkitBackgroundClip: "text", color: "transparent" }}
+          initial={{ opacity: 0, scale: 0, rotate: -20 }}
+          animate={inView ? { opacity: 1, scale: 1, rotate: 0 } : {}}
+          transition={{ type: "spring", stiffness: 500, damping: 12, delay: typingEnd + 0.15 }}
+        >
+          .
+        </motion.span>
+        {/* Blinking cursor */}
+        <motion.span
+          className="inline-block w-[3px] h-[0.8em] ml-1 align-middle rounded-full"
+          style={{ background: "linear-gradient(180deg, #06b6d4, #a78bfa)" }}
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: [0, 1, 0] } : { opacity: 0 }}
+          transition={{ duration: 0.7, repeat: 5, delay: 0.4, repeatType: "loop" }}
+        />
+      </motion.h2>
+    </div>
   );
 }
 
