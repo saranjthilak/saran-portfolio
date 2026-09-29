@@ -302,22 +302,22 @@ function MagneticTab({
       onMouseMove={onMove}
       onMouseLeave={onLeave}
       style={{ x: springX, y: springY }}
-      className={`relative px-4 py-2 rounded-full text-xs font-mono uppercase tracking-wider flex items-center gap-2 cursor-pointer ${
-        !isActive ? "bg-white/[0.04] border border-white/[0.08] hover:border-white/20" : ""
+      className={`relative px-4 py-2 rounded-full text-xs font-mono uppercase tracking-wider flex items-center gap-2 cursor-pointer transition-all duration-300 ${
+        !isActive ? "hover:bg-white/[0.08] text-white/60 hover:text-white" : ""
       }`}
     >
       {isActive && (
         <motion.div
           layoutId="expertise-active-tab"
-          className="absolute inset-0 rounded-full bg-accent shadow-[0_0_20px_rgba(0,223,143,0.4)]"
+          className="absolute inset-0 rounded-full bg-accent shadow-[0_0_24px_rgba(0,223,143,0.45)]"
           transition={{ type: "spring", stiffness: 380, damping: 30 }}
         />
       )}
-      <span className={`relative z-10 transition-colors duration-200 ${isActive ? "text-black font-semibold" : "text-white/60"}`}>
+      <span className={`relative z-10 transition-colors duration-200 ${isActive ? "text-black font-bold tracking-wider" : ""}`}>
         {tab.label}
       </span>
       <span className={`relative z-10 text-[10px] px-1.5 py-0.5 rounded-full transition-colors duration-200 ${
-        isActive ? "bg-black/20 text-black font-bold" : "bg-white/10 text-white/60"
+        isActive ? "bg-black/25 text-black font-extrabold" : "bg-white/10 text-white/50"
       }`}>
         {tab.count}
       </span>
@@ -336,7 +336,7 @@ function FilterTabs({ activeTab, onTabChange }: { activeTab: Category; onTabChan
 
   return (
     <motion.div
-      className="flex items-center justify-center gap-2 mt-8 flex-wrap"
+      className="flex items-center justify-center gap-1.5 sm:gap-2 mt-8 p-1.5 rounded-full bg-black/40 border border-white/[0.08] backdrop-blur-xl w-fit mx-auto flex-wrap shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
       initial={{ opacity: 0, y: 15 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
