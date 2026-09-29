@@ -218,7 +218,10 @@ function TypewriterTitle() {
       <motion.h2
         ref={ref}
         className="relative z-10 font-black leading-[0.92] tracking-tighter text-center"
-        style={{ fontSize: "clamp(2.6rem, 6.5vw, 4.8rem)" }}
+        style={{
+          fontSize: "clamp(2.6rem, 6.5vw, 4.8rem)",
+          filter: "drop-shadow(0 0 35px rgba(167,139,250,0.28))",
+        }}
       >
         <motion.span
           className="text-white"
@@ -252,7 +255,7 @@ function TypewriterTitle() {
         </motion.span>
         {/* Blinking cursor */}
         <motion.span
-          className="inline-block w-[3px] h-[0.8em] ml-1 align-middle rounded-full"
+          className="inline-block w-[3px] h-[0.8em] ml-1 align-middle rounded-full shadow-[0_0_12px_rgba(6,182,212,0.8)]"
           style={{ background: "linear-gradient(180deg, #06b6d4, #a78bfa)" }}
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: [0, 1, 0] } : { opacity: 0 }}
