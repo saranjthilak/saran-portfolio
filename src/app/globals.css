@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
-@import url('https://db.onlinewebfonts.com/c/8b75d9dcff6a48c35a46656192adf019?family=FSP+DEMO+-+PODIUM+Sharp+4.11');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -241,7 +241,7 @@
   .tnum { font-variant-numeric: tabular-nums; font-family: var(--font-jetbrains-mono), 'JetBrains Mono', ui-monospace, monospace; }
   .vertical-text { writing-mode: vertical-rl; }
   .font-kanit { font-family: var(--font-kanit), 'Kanit', sans-serif; }
-  .font-podium { font-family: 'FSP DEMO - PODIUM Sharp 4.11', sans-serif; }
+  .font-podium { font-family: var(--font-bebas-neue), 'Bebas Neue', sans-serif; }
   .font-inter { font-family: 'Inter', sans-serif; }
 
   /* Hero heading — gradient text */

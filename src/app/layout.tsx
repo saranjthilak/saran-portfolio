@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Space_Grotesk, JetBrains_Mono, Kanit } from 'next/font/google';
+import { Space_Grotesk, JetBrains_Mono, Kanit, Bebas_Neue } from 'next/font/google';
 import './globals.css';
 
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -22,6 +22,13 @@ const kanit = Kanit({
   subsets: ['latin'],
   variable: '--font-kanit',
   weight: ['300', '400', '500', '600', '700', '800', '900'],
+  display: 'swap',
+});
+
+const bebasNeue = Bebas_Neue({
+  subsets: ['latin'],
+  variable: '--font-bebas-neue',
+  weight: '400',
   display: 'swap',
 });
 
@@ -78,7 +85,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body suppressHydrationWarning className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${kanit.variable} font-sans antialiased`}>
+      <body suppressHydrationWarning className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${kanit.variable} ${bebasNeue.variable} font-sans antialiased`}>
         <CustomCursor />
         <PageTransition>
           {children}
