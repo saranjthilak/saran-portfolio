@@ -67,10 +67,10 @@ const EXPERTISE: ExpertiseItem[] = [
     spec: "99.9% RELIABILITY · PETABYTE SCALE",
     icon: Database,
     description:
-      "48 GB/s throughput, zero data loss. Designing ultra-reliable, petabyte-scale ETL/ELT pipelines with Apache Airflow & dbt — automated data contracts, strict idempotency, and high-throughput ingestion into Snowflake & BigQuery.",
+      "Built for high-throughput, zero-data-loss ingestion at scale. Designing ultra-reliable, petabyte-scale ETL/ELT pipelines with Apache Airflow & dbt — automated data contracts, strict idempotency, and streaming ingestion into Snowflake & BigQuery.",
     pipeline: ["Kafka Ingest", "Airflow DAG", "dbt Models", "BigQuery"],
     tags: ["Airflow", "dbt", "BigQuery", "Snowflake", "ETL/ELT"],
-    metrics: { label: "THROUGHPUT", value: "48.2 GB/s" },
+    metrics: { label: "STATUS", value: "OPERATIONAL" },
     visualizerType: "data",
     heroSpan: true,
   },
@@ -82,10 +82,10 @@ const EXPERTISE: ExpertiseItem[] = [
     spec: "SUB-SECOND LATENCY · HYBRID RETRIEVAL",
     icon: BrainCircuit,
     description:
-      "0.96 cosine similarity, grounded citations. Building enterprise-grade GenAI & RAG platforms with sub-second latency, hybrid retrieval, and robust hallucination guardrails using LangChain, FAISS, and cross-encoder reranking.",
+      "Hybrid retrieval with grounded, citation-backed responses. Building enterprise-grade GenAI & RAG platforms with sub-second latency, semantic + keyword search fusion, and robust hallucination guardrails using LangChain, FAISS, and cross-encoder reranking.",
     pipeline: ["Vectorize", "FAISS Index", "Reranker", "Grounded LLM"],
     tags: ["LangChain", "Vector DB", "FAISS", "Guardrails", "Reranking"],
-    metrics: { label: "RETRIEVAL COSINE", value: "0.96 SCORE" },
+    metrics: { label: "GROUNDING", value: "VERIFIED" },
     visualizerType: "ai",
   },
   {
@@ -96,10 +96,10 @@ const EXPERTISE: ExpertiseItem[] = [
     spec: "AUTOMATED CI/CD · ZERO-DOWNTIME ROLLOUT",
     icon: GitBranch,
     description:
-      "8.4ms P99 latency in production. Operating ML model serving pipelines with zero-downtime canary deployments, real-time drift detection, and quantized inference via NVIDIA Triton, MLflow, and FastAPI.",
+      "Low-latency inference with canary rollout and drift monitoring. Operating ML model serving pipelines with zero-downtime deployments, real-time drift detection, and quantized inference via NVIDIA Triton, MLflow, and FastAPI.",
     pipeline: ["Train/Log", "MLflow", "Triton Server", "Canary Route"],
     tags: ["MLflow", "Triton", "Quantization", "Docker", "Model Registry"],
-    metrics: { label: "INFERENCE P99", value: "8.4ms LATENCY" },
+    metrics: { label: "ROLLOUT", value: "CANARY ENABLED" },
     visualizerType: "mlops",
   },
   {
@@ -124,10 +124,10 @@ const EXPERTISE: ExpertiseItem[] = [
     spec: "24/7 GOC SLA · ZERO SINGLE POINT OF FAILURE",
     icon: Radio,
     description:
-      "99.999% SLA, sub-minute MTTR. 5+ years directing enterprise NOC & telecom backbones — self-healing failovers, real-time Prometheus/Grafana telemetry, and circuit-breaker remediation at scale.",
+      "High-availability operations with self-healing failover design. 5+ years directing enterprise NOC & telecom backbones — automated failovers, real-time Prometheus/Grafana telemetry, and circuit-breaker remediation at scale.",
     pipeline: ["Prometheus", "Telemetry", "Circuit Breaker", "Auto-Heal"],
     tags: ["High Availability", "Prometheus", "Grafana", "Incident SRE", "Failover"],
-    metrics: { label: "HISTORICAL UPTIME", value: "99.999% SLA" },
+    metrics: { label: "AVAILABILITY", value: "SELF-HEALING" },
     visualizerType: "ops",
   },
   {
@@ -138,10 +138,10 @@ const EXPERTISE: ExpertiseItem[] = [
     spec: "REACTIVE STREAMING · ASYNC MICROSERVICES",
     icon: Monitor,
     description:
-      "85 tokens/sec streaming, 18ms roundtrip. Bridging AI backends with reactive client apps via FastAPI async microservices, type-safe React/Next.js frontends, and real-time WebSocket streaming.",
+      "Real-time token streaming over WebSocket with async microservices. Bridging AI backends with reactive client apps via FastAPI, type-safe React/Next.js frontends, and low-latency WebSocket streaming pipelines.",
     pipeline: ["FastAPI RPC", "WebSocket", "React State", "Edge Render"],
     tags: ["FastAPI", "React", "Next.js", "TypeScript", "WebSocket"],
-    metrics: { label: "STREAM SPEED", value: "85 TOKENS/SEC" },
+    metrics: { label: "STREAMING", value: "REAL-TIME" },
     visualizerType: "ui",
     heroSpan: true,
   },
@@ -361,7 +361,7 @@ function DomainVisualizer({ type, c }: { type: ExpertiseItem["visualizerType"]; 
             <span className="h-1.5 w-1.5 rounded-full animate-ping" style={{ backgroundColor: c.primary }} />
             STREAM INGESTION ENGINE
           </span>
-          <span className="font-semibold" style={{ color: c.primary }}>48.2 GB/s</span>
+          <span className="font-semibold" style={{ color: c.primary }}>ACTIVE</span>
         </div>
         <div className="grid grid-cols-3 gap-1.5 text-center">
           <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5">
@@ -374,7 +374,7 @@ function DomainVisualizer({ type, c }: { type: ExpertiseItem["visualizerType"]; 
           </div>
           <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5">
             <div className="text-[9px] text-white/40">LAG</div>
-            <div className="font-medium mt-0.5" style={{ color: c.primary }}>&lt;14ms</div>
+            <div className="font-medium mt-0.5" style={{ color: c.primary }}>&lt;MIN</div>
           </div>
         </div>
         <div className="relative h-1.5 w-full bg-white/[0.06] rounded-full overflow-hidden">
@@ -397,7 +397,7 @@ function DomainVisualizer({ type, c }: { type: ExpertiseItem["visualizerType"]; 
             <BrainCircuit className="w-3.5 h-3.5" style={{ color: c.primary }} />
             HYBRID RETRIEVAL & CITATION
           </span>
-          <span className="font-semibold" style={{ color: c.primary }}>cos: 0.96</span>
+          <span className="font-semibold" style={{ color: c.primary }}>GROUNDED</span>
         </div>
         <div className="flex items-center justify-between gap-1 text-[10px] bg-white/[0.03] border border-white/[0.06] rounded p-1.5">
           <span className="text-white/60">Top-k Embeddings</span>
@@ -434,7 +434,7 @@ function DomainVisualizer({ type, c }: { type: ExpertiseItem["visualizerType"]; 
           </div>
           <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5 flex flex-col">
             <span className="text-[9px] text-white/40">DATA DRIFT</span>
-            <span className="mt-0.5 text-[10px] font-semibold" style={{ color: c.primary }}>NORMAL (0.012)</span>
+            <span className="mt-0.5 text-[10px] font-semibold" style={{ color: c.primary }}>NORMAL</span>
           </div>
         </div>
       </div>
@@ -477,14 +477,14 @@ function DomainVisualizer({ type, c }: { type: ExpertiseItem["visualizerType"]; 
             <Activity className="w-3.5 h-3.5" style={{ color: c.primary }} />
             PROMETHEUS SRE HEARTBEAT
           </span>
-          <span className="font-semibold" style={{ color: c.primary }}>99.999% SLA</span>
+          <span className="font-semibold" style={{ color: c.primary }}>HIGH AVAIL.</span>
         </div>
         <div className="flex items-center justify-between bg-white/[0.03] border border-white/[0.06] rounded p-1.5 text-[10px]">
           <div className="flex items-center gap-1.5">
             <span className="h-1.5 w-1.5 rounded-full animate-ping" style={{ backgroundColor: c.primary }} />
             <span className="text-white/80">Self-Healing Failover:</span>
           </div>
-          <span className="font-semibold" style={{ color: c.primary }}>ARMED (MTTR &lt; 45s)</span>
+          <span className="font-semibold" style={{ color: c.primary }}>ARMED</span>
         </div>
       </div>
     );
@@ -498,12 +498,12 @@ function DomainVisualizer({ type, c }: { type: ExpertiseItem["visualizerType"]; 
           <Zap className="w-3.5 h-3.5" style={{ color: c.primary }} />
           WEBSOCKET STREAM BUFFER
         </span>
-        <span className="font-semibold" style={{ color: c.primary }}>85 TOKENS/S</span>
+        <span className="font-semibold" style={{ color: c.primary }}>LIVE</span>
       </div>
       <div className="flex items-center justify-between bg-white/[0.03] border border-white/[0.06] rounded p-1.5 text-[10px]">
         <span className="text-white/60">FastAPI Async RPC</span>
         <span className="flex items-center gap-1" style={{ color: c.primary }}>
-          <span className="h-1 w-1 rounded-full" style={{ backgroundColor: c.primary }} /> 18ms Roundtrip
+          <span className="h-1 w-1 rounded-full" style={{ backgroundColor: c.primary }} /> Low-Latency
         </span>
         <span className="text-white/70">React UI</span>
       </div>
@@ -903,7 +903,7 @@ function ArchSummaryCard({ i }: { i: number }) {
 
           <div className="flex flex-col gap-1.5 text-[10px] font-mono text-white/50 tracking-wider text-center">
             <span>5+ YEARS PRODUCTION</span>
-            <span>99.999% UPTIME TRACK</span>
+            <span>HIGH-AVAILABILITY OPS</span>
           </div>
 
           <div className="mt-2 px-4 py-2 rounded-lg border border-[rgba(0,223,143,0.25)] bg-[rgba(0,223,143,0.06)] shadow-[0_0_20px_rgba(0,223,143,0.1)]">
@@ -1140,10 +1140,10 @@ const ServicesSection = () => {
               transition={{ duration: 0.6, delay: 0.35, ease: EASE }}
             >
               {[
-                { label: "DATA INGESTION", val: "48.2 GB/s", color: DOMAIN_COLORS.data.primary },
-                { label: "RETRIEVAL COSINE", val: "0.96 SCORE", color: DOMAIN_COLORS.ai.primary },
-                { label: "INFERENCE P99", val: "8.4ms LATENCY", color: DOMAIN_COLORS.mlops.primary },
-                { label: "HISTORICAL UPTIME", val: "99.999% SLA", color: DOMAIN_COLORS.ops.primary },
+                { label: "DATA INGESTION", val: "OPERATIONAL", color: DOMAIN_COLORS.data.primary },
+                { label: "RAG GROUNDING", val: "VERIFIED", color: DOMAIN_COLORS.ai.primary },
+                { label: "MODEL ROLLOUT", val: "CANARY ENABLED", color: DOMAIN_COLORS.mlops.primary },
+                { label: "AVAILABILITY", val: "SELF-HEALING", color: DOMAIN_COLORS.ops.primary },
               ].map((m, i) => (
                 <div
                   key={i}
