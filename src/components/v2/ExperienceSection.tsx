@@ -47,8 +47,8 @@ const ExperienceSection = () => {
         {/* Heading */}
         <FadeIn delay={0.08} y={30}>
           <SectionHeading
-            prefix="Nine years, "
-            accentWord="four teams"
+            prefix="A decade of "
+            accentWord="building"
             gradient="experience"
             align="left"
             className="mb-12 sm:mb-16 md:mb-20"
@@ -66,9 +66,17 @@ const ExperienceSection = () => {
               transition={{ delay: 0.1 + i * 0.1, duration: 0.6 }}
               className="grid grid-cols-1 md:grid-cols-[1fr_2fr_3fr] gap-6 md:gap-8 py-8 md:py-12 border-b border-[rgba(255, 255, 255, 0.1)] items-start"
             >
-              {/* Period */}
-              <div className="text-white/50 font-light text-sm md:text-base tracking-wider mt-1">
-                {item.period}
+              {/* Period + optional Education tag */}
+              <div className="flex items-center gap-3 mt-1">
+                <span className="text-white/50 font-light text-sm md:text-base tracking-wider">
+                  {item.period}
+                </span>
+                {(item as any).type === "education" && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[rgba(167,139,250,0.12)] border border-[rgba(167,139,250,0.25)] text-[10px] font-medium tracking-wider uppercase text-[#a78bfa]">
+                    <span className="text-xs">🎓</span>
+                    Education
+                  </span>
+                )}
               </div>
 
               {/* Company & Role */}
@@ -76,7 +84,11 @@ const ExperienceSection = () => {
                 <h3 className="text-white font-medium text-xl md:text-2xl mb-1">
                   {item.company}
                 </h3>
-                <p className="text-white/50 font-light text-sm md:text-base">
+                <p className={`font-light text-sm md:text-base ${
+                  (item as any).type === "education"
+                    ? "text-[#a78bfa]/70 italic"
+                    : "text-white/50"
+                }`}>
                   {item.role}
                 </p>
               </div>
