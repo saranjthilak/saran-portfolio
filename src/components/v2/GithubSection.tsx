@@ -6,6 +6,7 @@ import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef } from "react";
 import BlueprintSectionHeader from "./BlueprintSectionHeader";
 import SectionHeading from "./SectionHeading";
+import FadeIn from "./FadeIn";
 import { fetchGitHubStats, type GitHubStats } from "@/lib/github-stats";
 
 // Fix: next/dynamic with async factory correctly resolves named exports.
@@ -47,15 +48,15 @@ interface StatCardProps {
 }
 
 const StatCard = ({ label, value, icon, accentColor, delay, loading }: StatCardProps) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
 
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 24, scale: 0.95 }}
-      animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-      transition={{ duration: 0.7, delay, ease: EASE }}
+    <FadeIn
+      y={24}
+      scale={0.95}
+      duration={0.7}
+      delay={delay}
+      ease={[0.16, 1, 0.3, 1]}
+      viewportMargin="-60px"
       className="relative group flex-1 min-w-[160px] p-5 sm:p-6 rounded-stat border border-white/10 hover:border-white/20 bg-white/[0.03] backdrop-blur-xl transition-all duration-500 overflow-hidden"
     >
       {/* Ambient glow on hover */}
@@ -80,7 +81,7 @@ const StatCard = ({ label, value, icon, accentColor, delay, loading }: StatCardP
           </span>
         )}
       </div>
-    </motion.div>
+    </FadeIn>
   );
 };
 
@@ -159,29 +160,24 @@ export default function GithubSection() {
         {/* ── Section Header ── */}
         <BlueprintSectionHeader align="center">
           <div className="text-center mb-16 md:mb-20">
-            <motion.p
+            <FadeIn
+              y={10}
+              duration={0.6}
+              ease={[0.16, 1, 0.3, 1]}
               className="flex items-center justify-center gap-2 font-medium uppercase tracking-[0.25em] text-white/50 text-xs mb-4"
-              initial={{ opacity: 0, y: 10 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, ease: EASE }}
             >
               <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
               Open Source
-            </motion.p>
+            </FadeIn>
             <SectionHeading
               prefix="GitHub "
               accentWord="Contributions"
               gradient="github"
               align="center"
             />
-            <motion.p
-              className="mt-5 text-white/40 max-w-md mx-auto font-kanit font-light text-base"
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : {}}
-              transition={{ duration: 1, delay: 0.3 }}
-            >
-              Shipping code consistently — building in public, one commit at a time.
-            </motion.p>
+            <FadeIn y={0} delay={0.3} duration={1} className="mt-5 text-white/40 max-w-md mx-auto font-kanit font-light text-base">
+              <p>Shipping code consistently — building in public, one commit at a time.</p>
+            </FadeIn>
           </div>
         </BlueprintSectionHeader>
 
