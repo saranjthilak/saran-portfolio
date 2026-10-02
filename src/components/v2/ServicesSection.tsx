@@ -10,6 +10,7 @@ import {
 } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import BlueprintSectionHeader from "./BlueprintSectionHeader";
+import FadeIn from "./FadeIn";
 import {
   Database,
   BrainCircuit,
@@ -1107,16 +1108,17 @@ const ServicesSection = () => {
             <TypewriterTitle />
 
             {/* Sub-line */}
-            <motion.p
+            <FadeIn
+              y={20}
+              delay={0.25}
+              duration={0.6}
+              ease={[0.16, 1, 0.3, 1]}
               className="text-white/60 font-light mt-4 max-w-2xl mx-auto text-center leading-relaxed"
-              style={{ fontSize: "clamp(0.95rem, 1.3vw, 1.15rem)" }}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.25, ease: EASE }}
             >
-              Battle-tested data engineering pipelines, low-latency GenAI retrieval systems, and high-availability cloud architecture engineered to hold up under real-world production scale.
-            </motion.p>
+              <p style={{ fontSize: "clamp(0.95rem, 1.3vw, 1.15rem)" }}>
+                Battle-tested data engineering pipelines, low-latency GenAI retrieval systems, and high-availability cloud architecture engineered to hold up under real-world production scale.
+              </p>
+            </FadeIn>
 
             {/* Animated underline */}
             <motion.div
@@ -1132,12 +1134,12 @@ const ServicesSection = () => {
             />
 
             {/* ── Architecture Telemetry Metrics HUD ── */}
-            <motion.div
+            <FadeIn
+              y={20}
+              delay={0.35}
+              duration={0.6}
+              ease={[0.16, 1, 0.3, 1]}
               className="mt-8 max-w-4xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 px-2"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.35, ease: EASE }}
             >
               {[
                 { label: "DATA INGESTION", val: "OPERATIONAL", color: DOMAIN_COLORS.data.primary },
@@ -1160,7 +1162,7 @@ const ServicesSection = () => {
                   </div>
                 </div>
               ))}
-            </motion.div>
+            </FadeIn>
 
             <FilterTabs activeTab={activeTab} onTabChange={setActiveTab} />
           </div>
@@ -1191,25 +1193,24 @@ const ServicesSection = () => {
 
         {/* Bottom architecture summary note (shown when filtered) */}
         {!isAllView && (
-          <motion.div
+          <FadeIn
+            y={0}
+            delay={0.5}
+            duration={0.6}
             className="mt-12 text-center text-xs font-mono text-white/40 tracking-wider flex items-center justify-center gap-2"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.5 }}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-accent" />
             <span>PRODUCTION-PROVEN ARCHITECTURE STACK · TESLA / NOKIA / HUAWEI / ENTERPRISE SLA</span>
-          </motion.div>
+          </FadeIn>
         )}
 
         {/* ── Explore Projects CTA ── */}
-        <motion.div
+        <FadeIn
+          y={20}
+          delay={0.6}
+          duration={0.6}
+          ease={[0.16, 1, 0.3, 1]}
           className="mt-16 flex justify-center"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.6, ease: EASE }}
         >
           <motion.a
             href="#projects"
@@ -1243,7 +1244,7 @@ const ServicesSection = () => {
               transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
             />
           </motion.a>
-        </motion.div>
+        </FadeIn>
       </div>
     </section>
   );
