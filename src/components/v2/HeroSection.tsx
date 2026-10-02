@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import FadeIn from "./FadeIn";
 
 const navLinks = [
   { label: "ABOUT", href: "#about" },
@@ -44,44 +45,27 @@ const HeroSection = () => {
           
           {/* Left Column */}
           <div className="flex flex-col items-start pt-12 lg:pt-0">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              className="mb-6 inline-block px-3 py-1.5 border border-accent/60 text-xs uppercase tracking-widest"
-            >
-              <span className="text-accent font-mono font-medium">DATA ENGINEER & GENAI SPECIALIST</span>
-            </motion.div>
+            <FadeIn y={20} viewportMargin="-100px">
+              <div className="mb-6 inline-block px-3 py-1.5 border border-accent/60 text-xs uppercase tracking-widest">
+                <span className="text-accent font-mono font-medium">DATA ENGINEER & GENAI SPECIALIST</span>
+              </div>
+            </FadeIn>
             
-            <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ delay: 0.1 }}
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-black leading-[0.92] tracking-tighter mb-6"
-            >
-              I build AI systems<br/>
-              that hold up <span className="accent-serif">in production</span>
-              <span className="text-accent">.</span>
-            </motion.h1>
+            <FadeIn y={20} delay={0.1} viewportMargin="-100px">
+              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-black leading-[0.92] tracking-tighter mb-6">
+                I build AI systems<br/>
+                that hold up <span className="accent-serif">in production</span>
+                <span className="text-accent">.</span>
+              </h1>
+            </FadeIn>
             
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ delay: 0.2 }}
-              className="text-gray-400 max-w-lg text-base leading-relaxed mb-10"
-            >
-              RAG chatbots that cut support load by 25%. Airflow pipelines running at 99.9% reliability. I design and ship data&nbsp;+&nbsp;AI infrastructure that doesn&apos;t break under real workloads.
-            </motion.p>
+            <FadeIn y={20} delay={0.2} viewportMargin="-100px">
+              <p className="text-gray-400 max-w-lg text-base leading-relaxed mb-10">
+                RAG chatbots that cut support load by 25%. Airflow pipelines running at 99.9% reliability. I design and ship data&nbsp;+&nbsp;AI infrastructure that doesn&apos;t break under real workloads.
+              </p>
+            </FadeIn>
             
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ delay: 0.3 }}
-              className="flex flex-wrap items-center gap-6"
-            >
+            <FadeIn y={20} delay={0.3} viewportMargin="-100px" className="flex flex-wrap items-center gap-6">
               <a href="#projects" className="btn-frame group flex items-center gap-3 bg-accent text-accent-foreground px-8 py-4 font-bold text-sm uppercase tracking-wider">
                 View My Work
                 <ArrowUpRight className="w-5 h-5 group-hover:rotate-45 transition-transform" />
@@ -89,7 +73,7 @@ const HeroSection = () => {
               <a href="#contact" className="btn-frame flex items-center gap-3 bg-transparent border border-white/25 px-8 py-4 font-bold text-sm uppercase tracking-wider text-white hover:border-accent hover:text-accent transition-colors">
                 Contact Me
               </a>
-            </motion.div>
+            </FadeIn>
           </div>
 
           {/* Right Column - Interactive ID Card */}
