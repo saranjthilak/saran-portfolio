@@ -8,6 +8,14 @@ export const experience = [
     logo: "🚗"
   },
   {
+    company: "University of Europe for Applied Sciences",
+    role: "M.Sc. Data Science",
+    period: "2021–2023",
+    description: "Completed a Master's in Data Science with a focus on machine learning, deep learning, and applied AI. Published two IEEE papers on ML-based prediction systems. Also completed the Le Wagon Data Science & AI bootcamp during this period, gaining intensive hands-on experience in production ML workflows.",
+    logo: "🎓",
+    type: "education" as const,
+  },
+  {
     company: "Huawei",
     role: "Cloud Support Engineer",
     period: "2019–2021",
