@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import { motion, type Easing, type Variant, type Variants } from "framer-motion";
 import { type ReactNode } from "react";
 
 interface FadeInProps {
@@ -35,8 +35,8 @@ const FadeIn = ({
   const hasScale = scale !== 1;
   const hasBlur = blur > 0;
 
-  const hidden: Record<string, unknown> = { opacity: 0, x, y };
-  const visible: Record<string, unknown> = { opacity: 1, x: 0, y: 0 };
+  const hidden: Variant = { opacity: 0, x, y };
+  const visible: Variant = { opacity: 1, x: 0, y: 0 };
 
   if (hasScale) {
     hidden.scale = scale;
@@ -55,7 +55,7 @@ const FadeIn = ({
       transition: {
         duration,
         delay,
-        ease: ease as number[],
+        ease: ease as unknown as Easing,
       },
     },
   };
