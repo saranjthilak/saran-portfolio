@@ -80,6 +80,14 @@ export default {
 					raised: 'hsl(var(--bg-raised))',
 					recessed: 'hsl(var(--bg-recessed))',
 				},
+				expertise: {
+					cyan: 'hsl(var(--expertise-cyan))',
+					violet: 'hsl(var(--expertise-violet))',
+					amber: 'hsl(var(--expertise-amber))',
+					sky: 'hsl(var(--expertise-sky))',
+					rose: 'hsl(var(--expertise-rose))',
+					emerald: 'hsl(var(--expertise-emerald))',
+				},
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

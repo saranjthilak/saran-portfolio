@@ -49,6 +49,14 @@
 
     --grid-line: 158 100% 44%;
 
+    /* Expertise domain accents — kept as semantic tokens for the architecture canvas */
+    --expertise-cyan: 187 80% 48%;
+    --expertise-violet: 258 90% 76%;
+    --expertise-amber: 38 92% 55%;
+    --expertise-sky: 199 92% 60%;
+    --expertise-rose: 350 86% 60%;
+    --expertise-emerald: 160 84% 39%;
+
     /* Background step tokens — consolidates near-black values across v2 sections */
     --bg-base: 215 14% 4%;              /* #090b0e — deepest (footer, main section bg) */
     --bg-raised: 213 16% 6%;            /* #0d1116 — slightly elevated (hero, marquee) */
@@ -243,6 +251,46 @@
   .font-kanit { font-family: var(--font-kanit), 'Kanit', sans-serif; }
   .font-podium { font-family: var(--font-bebas-neue), 'Bebas Neue', sans-serif; }
   .font-inter { font-family: 'Inter', sans-serif; }
+
+  /* Living Architecture Canvas */
+  .expertise-canvas {
+    background:
+      linear-gradient(90deg, hsl(var(--expertise-cyan) / 0.025) 1px, transparent 1px),
+      linear-gradient(hsl(var(--expertise-cyan) / 0.025) 1px, transparent 1px),
+      hsl(var(--bg-recessed));
+    background-size: 42px 42px;
+  }
+  .expertise-domain-cyan { --domain-color: hsl(var(--expertise-cyan)); }
+  .expertise-domain-violet { --domain-color: hsl(var(--expertise-violet)); }
+  .expertise-domain-amber { --domain-color: hsl(var(--expertise-amber)); }
+  .expertise-domain-sky { --domain-color: hsl(var(--expertise-sky)); }
+  .expertise-domain-rose { --domain-color: hsl(var(--expertise-rose)); }
+  .expertise-domain-emerald { --domain-color: hsl(var(--expertise-emerald)); }
+  .expertise-domain-text { color: var(--domain-color); }
+  .expertise-domain-border { border-color: color-mix(in srgb, var(--domain-color) 38%, transparent); }
+  .expertise-domain-surface { background-color: color-mix(in srgb, var(--domain-color) 9%, transparent); }
+  .expertise-domain-glow { box-shadow: 0 0 28px color-mix(in srgb, var(--domain-color) 22%, transparent); }
+  .expertise-signal {
+    background: linear-gradient(90deg, transparent, var(--domain-color), transparent);
+    animation: expertise-signal 2.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+  .expertise-signal-vertical {
+    background: linear-gradient(180deg, transparent, var(--domain-color), transparent);
+    animation: expertise-signal-vertical 2.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+  @keyframes expertise-signal {
+    0% { transform: translateX(-160%); opacity: 0; }
+    18%, 78% { opacity: 1; }
+    100% { transform: translateX(380%); opacity: 0; }
+  }
+  @keyframes expertise-signal-vertical {
+    0% { transform: translateY(-160%); opacity: 0; }
+    18%, 78% { opacity: 1; }
+    100% { transform: translateY(380%); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .expertise-signal, .expertise-signal-vertical { animation: none; }
+  }
 
   /* Hero heading — gradient text */
   .hero-heading {
