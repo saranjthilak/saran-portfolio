@@ -1,1253 +1,159 @@
 "use client";
 
-import { useRef, useState, useCallback, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import type { LucideIcon } from "lucide-react";
 import {
-  motion,
-  AnimatePresence,
-  useMotionValue,
-  useSpring,
-  useInView,
-} from "framer-motion";
-import { ArrowRight } from "lucide-react";
+  Activity,
+  ArrowRight,
+  BrainCircuit,
+  CheckCircle2,
+  Cloud,
+  Code2,
+  Database,
+  Gauge,
+  GitBranch,
+  Monitor,
+  Pause,
+  Play,
+  Radio,
+  ShieldCheck,
+  Terminal,
+  Zap,
+} from "lucide-react";
 import BlueprintSectionHeader from "./BlueprintSectionHeader";
 import FadeIn from "./FadeIn";
-import {
-  Database,
-  BrainCircuit,
-  GitBranch,
-  Cloud,
-  Radio,
-  Monitor,
-  Activity,
-  ShieldCheck,
-  Zap,
-  Cpu,
-  Server,
-  RotateCcw,
-} from "lucide-react";
 
-// ── Constants ─────────────────────────────────────────────────────────────────
 const EASE = [0.16, 1, 0.3, 1] as const;
 
-// ── Domain Color System ───────────────────────────────────────────────────────
-// Each expertise domain gets a unique color identity with a secondary for gradients
-const DOMAIN_COLORS = {
-  data:  { primary: "#06b6d4", secondary: "#0891b2", rgb: "6,182,212" },
-  ai:    { primary: "#a78bfa", secondary: "#8b5cf6", rgb: "167,139,250" },
-  mlops: { primary: "#f59e0b", secondary: "#d97706", rgb: "245,158,11" },
-  cloud: { primary: "#38bdf8", secondary: "#0ea5e9", rgb: "56,189,248" },
-  ops:   { primary: "#f43f5e", secondary: "#e11d48", rgb: "244,63,94" },
-  ui:    { primary: "#10b981", secondary: "#059669", rgb: "16,185,129" },
-} as const;
-type DomainColor = (typeof DOMAIN_COLORS)[keyof typeof DOMAIN_COLORS];
-
-type Category = "all" | "data-ai" | "cloud-sre" | "fullstack";
+type DomainTone = "cyan" | "violet" | "amber" | "sky" | "rose" | "emerald";
+type InspectorTab = "system" | "terminal";
 
 interface ExpertiseItem {
   number: string;
-  category: "data-ai" | "cloud-sre" | "fullstack";
   categoryLabel: string;
   name: string;
   spec: string;
-  icon: typeof Database;
+  icon: LucideIcon;
   description: string;
   pipeline: string[];
   tags: string[];
   metrics: { label: string; value: string };
-  visualizerType: keyof typeof DOMAIN_COLORS;
-  heroSpan?: boolean;
+  tone: DomainTone;
+  telemetry: { label: string; value: string }[];
+  terminal: string[];
 }
 
-// ── Expertise Data ────────────────────────────────────────────────────────────
 const EXPERTISE: ExpertiseItem[] = [
   {
-    number: "01",
-    category: "data-ai",
-    categoryLabel: "Data Engineering",
-    name: "Production Data Engineering",
-    spec: "99.9% RELIABILITY · PETABYTE SCALE",
-    icon: Database,
-    description:
-      "Built for high-throughput, zero-data-loss ingestion at scale. Designing ultra-reliable, petabyte-scale ETL/ELT pipelines with Apache Airflow & dbt — automated data contracts, strict idempotency, and streaming ingestion into Snowflake & BigQuery.",
-    pipeline: ["Kafka Ingest", "Airflow DAG", "dbt Models", "BigQuery"],
-    tags: ["Airflow", "dbt", "BigQuery", "Snowflake", "ETL/ELT"],
-    metrics: { label: "STATUS", value: "OPERATIONAL" },
-    visualizerType: "data",
-    heroSpan: true,
+    number: "01", categoryLabel: "Data Engineering", name: "Production Data Engineering", spec: "99.9% RELIABILITY · PETABYTE SCALE", icon: Database,
+    description: "Built for high-throughput, zero-data-loss ingestion at scale. Designing ultra-reliable, petabyte-scale ETL/ELT pipelines with Apache Airflow & dbt — automated data contracts, strict idempotency, and streaming ingestion into Snowflake & BigQuery.",
+    pipeline: ["Kafka Ingest", "Airflow DAG", "dbt Models", "BigQuery"], tags: ["Airflow", "dbt", "BigQuery", "Snowflake", "ETL/ELT"], metrics: { label: "STATUS", value: "OPERATIONAL" }, tone: "cyan",
+    telemetry: [{ label: "THROUGHPUT", value: "1.2M EVENTS/S" }, { label: "SCHEMA", value: "ENFORCED" }, { label: "DROPPED", value: "0.00%" }], terminal: ["> airflow dags trigger ingest_prod", "> dbt run --select marts+", "> contract.check() ........ PASS"],
   },
   {
-    number: "02",
-    category: "data-ai",
-    categoryLabel: "GenAI & RAG",
-    name: "Enterprise GenAI & RAG Systems",
-    spec: "SUB-SECOND LATENCY · HYBRID RETRIEVAL",
-    icon: BrainCircuit,
-    description:
-      "Hybrid retrieval with grounded, citation-backed responses. Building enterprise-grade GenAI & RAG platforms with sub-second latency, semantic + keyword search fusion, and robust hallucination guardrails using LangChain, FAISS, and cross-encoder reranking.",
-    pipeline: ["Vectorize", "FAISS Index", "Reranker", "Grounded LLM"],
-    tags: ["LangChain", "Vector DB", "FAISS", "Guardrails", "Reranking"],
-    metrics: { label: "GROUNDING", value: "VERIFIED" },
-    visualizerType: "ai",
+    number: "02", categoryLabel: "GenAI & RAG", name: "Enterprise GenAI & RAG Systems", spec: "SUB-SECOND LATENCY · HYBRID RETRIEVAL", icon: BrainCircuit,
+    description: "Hybrid retrieval with grounded, citation-backed responses. Building enterprise-grade GenAI & RAG platforms with sub-second latency, semantic + keyword search fusion, and robust hallucination guardrails using LangChain, FAISS, and cross-encoder reranking.",
+    pipeline: ["Query", "Embed", "FAISS Vector", "Rerank", "Grounded LLM"], tags: ["LangChain", "Vector DB", "FAISS", "Guardrails", "Reranking"], metrics: { label: "GROUNDING", value: "VERIFIED" }, tone: "violet",
+    telemetry: [{ label: "P99 LATENCY", value: "42 MS" }, { label: "GROUNDING", value: "99.4%" }, { label: "TOP-K", value: "8 DOCS" }], terminal: ["> retriever.search(hybrid=True)", "> reranker.score(cross_encoder)", "> citation_guard ............ PASS"],
   },
   {
-    number: "03",
-    category: "data-ai",
-    categoryLabel: "MLOps",
-    name: "Production MLOps & Model Serving",
-    spec: "AUTOMATED CI/CD · ZERO-DOWNTIME ROLLOUT",
-    icon: GitBranch,
-    description:
-      "Low-latency inference with canary rollout and drift monitoring. Operating ML model serving pipelines with zero-downtime deployments, real-time drift detection, and quantized inference via NVIDIA Triton, MLflow, and FastAPI.",
-    pipeline: ["Train/Log", "MLflow", "Triton Server", "Canary Route"],
-    tags: ["MLflow", "Triton", "Quantization", "Docker", "Model Registry"],
-    metrics: { label: "ROLLOUT", value: "CANARY ENABLED" },
-    visualizerType: "mlops",
+    number: "03", categoryLabel: "MLOps", name: "Production MLOps & Model Serving", spec: "AUTOMATED CI/CD · ZERO-DOWNTIME ROLLOUT", icon: GitBranch,
+    description: "Low-latency inference with canary rollout and drift monitoring. Operating ML model serving pipelines with zero-downtime deployments, real-time drift detection, and quantized inference via NVIDIA Triton, MLflow, and FastAPI.",
+    pipeline: ["Train / Log", "MLflow", "Triton Server", "Canary Route"], tags: ["MLflow", "Triton", "Quantization", "Docker", "Model Registry"], metrics: { label: "ROLLOUT", value: "CANARY ENABLED" }, tone: "amber",
+    telemetry: [{ label: "P99 INFERENCE", value: "18 MS" }, { label: "CANARY", value: "10% TRAFFIC" }, { label: "DRIFT", value: "NORMAL" }], terminal: ["> mlflow.register_model(v2.5)", "> triton_client.infer(model)", "> route.canary(traffic=0.1)"],
   },
   {
-    number: "04",
-    category: "cloud-sre",
-    categoryLabel: "Cloud & IaC",
-    name: "Cloud Topology & IaC",
-    spec: "MULTI-CLOUD AWS/GCP · TERRAFORM AUTOMATION",
-    icon: Cloud,
-    description:
-      "100% declarative, multi-cloud ready. Provisioning secure, cost-optimized infrastructure with Terraform & Kubernetes — battle-tested across Tesla, Huawei, and Nokia for 99.99% availability.",
-    pipeline: ["Terraform HCL", "State Lock", "K8s Mesh", "Live Cluster"],
-    tags: ["Terraform", "AWS", "GCP", "Kubernetes", "FinOps"],
-    metrics: { label: "ORCHESTRATION", value: "100% DECLARATIVE" },
-    visualizerType: "cloud",
+    number: "04", categoryLabel: "Cloud & IaC", name: "Cloud Topology & IaC", spec: "MULTI-CLOUD AWS/GCP · TERRAFORM AUTOMATION", icon: Cloud,
+    description: "100% declarative, multi-cloud ready. Provisioning secure, cost-optimized infrastructure with Terraform & Kubernetes — battle-tested across Tesla, Huawei, and Nokia for 99.99% availability.",
+    pipeline: ["Terraform HCL", "State Lock", "K8s Mesh", "Live Cluster"], tags: ["Terraform", "AWS", "GCP", "Kubernetes", "FinOps"], metrics: { label: "ORCHESTRATION", value: "100% DECLARATIVE" }, tone: "sky",
+    telemetry: [{ label: "AVAILABILITY", value: "99.99%" }, { label: "PODS", value: "12 / 12 READY" }, { label: "STATE", value: "SYNCED" }], terminal: ["> terraform plan -out=prod.tfplan", "> kubectl rollout status deploy/mesh", "> policy.guard .............. PASS"],
   },
   {
-    number: "05",
-    category: "cloud-sre",
-    categoryLabel: "Mission-Critical",
-    name: "Mission-Critical Ops & High Availability",
-    spec: "24/7 GOC SLA · ZERO SINGLE POINT OF FAILURE",
-    icon: Radio,
-    description:
-      "High-availability operations with self-healing failover design. 5+ years directing enterprise NOC & telecom backbones — automated failovers, real-time Prometheus/Grafana telemetry, and circuit-breaker remediation at scale.",
-    pipeline: ["Prometheus", "Telemetry", "Circuit Breaker", "Auto-Heal"],
-    tags: ["High Availability", "Prometheus", "Grafana", "Incident SRE", "Failover"],
-    metrics: { label: "AVAILABILITY", value: "SELF-HEALING" },
-    visualizerType: "ops",
+    number: "05", categoryLabel: "Mission-Critical", name: "Mission-Critical Ops & High Availability", spec: "24/7 GOC SLA · ZERO SINGLE POINT OF FAILURE", icon: Radio,
+    description: "High-availability operations with self-healing failover design. 5+ years directing enterprise NOC & telecom backbones — automated failovers, real-time Prometheus/Grafana telemetry, and circuit-breaker remediation at scale.",
+    pipeline: ["Prometheus", "Telemetry", "Circuit Breaker", "Auto-Heal"], tags: ["High Availability", "Prometheus", "Grafana", "Incident SRE", "Failover"], metrics: { label: "AVAILABILITY", value: "SELF-HEALING" }, tone: "rose",
+    telemetry: [{ label: "UPTIME", value: "99.99%" }, { label: "MTTR", value: "< 8 MIN" }, { label: "FAILOVER", value: "ARMED" }], terminal: ["> alertmanager.route(severity)", "> circuit_breaker.trip()", "> failover.recover ........ PASS"],
   },
   {
-    number: "06",
-    category: "fullstack",
-    categoryLabel: "Full-Stack AI",
-    name: "Full-Stack AI Interfaces",
-    spec: "REACTIVE STREAMING · ASYNC MICROSERVICES",
-    icon: Monitor,
-    description:
-      "Real-time token streaming over WebSocket with async microservices. Bridging AI backends with reactive client apps via FastAPI, type-safe React/Next.js frontends, and low-latency WebSocket streaming pipelines.",
-    pipeline: ["FastAPI RPC", "WebSocket", "React State", "Edge Render"],
-    tags: ["FastAPI", "React", "Next.js", "TypeScript", "WebSocket"],
-    metrics: { label: "STREAMING", value: "REAL-TIME" },
-    visualizerType: "ui",
-    heroSpan: true,
+    number: "06", categoryLabel: "Full-Stack AI", name: "Full-Stack AI Interfaces", spec: "REACTIVE STREAMING · ASYNC MICROSERVICES", icon: Monitor,
+    description: "Real-time token streaming over WebSocket with async microservices. Bridging AI backends with reactive client apps via FastAPI, type-safe React/Next.js frontends, and low-latency WebSocket streaming pipelines.",
+    pipeline: ["FastAPI RPC", "WebSocket", "React State", "Edge Render"], tags: ["FastAPI", "React", "Next.js", "TypeScript", "WebSocket"], metrics: { label: "STREAMING", value: "REAL-TIME" }, tone: "emerald",
+    telemetry: [{ label: "STREAM", value: "LIVE" }, { label: "SOCKETS", value: "2.4K ACTIVE" }, { label: "FRAME", value: "16 MS" }], terminal: ["> await socket.accept()", "> tokens.emit(chunk)", "> render.commit ............ PASS"],
   },
 ];
 
-// Connection definitions for SVG lines between related cards
-const CARD_CONNECTIONS = [
-  { from: "01", to: "03", key: "data" as const },
-  { from: "02", to: "06", key: "ai" as const },
-  { from: "03", to: "04", key: "mlops" as const },
-  { from: "04", to: "05", key: "cloud" as const },
-];
+const toneClasses: Record<DomainTone, string> = {
+  cyan: "expertise-domain-cyan",
+  violet: "expertise-domain-violet",
+  amber: "expertise-domain-amber",
+  sky: "expertise-domain-sky",
+  rose: "expertise-domain-rose",
+  emerald: "expertise-domain-emerald",
+};
 
-// ── Corner Blueprint Ticks (reusable) ─────────────────────────────────────────
-function CornerTicks({ color, active }: { color?: string; active?: boolean }) {
-  const c = active && color ? color : "rgba(255,255,255,0.2)";
-  const base = "pointer-events-none absolute w-3 h-3 z-10 transition-colors duration-300";
-  return (
-    <>
-      <span className={`${base} top-0 left-0 border-t-2 border-l-2`} style={{ borderColor: c }} />
-      <span className={`${base} top-0 right-0 border-t-2 border-r-2`} style={{ borderColor: c }} />
-      <span className={`${base} bottom-0 left-0 border-b-2 border-l-2`} style={{ borderColor: c }} />
-      <span className={`${base} bottom-0 right-0 border-b-2 border-r-2`} style={{ borderColor: c }} />
-    </>
-  );
+function CornerTicks() {
+  return <><span className="pointer-events-none absolute left-0 top-0 h-3 w-3 border-l-2 border-t-2 border-accent/70" /><span className="pointer-events-none absolute right-0 top-0 h-3 w-3 border-r-2 border-t-2 border-accent/70" /><span className="pointer-events-none absolute bottom-0 left-0 h-3 w-3 border-b-2 border-l-2 border-accent/70" /><span className="pointer-events-none absolute bottom-0 right-0 h-3 w-3 border-b-2 border-r-2 border-accent/70" /></>;
 }
 
-// ── Typewriter Title ──────────────────────────────────────────────────────────
-function TypewriterTitle() {
-  const ref = useRef<HTMLHeadingElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-  const word = "Expertise";
-  const typingEnd = 0.5 + word.length * 0.06;
-
-  return (
-    <div className="relative flex flex-col items-center justify-center">
-      {/* ── Giant Atmospheric Architectural Ghost Watermark ── */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none select-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[clamp(4.5rem,14vw,11rem)] font-black tracking-[0.22em] uppercase leading-none opacity-[0.035] blur-[0.5px] z-0 whitespace-nowrap"
-        style={{
-          WebkitTextStroke: "1.5px rgba(255,255,255,0.7)",
-          color: "transparent",
-          maskImage: "radial-gradient(ellipse 65% 55% at 50% 50%, black 25%, transparent 80%)",
-          WebkitMaskImage: "radial-gradient(ellipse 65% 55% at 50% 50%, black 25%, transparent 80%)",
-        }}
-      >
-        EXPERTISE
-      </div>
-
-      {/* ── Ambient Radial Bloom Glow ── */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] h-[180px] rounded-full blur-[85px] opacity-40 z-0"
-        style={{
-          background: "radial-gradient(circle, rgba(167,139,250,0.35) 0%, rgba(6,182,212,0.22) 50%, transparent 80%)",
-        }}
-      />
-
-      {/* ── Architectural Status HUD Kicker ── */}
-      <motion.div
-        className="relative z-10 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/10 bg-white/[0.03] backdrop-blur-md mb-4 text-[10.5px] font-mono tracking-widest uppercase shadow-[0_0_25px_rgba(0,223,143,0.12)]"
-        initial={{ opacity: 0, y: -10 }}
-        animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.5, ease: EASE }}
-      >
-        <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
-        </span>
-        <span className="font-semibold text-accent">SYSTEM CLUSTER</span>
-        <span className="text-white/20">•</span>
-        <span className="text-white/60">06 PRODUCTION DOMAINS</span>
-      </motion.div>
-
-      <motion.h2
-        ref={ref}
-        className="relative z-10 font-black leading-[0.92] tracking-tighter text-center"
-        style={{
-          fontSize: "clamp(2.6rem, 6.5vw, 4.8rem)",
-          filter: "drop-shadow(0 0 35px rgba(167,139,250,0.28))",
-        }}
-      >
-        <motion.span
-          className="text-white"
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, ease: EASE }}
-        >
-          My{" "}
-        </motion.span>
-        <span className="accent-serif bg-gradient-to-r from-[#06b6d4] via-[#a78bfa] to-[#f59e0b] bg-clip-text text-transparent">
-          {word.split("").map((char, i) => (
-            <motion.span
-              key={i}
-              className="inline-block"
-              initial={{ opacity: 0, y: 10 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.05, delay: 0.5 + i * 0.06 }}
-            >
-              {char}
-            </motion.span>
-          ))}
-        </span>
-        <motion.span
-          className="inline-block"
-          style={{ background: "linear-gradient(135deg, hsl(158,100%,44%), #06b6d4)", WebkitBackgroundClip: "text", color: "transparent" }}
-          initial={{ opacity: 0, scale: 0, rotate: -20 }}
-          animate={inView ? { opacity: 1, scale: 1, rotate: 0 } : {}}
-          transition={{ type: "spring", stiffness: 500, damping: 12, delay: typingEnd + 0.15 }}
-        >
-          .
-        </motion.span>
-        {/* Blinking cursor */}
-        <motion.span
-          className="inline-block w-[3px] h-[0.8em] ml-1 align-middle rounded-full shadow-[0_0_12px_rgba(6,182,212,0.8)]"
-          style={{ background: "linear-gradient(180deg, #06b6d4, #a78bfa)" }}
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: [0, 1, 0] } : { opacity: 0 }}
-          transition={{ duration: 0.7, repeat: 5, delay: 0.4, repeatType: "loop" }}
-        />
-      </motion.h2>
-    </div>
-  );
+function PipelineConnector({ active, tone, vertical = false }: { active: boolean; tone: DomainTone; vertical?: boolean }) {
+  return <div aria-hidden="true" className={`${vertical ? "h-8 w-px" : "h-px min-w-4 flex-1"} relative overflow-hidden bg-border/80 ${toneClasses[tone]}`}><span className={`absolute ${vertical ? "inset-x-0 top-0 h-10 expertise-signal-vertical" : "inset-y-0 left-0 w-16 expertise-signal"} ${active ? "opacity-100" : "opacity-0"}`} /></div>;
 }
 
-// ── Magnetic Filter Tab ───────────────────────────────────────────────────────
-function MagneticTab({
-  tab,
-  isActive,
-  onClick,
-}: {
-  tab: { id: Category; label: string; count: number };
-  isActive: boolean;
-  onClick: () => void;
-}) {
-  const ref = useRef<HTMLButtonElement>(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const springX = useSpring(x, { stiffness: 300, damping: 20 });
-  const springY = useSpring(y, { stiffness: 300, damping: 20 });
-
-  const onMove = useCallback(
-    (e: React.MouseEvent) => {
-      const el = ref.current;
-      if (!el) return;
-      const r = el.getBoundingClientRect();
-      x.set((e.clientX - (r.left + r.width / 2)) * 0.15);
-      y.set((e.clientY - (r.top + r.height / 2)) * 0.15);
-    },
-    [x, y],
-  );
-
-  const onLeave = useCallback(() => { x.set(0); y.set(0); }, [x, y]);
-
-  return (
-    <motion.button
-      ref={ref}
-      onClick={onClick}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-      style={{ x: springX, y: springY }}
-      className={`relative px-4 py-2 rounded-full text-xs font-mono uppercase tracking-wider flex items-center gap-2 cursor-pointer transition-all duration-300 ${
-        !isActive ? "hover:bg-white/[0.08] text-white/60 hover:text-white" : ""
-      }`}
-    >
-      {isActive && (
-        <motion.div
-          layoutId="expertise-active-tab"
-          className="absolute inset-0 rounded-full bg-accent shadow-[0_0_24px_rgba(0,223,143,0.45)]"
-          transition={{ type: "spring", stiffness: 380, damping: 30 }}
-        />
-      )}
-      <span className={`relative z-10 transition-colors duration-200 ${isActive ? "text-black font-bold tracking-wider" : ""}`}>
-        {tab.label}
-      </span>
-      <span className={`relative z-10 text-[10px] px-1.5 py-0.5 rounded-full transition-colors duration-200 ${
-        isActive ? "bg-black/25 text-black font-extrabold" : "bg-white/10 text-white/50"
-      }`}>
-        {tab.count}
-      </span>
-    </motion.button>
-  );
-}
-
-// ── Filter Tab Bar ────────────────────────────────────────────────────────────
-function FilterTabs({ activeTab, onTabChange }: { activeTab: Category; onTabChange: (t: Category) => void }) {
-  const tabs: { id: Category; label: string; count: number }[] = [
-    { id: "all", label: "All Specializations", count: 6 },
-    { id: "data-ai", label: "Data & GenAI", count: 3 },
-    { id: "cloud-sre", label: "Cloud & SRE", count: 2 },
-    { id: "fullstack", label: "Full-Stack AI", count: 1 },
-  ];
-
-  return (
-    <motion.div
-      className="flex items-center justify-center gap-1.5 sm:gap-2 mt-8 p-1.5 rounded-full bg-black/40 border border-white/[0.08] backdrop-blur-xl w-fit mx-auto flex-wrap shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
-      initial={{ opacity: 0, y: 15 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: 0.4 }}
-    >
-      {tabs.map((tab) => (
-        <MagneticTab key={tab.id} tab={tab} isActive={activeTab === tab.id} onClick={() => onTabChange(tab.id)} />
-      ))}
-    </motion.div>
-  );
-}
-
-// ── Interactive Domain Micro-Visualizers ───────────────────────────────────────
-function DomainVisualizer({ type, c }: { type: ExpertiseItem["visualizerType"]; c: DomainColor }) {
-  if (type === "data") {
-    return (
-      <div className="rounded-lg bg-black/40 border border-white/[0.08] p-3 font-mono text-[11px] flex flex-col gap-2 overflow-hidden relative">
-        <div className="flex items-center justify-between text-white/50 text-[10px]">
-          <span className="flex items-center gap-1.5" style={{ color: c.primary }}>
-            <span className="h-1.5 w-1.5 rounded-full animate-ping" style={{ backgroundColor: c.primary }} />
-            STREAM INGESTION ENGINE
-          </span>
-          <span className="font-semibold" style={{ color: c.primary }}>ACTIVE</span>
-        </div>
-        <div className="grid grid-cols-3 gap-1.5 text-center">
-          <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5">
-            <div className="text-[9px] text-white/40">SCHEMA</div>
-            <div className="font-medium mt-0.5" style={{ color: c.primary }}>ENFORCED</div>
-          </div>
-          <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5">
-            <div className="text-[9px] text-white/40">DROPPED</div>
-            <div className="text-white/80 font-medium mt-0.5">0.00%</div>
-          </div>
-          <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5">
-            <div className="text-[9px] text-white/40">LAG</div>
-            <div className="font-medium mt-0.5" style={{ color: c.primary }}>&lt;MIN</div>
-          </div>
-        </div>
-        <div className="relative h-1.5 w-full bg-white/[0.06] rounded-full overflow-hidden">
-          <motion.div
-            className="h-full w-24"
-            style={{ background: `linear-gradient(90deg, transparent, ${c.primary}, transparent)` }}
-            animate={{ x: ["-100%", "300%"] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "linear" }}
-          />
-        </div>
-      </div>
-    );
-  }
-
-  if (type === "ai") {
-    return (
-      <div className="rounded-lg bg-black/40 border border-white/[0.08] p-3 font-mono text-[11px] flex flex-col gap-2 overflow-hidden relative">
-        <div className="flex items-center justify-between text-white/50 text-[10px]">
-          <span className="flex items-center gap-1.5" style={{ color: c.primary }}>
-            <BrainCircuit className="w-3.5 h-3.5" style={{ color: c.primary }} />
-            HYBRID RETRIEVAL & CITATION
-          </span>
-          <span className="font-semibold" style={{ color: c.primary }}>GROUNDED</span>
-        </div>
-        <div className="flex items-center justify-between gap-1 text-[10px] bg-white/[0.03] border border-white/[0.06] rounded p-1.5">
-          <span className="text-white/60">Top-k Embeddings</span>
-          <span className="text-white/90">FAISS Index / FlatIP</span>
-          <span className="flex items-center gap-1" style={{ color: c.primary }}>
-            <ShieldCheck className="w-3 h-3" /> Grounded
-          </span>
-        </div>
-        <div className="flex items-center justify-between text-[10px] text-white/40 px-0.5">
-          <span>Guardrail check: Pass</span>
-          <span style={{ color: c.primary }}>Trace verified</span>
-        </div>
-      </div>
-    );
-  }
-
-  if (type === "mlops") {
-    return (
-      <div className="rounded-lg bg-black/40 border border-white/[0.08] p-3 font-mono text-[11px] flex flex-col gap-2 overflow-hidden relative">
-        <div className="flex items-center justify-between text-white/50 text-[10px]">
-          <span className="flex items-center gap-1.5" style={{ color: c.primary }}>
-            <Cpu className="w-3.5 h-3.5" style={{ color: c.primary }} />
-            TRITON INFERENCE SERVER
-          </span>
-          <span className="font-semibold" style={{ color: c.primary }}>FP16 / INT8</span>
-        </div>
-        <div className="grid grid-cols-2 gap-1.5">
-          <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5 flex flex-col">
-            <span className="text-[9px] text-white/40">CANARY DEPLOY</span>
-            <div className="flex items-center justify-between mt-0.5 text-[10px]">
-              <span className="text-white/70">v2.4 (90%)</span>
-              <span style={{ color: c.primary }}>v2.5 (10%)</span>
-            </div>
-          </div>
-          <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5 flex flex-col">
-            <span className="text-[9px] text-white/40">DATA DRIFT</span>
-            <span className="mt-0.5 text-[10px] font-semibold" style={{ color: c.primary }}>NORMAL</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (type === "cloud") {
-    return (
-      <div className="rounded-lg bg-black/40 border border-white/[0.08] p-3 font-mono text-[11px] flex flex-col gap-2 overflow-hidden relative">
-        <div className="flex items-center justify-between text-white/50 text-[10px]">
-          <span className="flex items-center gap-1.5" style={{ color: c.primary }}>
-            <Server className="w-3.5 h-3.5" style={{ color: c.primary }} />
-            TERRAFORM MESH ARCHITECTURE
-          </span>
-          <span className="text-white/70">AWS + GCP</span>
-        </div>
-        <div className="grid grid-cols-3 gap-1.5 text-center text-[10px]">
-          <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5">
-            <div className="text-[9px] text-white/40">TF STATE</div>
-            <div className="font-medium mt-0.5" style={{ color: c.primary }}>SYNCED</div>
-          </div>
-          <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5">
-            <div className="text-[9px] text-white/40">K8S PODS</div>
-            <div className="text-white/90 font-medium mt-0.5">12/12 READY</div>
-          </div>
-          <div className="bg-white/[0.03] border border-white/[0.06] rounded p-1.5">
-            <div className="text-[9px] text-white/40">VPC PEER</div>
-            <div className="font-medium mt-0.5" style={{ color: c.primary }}>ACTIVE</div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (type === "ops") {
-    return (
-      <div className="rounded-lg bg-black/40 border border-white/[0.08] p-3 font-mono text-[11px] flex flex-col gap-2 overflow-hidden relative">
-        <div className="flex items-center justify-between text-white/50 text-[10px]">
-          <span className="flex items-center gap-1.5" style={{ color: c.primary }}>
-            <Activity className="w-3.5 h-3.5" style={{ color: c.primary }} />
-            PROMETHEUS SRE HEARTBEAT
-          </span>
-          <span className="font-semibold" style={{ color: c.primary }}>HIGH AVAIL.</span>
-        </div>
-        <div className="flex items-center justify-between bg-white/[0.03] border border-white/[0.06] rounded p-1.5 text-[10px]">
-          <div className="flex items-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full animate-ping" style={{ backgroundColor: c.primary }} />
-            <span className="text-white/80">Self-Healing Failover:</span>
-          </div>
-          <span className="font-semibold" style={{ color: c.primary }}>ARMED</span>
-        </div>
-      </div>
-    );
-  }
-
-  // UI / Full-stack
-  return (
-    <div className="rounded-lg bg-black/40 border border-white/[0.08] p-3 font-mono text-[11px] flex flex-col gap-2 overflow-hidden relative">
-      <div className="flex items-center justify-between text-white/50 text-[10px]">
-        <span className="flex items-center gap-1.5" style={{ color: c.primary }}>
-          <Zap className="w-3.5 h-3.5" style={{ color: c.primary }} />
-          WEBSOCKET STREAM BUFFER
-        </span>
-        <span className="font-semibold" style={{ color: c.primary }}>LIVE</span>
-      </div>
-      <div className="flex items-center justify-between bg-white/[0.03] border border-white/[0.06] rounded p-1.5 text-[10px]">
-        <span className="text-white/60">FastAPI Async RPC</span>
-        <span className="flex items-center gap-1" style={{ color: c.primary }}>
-          <span className="h-1 w-1 rounded-full" style={{ backgroundColor: c.primary }} /> Low-Latency
-        </span>
-        <span className="text-white/70">React UI</span>
-      </div>
-    </div>
-  );
-}
-
-// ── Micro Pipeline Component ──────────────────────────────────────────────────
-function PipelineFlow({ steps, c, delay = 0 }: { steps: string[]; c: DomainColor; delay?: number }) {
-  return (
-    <div className="relative pt-2.5 pb-1 border-t border-white/[0.06] mt-auto">
-      <div className="flex items-center justify-between text-[10px] font-mono tracking-wider text-white/40 mb-2">
-        <span className="flex items-center gap-1.5" style={{ color: c.primary }}>
-          <span className="relative flex h-1.5 w-1.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: c.primary }} />
-            <span className="relative inline-flex rounded-full h-1.5 w-1.5" style={{ backgroundColor: c.primary }} />
-          </span>
-          PIPELINE SEQUENCE
-        </span>
-        <span className="text-[9px] uppercase tracking-widest text-white/30">Continuous</span>
-      </div>
-
-      <div className="relative flex items-center justify-between gap-1 py-1.5 px-2 rounded-lg bg-black/30 border border-white/[0.06] overflow-hidden">
-        <motion.div
-          className="absolute inset-y-0 w-20 pointer-events-none"
-          style={{ background: `linear-gradient(90deg, transparent, rgba(${c.rgb},0.22), transparent)` }}
-          animate={{ x: ["-100%", "450%"] }}
-          transition={{ duration: 3.2, repeat: Infinity, ease: "linear", delay }}
-        />
-        {steps.map((step, idx) => (
-          <div key={step} className="flex items-center gap-1 relative z-10">
-            <span className="px-1.5 py-0.5 rounded text-[9.5px] font-mono tracking-tight text-white/80 bg-white/[0.04] border border-white/[0.08] transition-colors duration-200">
-              {step}
-            </span>
-            {idx < steps.length - 1 && (
-              <span className="text-[9px] font-mono select-none" style={{ color: `rgba(${c.rgb},0.6)` }}>→</span>
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ── Flip Card Component ───────────────────────────────────────────────────────
-function FlipCard({
-  item,
-  i,
-  isAllView,
-  cardMapRef,
-}: {
-  item: ExpertiseItem;
-  i: number;
-  isAllView: boolean;
-  cardMapRef: React.MutableRefObject<Map<string, HTMLDivElement>>;
-}) {
-  const [isFlipped, setIsFlipped] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [hovered, setHovered] = useState(false);
-  const outerRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(outerRef, { once: true, margin: "-60px" });
-
-  const color = DOMAIN_COLORS[item.visualizerType];
+function SystemNode({ item, active, onSelect, index }: { item: ExpertiseItem; active: boolean; onSelect: () => void; index: number }) {
   const Icon = item.icon;
-
-  // Register card element for ConnectionLines measurement
-  useEffect(() => {
-    const el = outerRef.current;
-    if (el) cardMapRef.current.set(item.number, el);
-    return () => { cardMapRef.current.delete(item.number); };
-  }, [item.number, cardMapRef]);
-
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const el = outerRef.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    setMousePos({ x: e.clientX - r.left, y: e.clientY - r.top });
-  }, []);
-
-  const handleFlip = useCallback(() => setIsFlipped((f) => !f), []);
-  const handleKey = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setIsFlipped((f) => !f); }
-  }, []);
-
-  const spanClass = isAllView && item.heroSpan ? "lg:col-span-2" : "";
-
-  return (
-    <motion.div
-      ref={outerRef}
-      layout
-      className={`h-full ${spanClass}`}
-      initial={{ opacity: 0, y: 50, rotateX: -5, filter: "blur(8px)" }}
-      animate={inView ? { opacity: 1, y: 0, rotateX: 0, filter: "blur(0px)" } : {}}
-      exit={{ opacity: 0, scale: 0.92, filter: "blur(6px)" }}
-      transition={{ duration: 0.7, delay: i * 0.12, ease: EASE }}
-      style={{ perspective: "800px" }}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => { setHovered(false); setMousePos({ x: 0, y: 0 }); }}
-    >
-      <div
-        role="button"
-        tabIndex={0}
-        aria-label={`${item.name} – ${isFlipped ? "click to see overview" : "click to explore details"}`}
-        className="relative min-h-[420px] w-full cursor-pointer select-none outline-none"
-        style={{ perspective: "1200px" }}
-        onClick={handleFlip}
-        onKeyDown={handleKey}
-      >
-        <motion.div
-          className="relative w-full min-h-[420px]"
-          style={{ transformStyle: "preserve-3d" }}
-          animate={{ rotateY: isFlipped ? 180 : 0 }}
-          transition={{ type: "spring", stiffness: 200, damping: 26 }}
-        >
-          {/* ────────────── FRONT FACE ────────────── */}
-          <div
-            className="absolute inset-0 rounded-2xl bg-v2-recessed/90 backdrop-blur-xl border border-white/[0.08] p-6 sm:p-7 flex flex-col gap-3 overflow-hidden"
-            style={{ backfaceVisibility: "hidden" }}
-          >
-            {/* Grid dot pattern */}
-            <div
-              className="pointer-events-none absolute inset-0 transition-opacity duration-500"
-              style={{
-                backgroundImage: "radial-gradient(rgba(255,255,255,0.4) 1px, transparent 1px)",
-                backgroundSize: "16px 16px",
-                opacity: hovered ? 0.06 : 0.035,
-              }}
-            />
-
-            {/* Cursor spotlight */}
-            <div
-              className="pointer-events-none absolute inset-0 rounded-2xl z-0 transition-opacity duration-500"
-              style={{
-                background: `radial-gradient(400px circle at ${mousePos.x}px ${mousePos.y}px, rgba(${color.rgb},0.12), transparent 70%)`,
-                opacity: hovered ? 1 : 0,
-              }}
-            />
-
-            {/* Glow border */}
-            <motion.div
-              className="pointer-events-none absolute inset-0 rounded-2xl z-0"
-              animate={{
-                boxShadow: hovered
-                  ? `inset 0 0 0 1px rgba(${color.rgb},0.6), 0 20px 50px -10px rgba(${color.rgb},0.25), 0 0 80px -20px rgba(${color.rgb},0.15)`
-                  : "inset 0 0 0 1px rgba(255,255,255,0.07)",
-              }}
-              transition={{ duration: 0.35 }}
-            />
-
-            {/* Top rim accent glow */}
-            <div
-              className="absolute top-0 left-0 right-0 h-[2px] pointer-events-none z-20 transition-opacity duration-500"
-              style={{
-                background: `linear-gradient(90deg, transparent 5%, ${color.primary} 50%, transparent 95%)`,
-                opacity: hovered ? 1 : 0.45,
-              }}
-            />
-
-            {/* Bottom sweep line */}
-            <div
-              className="absolute bottom-0 left-0 h-[2px] pointer-events-none z-20 transition-all duration-500"
-              style={{
-                width: hovered ? "100%" : "0%",
-                background: `linear-gradient(90deg, transparent, ${color.primary}, transparent)`,
-              }}
-            />
-
-            <CornerTicks color={color.primary} active={hovered} />
-
-            {/* Top bar: icon + number */}
-            <div className="flex items-start justify-between relative z-10">
-              <motion.div
-                className="inline-flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-300"
-                style={{
-                  border: `1px solid rgba(${color.rgb},${hovered ? 0.7 : 0.25})`,
-                  backgroundColor: `rgba(${color.rgb},${hovered ? 0.15 : 0.06})`,
-                  color: color.primary,
-                  boxShadow: hovered ? `0 0 24px rgba(${color.rgb},0.3)` : "none",
-                }}
-                animate={hovered ? { scale: [1, 1.12, 1] } : { scale: 1 }}
-                transition={{ duration: 0.35 }}
-              >
-                <Icon className="w-5 h-5" strokeWidth={1.75} />
-              </motion.div>
-              <div className="flex flex-col items-end gap-0.5">
-                <span className="font-mono text-xs font-bold tracking-[0.2em] select-none" style={{ color: color.primary }}>
-                  {item.number}
-                </span>
-                <span className="text-[9px] font-mono tracking-widest text-white/40 uppercase select-none">
-                  SYS.ARCH.v{parseInt(item.number)}
-                </span>
-              </div>
-            </div>
-
-            {/* Spec pill */}
-            <div
-              className="relative z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-md w-fit"
-              style={{ background: `linear-gradient(135deg, rgba(${color.rgb},0.12), rgba(${color.rgb},0.03))`, border: `1px solid rgba(${color.rgb},0.25)` }}
-            >
-              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: color.primary }} />
-              <span className="text-[9.5px] font-mono font-medium tracking-wider uppercase" style={{ color: color.primary }}>
-                {item.spec}
-              </span>
-            </div>
-
-            {/* Title */}
-            <h3
-              className="font-bold tracking-tight leading-tight relative z-10 text-lg transition-colors duration-300"
-              style={{ color: hovered ? color.primary : "white" }}
-            >
-              {item.name}
-            </h3>
-
-            {/* Description preview (truncated) */}
-            <p className="font-light text-white/65 leading-relaxed relative z-10 text-sm line-clamp-2">
-              {item.description}
-            </p>
-
-            {/* Primary Metric Mini-Display on Front Face */}
-            <div
-              className="relative z-10 flex items-center justify-between px-3 py-2 rounded-lg transition-all duration-300 mt-0.5"
-              style={{
-                backgroundColor: `rgba(${color.rgb}, ${hovered ? 0.08 : 0.035})`,
-                border: `1px solid rgba(${color.rgb}, ${hovered ? 0.35 : 0.15})`,
-              }}
-            >
-              <div className="flex items-center gap-2">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: color.primary }} />
-                  <span className="relative inline-flex rounded-full h-2 w-2" style={{ backgroundColor: color.primary }} />
-                </span>
-                <span className="text-[10px] font-mono tracking-widest text-white/50 uppercase">{item.metrics.label}</span>
-              </div>
-              <span className="font-mono text-xs font-bold tracking-tight" style={{ color: color.primary }}>
-                {item.metrics.value}
-              </span>
-            </div>
-
-            {/* Tags */}
-            <div className="flex flex-wrap gap-1.5 relative z-10 mt-auto">
-              {item.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="text-[10px] font-mono font-medium tracking-wider rounded px-2 py-0.5 bg-white/[0.02] transition-all duration-200 cursor-default"
-                  style={{
-                    border: `1px solid ${hovered ? `rgba(${color.rgb},0.35)` : "rgba(255,255,255,0.1)"}`,
-                    color: hovered ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.6)",
-                  }}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            {/* Flip hint with interactive glowing button */}
-            <div className="relative z-10 flex items-center justify-between pt-3 border-t border-white/[0.06]">
-              <div className="flex items-center gap-1.5 text-[9px] font-mono text-white/35 tracking-wider">
-                <span className="w-1 h-1 rounded-full bg-white/30" />
-                <span>SYS ARCHITECTURE</span>
-              </div>
-              <div
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-semibold transition-all duration-300"
-                style={{
-                  border: `1px solid ${hovered ? color.primary : "rgba(255,255,255,0.12)"}`,
-                  backgroundColor: hovered ? `rgba(${color.rgb}, 0.16)` : "rgba(255,255,255,0.03)",
-                  color: hovered ? "#fff" : "rgba(255,255,255,0.6)",
-                  boxShadow: hovered ? `0 0 16px rgba(${color.rgb}, 0.35)` : "none",
-                }}
-              >
-                <RotateCcw className={`w-3 h-3 transition-transform duration-500 ${hovered ? "-rotate-180" : ""}`} />
-                <span>INSPECT PIPELINE</span>
-              </div>
-            </div>
-          </div>
-
-          {/* ────────────── BACK FACE ────────────── */}
-          <div
-            className="absolute inset-0 rounded-2xl bg-v2-recessed/95 backdrop-blur-xl p-6 sm:p-7 flex flex-col gap-3 overflow-y-auto"
-            style={{
-              backfaceVisibility: "hidden",
-              transform: "rotateY(180deg)",
-              border: `1px solid rgba(${color.rgb},0.15)`,
-            }}
-          >
-            {/* Subtle top gradient */}
-            <div
-              className="pointer-events-none absolute inset-0 rounded-2xl"
-              style={{ background: `linear-gradient(180deg, rgba(${color.rgb},0.06) 0%, transparent 40%)` }}
-            />
-
-            {/* Grid dot pattern */}
-            <div
-              className="pointer-events-none absolute inset-0 opacity-[0.04]"
-              style={{
-                backgroundImage: "radial-gradient(rgba(255,255,255,0.4) 1px, transparent 1px)",
-                backgroundSize: "16px 16px",
-              }}
-            />
-
-            <CornerTicks color={color.primary} active />
-
-            {/* Header */}
-            <div className="flex items-center justify-between relative z-10">
-              <span className="text-xs font-mono tracking-wider uppercase font-semibold" style={{ color: color.primary }}>
-                {item.categoryLabel}
-              </span>
-              <span className="text-[10px] font-mono text-white/40 flex items-center gap-1.5">
-                <RotateCcw className="w-3 h-3" />
-                FLIP BACK
-              </span>
-            </div>
-
-            {/* Full description */}
-            <p className="font-light text-white/75 leading-relaxed relative z-10 text-sm">
-              {item.description}
-            </p>
-
-            {/* Domain visualizer */}
-            <div className="relative z-10">
-              <DomainVisualizer type={item.visualizerType} c={color} />
-            </div>
-
-            {/* Pipeline flow */}
-            <div className="relative z-10">
-              <PipelineFlow steps={item.pipeline} c={color} delay={i * 0.25} />
-            </div>
-
-            {/* Metrics bar */}
-            <div className="flex items-center justify-between pt-2 border-t border-white/[0.06] relative z-10 mt-auto">
-              <span className="text-[10px] font-mono text-white/40 tracking-wider">{item.metrics.label}</span>
-              <span
-                className="text-base font-mono font-bold tracking-tight"
-                style={{
-                  background: `linear-gradient(135deg, ${color.primary}, hsl(158,100%,44%))`,
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  filter: `drop-shadow(0 0 8px rgba(${color.rgb},0.4))`,
-                }}
-              >
-                {item.metrics.value}
-              </span>
-            </div>
-          </div>
-        </motion.div>
-      </div>
-    </motion.div>
-  );
+  return <motion.button type="button" onClick={onSelect} aria-pressed={active} className={`group ${toneClasses[item.tone]} relative flex min-w-0 flex-1 items-center gap-3 border bg-card/60 p-3 text-left backdrop-blur-md transition-colors duration-300 ${active ? "expertise-domain-border expertise-domain-surface expertise-domain-glow" : "border-border/70 hover:border-accent/50 hover:bg-card"}`} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-40px" }} transition={{ duration: 0.5, delay: index * 0.07, ease: EASE }} whileHover={{ y: -3 }}>
+    <span className={`grid h-9 w-9 shrink-0 place-items-center border ${active ? "expertise-domain-border expertise-domain-surface expertise-domain-text" : "border-border text-muted-foreground group-hover:text-foreground"}`}><Icon className="h-4 w-4" strokeWidth={1.6} /></span>
+    <span className="min-w-0"><span className={`block font-mono text-[9px] tracking-[0.18em] ${active ? "expertise-domain-text" : "text-muted-foreground"}`}>{item.number} / {item.categoryLabel}</span><span className="mt-1 block truncate text-xs font-semibold text-foreground">{item.name}</span></span>
+    {active && <motion.span layoutId="active-node" className="absolute bottom-0 left-3 right-3 h-px bg-[var(--domain-color)]" />}
+  </motion.button>;
 }
 
-// ── Architecture Summary Card (fills grid gap on "all" view) ──────────────────
-function ArchSummaryCard({ i }: { i: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
-
-  return (
-    <motion.div
-      ref={ref}
-      layout
-      initial={{ opacity: 0, y: 30, filter: "blur(6px)" }}
-      animate={inView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
-      exit={{ opacity: 0, scale: 0.92, filter: "blur(6px)" }}
-      transition={{ duration: 0.65, delay: i * 0.12, ease: EASE }}
-      className="h-full min-h-[420px] hidden lg:flex"
-    >
-      <div className="relative w-full rounded-2xl bg-v2-recessed/80 backdrop-blur-xl border border-white/[0.08] p-6 sm:p-7 flex flex-col items-center justify-center gap-4 overflow-hidden shadow-[0_12px_36px_rgba(0,0,0,0.4)]">
-        {/* Holographic top rim light */}
-        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-accent/70 to-transparent pointer-events-none z-20" />
-
-        {/* Ambient center radar glow */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-44 h-44 rounded-full bg-accent/[0.06] blur-[40px] pointer-events-none" />
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 rounded-full border border-accent/10 pointer-events-none" />
-
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.035]"
-          style={{
-            backgroundImage: "radial-gradient(rgba(255,255,255,0.4) 1px, transparent 1px)",
-            backgroundSize: "16px 16px",
-          }}
-        />
-        <CornerTicks color="hsl(158,100%,44%)" active />
-
-        <div className="text-center relative z-10 flex flex-col items-center gap-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent/25 bg-accent/[0.06] text-[10px] font-mono tracking-widest text-accent uppercase shadow-[0_0_15px_rgba(0,223,143,0.15)]">
-            <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-            SYSTEM STATUS
-          </div>
-
-          <div className="text-4xl font-black text-white tracking-tight">
-            6<span className="text-accent drop-shadow-[0_0_12px_rgba(0,223,143,0.8)]">.</span>
-          </div>
-          <div className="text-xs font-mono text-white/50 tracking-wider uppercase">
-            Expertise Domains
-          </div>
-
-          <div className="h-px w-20 bg-gradient-to-r from-transparent via-accent/30 to-transparent my-1" />
-
-          <div className="flex flex-col gap-1.5 text-[10px] font-mono text-white/50 tracking-wider text-center">
-            <span>5+ YEARS PRODUCTION</span>
-            <span>HIGH-AVAILABILITY OPS</span>
-          </div>
-
-          <div className="mt-2 px-4 py-2 rounded-lg border border-[rgba(0,223,143,0.25)] bg-[rgba(0,223,143,0.06)] shadow-[0_0_20px_rgba(0,223,143,0.1)]">
-            <span className="text-[9px] font-mono tracking-wider text-accent font-semibold">
-              ARCHITECTURE READY
-            </span>
-          </div>
-
-          <div className="mt-1 flex flex-wrap justify-center gap-x-2 gap-y-1">
-            {["TESLA", "NOKIA", "HUAWEI"].map((co) => (
-              <span key={co} className="text-[9px] font-mono tracking-widest text-white/40">{co}</span>
-            ))}
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
+function Inspector({ item, isSimulating }: { item: ExpertiseItem; isSimulating: boolean }) {
+  const [tab, setTab] = useState<InspectorTab>("system");
+  const Icon = item.icon;
+  return <motion.div key={item.number} className={`${toneClasses[item.tone]} relative overflow-hidden border border-border/80 bg-card/70 backdrop-blur-xl`} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, ease: EASE }}>
+    <CornerTicks />
+    <div className="absolute inset-x-0 top-0 h-px bg-[var(--domain-color)] opacity-70" />
+    <div className="flex flex-col gap-4 border-b border-border/70 p-5 sm:flex-row sm:items-start sm:justify-between sm:p-7">
+      <div className="flex gap-3"><span className="grid h-11 w-11 shrink-0 place-items-center border expertise-domain-border expertise-domain-surface expertise-domain-text"><Icon className="h-5 w-5" /></span><div><p className="font-mono text-[10px] tracking-[0.18em] expertise-domain-text">ACTIVE SYSTEM INSPECTOR / {item.number}</p><h3 className="mt-1 text-xl font-bold tracking-tight text-foreground sm:text-2xl">{item.name}</h3><p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{item.description}</p></div></div>
+      <div className="flex shrink-0 items-center gap-2 font-mono text-[10px] tracking-widest text-muted-foreground"><span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />{isSimulating ? "FLOWING" : item.metrics.value}</div>
+    </div>
+    <div className="grid gap-0 lg:grid-cols-[1.35fr_0.65fr]">
+      <div className="border-b border-border/70 p-5 sm:p-7 lg:border-b-0 lg:border-r"><div className="mb-4 flex items-center justify-between"><span className="font-mono text-[10px] tracking-[0.18em] text-muted-foreground">ARCHITECTURE FLOW</span><span className="font-mono text-[10px] expertise-domain-text">{item.spec}</span></div><div className="flex flex-wrap items-center gap-2 sm:flex-nowrap">{item.pipeline.map((step, index) => <div key={step} className="contents"><motion.div className={`border px-2.5 py-2 font-mono text-[10px] font-semibold text-foreground transition-colors ${isSimulating && index <= 3 ? "expertise-domain-border expertise-domain-surface" : "border-border/70 bg-background/40"}`} animate={isSimulating ? { y: [0, -3, 0] } : { y: 0 }} transition={{ duration: 1.3, repeat: isSimulating ? Infinity : 0, delay: index * 0.12 }}>{step}</motion.div>{index < item.pipeline.length - 1 && <ArrowRight className="h-3 w-3 shrink-0 text-muted-foreground" />}</div>)}</div><div className="mt-6 grid grid-cols-3 gap-2">{item.telemetry.map((metric) => <div key={metric.label} className="border border-border/70 bg-background/40 p-3"><span className="block truncate font-mono text-[9px] tracking-widest text-muted-foreground">{metric.label}</span><span className="mt-2 block font-mono text-xs font-bold expertise-domain-text">{metric.value}</span></div>)}</div></div>
+      <div className="min-w-0 p-5 sm:p-7"><div className="mb-4 flex items-center justify-between"><div className="flex gap-1 border-b border-border/70"><button type="button" onClick={() => setTab("system")} className={`border-b-2 px-2 pb-2 font-mono text-[10px] tracking-widest transition-colors ${tab === "system" ? "border-accent text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"}`}>SYSTEM</button><button type="button" onClick={() => setTab("terminal")} className={`border-b-2 px-2 pb-2 font-mono text-[10px] tracking-widest transition-colors ${tab === "terminal" ? "border-accent text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"}`}>TERMINAL</button></div><Terminal className="h-4 w-4 text-muted-foreground" /></div><AnimatePresence mode="wait"><motion.div key={tab} initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -8 }} transition={{ duration: 0.2 }} className="min-h-[130px] font-mono text-[11px] leading-7">{tab === "system" ? <div className="space-y-3"><div className="flex items-center gap-2 expertise-domain-text"><ShieldCheck className="h-4 w-4" />PRODUCTION GRADE</div><p className="text-muted-foreground">{item.metrics.label}: <span className="text-foreground">{item.metrics.value}</span></p><p className="text-muted-foreground">deployment: <span className="expertise-domain-text">zero-downtime</span></p><p className="text-muted-foreground">guardrails: <span className="expertise-domain-text">enabled</span></p></div> : <div className="rounded border border-border/70 bg-background/70 p-3 text-muted-foreground">{item.terminal.map((line) => <div key={line}><span className="mr-2 expertise-domain-text">›</span>{line.replace(/^&gt; /, "")}</div>)}</div>}</motion.div></AnimatePresence></div>
+    </div>
+  </motion.div>;
 }
 
-// ── Connection Lines (SVG overlay between related cards) ──────────────────────
-interface ConnectionPath {
-  d: string;
-  color: string;
-  x1: number;
-  y1: number;
-  x2: number;
-  y2: number;
-}
-
-function ConnectionLines({
-  gridRef,
-  cardMapRef,
-  visible,
-}: {
-  gridRef: React.RefObject<HTMLDivElement | null>;
-  cardMapRef: React.MutableRefObject<Map<string, HTMLDivElement>>;
-  visible: boolean;
-}) {
-  const [paths, setPaths] = useState<ConnectionPath[]>([]);
-  const svgRef = useRef<SVGSVGElement>(null);
-  const inView = useInView(svgRef, { once: true, margin: "-100px" });
-
-  useEffect(() => {
-    if (!visible) {
-      setPaths([]);
-      return;
-    }
-
-    const measure = () => {
-      const grid = gridRef.current;
-      const cards = cardMapRef.current;
-      if (!grid || !cards || cards.size < 6) return;
-
-      const gr = grid.getBoundingClientRect();
-      const result: ConnectionPath[] = [];
-
-      for (const conn of CARD_CONNECTIONS) {
-        const fromEl = cards.get(conn.from);
-        const toEl = cards.get(conn.to);
-        if (!fromEl || !toEl) continue;
-
-        const fr = fromEl.getBoundingClientRect();
-        const tr = toEl.getBoundingClientRect();
-        const sameRow = Math.abs(fr.top - tr.top) < fr.height * 0.5;
-
-        let x1: number, y1: number, x2: number, y2: number, d: string;
-
-        if (sameRow) {
-          x1 = fr.right - gr.left;
-          y1 = fr.top + fr.height / 2 - gr.top;
-          x2 = tr.left - gr.left;
-          y2 = tr.top + tr.height / 2 - gr.top;
-          const gap = (x2 - x1) * 0.4;
-          d = `M ${x1} ${y1} C ${x1 + gap} ${y1}, ${x2 - gap} ${y2}, ${x2} ${y2}`;
-        } else {
-          x1 = fr.left + fr.width / 2 - gr.left;
-          y1 = fr.bottom - gr.top;
-          x2 = tr.left + tr.width / 2 - gr.left;
-          y2 = tr.top - gr.top;
-          const my = (y1 + y2) / 2;
-          d = `M ${x1} ${y1} C ${x1} ${my}, ${x2} ${my}, ${x2} ${y2}`;
-        }
-
-        result.push({ d, color: DOMAIN_COLORS[conn.key].primary, x1, y1, x2, y2 });
-      }
-
-      setPaths(result);
-    };
-
-    const timer = setTimeout(measure, 1400);
-    const ro = new ResizeObserver(() => requestAnimationFrame(measure));
-    if (gridRef.current) ro.observe(gridRef.current);
-
-    return () => {
-      clearTimeout(timer);
-      ro.disconnect();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visible]);
-
-  if (!paths.length) return null;
-
-  return (
-    <svg
-      ref={svgRef}
-      className="absolute inset-0 w-full h-full pointer-events-none z-[1] hidden lg:block"
-      style={{ overflow: "visible" }}
-    >
-      {paths.map((p, i) => (
-        <g key={i}>
-          <motion.path
-            d={p.d}
-            stroke={p.color}
-            strokeWidth="1"
-            strokeDasharray="4 4"
-            strokeOpacity="0.3"
-            fill="none"
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={inView ? { pathLength: 1, opacity: 1 } : {}}
-            transition={{ duration: 1.8, delay: i * 0.3, ease: EASE }}
-          />
-          <motion.circle
-            cx={p.x1}
-            cy={p.y1}
-            r="2.5"
-            fill={p.color}
-            fillOpacity="0.4"
-            initial={{ scale: 0 }}
-            animate={inView ? { scale: 1 } : {}}
-            transition={{ delay: i * 0.3 + 0.5, type: "spring", stiffness: 300 }}
-          />
-          <motion.circle
-            cx={p.x2}
-            cy={p.y2}
-            r="2.5"
-            fill={p.color}
-            fillOpacity="0.4"
-            initial={{ scale: 0 }}
-            animate={inView ? { scale: 1 } : {}}
-            transition={{ delay: i * 0.3 + 1.2, type: "spring", stiffness: 300 }}
-          />
-        </g>
-      ))}
-    </svg>
-  );
-}
-
-// ── Main Section ──────────────────────────────────────────────────────────────
 const ServicesSection = () => {
-  const [activeTab, setActiveTab] = useState<Category>("all");
-  const gridRef = useRef<HTMLDivElement>(null);
-  const cardMapRef = useRef<Map<string, HTMLDivElement>>(new Map());
+  const [activeIndex, setActiveIndex] = useState(1);
+  const [isSimulating, setIsSimulating] = useState(false);
+  const activeItem = EXPERTISE[activeIndex];
+  const activeTone = activeItem.tone;
+  const stageLabel = useMemo(() => isSimulating ? "SIMULATION RUNNING" : "SYSTEM READY", [isSimulating]);
 
-  const filteredItems = EXPERTISE.filter((item) => {
-    if (activeTab === "all") return true;
-    return item.category === activeTab;
-  });
+  useEffect(() => {
+    if (!isSimulating) return;
+    const timer = window.setInterval(() => setActiveIndex((current) => (current + 1) % EXPERTISE.length), 1500);
+    return () => window.clearInterval(timer);
+  }, [isSimulating]);
 
-  const isAllView = activeTab === "all";
+  return <section id="skills" className="relative z-20 -mt-10 overflow-hidden rounded-t-section border-t border-border bg-v2-recessed px-5 pb-24 pt-16 sm:-mt-12 sm:px-8 sm:pt-24 md:-mt-14" aria-labelledby="expertise-heading">
+    <div className="absolute inset-0 blueprint-dots opacity-[0.16]" aria-hidden="true" />
+    <div className="relative mx-auto max-w-7xl">
+      <BlueprintSectionHeader align="center"><div className="mb-10 text-center sm:mb-14"><motion.div initial={{ opacity: 0, y: -8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="eyebrow justify-center">SYSTEM CLUSTER <span className="text-muted-foreground">/ 06 PRODUCTION DOMAINS</span></motion.div><motion.h2 id="expertise-heading" initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.08, ease: EASE }} className="mt-4 text-5xl font-black leading-none tracking-tighter text-foreground sm:text-7xl">My <span className="accent-serif text-accent">Expertise.</span></motion.h2><FadeIn y={16} delay={0.2} duration={0.6} className="mx-auto mt-5 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">Battle-tested data engineering pipelines, low-latency GenAI retrieval systems, and high-availability cloud architecture engineered to hold up under real-world production scale.</FadeIn></div></BlueprintSectionHeader>
 
-  return (
-    <section
-      id="skills"
-      className="relative font-kanit rounded-t-section -mt-10 sm:-mt-12 md:-mt-14 z-20 overflow-hidden border-t border-white/10 bg-v2-recessed"
-      style={{
-        padding: "clamp(4rem, 6vw, 6rem) 1.25rem clamp(6rem, 9vw, 9rem)",
-        boxShadow: "0 -10px 40px rgba(0,0,0,0.6)",
-      }}
-    >
-      {/* ── Background Video & Ambient Mesh ── */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-full h-full object-cover pointer-events-none opacity-40"
-          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260508_064122_c4750c0e-7476-4b44-94a2-a85a65c63bf2.mp4"
-        />
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-accent/[0.07] rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-10 left-1/3 w-[500px] h-[250px] bg-[#38bdf8]/[0.05] rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute inset-0 bg-v2-recessed/75" />
-        <div className="absolute inset-0 bg-gradient-to-b from-v2-recessed via-transparent to-v2-recessed" />
-        {/* Subtle grid texture overlay */}
-        <div
-          className="absolute inset-0 opacity-[0.04] pointer-events-none"
-          style={{
-            backgroundImage: "radial-gradient(rgba(255,255,255,0.5) 1px, transparent 1px)",
-            backgroundSize: "24px 24px",
-          }}
-        />
+      <div className="expertise-canvas relative overflow-hidden border border-border/80 p-3 shadow-[0_20px_80px_hsl(var(--background)/0.45)] sm:p-5"><CornerTicks /><div className="mb-4 flex flex-col gap-3 border-b border-border/70 pb-4 sm:flex-row sm:items-center sm:justify-between"><div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.16em] text-muted-foreground"><Activity className="h-3.5 w-3.5 text-accent" />END-TO-END PRODUCTION TOPOLOGY</div><button type="button" onClick={() => setIsSimulating((value) => !value)} className="group inline-flex items-center justify-center gap-2 border border-accent/50 bg-accent/10 px-3 py-2 font-mono text-[10px] font-semibold tracking-widest text-accent transition-all hover:bg-accent/20 hover:shadow-[0_0_24px_hsl(var(--accent)/0.2)]" aria-pressed={isSimulating}>{isSimulating ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />} {isSimulating ? "PAUSE RUN" : "SIMULATE PIPELINE FLOW"}</button></div>
+        <div className="hidden items-stretch lg:flex">{EXPERTISE.map((item, index) => <div key={item.number} className="contents"><SystemNode item={item} active={activeIndex === index} onSelect={() => { setActiveIndex(index); setIsSimulating(false); }} index={index} />{index < EXPERTISE.length - 1 && <PipelineConnector active={isSimulating || activeIndex === index} tone={item.tone} />}</div>)}</div>
+        <div className="flex flex-col lg:hidden">{EXPERTISE.map((item, index) => <div key={item.number} className="flex flex-col items-stretch"><SystemNode item={item} active={activeIndex === index} onSelect={() => { setActiveIndex(index); setIsSimulating(false); }} index={index} />{index < EXPERTISE.length - 1 && <div className="flex justify-center"><PipelineConnector vertical active={isSimulating || activeIndex === index} tone={item.tone} /></div>}</div>)}</div>
+        <div className="mt-5 flex items-center justify-between border-t border-border/70 pt-3 font-mono text-[9px] tracking-widest text-muted-foreground"><span className="flex items-center gap-2"><span className={`h-1.5 w-1.5 rounded-full ${isSimulating ? "animate-ping bg-accent" : "bg-accent"}`} />{stageLabel}</span><span>LATENCY BUDGET / <span className="text-foreground">&lt; 50 MS</span></span></div>
       </div>
 
-      {/* Guide lines at container edges */}
-      <div className="hidden xl:block pointer-events-none absolute inset-y-0 left-1/2 -translate-x-[calc(50%+38rem)] w-px bg-white/[0.08] z-[5]" />
-      <div className="hidden xl:block pointer-events-none absolute inset-y-0 left-1/2 translate-x-[calc(-50%+38rem)] w-px bg-white/[0.08] z-[5]" />
-
-      <div className="relative z-10 max-w-7xl mx-auto">
-        <BlueprintSectionHeader align="center">
-          <div className="mb-8 text-center sm:mb-12 -mt-3 sm:-mt-5">
-            <TypewriterTitle />
-
-            {/* Sub-line */}
-            <FadeIn
-              y={20}
-              delay={0.25}
-              duration={0.6}
-              ease={[0.16, 1, 0.3, 1]}
-              className="text-white/60 font-light mt-4 max-w-2xl mx-auto text-center leading-relaxed"
-            >
-              <p style={{ fontSize: "clamp(0.95rem, 1.3vw, 1.15rem)" }}>
-                Battle-tested data engineering pipelines, low-latency GenAI retrieval systems, and high-availability cloud architecture engineered to hold up under real-world production scale.
-              </p>
-            </FadeIn>
-
-            {/* Animated underline */}
-            <motion.div
-              className="mx-auto mt-6 h-px"
-              style={{
-                width: "min(200px, 40%)",
-                background: "linear-gradient(90deg, transparent, rgba(94,210,156,0.8), transparent)",
-              }}
-              initial={{ scaleX: 0, opacity: 0 }}
-              whileInView={{ scaleX: 1, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.9, delay: 0.35, ease: EASE }}
-            />
-
-            {/* ── Architecture Telemetry Metrics HUD ── */}
-            <FadeIn
-              y={20}
-              delay={0.35}
-              duration={0.6}
-              ease={[0.16, 1, 0.3, 1]}
-              className="mt-8 max-w-4xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 px-2"
-            >
-              {[
-                { label: "DATA INGESTION", val: "OPERATIONAL", color: DOMAIN_COLORS.data.primary },
-                { label: "RAG GROUNDING", val: "VERIFIED", color: DOMAIN_COLORS.ai.primary },
-                { label: "MODEL ROLLOUT", val: "CANARY ENABLED", color: DOMAIN_COLORS.mlops.primary },
-                { label: "AVAILABILITY", val: "SELF-HEALING", color: DOMAIN_COLORS.ops.primary },
-              ].map((m, i) => (
-                <div
-                  key={i}
-                  className="relative group overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.02] backdrop-blur-md p-3 text-left transition-all duration-300 hover:border-white/25 hover:bg-white/[0.05] hover:shadow-[0_8px_24px_rgba(0,0,0,0.4)]"
-                >
-                  <div
-                    className="absolute top-0 left-0 right-0 h-[2px] opacity-70 transition-opacity duration-300 group-hover:opacity-100"
-                    style={{ background: `linear-gradient(90deg, transparent, ${m.color}, transparent)` }}
-                  />
-                  <div className="text-[9px] font-mono tracking-widest text-white/40 uppercase truncate">{m.label}</div>
-                  <div className="mt-1 text-sm sm:text-base font-mono font-bold tracking-tight text-white flex items-center justify-between">
-                    <span style={{ color: m.color }}>{m.val}</span>
-                    <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: m.color }} />
-                  </div>
-                </div>
-              ))}
-            </FadeIn>
-
-            <FilterTabs activeTab={activeTab} onTabChange={setActiveTab} />
-          </div>
-        </BlueprintSectionHeader>
-
-        {/* ── Card Grid with Connection Lines ── */}
-        <div ref={gridRef} className="relative">
-          <ConnectionLines gridRef={gridRef} cardMapRef={cardMapRef} visible={isAllView} />
-
-          <motion.div
-            layout
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6 relative z-10"
-          >
-            <AnimatePresence mode="popLayout">
-              {filteredItems.map((item, i) => (
-                <FlipCard
-                  key={item.number}
-                  item={item}
-                  i={i}
-                  isAllView={isAllView}
-                  cardMapRef={cardMapRef}
-                />
-              ))}
-              {isAllView && <ArchSummaryCard key="arch-summary" i={filteredItems.length} />}
-            </AnimatePresence>
-          </motion.div>
-        </div>
-
-        {/* Bottom architecture summary note (shown when filtered) */}
-        {!isAllView && (
-          <FadeIn
-            y={0}
-            delay={0.5}
-            duration={0.6}
-            className="mt-12 text-center text-xs font-mono text-white/40 tracking-wider flex items-center justify-center gap-2"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-            <span>PRODUCTION-PROVEN ARCHITECTURE STACK · TESLA / NOKIA / HUAWEI / ENTERPRISE SLA</span>
-          </FadeIn>
-        )}
-
-        {/* ── Explore Projects CTA ── */}
-        <FadeIn
-          y={20}
-          delay={0.6}
-          duration={0.6}
-          ease={[0.16, 1, 0.3, 1]}
-          className="mt-16 flex justify-center"
-        >
-          <motion.a
-            href="#projects"
-            className="group relative inline-flex items-center gap-3 px-8 py-3.5 rounded-full font-mono text-sm font-semibold tracking-wider uppercase overflow-hidden cursor-pointer"
-            style={{
-              border: "1.5px solid rgba(0,223,143,0.4)",
-              background: "rgba(0,223,143,0.06)",
-              color: "hsl(158, 100%, 44%)",
-            }}
-            whileHover={{
-              boxShadow: "0 0 30px rgba(0,223,143,0.25), inset 0 0 30px rgba(0,223,143,0.08)",
-              borderColor: "rgba(0,223,143,0.7)",
-              scale: 1.04,
-            }}
-            whileTap={{ scale: 0.97 }}
-            transition={{ type: "spring", stiffness: 400, damping: 25 }}
-          >
-            <span className="relative z-10">Explore My Projects</span>
-            <motion.span
-              className="relative z-10"
-              animate={{ x: [0, 4, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <ArrowRight className="w-4 h-4" />
-            </motion.span>
-            {/* Animated sweep */}
-            <motion.div
-              className="absolute inset-0 pointer-events-none"
-              style={{ background: "linear-gradient(90deg, transparent, rgba(0,223,143,0.1), transparent)" }}
-              animate={{ x: ["-100%", "200%"] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-            />
-          </motion.a>
-        </FadeIn>
-      </div>
-    </section>
-  );
+      <div className="mt-5"><Inspector item={activeItem} isSimulating={isSimulating} /></div>
+      <FadeIn y={16} delay={0.2} duration={0.6} className="mt-10 flex justify-center"><a href="#projects" className="group inline-flex items-center gap-3 border border-accent/40 bg-accent/5 px-6 py-3 font-mono text-xs font-semibold tracking-widest text-accent transition-all hover:border-accent hover:bg-accent/10"><span>EXPLORE THE BUILDS</span><ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></a></FadeIn>
+    </div>
+  </section>;
 };
 
 export default ServicesSection;
