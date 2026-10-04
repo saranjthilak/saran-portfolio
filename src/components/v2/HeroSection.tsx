@@ -13,14 +13,6 @@ const navLinks = [
   { label: "CONTACT", href: "#contact" },
 ];
 
-/* ─── Floating stat badges ───────────────────────────────── */
-const statBadges = [
-  { label: "Uptime", value: "99.9%", position: "top-8 -left-12", delay: 0.8 },
-  { label: "Support ↓", value: "25%", position: "top-8 -right-16", delay: 1.0 },
-  { label: "Pipelines", value: "ETL", position: "bottom-12 -left-12", delay: 1.2 },
-  { label: "IEEE Papers", value: "2", position: "bottom-4 -right-16", delay: 1.4 },
-];
-
 /* ─── Particle Network Canvas ────────────────────────────── */
 const ParticleNetwork = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -494,27 +486,6 @@ const HeroSection = () => {
             >
               <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-accent/30" />
             </motion.div>
-
-            {/* Floating stat badges */}
-            {statBadges.map((badge) => (
-              <motion.div
-                key={badge.label}
-                className={`absolute z-20 px-3 py-2 bg-[#161b22]/90 backdrop-blur-md border border-white/10 rounded-lg shadow-lg hidden xl:block ${badge.position}`}
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{
-                  delay: badge.delay,
-                  duration: 0.5,
-                  type: "spring",
-                  stiffness: 260,
-                  damping: 20,
-                }}
-                whileHover={{ scale: 1.1, borderColor: "hsl(158 100% 44% / 0.4)" }}
-              >
-                <div className="text-[10px] font-mono uppercase tracking-wider text-gray-500">{badge.label}</div>
-                <div className="text-sm font-black text-accent tnum">{badge.value}</div>
-              </motion.div>
-            ))}
 
             <IDCard />
           </div>
