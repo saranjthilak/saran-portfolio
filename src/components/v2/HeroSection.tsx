@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform, type Easing, type Variants } from "framer-motion";
 import { ArrowUpRight, ChevronDown } from "lucide-react";
 import { useEffect, useRef, useState, useCallback } from "react";
 import FadeIn from "./FadeIn";
@@ -149,7 +149,7 @@ const AnimatedHeading = () => {
     },
   };
 
-  const lineVariants = {
+  const lineVariants: Variants = {
     hidden: { opacity: 0, y: 30, filter: "blur(6px)" },
     visible: {
       opacity: 1,
@@ -157,7 +157,7 @@ const AnimatedHeading = () => {
       filter: "blur(0px)",
       transition: {
         duration: 0.7,
-        ease: [0.25, 0.1, 0.25, 1],
+        ease: [0.25, 0.1, 0.25, 1] as Easing,
       },
     },
   };
