@@ -1,3 +1,3 @@
-- [ ] Replace Expertise flip-card grid with Living Architecture Canvas
-- [ ] Add semantic domain tokens and canvas motion utilities
-- [ ] Validate build and preview interactions
+- [x] Replace Expertise flip-card grid with Living Architecture Canvas
+- [x] Add semantic domain tokens and canvas motion utilities
+- [x] Validate build and preview interactions
