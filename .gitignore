@@ -16,6 +16,9 @@ dist-ssr
 .env
 .env.local
 .env*.local
+.env.development
+.env.production
+.env.staging
 
 # Editor directories and files
 .vscode/*
@@ -30,3 +33,4 @@ dist-ssr
 
 .next/
 tsconfig.tsbuildinfo
+bun.lock
