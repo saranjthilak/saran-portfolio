@@ -1,73 +1,83 @@
-# Welcome to your Lovable project
+# Saran J Thilak — Portfolio
 
-## Project info
+A performance-focused developer portfolio showcasing full-stack projects, research publications, certifications, and professional experience. Built with Next.js 16 and deployed as a static export on Netlify, the site features smooth Framer Motion animations, a custom cursor, a GitHub contribution heatmap, and a serverless contact form powered by Resend.
 
-**URL**: https://lovable.dev/projects/5b0a7cf1-6333-4c7b-b8b1-03ef453fa6aa
+🔗 **Live site:** [https://saran.cloud](https://saran.cloud)
 
-## How can I edit this code?
+## Screenshot
 
-There are several ways of editing your application.
+<!-- Replace with an actual screenshot once available -->
+![Portfolio screenshot](docs/screenshot.png)
 
-**Use Lovable**
+## Tech Stack
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/5b0a7cf1-6333-4c7b-b8b1-03ef453fa6aa) and start prompting.
+| Layer        | Technology                                  |
+| ------------ | ------------------------------------------- |
+| Framework    | Next.js 16 (static export)                  |
+| UI           | React 18, TypeScript, Tailwind CSS, shadcn/ui |
+| Animations   | Framer Motion                               |
+| Email        | Netlify Functions + Resend                  |
+| Deployment   | Netlify                                     |
 
-Changes made via Lovable will be committed automatically to this repo.
+## Project Structure
 
-**Use your preferred IDE**
+```
+├── src/
+│   ├── app/             # Next.js App Router (layout, pages, metadata)
+│   ├── components/
+│   │   ├── ui/          # Shared primitives (shadcn/ui, cursor, transitions)
+│   │   └── v2/          # Section components (Hero, About, Projects, …)
+│   ├── data/            # Portfolio content (portfolio.ts)
+│   └── lib/             # Utilities (GitHub stats, cn helper)
+├── netlify/
+│   └── functions/       # Serverless contact form handler
+├── public/              # Static assets
+├── docs/                # Architecture rules & roadmap
+├── tailwind.config.ts
+├── next.config.mjs
+└── netlify.toml
+```
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Local Setup
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+```bash
+# 1. Clone the repo
+git clone https://github.com/saranjthilak/saran-portfolio.git
+cd saran-portfolio
 
-Follow these steps:
+# 2. Install dependencies
+npm install
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# 3. Copy and fill in environment variables
+cp .env.example .env.local
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# 4. Start the dev server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The site will be available at `http://localhost:3000`.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Environment Variables
 
-**Use GitHub Codespaces**
+| Variable        | Description                                       |
+| --------------- | ------------------------------------------------- |
+| `RESEND_API_KEY` | API key from [Resend](https://resend.com)         |
+| `CONTACT_EMAIL`  | Recipient address for contact form submissions    |
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+> Copy `.env.example` to `.env.local` and fill in the values. The contact form will not work without a valid Resend key.
 
-## What technologies are used for this project?
+## Deployment
 
-This project is built with:
+The project deploys automatically to **Netlify** on push.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- **Build command:** `npm run build`
+- **Publish directory:** `dist`
+- **Functions directory:** `netlify/functions`
 
-## How can I deploy this project?
+Set `RESEND_API_KEY` and `CONTACT_EMAIL` in the Netlify dashboard under **Site settings → Environment variables**.
 
-Simply open [Lovable](https://lovable.dev/projects/5b0a7cf1-6333-4c7b-b8b1-03ef453fa6aa) and click on Share -> Publish.
+See [`netlify.toml`](netlify.toml) for the full build and redirect configuration.
 
-## Can I connect a custom domain to my Lovable project?
+## License
 
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+[MIT](LICENSE) © 2025 Saran Jaya Thilak
