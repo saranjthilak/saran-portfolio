@@ -4,15 +4,25 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
-import { Check, Crown, ArrowUpRight } from "lucide-react";
+import { Check, Crown, ArrowUpRight, Loader2 } from "lucide-react";
 import { useState, useRef } from "react";
 import { useInView } from "framer-motion";
 import BlueprintSectionHeader from "./BlueprintSectionHeader";
 
+// ── Validation schema (mirrors server-side limits) ─────────────────────────
 const formSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-  email: z.string().email({ message: "Please enter a valid email." }),
-  message: z.string().min(10, { message: "Message must be at least 10 characters." }),
+  name: z
+    .string()
+    .min(2, { message: "Name must be at least 2 characters." })
+    .max(100, { message: "Name must be at most 100 characters." }),
+  email: z
+    .string()
+    .email({ message: "Please enter a valid email." })
+    .max(254, { message: "Email is too long." }),
+  message: z
+    .string()
+    .min(10, { message: "Message must be at least 10 characters." })
+    .max(5000, { message: "Message must be at most 5,000 characters." }),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -36,6 +46,8 @@ const ContactSection = () => {
   const [honeypot, setHoneypot] = useState("");
   const [lastSubmit, setLastSubmit] = useState(0);
   const [submitting, setSubmitting] = useState(false);
+  // Accessible status message for screen readers
+  const [statusMessage, setStatusMessage] = useState("");
 
   const {
     register,
@@ -45,31 +57,42 @@ const ContactSection = () => {
   } = useForm<FormValues>({ resolver: zodResolver(formSchema) });
 
   const onSubmit = async (values: FormValues) => {
+    // Honeypot — silently bail if filled
     if (honeypot) return;
+
     const now = Date.now();
     if (now - lastSubmit < RATE_LIMIT_MS) {
       toast.error("Please wait before sending another message.");
+      setStatusMessage("Rate limited. Please wait before sending another message.");
       return;
     }
+
     setSubmitting(true);
+    setStatusMessage("Sending your message…");
+
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
+        body: JSON.stringify({ ...values, website: honeypot }),
       });
+
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         throw new Error(data?.error ?? "Server error");
       }
+
       toast.success("Message sent! I'll get back to you soon.");
+      setStatusMessage("Message sent successfully. I'll get back to you soon.");
       setSent(true);
       setLastSubmit(Date.now());
       reset();
       setTimeout(() => setSent(false), 4000);
     } catch (err) {
       console.error(err);
-      toast.error("Failed to send. Please try again.");
+      const message = err instanceof Error ? err.message : "Failed to send. Please try again.";
+      toast.error(message);
+      setStatusMessage(`Error: ${message}`);
     } finally {
       setSubmitting(false);
     }
@@ -161,11 +184,31 @@ const ContactSection = () => {
             className="rounded-panel p-6 sm:p-8 relative overflow-hidden backdrop-blur-md"
             style={{ background: "rgba(20,20,20,0.4)", border: "1px solid rgba(255,255,255,0.15)" }}
           >
-            {/* Honeypot — visually hidden from real users, bots fill it and get dropped */}
+            {/* Accessible live region for form status */}
+            <div
+              aria-live="polite"
+              aria-atomic="true"
+              className="sr-only"
+              role="status"
+            >
+              {statusMessage}
+            </div>
+
+            {/*
+              Honeypot field — positioned off-screen to avoid bot detection
+              via display:none heuristics. Real users never see or reach it
+              (tabIndex=-1, aria-hidden, autocomplete=off).
+            */}
             <div
               aria-hidden="true"
-              className="hidden"
-              style={{ display: "none" }}
+              style={{
+                position: "absolute",
+                left: "-9999px",
+                top: "-9999px",
+                width: "1px",
+                height: "1px",
+                overflow: "hidden",
+              }}
             >
               <label htmlFor="v2-website">Website</label>
               <input
@@ -179,18 +222,36 @@ const ContactSection = () => {
               />
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
               {/* Name + Email row */}
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
                   <label htmlFor="name" className="block text-xs text-white/70 font-light mb-2 uppercase tracking-wider">Your name</label>
-                  <input id="name" aria-label="Your name" type="text" placeholder="Jane Doe" {...register("name")} className={inputBase} />
-                  {errors.name && <p className="text-xs text-red-400 mt-1">{errors.name.message}</p>}
+                  <input
+                    id="name"
+                    type="text"
+                    placeholder="Jane Doe"
+                    maxLength={100}
+                    aria-invalid={!!errors.name}
+                    aria-describedby={errors.name ? "name-error" : undefined}
+                    {...register("name")}
+                    className={inputBase}
+                  />
+                  {errors.name && <p id="name-error" className="text-xs text-red-400 mt-1" role="alert">{errors.name.message}</p>}
                 </div>
                 <div>
                   <label htmlFor="email" className="block text-xs text-white/70 font-light mb-2 uppercase tracking-wider">Email</label>
-                  <input id="email" aria-label="Email" type="email" placeholder="jane@company.com" {...register("email")} className={inputBase} />
-                  {errors.email && <p className="text-xs text-red-400 mt-1">{errors.email.message}</p>}
+                  <input
+                    id="email"
+                    type="email"
+                    placeholder="jane@company.com"
+                    maxLength={254}
+                    aria-invalid={!!errors.email}
+                    aria-describedby={errors.email ? "email-error" : undefined}
+                    {...register("email")}
+                    className={inputBase}
+                  />
+                  {errors.email && <p id="email-error" className="text-xs text-red-400 mt-1" role="alert">{errors.email.message}</p>}
                 </div>
               </div>
 
@@ -199,13 +260,15 @@ const ContactSection = () => {
                 <label htmlFor="message" className="block text-xs text-white/70 font-light mb-2 uppercase tracking-wider">Project or message</label>
                 <textarea
                   id="message"
-                  aria-label="Project or message"
                   rows={5}
                   placeholder="Tell me what you're building…"
+                  maxLength={5000}
+                  aria-invalid={!!errors.message}
+                  aria-describedby={errors.message ? "message-error" : undefined}
                   {...register("message")}
                   className={`${inputBase} resize-none`}
                 />
-                {errors.message && <p className="text-xs text-red-400 mt-1">{errors.message.message}</p>}
+                {errors.message && <p id="message-error" className="text-xs text-red-400 mt-1" role="alert">{errors.message.message}</p>}
               </div>
 
               {/* Submit row */}
@@ -213,12 +276,15 @@ const ContactSection = () => {
                 <button
                   type="submit"
                   disabled={submitting || sent}
+                  aria-busy={submitting}
                   className="group flex items-center gap-3 bg-black hover:bg-neutral-900 border border-white/20 hover:border-white/40 px-5 sm:px-7 py-3 sm:py-4 text-[11px] sm:text-xs text-white tracking-widest uppercase transition-all duration-300 disabled:opacity-60"
                 >
                   <span>
                     {submitting ? "Sending…" : sent ? "Message sent" : "Get In Touch"}
                   </span>
-                  {sent ? (
+                  {submitting ? (
+                    <Loader2 className="w-4 h-4 text-white animate-spin" />
+                  ) : sent ? (
                     <Check className="w-4 h-4 text-white" />
                   ) : (
                     <ArrowUpRight className="w-4 h-4 text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -237,4 +303,3 @@ const ContactSection = () => {
 };
 
 export default ContactSection;
-
