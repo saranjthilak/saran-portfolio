@@ -8,7 +8,7 @@
     "build": "next build --webpack",
     "build:dev": "next build --webpack",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",

@@ -71,7 +71,7 @@ const ExperienceSection = () => {
                 <span className="text-white/50 font-light text-sm md:text-base tracking-wider">
                   {item.period}
                 </span>
-                {(item as any).type === "education" && (
+                {'type' in item && item.type === "education" && (
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[rgba(167,139,250,0.12)] border border-[rgba(167,139,250,0.25)] text-[10px] font-medium tracking-wider uppercase text-[#a78bfa]">
                     <span className="text-xs">🎓</span>
                     Education
@@ -85,7 +85,7 @@ const ExperienceSection = () => {
                   {item.company}
                 </h3>
                 <p className={`font-light text-sm md:text-base ${
-                  (item as any).type === "education"
+                  'type' in item && item.type === "education"
                     ? "text-[#a78bfa]/70 italic"
                     : "text-white/50"
                 }`}>
