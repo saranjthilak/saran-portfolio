@@ -7,15 +7,12 @@ import { useRef } from "react";
 import BlueprintSectionHeader from "./BlueprintSectionHeader";
 import SectionHeading from "./SectionHeading";
 import FadeIn from "./FadeIn";
-import { fetchGitHubStats, type GitHubStats } from "@/lib/github-stats";
+import { fetchGitHubStats, type GitHubStats, type ContributionDay } from "@/lib/github-stats";
 
-// Fix: next/dynamic with async factory correctly resolves named exports.
-// The old pattern `.then((mod) => mod.GitHubCalendar)` resolved to undefined
-// because next/dynamic couldn't unwrap a chained promise into a component.
-const GitHubCalendar = dynamic(
+const ActivityCalendar = dynamic(
   async () => {
-    const mod = await import("react-github-calendar");
-    return mod.GitHubCalendar;
+    const mod = await import("react-activity-calendar");
+    return mod.ActivityCalendar;
   },
   {
     ssr: false,
@@ -85,55 +82,26 @@ const StatCard = ({ label, value, icon, accentColor, delay, loading }: StatCardP
   );
 };
 
-// ── Animated Counter ────────────────────────────────────────────────────────
-const useAnimatedNumber = (target: number, duration = 1500) => {
-  const [current, setCurrent] = useState(0);
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
-
-  useEffect(() => {
-    if (!isInView || target === 0) return;
-    const startTime = performance.now();
-    const step = (now: number) => {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      // easeOutExpo
-      const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-      setCurrent(Math.round(eased * target));
-      if (progress < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }, [isInView, target, duration]);
-
-  return { current, ref };
-};
-
 // ── Main Component ──────────────────────────────────────────────────────────
-export default function GithubSection() {
+export default function GithubSection({ initialData }: { initialData?: { stats: GitHubStats; contributions: ContributionDay[] } | null }) {
   const [mounted, setMounted] = useState(false);
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
-  // Real GitHub stats — null while loading, false if fetch failed
-  const [stats, setStats] = useState<GitHubStats | null | false>(null);
-
   useEffect(() => {
     setMounted(true);
-    fetchGitHubStats(GITHUB_USERNAME).then((result) => {
-      setStats(result ?? false);
-    });
   }, []);
 
-  const statsLoaded = stats !== null && stats !== false;
+  const statsLoaded = !!initialData;
 
-  // Animated stats — driven by real data once loaded
-  const contributions = useAnimatedNumber(statsLoaded ? stats.totalContributions : 0);
-  const longestStreak = useAnimatedNumber(statsLoaded ? stats.longestStreak : 0);
-  const currentStreak = useAnimatedNumber(statsLoaded ? stats.currentStreak : 0);
-  const activeDays = useAnimatedNumber(statsLoaded ? stats.activeDays : 0);
+  // Render stats directly instead of using useAnimatedNumber to avoid 0 values before JS loads
+  const contributions = statsLoaded ? initialData.stats.totalContributions : 0;
+  const longestStreak = statsLoaded ? initialData.stats.longestStreak : 0;
+  const currentStreak = statsLoaded ? initialData.stats.currentStreak : 0;
+  const activeDays = statsLoaded ? initialData.stats.activeDays : 0;
 
   // If the fetch failed, don't render stat cards at all (no fake data)
-  const showStats = stats !== false;
+  const showStats = statsLoaded;
 
   return (
     <section
@@ -193,7 +161,7 @@ export default function GithubSection() {
             >
               <StatCard
                 label="Contributions"
-                value={contributions.current.toLocaleString()}
+                value={contributions.toLocaleString()}
                 loading={!statsLoaded}
                 icon={
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -203,10 +171,9 @@ export default function GithubSection() {
                 accentColor="hsl(158, 100%, 44%)"
                 delay={0.1}
               />
-              <div ref={contributions.ref} />
               <StatCard
                 label="Longest Streak"
-                value={`${longestStreak.current}d`}
+                value={`${longestStreak}d`}
                 loading={!statsLoaded}
                 icon={
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -216,10 +183,9 @@ export default function GithubSection() {
                 accentColor="#f59e0b"
                 delay={0.2}
               />
-              <div ref={longestStreak.ref} />
               <StatCard
                 label="Current Streak"
-                value={`${currentStreak.current}d`}
+                value={`${currentStreak}d`}
                 loading={!statsLoaded}
                 icon={
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -229,10 +195,9 @@ export default function GithubSection() {
                 accentColor="#38bdf8"
                 delay={0.3}
               />
-              <div ref={currentStreak.ref} />
               <StatCard
                 label="Active Days"
-                value={activeDays.current}
+                value={activeDays}
                 loading={!statsLoaded}
                 icon={
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -245,7 +210,6 @@ export default function GithubSection() {
                 accentColor="#a78bfa"
                 delay={0.4}
               />
-              <div ref={activeDays.ref} />
             </motion.div>
           )}
         </AnimatePresence>
@@ -268,9 +232,21 @@ export default function GithubSection() {
 
           {/* Calendar */}
           <div className="min-w-[800px] flex justify-center overflow-x-auto">
-            {mounted && (
-              <GitHubCalendar
-                username={GITHUB_USERNAME}
+            {!showStats ? (
+              <div className="flex flex-col items-center justify-center py-12 text-white/50 text-sm">
+                <p>GitHub data is currently unavailable.</p>
+                <a
+                  href={`https://github.com/${GITHUB_USERNAME}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 text-accent hover:underline"
+                >
+                  View Profile on GitHub →
+                </a>
+              </div>
+            ) : mounted && initialData ? (
+              <ActivityCalendar
+                data={initialData.contributions}
                 colorScheme="dark"
                 theme={{
                   dark: ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"],
@@ -278,8 +254,11 @@ export default function GithubSection() {
                 blockSize={14}
                 blockMargin={4}
                 fontSize={14}
+                labels={{
+                  totalCount: `{{count}} contributions in the last year`,
+                }}
               />
-            )}
+            ) : null}
           </div>
 
           {/* ── Footer: Profile Link ── */}
