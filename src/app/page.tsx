@@ -1,5 +1,3 @@
-"use client";
-
 import HeroSection from "@/components/v2/HeroSection";
 import MarqueeSection from "@/components/v2/MarqueeSection";
 import AboutSection from "@/components/v2/AboutSection";
@@ -12,8 +10,11 @@ import CertificationsSection from "@/components/v2/CertificationsSection";
 import GithubSection from "@/components/v2/GithubSection";
 import ContactSection from "@/components/v2/ContactSection";
 import V2Footer from "@/components/v2/V2Footer";
+import { fetchGitHubStats } from "@/lib/github-stats";
 
-const Index = () => {
+const Index = async () => {
+  const githubData = await fetchGitHubStats("saranjthilak");
+
   return (
     <div className="v2-page" style={{ overflowX: "clip" }}>
       <HeroSection />
@@ -23,7 +24,7 @@ const Index = () => {
 
       <ServicesSection />
       <ProjectsSection />
-      <GithubSection />
+      <GithubSection initialData={githubData} />
       <CertificationsSection />
       <ResearchSection />
       <ContactSection />
