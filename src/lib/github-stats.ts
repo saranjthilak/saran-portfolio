@@ -12,7 +12,7 @@ export interface GitHubStats {
   activeDays: number;
 }
 
-interface ContributionDay {
+export interface ContributionDay {
   date: string;   // "YYYY-MM-DD"
   count: number;
   level: number;  // 0–4
@@ -93,17 +93,21 @@ function computeStats(contributions: ContributionDay[]): GitHubStats {
  */
 export async function fetchGitHubStats(
   username: string
-): Promise<GitHubStats | null> {
+): Promise<{ stats: GitHubStats; contributions: ContributionDay[] } | null> {
   try {
     const res = await fetch(
-      `https://github-contributions-api.jogruber.de/v4/${username}?y=last`
+      `https://github-contributions-api.jogruber.de/v4/${username}?y=last`,
+      { next: { revalidate: 3600 } }
     );
     if (!res.ok) return null;
 
     const data: ContributionsApiResponse = await res.json();
     if (!data.contributions || data.contributions.length === 0) return null;
 
-    return computeStats(data.contributions);
+    return {
+      stats: computeStats(data.contributions),
+      contributions: data.contributions
+    };
   } catch {
     return null;
   }
