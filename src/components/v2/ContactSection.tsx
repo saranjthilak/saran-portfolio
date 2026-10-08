@@ -194,34 +194,6 @@ const ContactSection = () => {
               {statusMessage}
             </div>
 
-            {/*
-              Honeypot field — positioned off-screen to avoid bot detection
-              via display:none heuristics. Real users never see or reach it
-              (tabIndex=-1, aria-hidden, autocomplete=off).
-            */}
-            <div
-              aria-hidden="true"
-              style={{
-                position: "absolute",
-                left: "-9999px",
-                top: "-9999px",
-                width: "1px",
-                height: "1px",
-                overflow: "hidden",
-              }}
-            >
-              <label htmlFor="v2-website">Website</label>
-              <input
-                id="v2-website"
-                type="text"
-                name="website"
-                tabIndex={-1}
-                autoComplete="off"
-                value={honeypot}
-                onChange={(e) => setHoneypot(e.target.value)}
-              />
-            </div>
-
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
               {/* Name + Email row */}
               <div className="grid gap-5 sm:grid-cols-2">
@@ -269,6 +241,34 @@ const ContactSection = () => {
                   className={`${inputBase} resize-none`}
                 />
                 {errors.message && <p id="message-error" className="text-xs text-red-400 mt-1" role="alert">{errors.message.message}</p>}
+              </div>
+
+              {/*
+                Honeypot field — positioned off-screen to avoid bot detection
+                via display:none heuristics. Real users never see or reach it
+                (tabIndex=-1, aria-hidden, autocomplete=off).
+              */}
+              <div
+                aria-hidden="true"
+                style={{
+                  position: "absolute",
+                  left: "-9999px",
+                  top: "-9999px",
+                  width: "1px",
+                  height: "1px",
+                  overflow: "hidden",
+                }}
+              >
+                <label htmlFor="v2-website">Website</label>
+                <input
+                  id="v2-website"
+                  type="text"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                />
               </div>
 
               {/* Submit row */}

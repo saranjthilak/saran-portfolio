@@ -8,6 +8,7 @@ import BlueprintSectionHeader from "./BlueprintSectionHeader";
 import SectionHeading from "./SectionHeading";
 
 const FEATURED = projects.filter((p) => p.featured);
+const SECONDARY = projects.filter((p) => !p.featured);
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 // ── Bento Box Component ───────────────────────────────────────────────────────
@@ -216,6 +217,58 @@ export default function ProjectsSection() {
               <ProjectBento key={project.title} project={project} index={index} />
             ))}
           </div>
+
+          {/* Secondary Projects Grid */}
+          {SECONDARY.length > 0 && (
+            <div className="mt-20 md:mt-32 pt-16 border-t border-white/10">
+              <h3 className="text-2xl font-black uppercase tracking-widest text-white mb-10 text-center md:text-left">
+                More Projects
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {SECONDARY.map((project, idx) => (
+                  <motion.div
+                    key={project.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: idx * 0.1 }}
+                    className="p-6 md:p-8 rounded-card border border-white/10 bg-v2-raised hover:bg-white/[0.03] hover:border-white/20 transition-all flex flex-col justify-between group"
+                  >
+                    <div>
+                      <div className="flex justify-between items-start mb-4">
+                        <span className="font-kanit text-[10px] uppercase tracking-widest text-white/40">
+                          {project.source}
+                        </span>
+                        <a
+                          href={project.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-white/40 hover:text-white transition-colors p-1"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.02c3.14-.35 6.5-1.4 6.5-7a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 5.6 3.3 6.6 6.5 7a4.8 4.8 0 0 0-1 3.02v4"/><path d="M9 18c-4.5 1.6-5-2.5-5-2.5"/></svg>
+                        </a>
+                      </div>
+                      <h4 className="text-xl font-bold text-white mb-3 group-hover:text-accent transition-colors">{project.title}</h4>
+                      <p className="text-sm text-white/60 leading-relaxed mb-6">
+                        {project.description}
+                      </p>
+                    </div>
+                    
+                    <div className="flex flex-wrap gap-2 mt-auto">
+                      {project.skills?.map((skill) => (
+                        <span
+                          key={skill}
+                          className="px-3 py-1 rounded-full border border-white/10 text-white/50 text-[10px] font-mono bg-white/[0.02]"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>

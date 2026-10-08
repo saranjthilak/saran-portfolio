@@ -40,26 +40,6 @@ export const experience = [
 
 export const projects = [
   {
-    title: "AI Product Matching System",
-    source: "FAISS + Triton Inference + CLIP",
-    description: "Developed an image-based product search engine using FAISS for vector similarity and a quantized CLIP model served via NVIDIA Triton Inference Server. Integrated MongoDB and Docker for fast, scalable product matching.",
-    skills: ["FAISS", "CLIP", "Triton", "MongoDB", "Docker"],
-    image: "/images/projects/project-product-matching.webp",
-    url: "https://github.com/saranjthilak/ai_poduct_matching",
-    liveUrl: undefined as string | undefined,
-    featured: true,
-    problem: "Text-based search fails for visual product catalogues. Needed sub-second image similarity search at scale without a heavyweight vector DB.",
-    approach: "Quantized CLIP embeddings via NVIDIA Triton for low-latency inference; FAISS for ANN search to cut overhead vs. a full vector DB; MongoDB stores product metadata.",
-    result: "25% vector DB efficiency boost and 30% match-accuracy gain over keyword search baselines.",
-    pipeline: [
-      { label: "Image", icon: "image" },
-      { label: "CLIP", icon: "cpu" },
-      { label: "FAISS", icon: "search" },
-      { label: "Triton", icon: "server" },
-      { label: "MongoDB", icon: "database" },
-    ],
-  },
-  {
     title: "Multimodal RAG System",
     source: "Production RAG + Conversational AI",
     description: "A production-ready Multimodal Retrieval-Augmented Generation system that supports conversational querying over text and image data. Handles chunking, embedding, reranking, and grounded LLM responses with citation traces — designed for real deployment, not demos.",
@@ -77,6 +57,26 @@ export const projects = [
       { label: "Embed", icon: "cpu" },
       { label: "Rerank", icon: "search" },
       { label: "LLM", icon: "bot" },
+    ],
+  },
+  {
+    title: "AI Product Matching System",
+    source: "FAISS + Triton Inference + CLIP",
+    description: "Developed an image-based product search engine using FAISS for vector similarity and a quantized CLIP model served via NVIDIA Triton Inference Server. Integrated MongoDB and Docker for fast, scalable product matching.",
+    skills: ["FAISS", "CLIP", "Triton", "MongoDB", "Docker"],
+    image: "/images/projects/project-product-matching.webp",
+    url: "https://github.com/saranjthilak/ai_poduct_matching",
+    liveUrl: undefined as string | undefined,
+    featured: true,
+    problem: "Text-based search fails for visual product catalogues. Needed sub-second image similarity search at scale without a heavyweight vector DB.",
+    approach: "Quantized CLIP embeddings via NVIDIA Triton for low-latency inference; FAISS for ANN search to cut overhead vs. a full vector DB; MongoDB stores product metadata.",
+    result: "25% vector DB efficiency boost and 30% match-accuracy gain over keyword search baselines.",
+    pipeline: [
+      { label: "Image", icon: "image" },
+      { label: "CLIP", icon: "cpu" },
+      { label: "FAISS", icon: "search" },
+      { label: "Triton", icon: "server" },
+      { label: "MongoDB", icon: "database" },
     ],
   },
   {
@@ -119,8 +119,24 @@ export const projects = [
       { label: "Looker", icon: "chart" },
     ],
   },
-
-
+  {
+    title: "German Learning App",
+    source: "TypeScript | AI Tutor | A1–C1",
+    description: "AI-powered German learning platform with interactive lessons, vocabulary practice, pronunciation support, quizzes, and personalized learning from A1 to C1.",
+    skills: ["TypeScript", "AI", "NLP", "React"],
+    image: "/images/projects/project-german-app.webp",
+    url: "https://github.com/saranjthilak/German-Learning-APP",
+    featured: false,
+  },
+  {
+    title: "Vanilla Steel Assessment",
+    source: "Full-stack | APIs | Docker",
+    description: "A full-stack assessment project demonstrating modern software engineering practices, including backend development, APIs, testing, containerization, and deployment.",
+    skills: ["Python", "FastAPI", "Docker", "Testing", "CI/CD"],
+    image: "/images/projects/project-vanilla-steel.webp",
+    url: "https://github.com/saranjthilak/vanilla-steel-assessment",
+    featured: false,
+  }
 ];
 
 export const publications = [
