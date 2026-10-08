@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion, useSpring, useTransform } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
 import {
   Activity,
@@ -97,7 +97,11 @@ function CornerTicks() {
 }
 
 function PipelineConnector({ active, tone, vertical = false }: { active: boolean; tone: DomainTone; vertical?: boolean }) {
-  return <div aria-hidden="true" className={`${vertical ? "h-8 w-px" : "h-px min-w-4 flex-1"} relative overflow-hidden bg-border/80 ${toneClasses[tone]}`}><span className={`absolute ${vertical ? "inset-x-0 top-0 h-10 expertise-signal-vertical" : "inset-y-0 left-0 w-16 expertise-signal"} ${active ? "opacity-100" : "opacity-0"}`} /></div>;
+  return <div aria-hidden="true" className={`${vertical ? "h-8 w-3" : "h-3 min-w-5 flex-1"} relative overflow-hidden ${toneClasses[tone]}`}>
+    <span className={`absolute rounded-full bg-border/80 ${vertical ? "left-1/2 top-0 h-full w-px -translate-x-1/2" : "left-0 top-1/2 h-px w-full -translate-y-1/2"}`} />
+    <span className={`absolute ${vertical ? "inset-x-0 top-0 h-10 expertise-signal-vertical" : "inset-y-0 left-0 w-16 expertise-signal"} ${active ? "opacity-100" : "opacity-0"}`} />
+    {[0, 1].map((i) => <span key={i} className={`expertise-packet ${vertical ? "left-[calc(50%-2px)] expertise-packet-vertical" : "top-[calc(50%-2px)]"} ${active ? "expertise-packet-hot" : ""}`} style={{ animationDelay: `${i * 1.8}s` }} />)}
+  </div>;
 }
 
 function SystemNode({ item, active, onSelect, index }: { item: ExpertiseItem; active: boolean; onSelect: () => void; index: number }) {
@@ -133,6 +137,24 @@ const ServicesSection = () => {
   const activeTone = activeItem.tone;
   const stageLabel = useMemo(() => isSimulating ? "SIMULATION RUNNING" : "SYSTEM READY", [isSimulating]);
 
+  // Cursor-parallax depth: the canvas tilts subtly toward the cursor while the
+  // node stage counter-shifts, creating a layered control-room feel.
+  const rotateX = useSpring(0, { stiffness: 55, damping: 16, mass: 0.6 });
+  const rotateY = useSpring(0, { stiffness: 55, damping: 16, mass: 0.6 });
+  const stageShiftX = useTransform(rotateY, (value) => value * -1.6);
+  const stageShiftY = useTransform(rotateX, (value) => value * 1.4);
+  const tiltEnabled = () => typeof window !== "undefined" && window.matchMedia("(hover: hover) and (prefers-reduced-motion: no-preference)").matches;
+
+  const handleTilt = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!tiltEnabled()) return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    const nx = (event.clientX - rect.left) / rect.width - 0.5;
+    const ny = (event.clientY - rect.top) / rect.height - 0.5;
+    rotateY.set(nx * 5);
+    rotateX.set(-ny * 4);
+  };
+  const resetTilt = () => { rotateX.set(0); rotateY.set(0); };
+
   useEffect(() => {
     if (!isSimulating) return;
     const timer = window.setInterval(() => setActiveIndex((current) => (current + 1) % EXPERTISE.length), 1500);
@@ -144,11 +166,11 @@ const ServicesSection = () => {
     <div className="relative mx-auto max-w-7xl">
       <BlueprintSectionHeader align="center"><div className="mb-10 text-center sm:mb-14"><motion.div initial={{ opacity: 0, y: -8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="eyebrow justify-center">SYSTEM CLUSTER <span className="text-muted-foreground">/ 06 PRODUCTION DOMAINS</span></motion.div><motion.h2 id="expertise-heading" initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.08, ease: EASE }} className="mt-4 text-5xl font-black leading-none tracking-tighter text-foreground sm:text-7xl">My <span className="accent-serif text-accent">Expertise.</span></motion.h2><FadeIn y={16} delay={0.2} duration={0.6} className="mx-auto mt-5 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">Battle-tested data engineering pipelines, low-latency GenAI retrieval systems, and high-availability cloud architecture engineered to hold up under real-world production scale.</FadeIn></div></BlueprintSectionHeader>
 
-      <div className="expertise-canvas relative overflow-hidden border border-border/80 p-3 shadow-[0_20px_80px_hsl(var(--background)/0.45)] sm:p-5"><CornerTicks /><div className="mb-4 flex flex-col gap-3 border-b border-border/70 pb-4 sm:flex-row sm:items-center sm:justify-between"><div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.16em] text-muted-foreground"><Activity className="h-3.5 w-3.5 text-accent" />END-TO-END PRODUCTION TOPOLOGY</div><button type="button" onClick={() => setIsSimulating((value) => !value)} className="group inline-flex items-center justify-center gap-2 border border-accent/50 bg-accent/10 px-3 py-2 font-mono text-[10px] font-semibold tracking-widest text-accent transition-all hover:bg-accent/20 hover:shadow-[0_0_24px_hsl(var(--accent)/0.2)]" aria-pressed={isSimulating}>{isSimulating ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />} {isSimulating ? "PAUSE RUN" : "SIMULATE PIPELINE FLOW"}</button></div>
-        <div className="hidden items-stretch lg:flex">{EXPERTISE.map((item, index) => <div key={item.number} className="contents"><SystemNode item={item} active={activeIndex === index} onSelect={() => { setActiveIndex(index); setIsSimulating(false); }} index={index} />{index < EXPERTISE.length - 1 && <PipelineConnector active={isSimulating || activeIndex === index} tone={item.tone} />}</div>)}</div>
+      <motion.div className="expertise-canvas relative overflow-hidden border border-border/80 p-3 shadow-[0_20px_80px_hsl(var(--background)/0.45)] [transform-style:preserve-3d] sm:p-5" style={{ rotateX, rotateY, transformPerspective: 1400 }} onMouseMove={handleTilt} onMouseLeave={resetTilt}><CornerTicks /><div className="mb-4 flex flex-col gap-3 border-b border-border/70 pb-4 sm:flex-row sm:items-center sm:justify-between"><div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.16em] text-muted-foreground"><Activity className="h-3.5 w-3.5 text-accent" />END-TO-END PRODUCTION TOPOLOGY</div><button type="button" onClick={() => setIsSimulating((value) => !value)} className="group inline-flex items-center justify-center gap-2 border border-accent/50 bg-accent/10 px-3 py-2 font-mono text-[10px] font-semibold tracking-widest text-accent transition-all hover:bg-accent/20 hover:shadow-[0_0_24px_hsl(var(--accent)/0.2)]" aria-pressed={isSimulating}>{isSimulating ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />} {isSimulating ? "PAUSE RUN" : "SIMULATE PIPELINE FLOW"}</button></div>
+        <motion.div className="hidden items-stretch lg:flex [transform-style:preserve-3d]" style={{ x: stageShiftX, y: stageShiftY }}>{EXPERTISE.map((item, index) => <div key={item.number} className="contents"><SystemNode item={item} active={activeIndex === index} onSelect={() => { setActiveIndex(index); setIsSimulating(false); }} index={index} />{index < EXPERTISE.length - 1 && <PipelineConnector active={isSimulating || activeIndex === index} tone={item.tone} />}</div>)}</motion.div>
         <div className="flex flex-col lg:hidden">{EXPERTISE.map((item, index) => <div key={item.number} className="flex flex-col items-stretch"><SystemNode item={item} active={activeIndex === index} onSelect={() => { setActiveIndex(index); setIsSimulating(false); }} index={index} />{index < EXPERTISE.length - 1 && <div className="flex justify-center"><PipelineConnector vertical active={isSimulating || activeIndex === index} tone={item.tone} /></div>}</div>)}</div>
         <div className="mt-5 flex items-center justify-between border-t border-border/70 pt-3 font-mono text-[9px] tracking-widest text-muted-foreground"><span className="flex items-center gap-2"><span className={`h-1.5 w-1.5 rounded-full ${isSimulating ? "animate-ping bg-accent" : "bg-accent"}`} />{stageLabel}</span><span>LATENCY BUDGET / <span className="text-foreground">&lt; 50 MS</span></span></div>
-      </div>
+      </motion.div>
 
       <div className="mt-5"><Inspector item={activeItem} isSimulating={isSimulating} /></div>
       <FadeIn y={16} delay={0.2} duration={0.6} className="mt-10 flex justify-center"><a href="#projects" className="group inline-flex items-center gap-3 border border-accent/40 bg-accent/5 px-6 py-3 font-mono text-xs font-semibold tracking-widest text-accent transition-all hover:border-accent hover:bg-accent/10"><span>EXPLORE THE BUILDS</span><ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></a></FadeIn>
