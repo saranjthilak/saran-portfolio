@@ -137,6 +137,24 @@ const ServicesSection = () => {
   const activeTone = activeItem.tone;
   const stageLabel = useMemo(() => isSimulating ? "SIMULATION RUNNING" : "SYSTEM READY", [isSimulating]);
 
+  // Cursor-parallax depth: the canvas tilts subtly toward the cursor while the
+  // node stage counter-shifts, creating a layered control-room feel.
+  const rotateX = useSpring(0, { stiffness: 55, damping: 16, mass: 0.6 });
+  const rotateY = useSpring(0, { stiffness: 55, damping: 16, mass: 0.6 });
+  const stageShiftX = useTransform(rotateY, (value) => value * -1.6);
+  const stageShiftY = useTransform(rotateX, (value) => value * 1.4);
+  const tiltEnabled = () => typeof window !== "undefined" && window.matchMedia("(hover: hover) and (prefers-reduced-motion: no-preference)").matches;
+
+  const handleTilt = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!tiltEnabled()) return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    const nx = (event.clientX - rect.left) / rect.width - 0.5;
+    const ny = (event.clientY - rect.top) / rect.height - 0.5;
+    rotateY.set(nx * 5);
+    rotateX.set(-ny * 4);
+  };
+  const resetTilt = () => { rotateX.set(0); rotateY.set(0); };
+
   useEffect(() => {
     if (!isSimulating) return;
     const timer = window.setInterval(() => setActiveIndex((current) => (current + 1) % EXPERTISE.length), 1500);
