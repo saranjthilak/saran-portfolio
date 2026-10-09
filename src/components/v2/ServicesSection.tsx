@@ -1,17 +1,16 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion, useSpring, useTransform } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
 import {
   Activity,
   ArrowRight,
+  ArrowDown,
+  ChevronDown,
   BrainCircuit,
-  CheckCircle2,
   Cloud,
-  Code2,
   Database,
-  Gauge,
   GitBranch,
   Monitor,
   Pause,
@@ -19,7 +18,6 @@ import {
   Radio,
   ShieldCheck,
   Terminal,
-  Zap,
 } from "lucide-react";
 import BlueprintSectionHeader from "./BlueprintSectionHeader";
 import FadeIn from "./FadeIn";
@@ -104,12 +102,13 @@ function PipelineConnector({ active, tone, vertical = false }: { active: boolean
   </div>;
 }
 
-function SystemNode({ item, active, onSelect, index }: { item: ExpertiseItem; active: boolean; onSelect: () => void; index: number }) {
+function SystemNode({ item, active, onSelect, index, stacked = false }: { item: ExpertiseItem; active: boolean; onSelect: () => void; index: number; stacked?: boolean }) {
   const Icon = item.icon;
-  return <motion.button type="button" onClick={onSelect} aria-label={`${item.number} ${item.name}`} aria-pressed={active} className={`group ${toneClasses[item.tone]} relative flex min-w-0 flex-1 items-center gap-3 border bg-card/60 p-3 text-left backdrop-blur-md transition-colors duration-300 ${active ? "expertise-domain-border expertise-domain-surface expertise-domain-glow" : "border-border/70 hover:border-accent/50 hover:bg-card"}`} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-40px" }} transition={{ duration: 0.5, delay: index * 0.07, ease: EASE }} whileHover={{ y: -3 }}>
+  return <motion.button type="button" onClick={onSelect} aria-label={`${item.number} ${item.name}`} aria-pressed={active} aria-expanded={stacked ? active : undefined} aria-controls={stacked ? `mobile-inspector-${item.number}` : "desktop-expertise-inspector"} className={`group ${toneClasses[item.tone]} relative flex min-w-0 flex-1 items-center gap-3 border bg-card/60 p-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background ${stacked ? "min-h-[88px] w-full px-4 py-4" : ""} backdrop-blur-md transition-colors duration-300 ${active ? "expertise-domain-border expertise-domain-surface expertise-domain-glow" : "border-border/70 hover:border-accent/50 hover:bg-card"}`} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-40px" }} transition={{ duration: 0.5, delay: index * 0.07, ease: EASE }} whileHover={{ y: -3 }}>
     <span className={`grid h-9 w-9 shrink-0 place-items-center border ${active ? "expertise-domain-border expertise-domain-surface expertise-domain-text" : "border-border text-muted-foreground group-hover:text-foreground"}`}><Icon className="h-4 w-4" strokeWidth={1.6} /></span>
-    <span className="min-w-0"><span className={`block whitespace-nowrap font-mono text-[9px] tracking-[0.12em] ${active ? "expertise-domain-text" : "text-muted-foreground"}`}>{item.number} / {item.categoryLabel}</span><span className="mt-1 block truncate text-[11px] font-semibold leading-tight text-foreground" title={item.name}>{item.name}</span></span>
-    {active && <motion.span layoutId="active-node" className="absolute bottom-0 left-3 right-3 h-px bg-[var(--domain-color)]" />}
+    <span className="min-w-0 flex-1"><span className={`block font-mono ${stacked ? "text-[10px]" : "whitespace-nowrap text-[9px]"} tracking-[0.12em] ${active ? "expertise-domain-text" : "text-muted-foreground"}`}>{item.number} / {item.categoryLabel}</span><span className={`mt-1 block font-semibold text-foreground ${stacked ? "text-sm leading-5" : "truncate text-[11px] leading-tight"}`} title={item.name}>{item.name}</span></span>
+    {stacked && <ChevronDown aria-hidden="true" className={`h-4 w-4 shrink-0 transition-transform ${active ? "rotate-180 expertise-domain-text" : "text-muted-foreground"}`} />}
+    {active && <motion.span layoutId={stacked ? "active-mobile-node" : "active-node"} className="absolute bottom-0 left-3 right-3 h-px bg-[var(--domain-color)]" />}
   </motion.button>;
 }
 
@@ -120,12 +119,12 @@ function Inspector({ item, isSimulating }: { item: ExpertiseItem; isSimulating: 
     <CornerTicks />
     <div className="absolute inset-x-0 top-0 h-px bg-[var(--domain-color)] opacity-70" />
     <div className="flex flex-col gap-4 border-b border-border/70 p-5 sm:flex-row sm:items-start sm:justify-between sm:p-7">
-      <div className="flex gap-3"><span className="grid h-11 w-11 shrink-0 place-items-center border expertise-domain-border expertise-domain-surface expertise-domain-text"><Icon className="h-5 w-5" /></span><div><p className="font-mono text-[10px] tracking-[0.18em] expertise-domain-text">ACTIVE SYSTEM INSPECTOR / {item.number}</p><h3 className="mt-1 text-xl font-bold tracking-tight text-foreground sm:text-2xl">{item.name}</h3><p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{item.description}</p></div></div>
+      <div className="flex min-w-0 gap-3"><span className="grid h-11 w-11 shrink-0 place-items-center border expertise-domain-border expertise-domain-surface expertise-domain-text"><Icon className="h-5 w-5" /></span><div className="min-w-0"><p className="font-mono text-[10px] tracking-[0.18em] expertise-domain-text">ACTIVE SYSTEM INSPECTOR / {item.number}</p><h3 className="mt-1 text-xl font-bold tracking-tight text-foreground sm:text-2xl">{item.name}</h3><p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{item.description}</p></div></div>
       <div className="flex shrink-0 items-center gap-2 font-mono text-[10px] tracking-widest text-muted-foreground"><span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />{isSimulating ? "FLOWING" : item.metrics.value}</div>
     </div>
     <div className="grid gap-0 lg:grid-cols-[1.35fr_0.65fr]">
-      <div className="border-b border-border/70 p-5 sm:p-7 lg:border-b-0 lg:border-r"><div className="mb-4 flex items-center justify-between"><span className="font-mono text-[10px] tracking-[0.18em] text-muted-foreground">ARCHITECTURE FLOW</span><span className="font-mono text-[10px] expertise-domain-text">{item.spec}</span></div><div className="flex flex-wrap items-center gap-2 sm:flex-nowrap">{item.pipeline.map((step, index) => <div key={step} className="contents"><motion.div className={`border px-2.5 py-2 font-mono text-[10px] font-semibold text-foreground transition-colors ${isSimulating && index <= 3 ? "expertise-domain-border expertise-domain-surface" : "border-border/70 bg-background/40"}`} animate={isSimulating ? { y: [0, -3, 0] } : { y: 0 }} transition={{ duration: 1.3, repeat: isSimulating ? Infinity : 0, delay: index * 0.12 }}>{step}</motion.div>{index < item.pipeline.length - 1 && <ArrowRight className="h-3 w-3 shrink-0 text-muted-foreground" />}</div>)}</div><div className="mt-6 grid grid-cols-3 gap-2">{item.telemetry.map((metric) => <div key={metric.label} className="border border-border/70 bg-background/40 p-3"><span className="block truncate font-mono text-[9px] tracking-widest text-muted-foreground">{metric.label}</span><span className="mt-2 block font-mono text-xs font-bold expertise-domain-text">{metric.value}</span></div>)}</div></div>
-      <div className="min-w-0 p-5 sm:p-7"><div className="mb-4 flex items-center justify-between"><div className="flex gap-1 border-b border-border/70"><button type="button" onClick={() => setTab("system")} className={`border-b-2 px-2 pb-2 font-mono text-[10px] tracking-widest transition-colors ${tab === "system" ? "border-accent text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"}`}>SYSTEM</button><button type="button" onClick={() => setTab("terminal")} className={`border-b-2 px-2 pb-2 font-mono text-[10px] tracking-widest transition-colors ${tab === "terminal" ? "border-accent text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"}`}>TERMINAL</button></div><Terminal className="h-4 w-4 text-muted-foreground" /></div><AnimatePresence mode="wait"><motion.div key={tab} initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -8 }} transition={{ duration: 0.2 }} className="min-h-[130px] font-mono text-[11px] leading-7">{tab === "system" ? <div className="space-y-3"><div className="flex items-center gap-2 expertise-domain-text"><ShieldCheck className="h-4 w-4" />PRODUCTION GRADE</div><p className="text-muted-foreground">{item.metrics.label}: <span className="text-foreground">{item.metrics.value}</span></p><p className="text-muted-foreground">deployment: <span className="expertise-domain-text">zero-downtime</span></p><p className="text-muted-foreground">guardrails: <span className="expertise-domain-text">enabled</span></p></div> : <div className="rounded border border-border/70 bg-background/70 p-3 text-muted-foreground">{item.terminal.map((line) => <div key={line}><span className="mr-2 expertise-domain-text">›</span>{line.replace(/^&gt; /, "")}</div>)}</div>}</motion.div></AnimatePresence></div>
+      <div className="border-b border-border/70 p-5 sm:p-7 lg:border-b-0 lg:border-r"><div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"><span className="font-mono text-[10px] tracking-[0.18em] text-muted-foreground">ARCHITECTURE FLOW</span><span className="font-mono text-[10px] expertise-domain-text">{item.spec}</span></div><div className="flex flex-col items-stretch gap-2 sm:flex-row sm:flex-wrap sm:items-center">{item.pipeline.map((step, index) => <div key={step} className="contents"><motion.div className={`border px-2.5 py-2 font-mono text-[10px] font-semibold text-foreground transition-colors ${isSimulating && index <= 3 ? "expertise-domain-border expertise-domain-surface" : "border-border/70 bg-background/40"}`} animate={isSimulating ? { y: [0, -3, 0] } : { y: 0 }} transition={{ duration: 1.3, repeat: isSimulating ? Infinity : 0, delay: index * 0.12 }}>{step}</motion.div>{index < item.pipeline.length - 1 && <ArrowRight className="mx-auto h-3 w-3 shrink-0 rotate-90 text-muted-foreground sm:mx-0 sm:rotate-0" />}</div>)}</div><div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-3">{item.telemetry.map((metric) => <div key={metric.label} className="flex items-center justify-between gap-2 border border-border/70 bg-background/40 p-3 sm:block"><span className="block font-mono text-[9px] tracking-widest text-muted-foreground">{metric.label}</span><span className="block font-mono text-xs sm:mt-2 font-bold expertise-domain-text">{metric.value}</span></div>)}</div></div>
+      <div className="min-w-0 p-5 sm:p-7"><div className="mb-4 flex items-center justify-between"><div className="flex gap-1 border-b border-border/70"><button type="button" onClick={() => setTab("system")} className={`min-h-11 border-b-2 px-3 pb-2 font-mono text-[10px] tracking-widest transition-colors ${tab === "system" ? "border-accent text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"}`}>SYSTEM</button><button type="button" onClick={() => setTab("terminal")} className={`min-h-11 border-b-2 px-3 pb-2 font-mono text-[10px] tracking-widest transition-colors ${tab === "terminal" ? "border-accent text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"}`}>TERMINAL</button></div><Terminal className="h-4 w-4 text-muted-foreground" /></div><AnimatePresence mode="wait"><motion.div key={tab} initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -8 }} transition={{ duration: 0.2 }} className="min-h-[130px] font-mono text-[11px] leading-7">{tab === "system" ? <div className="space-y-3"><div className="flex items-center gap-2 expertise-domain-text"><ShieldCheck className="h-4 w-4" />PRODUCTION GRADE</div><p className="text-muted-foreground">{item.metrics.label}: <span className="text-foreground">{item.metrics.value}</span></p><p className="text-muted-foreground">deployment: <span className="expertise-domain-text">zero-downtime</span></p><p className="text-muted-foreground">guardrails: <span className="expertise-domain-text">enabled</span></p></div> : <div className="rounded border border-border/70 bg-background/70 p-3 text-muted-foreground break-words [overflow-wrap:anywhere]">{item.terminal.map((line) => <div key={line}><span className="mr-2 expertise-domain-text">›</span>{line.replace(/^&gt; /, "")}</div>)}</div>}</motion.div></AnimatePresence></div>
     </div>
   </motion.div>;
 }
@@ -134,7 +133,6 @@ const ServicesSection = () => {
   const [activeIndex, setActiveIndex] = useState(1);
   const [isSimulating, setIsSimulating] = useState(false);
   const activeItem = EXPERTISE[activeIndex];
-  const activeTone = activeItem.tone;
   const stageLabel = useMemo(() => isSimulating ? "SIMULATION RUNNING" : "SYSTEM READY", [isSimulating]);
 
   // Cursor-parallax depth: the canvas tilts subtly toward the cursor while the
@@ -143,7 +141,7 @@ const ServicesSection = () => {
   const rotateY = useSpring(0, { stiffness: 55, damping: 16, mass: 0.6 });
   const stageShiftX = useTransform(rotateY, (value) => value * -1.6);
   const stageShiftY = useTransform(rotateX, (value) => value * 1.4);
-  const tiltEnabled = () => typeof window !== "undefined" && window.matchMedia("(hover: hover) and (prefers-reduced-motion: no-preference)").matches;
+  const tiltEnabled = () => typeof window !== "undefined" && window.matchMedia("(min-width: 1024px) and (hover: hover) and (prefers-reduced-motion: no-preference)").matches;
 
   const handleTilt = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!tiltEnabled()) return;
@@ -166,13 +164,27 @@ const ServicesSection = () => {
     <div className="relative mx-auto max-w-7xl">
       <BlueprintSectionHeader align="center"><div className="mb-10 text-center sm:mb-14"><motion.div initial={{ opacity: 0, y: -8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="eyebrow justify-center">SYSTEM CLUSTER <span className="text-muted-foreground">/ 06 PRODUCTION DOMAINS</span></motion.div><motion.h2 id="expertise-heading" initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.08, ease: EASE }} className="mt-4 text-5xl font-black leading-none tracking-tighter text-foreground sm:text-7xl">My <span className="accent-serif text-accent">Expertise.</span></motion.h2><FadeIn y={16} delay={0.2} duration={0.6} className="mx-auto mt-5 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">Battle-tested data engineering pipelines, low-latency GenAI retrieval systems, and high-availability cloud architecture engineered to hold up under real-world production scale.</FadeIn></div></BlueprintSectionHeader>
 
-      <motion.div className="expertise-canvas relative overflow-hidden border border-border/80 p-3 shadow-[0_20px_80px_hsl(var(--background)/0.45)] [transform-style:preserve-3d] sm:p-5" style={{ rotateX, rotateY, transformPerspective: 1400 }} onMouseMove={handleTilt} onMouseLeave={resetTilt}><CornerTicks /><div className="mb-4 flex flex-col gap-3 border-b border-border/70 pb-4 sm:flex-row sm:items-center sm:justify-between"><div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.16em] text-muted-foreground"><Activity className="h-3.5 w-3.5 text-accent" />END-TO-END PRODUCTION TOPOLOGY</div><button type="button" onClick={() => setIsSimulating((value) => !value)} className="group inline-flex items-center justify-center gap-2 border border-accent/50 bg-accent/10 px-3 py-2 font-mono text-[10px] font-semibold tracking-widest text-accent transition-all hover:bg-accent/20 hover:shadow-[0_0_24px_hsl(var(--accent)/0.2)]" aria-pressed={isSimulating}>{isSimulating ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />} {isSimulating ? "PAUSE RUN" : "SIMULATE PIPELINE FLOW"}</button></div>
+      <motion.div className="expertise-canvas relative overflow-hidden border border-border/80 p-3 shadow-[0_20px_80px_hsl(var(--background)/0.45)] [transform-style:preserve-3d] sm:p-5" style={{ rotateX, rotateY, transformPerspective: 1400 }} onMouseMove={handleTilt} onMouseLeave={resetTilt}><CornerTicks /><div className="mb-4 flex flex-col gap-3 border-b border-border/70 pb-4 sm:flex-row sm:items-center sm:justify-between"><div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.16em] text-muted-foreground"><Activity className="h-3.5 w-3.5 text-accent" />END-TO-END PRODUCTION TOPOLOGY</div><button type="button" onClick={() => setIsSimulating((value) => !value)} className="group inline-flex min-h-11 items-center justify-center gap-2 border border-accent/50 bg-accent/10 px-3 py-2 font-mono text-[10px] font-semibold tracking-widest text-accent transition-all hover:bg-accent/20 hover:shadow-[0_0_24px_hsl(var(--accent)/0.2)]" aria-pressed={isSimulating}>{isSimulating ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />} {isSimulating ? "PAUSE RUN" : "SIMULATE PIPELINE FLOW"}</button></div>
         <motion.div className="hidden items-stretch lg:flex [transform-style:preserve-3d]" style={{ x: stageShiftX, y: stageShiftY }}>{EXPERTISE.map((item, index) => <div key={item.number} className="contents"><SystemNode item={item} active={activeIndex === index} onSelect={() => { setActiveIndex(index); setIsSimulating(false); }} index={index} />{index < EXPERTISE.length - 1 && <PipelineConnector active={isSimulating || activeIndex === index} tone={item.tone} />}</div>)}</motion.div>
-        <div className="flex flex-col lg:hidden">{EXPERTISE.map((item, index) => <div key={item.number} className="flex flex-col items-stretch"><SystemNode item={item} active={activeIndex === index} onSelect={() => { setActiveIndex(index); setIsSimulating(false); }} index={index} />{index < EXPERTISE.length - 1 && <div className="flex justify-center"><PipelineConnector vertical active={isSimulating || activeIndex === index} tone={item.tone} /></div>}</div>)}</div>
-        <div className="mt-5 flex items-center justify-between border-t border-border/70 pt-3 font-mono text-[9px] tracking-widest text-muted-foreground"><span className="flex items-center gap-2"><span className={`h-1.5 w-1.5 rounded-full ${isSimulating ? "animate-ping bg-accent" : "bg-accent"}`} />{stageLabel}</span><span>LATENCY BUDGET / <span className="text-foreground">&lt; 50 MS</span></span></div>
+        <div className="flex flex-col lg:hidden">
+          {EXPERTISE.map((item, index) => {
+            const nextItem = EXPERTISE[index + 1];
+            return <div key={item.number} className="flex min-w-0 flex-col items-stretch">
+              <SystemNode stacked item={item} active={activeIndex === index} onSelect={() => { setActiveIndex(index); setIsSimulating(false); }} index={index} />
+              <div id={`mobile-inspector-${item.number}`} hidden={activeIndex !== index} className="mt-2">
+                {activeIndex === index && <Inspector item={item} isSimulating={isSimulating} />}
+              </div>
+              {nextItem && <button type="button" aria-label={`Connect ${item.categoryLabel} to ${nextItem.categoryLabel}`} onClick={() => { setActiveIndex(index + 1); setIsSimulating(false); }} className={`${toneClasses[item.tone]} group relative flex min-h-12 w-full items-center justify-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent`}>
+                <PipelineConnector vertical active={isSimulating || activeIndex === index} tone={item.tone} />
+                <span className="absolute left-[calc(50%+14px)] flex items-center gap-2 font-mono text-[9px] text-muted-foreground group-hover:text-foreground"><ArrowDown aria-hidden="true" className="h-3 w-3 expertise-domain-text" />{item.number} → {nextItem.number}</span>
+              </button>}
+            </div>;
+          })}
+        </div>
+        <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-border/70 pt-3 font-mono text-[9px] tracking-widest text-muted-foreground"><span className="flex items-center gap-2"><span className={`h-1.5 w-1.5 rounded-full ${isSimulating ? "animate-ping bg-accent" : "bg-accent"}`} />{stageLabel}</span><span>LATENCY BUDGET / <span className="text-foreground">&lt; 50 MS</span></span></div>
       </motion.div>
 
-      <div className="mt-5"><Inspector item={activeItem} isSimulating={isSimulating} /></div>
+      <div id="desktop-expertise-inspector" className="mt-5 hidden lg:block"><Inspector item={activeItem} isSimulating={isSimulating} /></div>
       <FadeIn y={16} delay={0.2} duration={0.6} className="mt-10 flex justify-center"><a href="#projects" className="group inline-flex items-center gap-3 border border-accent/40 bg-accent/5 px-6 py-3 font-mono text-xs font-semibold tracking-widest text-accent transition-all hover:border-accent hover:bg-accent/10"><span>EXPLORE THE BUILDS</span><ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></a></FadeIn>
     </div>
   </section>;
