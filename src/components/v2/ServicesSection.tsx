@@ -134,7 +134,9 @@ const ServicesSection = () => {
   const [isSimulating, setIsSimulating] = useState(false);
   const prefersReducedMotion = useReducedMotion();
   const [pauseOverride, setPauseOverride] = useState<boolean | null>(null);
-  const motionPaused = pauseOverride ?? Boolean(prefersReducedMotion);
+  const [motionPreferenceReady, setMotionPreferenceReady] = useState(false);
+  useEffect(() => { setMotionPreferenceReady(true); }, []);
+  const motionPaused = pauseOverride ?? (motionPreferenceReady && Boolean(prefersReducedMotion));
   const activeItem = EXPERTISE[activeIndex];
   const stageLabel = useMemo(() => motionPaused ? "MOTION PAUSED" : isSimulating ? "SIMULATION RUNNING" : "SYSTEM READY", [isSimulating, motionPaused]);
 
