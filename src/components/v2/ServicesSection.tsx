@@ -7,6 +7,7 @@ import {
   Activity,
   ArrowRight,
   ArrowDown,
+  ArrowUpRight,
   ChevronDown,
   BrainCircuit,
   Cloud,
@@ -21,6 +22,7 @@ import {
 } from "lucide-react";
 import BlueprintSectionHeader from "./BlueprintSectionHeader";
 import FadeIn from "./FadeIn";
+import { projects } from "@/data/portfolio";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -36,6 +38,8 @@ interface ExpertiseItem {
   description: string;
   pipeline: string[];
   tags: string[];
+  skills: string[];
+  projectRepos: string[];
   metrics: { label: string; value: string };
   tone: DomainTone;
   telemetry: { label: string; value: string }[];
@@ -44,37 +48,37 @@ interface ExpertiseItem {
 
 const EXPERTISE: ExpertiseItem[] = [
   {
-    number: "01", categoryLabel: "Data Engineering", name: "Production Data Engineering", spec: "99.9% RELIABILITY · PETABYTE SCALE", icon: Database,
+    number: "01", skills: ["ETL/ELT design", "Streaming ingestion", "Data contracts", "SQL transformations"], projectRepos: ["Divvy-Bike-Data-End-to-End-Pipeline"], categoryLabel: "Data Engineering", name: "Production Data Engineering", spec: "99.9% RELIABILITY · PETABYTE SCALE", icon: Database,
     description: "Built for high-throughput, zero-data-loss ingestion at scale. Designing ultra-reliable, petabyte-scale ETL/ELT pipelines with Apache Airflow & dbt — automated data contracts, strict idempotency, and streaming ingestion into Snowflake & BigQuery.",
     pipeline: ["Kafka Ingest", "Airflow DAG", "dbt Models", "BigQuery"], tags: ["Airflow", "dbt", "BigQuery", "Snowflake", "ETL/ELT"], metrics: { label: "STATUS", value: "OPERATIONAL" }, tone: "cyan",
     telemetry: [{ label: "THROUGHPUT", value: "1.2M EVENTS/S" }, { label: "SCHEMA", value: "ENFORCED" }, { label: "DROPPED", value: "0.00%" }], terminal: ["> airflow dags trigger ingest_prod", "> dbt run --select marts+", "> contract.check() ........ PASS"],
   },
   {
-    number: "02", categoryLabel: "GenAI & RAG", name: "Enterprise GenAI & RAG Systems", spec: "SUB-SECOND LATENCY · HYBRID RETRIEVAL", icon: BrainCircuit,
+    number: "02", skills: ["Hybrid retrieval", "Multimodal embeddings", "Citation grounding", "Hallucination guardrails"], projectRepos: ["Multimodel_RAG", "Car-Manual-RAG-Assistant"], categoryLabel: "GenAI & RAG", name: "Enterprise GenAI & RAG Systems", spec: "SUB-SECOND LATENCY · HYBRID RETRIEVAL", icon: BrainCircuit,
     description: "Hybrid retrieval with grounded, citation-backed responses. Building enterprise-grade GenAI & RAG platforms with sub-second latency, semantic + keyword search fusion, and robust hallucination guardrails using LangChain, FAISS, and cross-encoder reranking.",
     pipeline: ["Query", "Embed", "FAISS Vector", "Rerank", "Grounded LLM"], tags: ["LangChain", "Vector DB", "FAISS", "Guardrails", "Reranking"], metrics: { label: "GROUNDING", value: "VERIFIED" }, tone: "violet",
     telemetry: [{ label: "P99 LATENCY", value: "42 MS" }, { label: "GROUNDING", value: "99.4%" }, { label: "TOP-K", value: "8 DOCS" }], terminal: ["> retriever.search(hybrid=True)", "> reranker.score(cross_encoder)", "> citation_guard ............ PASS"],
   },
   {
-    number: "03", categoryLabel: "MLOps", name: "Production MLOps & Model Serving", spec: "AUTOMATED CI/CD · ZERO-DOWNTIME ROLLOUT", icon: GitBranch,
+    number: "03", skills: ["Model serving", "Quantized inference", "Canary deployments", "Drift monitoring"], projectRepos: ["ai_poduct_matching"], categoryLabel: "MLOps", name: "Production MLOps & Model Serving", spec: "AUTOMATED CI/CD · ZERO-DOWNTIME ROLLOUT", icon: GitBranch,
     description: "Low-latency inference with canary rollout and drift monitoring. Operating ML model serving pipelines with zero-downtime deployments, real-time drift detection, and quantized inference via NVIDIA Triton, MLflow, and FastAPI.",
     pipeline: ["Train / Log", "MLflow", "Triton Server", "Canary Route"], tags: ["MLflow", "Triton", "Quantization", "Docker", "Model Registry"], metrics: { label: "ROLLOUT", value: "CANARY ENABLED" }, tone: "amber",
     telemetry: [{ label: "P99 INFERENCE", value: "18 MS" }, { label: "CANARY", value: "10% TRAFFIC" }, { label: "DRIFT", value: "NORMAL" }], terminal: ["> mlflow.register_model(v2.5)", "> triton_client.infer(model)", "> route.canary(traffic=0.1)"],
   },
   {
-    number: "04", categoryLabel: "Cloud & IaC", name: "Cloud Topology & IaC", spec: "MULTI-CLOUD AWS/GCP · TERRAFORM AUTOMATION", icon: Cloud,
+    number: "04", skills: ["Infrastructure as code", "Multi-cloud provisioning", "Container orchestration", "Cost optimization"], projectRepos: ["Divvy-Bike-Data-End-to-End-Pipeline", "vanilla-steel-assessment"], categoryLabel: "Cloud & IaC", name: "Cloud Topology & IaC", spec: "MULTI-CLOUD AWS/GCP · TERRAFORM AUTOMATION", icon: Cloud,
     description: "100% declarative, multi-cloud ready. Provisioning secure, cost-optimized infrastructure with Terraform & Kubernetes — battle-tested across Tesla, Huawei, and Nokia for 99.99% availability.",
     pipeline: ["Terraform HCL", "State Lock", "K8s Mesh", "Live Cluster"], tags: ["Terraform", "AWS", "GCP", "Kubernetes", "FinOps"], metrics: { label: "ORCHESTRATION", value: "100% DECLARATIVE" }, tone: "sky",
     telemetry: [{ label: "AVAILABILITY", value: "99.99%" }, { label: "PODS", value: "12 / 12 READY" }, { label: "STATE", value: "SYNCED" }], terminal: ["> terraform plan -out=prod.tfplan", "> kubectl rollout status deploy/mesh", "> policy.guard .............. PASS"],
   },
   {
-    number: "05", categoryLabel: "Mission-Critical", name: "Mission-Critical Ops & High Availability", spec: "24/7 GOC SLA · ZERO SINGLE POINT OF FAILURE", icon: Radio,
+    number: "05", skills: ["Incident response", "Failover design", "SLA operations", "Infrastructure monitoring"], projectRepos: ["vanilla-steel-assessment"], categoryLabel: "Mission-Critical", name: "Mission-Critical Ops & High Availability", spec: "24/7 GOC SLA · ZERO SINGLE POINT OF FAILURE", icon: Radio,
     description: "High-availability operations with self-healing failover design. 5+ years directing enterprise NOC & telecom backbones — automated failovers, real-time Prometheus/Grafana telemetry, and circuit-breaker remediation at scale.",
     pipeline: ["Prometheus", "Telemetry", "Circuit Breaker", "Auto-Heal"], tags: ["High Availability", "Prometheus", "Grafana", "Incident SRE", "Failover"], metrics: { label: "AVAILABILITY", value: "SELF-HEALING" }, tone: "rose",
     telemetry: [{ label: "UPTIME", value: "99.99%" }, { label: "MTTR", value: "< 8 MIN" }, { label: "FAILOVER", value: "ARMED" }], terminal: ["> alertmanager.route(severity)", "> circuit_breaker.trip()", "> failover.recover ........ PASS"],
   },
   {
-    number: "06", categoryLabel: "Full-Stack AI", name: "Full-Stack AI Interfaces", spec: "REACTIVE STREAMING · ASYNC MICROSERVICES", icon: Monitor,
+    number: "06", skills: ["Reactive interfaces", "Async APIs", "Token streaming", "Type-safe development"], projectRepos: ["German-Learning-APP", "vanilla-steel-assessment"], categoryLabel: "Full-Stack AI", name: "Full-Stack AI Interfaces", spec: "REACTIVE STREAMING · ASYNC MICROSERVICES", icon: Monitor,
     description: "Real-time token streaming over WebSocket with async microservices. Bridging AI backends with reactive client apps via FastAPI, type-safe React/Next.js frontends, and low-latency WebSocket streaming pipelines.",
     pipeline: ["FastAPI RPC", "WebSocket", "React State", "Edge Render"], tags: ["FastAPI", "React", "Next.js", "TypeScript", "WebSocket"], metrics: { label: "STREAMING", value: "REAL-TIME" }, tone: "emerald",
     telemetry: [{ label: "STREAM", value: "LIVE" }, { label: "SOCKETS", value: "2.4K ACTIVE" }, { label: "FRAME", value: "16 MS" }], terminal: ["> await socket.accept()", "> tokens.emit(chunk)", "> render.commit ............ PASS"],
@@ -104,7 +108,7 @@ function PipelineConnector({ active, tone, vertical = false }: { active: boolean
 
 function SystemNode({ item, active, onSelect, index, stacked = false, motionPaused }: { item: ExpertiseItem; active: boolean; onSelect: () => void; index: number; stacked?: boolean; motionPaused: boolean }) {
   const Icon = item.icon;
-  return <motion.button type="button" onClick={onSelect} aria-label={`${item.number} ${item.name}`} aria-pressed={active} aria-expanded={stacked ? active : undefined} aria-controls={stacked ? `mobile-inspector-${item.number}` : "desktop-expertise-inspector"} className={`group ${toneClasses[item.tone]} relative flex min-w-0 flex-1 items-center gap-3 border bg-card/60 p-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background ${stacked ? "min-h-[88px] w-full px-4 py-4" : ""} backdrop-blur-md transition-colors duration-300 ${active ? "expertise-domain-border expertise-domain-surface expertise-domain-glow" : "border-border/70 hover:border-accent/50 hover:bg-card"}`} initial={motionPaused ? false : { opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-40px" }} transition={{ duration: motionPaused ? 0 : 0.5, delay: motionPaused ? 0 : index * 0.07, ease: EASE }} whileHover={motionPaused ? undefined : { y: -3 }}>
+  return <motion.button type="button" onClick={onSelect} aria-label={`${item.number} ${item.name}`} aria-pressed={active} aria-expanded={stacked ? active : undefined} aria-controls={stacked ? `mobile-inspector-${item.number}` : `desktop-inspector-${item.number}`} className={`group ${toneClasses[item.tone]} relative flex min-w-0 flex-1 items-center gap-3 border bg-card/60 p-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background ${stacked ? "min-h-[88px] w-full px-4 py-4" : ""} backdrop-blur-md transition-colors duration-300 ${active ? "expertise-domain-border expertise-domain-surface expertise-domain-glow" : "border-border/70 hover:border-accent/50 hover:bg-card"}`} initial={motionPaused ? false : { opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-40px" }} transition={{ duration: motionPaused ? 0 : 0.5, delay: motionPaused ? 0 : index * 0.07, ease: EASE }} whileHover={motionPaused ? undefined : { y: -3 }}>
     <span className={`grid h-9 w-9 shrink-0 place-items-center border ${active ? "expertise-domain-border expertise-domain-surface expertise-domain-text" : "border-border text-muted-foreground group-hover:text-foreground"}`}><Icon className="h-4 w-4" strokeWidth={1.6} /></span>
     <span className="min-w-0 flex-1"><span className={`block font-mono ${stacked ? "text-[10px]" : "whitespace-nowrap text-[9px]"} tracking-[0.12em] ${active ? "expertise-domain-text" : "text-muted-foreground"}`}>{item.number} / {item.categoryLabel}</span><span className={`mt-1 block font-semibold text-foreground ${stacked ? "text-sm leading-5" : "truncate text-[11px] leading-tight"}`} title={item.name}>{item.name}</span></span>
     {stacked && <ChevronDown aria-hidden="true" className={`h-4 w-4 shrink-0 transition-transform ${active ? "rotate-180 expertise-domain-text" : "text-muted-foreground"}`} />}
@@ -126,6 +130,23 @@ function Inspector({ item, isSimulating, motionPaused }: { item: ExpertiseItem; 
       <div className="border-b border-border/70 p-5 sm:p-7 lg:border-b-0 lg:border-r"><div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"><span className="font-mono text-[10px] tracking-[0.18em] text-muted-foreground">ARCHITECTURE FLOW</span><span className="font-mono text-[10px] expertise-domain-text">{item.spec}</span></div><div className="flex flex-col items-stretch gap-2 sm:flex-row sm:flex-wrap sm:items-center">{item.pipeline.map((step, index) => <div key={step} className="contents"><motion.div className={`border px-2.5 py-2 font-mono text-[10px] font-semibold text-foreground transition-colors ${isSimulating && index <= 3 ? "expertise-domain-border expertise-domain-surface" : "border-border/70 bg-background/40"}`} animate={isSimulating && !motionPaused ? { y: [0, -3, 0] } : { y: 0 }} transition={{ duration: motionPaused ? 0 : 1.3, repeat: isSimulating && !motionPaused ? Infinity : 0, delay: index * 0.12 }}>{step}</motion.div>{index < item.pipeline.length - 1 && <ArrowRight className="mx-auto h-3 w-3 shrink-0 rotate-90 text-muted-foreground sm:mx-0 sm:rotate-0" />}</div>)}</div><div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-3">{item.telemetry.map((metric) => <div key={metric.label} className="flex items-center justify-between gap-2 border border-border/70 bg-background/40 p-3 sm:block"><span className="block font-mono text-[9px] tracking-widest text-muted-foreground">{metric.label}</span><span className="block font-mono text-xs sm:mt-2 font-bold expertise-domain-text">{metric.value}</span></div>)}</div></div>
       <div className="min-w-0 p-5 sm:p-7"><div className="mb-4 flex items-center justify-between"><div className="flex gap-1 border-b border-border/70"><button type="button" onClick={() => setTab("system")} className={`min-h-11 border-b-2 px-3 pb-2 font-mono text-[10px] tracking-widest transition-colors ${tab === "system" ? "border-accent text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"}`}>SYSTEM</button><button type="button" onClick={() => setTab("terminal")} className={`min-h-11 border-b-2 px-3 pb-2 font-mono text-[10px] tracking-widest transition-colors ${tab === "terminal" ? "border-accent text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"}`}>TERMINAL</button></div><Terminal className="h-4 w-4 text-muted-foreground" /></div><AnimatePresence mode="wait"><motion.div key={tab} initial={motionPaused ? false : { opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} exit={motionPaused ? undefined : { opacity: 0, x: -8 }} transition={{ duration: motionPaused ? 0 : 0.2 }} className="min-h-[130px] font-mono text-[11px] leading-7">{tab === "system" ? <div className="space-y-3"><div className="flex items-center gap-2 expertise-domain-text"><ShieldCheck className="h-4 w-4" />PRODUCTION GRADE</div><p className="text-muted-foreground">{item.metrics.label}: <span className="text-foreground">{item.metrics.value}</span></p><p className="text-muted-foreground">deployment: <span className="expertise-domain-text">zero-downtime</span></p><p className="text-muted-foreground">guardrails: <span className="expertise-domain-text">enabled</span></p></div> : <div className="rounded border border-border/70 bg-background/70 p-3 text-muted-foreground break-words [overflow-wrap:anywhere]">{item.terminal.map((line) => <div key={line}><span className="mr-2 expertise-domain-text">›</span>{line.replace(/^&gt; /, "")}</div>)}</div>}</motion.div></AnimatePresence></div>
     </div>
+    <div className="grid border-t border-border/70 lg:grid-cols-[0.8fr_1.2fr]">
+      <div className="space-y-6 border-b border-border/70 p-5 sm:p-7 lg:border-b-0 lg:border-r">
+        <div><h4 className="font-mono text-[10px] tracking-widest expertise-domain-text">RELATED SKILLS</h4><ul className="mt-3 grid gap-2 text-sm text-foreground">{item.skills.map((skill) => <li key={skill} className="flex items-start gap-2"><span aria-hidden="true" className="mt-2 h-1 w-1 shrink-0 bg-accent" />{skill}</li>)}</ul></div>
+        <div><h4 className="font-mono text-[10px] tracking-widest expertise-domain-text">TOOLS & TECHNOLOGIES</h4><ul className="mt-3 flex flex-wrap gap-2">{item.tags.map((tool) => <li key={tool} className="border border-border bg-background/40 px-2.5 py-2 font-mono text-[11px] text-foreground">{tool}</li>)}</ul></div>
+      </div>
+      <div className="min-w-0 p-5 sm:p-7"><h4 className="font-mono text-[10px] tracking-widest expertise-domain-text">RELATED PROJECT EXAMPLES</h4>
+        <div className="mt-3 divide-y divide-border/70">{item.projectRepos.map((repo) => {
+          const project = projects.find((candidate) => candidate.url.split("/").pop() === repo);
+          if (!project) return null;
+          return <a key={repo} href={project.url} target="_blank" rel="noopener noreferrer" aria-label={`View ${project.title} on GitHub`} className="group flex min-h-11 items-start gap-3 py-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
+            <img src={project.image} alt="" loading="lazy" className="h-14 w-16 shrink-0 border border-border object-cover sm:h-16 sm:w-24" />
+            <span className="min-w-0 flex-1"><span className="block text-sm font-semibold leading-5 text-foreground group-hover:text-accent">{project.title}</span><span className="mt-1 block font-mono text-[10px] leading-5 text-muted-foreground">{project.source}</span><span className="mt-2 block text-xs leading-5 text-muted-foreground">{project.description}</span></span>
+            <ArrowUpRight aria-hidden="true" className="h-4 w-4 shrink-0 expertise-domain-text" />
+          </a>;
+        })}</div>
+      </div>
+    </div>
   </motion.div>;
 }
 
@@ -137,7 +158,6 @@ const ServicesSection = () => {
   const [motionPreferenceReady, setMotionPreferenceReady] = useState(false);
   useEffect(() => { setMotionPreferenceReady(true); }, []);
   const motionPaused = pauseOverride ?? (motionPreferenceReady && Boolean(prefersReducedMotion));
-  const activeItem = EXPERTISE[activeIndex];
   const stageLabel = useMemo(() => motionPaused ? "MOTION PAUSED" : isSimulating ? "SIMULATION RUNNING" : "SYSTEM READY", [isSimulating, motionPaused]);
 
   // Cursor-parallax depth: the canvas tilts subtly toward the cursor while the
@@ -181,7 +201,7 @@ const ServicesSection = () => {
             return <div key={item.number} className="flex min-w-0 flex-col items-stretch">
               <SystemNode motionPaused={motionPaused} stacked item={item} active={activeIndex === index} onSelect={() => { setActiveIndex(index); setIsSimulating(false); }} index={index} />
               <div id={`mobile-inspector-${item.number}`} hidden={activeIndex !== index} className="mt-2">
-                {activeIndex === index && <Inspector motionPaused={motionPaused} item={item} isSimulating={isSimulating} />}
+                <Inspector motionPaused={motionPaused || activeIndex !== index} item={item} isSimulating={isSimulating && activeIndex === index} />
               </div>
               {nextItem && <button type="button" aria-label={`Connect ${item.categoryLabel} to ${nextItem.categoryLabel}`} onClick={() => { setActiveIndex(index + 1); setIsSimulating(false); }} className={`${toneClasses[item.tone]} group relative flex min-h-12 w-full items-center justify-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent`}>
                 <PipelineConnector vertical active={isSimulating || activeIndex === index} tone={item.tone} />
@@ -193,7 +213,7 @@ const ServicesSection = () => {
         <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-border/70 pt-3 font-mono text-[9px] tracking-widest text-muted-foreground"><span className="flex items-center gap-2"><span className={`h-1.5 w-1.5 rounded-full ${isSimulating ? "animate-ping bg-accent" : "bg-accent"}`} />{stageLabel}</span><span>LATENCY BUDGET / <span className="text-foreground">&lt; 50 MS</span></span></div>
       </motion.div>
 
-      <div id="desktop-expertise-inspector" className="mt-5 hidden lg:block"><Inspector motionPaused={motionPaused} item={activeItem} isSimulating={isSimulating} /></div>
+      <div id="desktop-expertise-inspector" className="mt-5 hidden lg:block">{EXPERTISE.map((item, index) => <div key={item.number} id={`desktop-inspector-${item.number}`} hidden={activeIndex !== index}><Inspector motionPaused={motionPaused || activeIndex !== index} item={item} isSimulating={isSimulating && activeIndex === index} /></div>)}</div>
       <FadeIn y={16} delay={0.2} duration={0.6} className="mt-10 flex justify-center"><a href="#projects" className="group inline-flex items-center gap-3 border border-accent/40 bg-accent/5 px-6 py-3 font-mono text-xs font-semibold tracking-widest text-accent transition-all hover:border-accent hover:bg-accent/10"><span>EXPLORE THE BUILDS</span><ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></a></FadeIn>
     </div>
   </section>;
