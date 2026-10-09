@@ -260,6 +260,12 @@
       hsl(var(--bg-recessed));
     background-size: 42px 42px;
   }
+  #skills[data-motion-paused="true"] *,
+  #skills[data-motion-paused="true"] *::before,
+  #skills[data-motion-paused="true"] *::after {
+    animation-play-state: paused !important;
+    transition-duration: 0s !important;
+  }
   .expertise-domain-cyan { --domain-color: hsl(var(--expertise-cyan)); }
   .expertise-domain-violet { --domain-color: hsl(var(--expertise-violet)); }
   .expertise-domain-amber { --domain-color: hsl(var(--expertise-amber)); }
