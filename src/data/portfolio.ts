@@ -82,7 +82,7 @@ export const projects = [
   {
     title: "Car Manual RAG Assistant",
     source: "Closed-Domain PDF QA",
-    description: "Domain-specific RAG over a single corpus of automotive PDFs. A focused proof-of-concept for constrained document QA — no multimodal retrieval, no general-purpose chat, just precise grounded answers from a closed source.",
+    description: "Domain-specific RAG system that delivers grounded Q&A over a closed corpus of automotive PDFs. Retrieves precisely relevant sections and generates accurate, citation-backed answers anchored entirely in the source documents.",
     skills: ["RAG", "LangChain", "Embeddings", "LLMs", "Python"],
     image: "/images/projects/project-knowledge-assistant.webp",
     url: "https://github.com/saranjthilak/Car-Manual-RAG-Assistant",
@@ -102,8 +102,8 @@ export const projects = [
   {
     title: "Divvy Bikes – End-to-End Data Pipeline",
     source: "GCP | Terraform | Airflow | DBT",
-    description: "Built an end-to-end data pipeline on GCP using Terraform for infrastructure, Airflow for orchestration, and DBT for SQL transformations. Loaded data into BigQuery and visualized insights via Google Data Studio.",
-    skills: ["GCP", "Terraform", "Airflow", "DBT", "BigQuery", "Data Studio"],
+    description: "Built an end-to-end data pipeline on GCP using Terraform for infrastructure, Airflow for orchestration, and DBT for SQL transformations. Loaded data into BigQuery and visualized insights via Looker Studio.",
+    skills: ["GCP", "Terraform", "Airflow", "DBT", "BigQuery", "Looker Studio"],
     image: "/images/projects/project-divvy-bikes.webp",
     url: "https://github.com/saranjthilak/Divvy-Bike-Data-End-to-End-Pipeline",
     liveUrl: undefined as string | undefined,
