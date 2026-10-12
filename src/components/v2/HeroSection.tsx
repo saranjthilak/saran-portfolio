@@ -252,7 +252,9 @@ const IDCard = () => {
         <div className="w-full h-full bg-v2-raised rounded-2xl overflow-hidden relative">
           <img
             src="/images/profile.png"
-            alt="Saran Portrait"
+            alt="Portrait of Saran Jaya Thilak"
+            width={300}
+            height={420}
             className="w-full h-full object-cover opacity-80 group-hover:opacity-95 transition-opacity duration-500"
             draggable={false}
           />
@@ -385,14 +387,15 @@ const HeroSection = () => {
 
       {/* Massive Typography Graphic */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-        <motion.h1
+        <motion.p
+          aria-hidden="true"
           className="text-[20vw] font-black opacity-[0.02] tracking-tighter select-none"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 0.02, scale: 1 }}
           transition={{ duration: 1.5, ease: "easeOut" }}
         >
           PRODUCTION
-        </motion.h1>
+        </motion.p>
       </div>
 
       {/* Hero Content */}
