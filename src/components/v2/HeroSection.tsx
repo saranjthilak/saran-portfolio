@@ -418,7 +418,7 @@ const HeroSection = () => {
 
             <FadeIn y={20} delay={0.8} viewportMargin="-100px">
               <p className="text-gray-400 max-w-lg text-base leading-relaxed mb-10">
-                RAG chatbots that cut support load by 25%. Airflow pipelines running at 99.9% reliability. I design and ship data&nbsp;+&nbsp;AI infrastructure that doesn&apos;t break under real workloads.
+                RAG chatbots improving customer interaction efficiency by 25%. Airflow pipelines running at 99.9% reliability. I design and ship data&nbsp;+&nbsp;AI infrastructure that doesn&apos;t break under real workloads.
               </p>
             </FadeIn>
 
