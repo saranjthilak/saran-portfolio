@@ -3,7 +3,6 @@
 import React from "react";
 import FadeIn from "./FadeIn";
 import BlueprintSectionHeader from "./BlueprintSectionHeader";
-import SectionHeading from "./SectionHeading";
 
 const AboutSection = () => {
   return (
@@ -87,15 +86,29 @@ const AboutSection = () => {
               >
                 I engineer data<br />
                 and AI systems<br />
+                that{" "}
+                <span
+                  className="accent-serif"
+                  style={{
+                    background: "linear-gradient(135deg, hsl(var(--accent)), #06b6d4)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  scale
+                </span>
+                <span
+                  style={{
+                    background: "linear-gradient(135deg, hsl(var(--accent)), #06b6d4)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  .
+                </span>
               </h2>
-              <SectionHeading
-                prefix="that "
-                accentWord="scale"
-                gradient="research"
-                align="left"
-                fontSize="clamp(2.5rem, 5vw, 4.5rem)"
-                className="font-podium uppercase leading-[0.95] tracking-tight"
-              />
             </FadeIn>
           </div>
 
