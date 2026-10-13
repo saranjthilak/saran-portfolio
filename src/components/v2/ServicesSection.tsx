@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion, useSpring, useTransform } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -49,19 +49,19 @@ interface ExpertiseItem {
 
 const EXPERTISE: ExpertiseItem[] = [
   {
-    number: "01", skills: ["ETL/ELT design", "Streaming ingestion", "Data contracts", "SQL transformations"], projectRepos: ["Divvy-Bike-Data-End-to-End-Pipeline"], categoryLabel: "Data Engineering", name: "Production Data Engineering", spec: "REFERENCE PATTERN · STREAMING INGESTION", icon: Database,
+    number: "01", skills: ["ETL/ELT design", "Streaming ingestion", "Data contracts", "SQL transformations"], projectRepos: ["Divvy-Bike-Data-End-to-End-Pipeline"], categoryLabel: "Data Engineering", name: "Data Engineering Architecture", spec: "REFERENCE PATTERN · STREAMING INGESTION", icon: Database,
     description: "Reference architecture for resilient ETL/ELT pipelines with Apache Airflow and dbt, including data contracts, idempotent processing, and streaming ingestion into analytical warehouses.",
     pipeline: ["Kafka Ingest", "Airflow DAG", "dbt Models", "BigQuery"], tags: ["Airflow", "dbt", "BigQuery", "Snowflake", "ETL/ELT"], metrics: { label: "SCENARIO", value: "STREAMING INGEST" }, inspectorNote: "TODO: add the source dataset, measured event volume, and benchmark window.", tone: "cyan",
-    telemetry: [{ label: "THROUGHPUT", value: "1.2M EVENTS/S" }, { label: "SCHEMA", value: "ENFORCED" }, { label: "DROPPED", value: "0.00%" }], terminal: ["> airflow dags trigger ingest_prod", "> dbt run --select marts+", "> contract.check() ........ PASS"],
+    telemetry: [{ label: "THROUGHPUT", value: "1.2M EVENTS/S" }, { label: "SCHEMA", value: "ENFORCED" }, { label: "DROPPED", value: "0.00%" }], terminal: ["> airflow dags trigger ingest_reference", "> dbt run --select marts+", "> contract.check() ........ PASS"],
   },
   {
-    number: "02", skills: ["Hybrid retrieval", "Multimodal embeddings", "Citation grounding", "Hallucination guardrails"], projectRepos: ["Multimodel_RAG", "Car-Manual-RAG-Assistant"], categoryLabel: "GenAI & RAG", name: "Enterprise GenAI & RAG Systems", spec: "REFERENCE PATTERN · HYBRID RETRIEVAL", icon: BrainCircuit,
+    number: "02", skills: ["Hybrid retrieval", "Multimodal embeddings", "Citation grounding", "Hallucination guardrails"], projectRepos: ["Multimodel_RAG", "Car-Manual-RAG-Assistant"], categoryLabel: "GenAI & RAG", name: "GenAI & RAG Systems", spec: "REFERENCE PATTERN · HYBRID RETRIEVAL", icon: BrainCircuit,
     description: "Reference architecture for grounded, citation-backed responses, combining semantic and keyword retrieval, cross-encoder reranking, and answer guardrails with LangChain and FAISS.",
     pipeline: ["Query", "Embed", "FAISS Vector", "Rerank", "Grounded LLM"], tags: ["LangChain", "Vector DB", "FAISS", "Guardrails", "Reranking"], metrics: { label: "DESIGN FOCUS", value: "CITATION GROUNDING" }, inspectorNote: "TODO: add the evaluation set, grounding metric definition, and test results.", tone: "violet",
     telemetry: [{ label: "P99 LATENCY", value: "42 MS" }, { label: "GROUNDING", value: "99.4%" }, { label: "TOP-K", value: "8 DOCS" }], terminal: ["> retriever.search(hybrid=True)", "> reranker.score(cross_encoder)", "> citation_guard ............ PASS"],
   },
   {
-    number: "03", skills: ["Model serving", "Quantized inference", "Canary deployments", "Drift monitoring"], projectRepos: ["ai_poduct_matching"], categoryLabel: "MLOps", name: "Production MLOps & Model Serving", spec: "MODEL REGISTRY · CANARY ROLLOUT", icon: GitBranch,
+    number: "03", skills: ["Model serving", "Quantized inference", "Canary deployments", "Drift monitoring"], projectRepos: ["ai_poduct_matching"], categoryLabel: "MLOps", name: "Model Operations & Serving", spec: "MODEL REGISTRY · CANARY ROLLOUT", icon: GitBranch,
     description: "Reference workflow for model registration, quantized inference, canary routing, and drift monitoring using NVIDIA Triton, MLflow, and FastAPI.",
     pipeline: ["Train / Log", "MLflow", "Triton Server", "Canary Route"], tags: ["MLflow", "Triton", "Quantization", "Docker", "Model Registry"], metrics: { label: "DESIGN FOCUS", value: "CANARY ROLLOUT" }, inspectorNote: "TODO: add the deployed model, inference hardware, and latency test conditions.", tone: "amber",
     telemetry: [{ label: "P99 INFERENCE", value: "18 MS" }, { label: "CANARY", value: "10% TRAFFIC" }, { label: "DRIFT", value: "NORMAL" }], terminal: ["> mlflow.register_model(v2.5)", "> triton_client.infer(model)", "> route.canary(traffic=0.1)"],
@@ -107,20 +107,33 @@ function PipelineConnector({ active, tone, vertical = false }: { active: boolean
   </div>;
 }
 
-function SystemNode({ item, active, onSelect, index, stacked = false, motionPaused }: { item: ExpertiseItem; active: boolean; onSelect: () => void; index: number; stacked?: boolean; motionPaused: boolean }) {
+interface SystemNodeProps {
+  item: ExpertiseItem;
+  active: boolean;
+  onSelect: () => void;
+  index: number;
+  stacked?: boolean;
+  motionPaused: boolean;
+  onKeyDown?: (e: React.KeyboardEvent) => void;
+}
+
+const SystemNode = forwardRef<HTMLButtonElement, SystemNodeProps>(function SystemNode(
+  { item, active, onSelect, index, stacked = false, motionPaused, onKeyDown },
+  ref
+) {
   const Icon = item.icon;
-  return <motion.button type="button" onClick={onSelect} aria-label={`${item.number} ${item.name}`} aria-pressed={active} aria-expanded={stacked ? active : undefined} aria-controls={stacked ? `mobile-inspector-${item.number}` : `desktop-inspector-${item.number}`} className={`group ${toneClasses[item.tone]} relative flex min-w-0 flex-1 items-center gap-3 border bg-card/60 p-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background ${stacked ? "min-h-[88px] w-full px-4 py-4" : ""} backdrop-blur-md transition-colors duration-300 ${active ? "expertise-domain-border expertise-domain-surface expertise-domain-glow" : "border-border/70 hover:border-accent/50 hover:bg-card"}`} initial={motionPaused ? false : { opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-40px" }} transition={{ duration: motionPaused ? 0 : 0.5, delay: motionPaused ? 0 : index * 0.07, ease: EASE }} whileHover={motionPaused ? undefined : { y: -3 }}>
+  return <motion.button ref={ref} type="button" role="tab" id={`expertise-tab-${item.number}`} aria-selected={active} aria-controls={`expertise-panel-${item.number}`} tabIndex={active ? 0 : -1} onClick={onSelect} onKeyDown={onKeyDown} className={`group ${toneClasses[item.tone]} relative flex min-w-0 flex-1 items-center gap-3 border bg-card/60 p-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background ${stacked ? "min-h-[88px] w-full px-4 py-4" : ""} backdrop-blur-md transition-colors duration-300 ${active ? "expertise-domain-border expertise-domain-surface expertise-domain-glow" : "border-border/70 hover:border-accent/50 hover:bg-card"}`} initial={motionPaused ? false : { opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-40px" }} transition={{ duration: motionPaused ? 0 : 0.5, delay: motionPaused ? 0 : index * 0.07, ease: EASE }} whileHover={motionPaused ? undefined : { y: -3 }}>
     <span className={`grid h-9 w-9 shrink-0 place-items-center border ${active ? "expertise-domain-border expertise-domain-surface expertise-domain-text" : "border-border text-muted-foreground group-hover:text-foreground"}`}><Icon className="h-4 w-4" strokeWidth={1.6} /></span>
     <span className="min-w-0 flex-1"><span className={`block font-mono ${stacked ? "text-[10px]" : "whitespace-nowrap text-[9px]"} tracking-[0.12em] ${active ? "expertise-domain-text" : "text-muted-foreground"}`}>{item.number} / {item.categoryLabel}</span><span className={`mt-1 block font-semibold text-foreground ${stacked ? "text-sm leading-5" : "truncate text-[11px] leading-tight"}`} title={item.name}>{item.name}</span></span>
     {stacked && <ChevronDown aria-hidden="true" className={`h-4 w-4 shrink-0 transition-transform ${active ? "rotate-180 expertise-domain-text" : "text-muted-foreground"}`} />}
     {active && <motion.span layoutId={motionPaused ? undefined : stacked ? "active-mobile-node" : "active-node"} className="absolute bottom-0 left-3 right-3 h-px bg-[var(--domain-color)]" />}
   </motion.button>;
-}
+});
 
-function Inspector({ item, isSimulating, motionPaused }: { item: ExpertiseItem; isSimulating: boolean; motionPaused: boolean }) {
+function Inspector({ item, isSimulating, motionPaused, id }: { item: ExpertiseItem; isSimulating: boolean; motionPaused: boolean; id: string }) {
   const [tab, setTab] = useState<InspectorTab>("system");
   const Icon = item.icon;
-  return <motion.div key={item.number} className={`${toneClasses[item.tone]} relative overflow-hidden border border-border/80 bg-card/70 backdrop-blur-xl`} initial={motionPaused ? false : { opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: motionPaused ? 0 : 0.45, ease: EASE }}>
+  return <motion.div id={id} role="tabpanel" aria-labelledby={`expertise-tab-${item.number}`} key={item.number} className={`${toneClasses[item.tone]} relative overflow-hidden border border-border/80 bg-card/70 backdrop-blur-xl`} initial={motionPaused ? false : { opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: motionPaused ? 0 : 0.45, ease: EASE }}>
     <CornerTicks />
     <div className="absolute inset-x-0 top-0 h-px bg-[var(--domain-color)] opacity-70" />
     <div className="flex flex-col gap-4 border-b border-border/70 p-5 sm:flex-row sm:items-start sm:justify-between sm:p-7">
@@ -161,6 +174,31 @@ const ServicesSection = () => {
   const motionPaused = pauseOverride ?? (motionPreferenceReady && Boolean(prefersReducedMotion));
   const stageLabel = useMemo(() => motionPaused ? "MOTION PAUSED" : isSimulating ? "SIMULATION RUNNING" : "SYSTEM READY", [isSimulating, motionPaused]);
 
+  // ── Arrow-key navigation for tabs ──
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const handleTabKeyDown = useCallback((e: React.KeyboardEvent, currentIndex: number) => {
+    let nextIndex: number | null = null;
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+      e.preventDefault();
+      nextIndex = (currentIndex + 1) % EXPERTISE.length;
+    } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+      e.preventDefault();
+      nextIndex = (currentIndex - 1 + EXPERTISE.length) % EXPERTISE.length;
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      nextIndex = 0;
+    } else if (e.key === "End") {
+      e.preventDefault();
+      nextIndex = EXPERTISE.length - 1;
+    }
+    if (nextIndex !== null) {
+      setActiveIndex(nextIndex);
+      setIsSimulating(false);
+      // Focus the new tab — find it in both desktop and mobile refs
+      tabRefs.current[nextIndex]?.focus();
+    }
+  }, []);
+
   // Cursor-parallax depth: the canvas tilts subtly toward the cursor while the
   // node stage counter-shifts, creating a layered control-room feel.
   const rotateX = useSpring(0, { stiffness: 55, damping: 16, mass: 0.6 });
@@ -189,21 +227,24 @@ const ServicesSection = () => {
     if (motionPaused) { rotateX.jump(0); rotateY.jump(0); }
   }, [motionPaused, rotateX, rotateY]);
 
+  const activeItem = EXPERTISE[activeIndex];
+
   return <section data-motion-paused={motionPaused} id="skills" className="relative z-20 -mt-10 overflow-hidden rounded-t-section border-t border-border bg-v2-recessed px-5 pb-24 pt-16 sm:-mt-12 sm:px-8 sm:pt-24 md:-mt-14" aria-labelledby="expertise-heading">
     <div className="absolute inset-0 blueprint-dots opacity-[0.16]" aria-hidden="true" />
     <div className="relative mx-auto max-w-7xl">
       <BlueprintSectionHeader align="center"><div className="mb-10 text-center sm:mb-14"><motion.div initial={{ opacity: 0, y: -8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="eyebrow justify-center">SYSTEM CLUSTER <span className="text-muted-foreground">/ 06 REFERENCE DOMAINS</span></motion.div><motion.h2 id="expertise-heading" initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.08, ease: EASE }} className="mt-4 text-5xl font-black leading-none tracking-tighter text-foreground sm:text-7xl">My <span className="accent-serif text-accent">Expertise.</span></motion.h2><FadeIn y={16} delay={0.2} duration={0.6} className="mx-auto mt-5 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">Reference architectures for data engineering, GenAI retrieval, model serving, cloud infrastructure, resilient operations, and full-stack AI—paired with illustrative telemetry.</FadeIn></div></BlueprintSectionHeader>
 
       <motion.div className="expertise-canvas relative overflow-hidden border border-border/80 p-3 shadow-[0_20px_80px_hsl(var(--background)/0.45)] [transform-style:preserve-3d] sm:p-5" style={{ rotateX: motionPaused ? 0 : rotateX, rotateY: motionPaused ? 0 : rotateY, transformPerspective: 1400 }} onMouseMove={handleTilt} onMouseLeave={resetTilt}><CornerTicks /><div className="mb-4 flex flex-col gap-3 border-b border-border/70 pb-4 sm:flex-row sm:items-center sm:justify-between"><div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.16em] text-muted-foreground"><Activity className="h-3.5 w-3.5 text-accent" />REFERENCE ARCHITECTURE</div><div className="flex flex-col gap-2 sm:flex-row sm:items-center"><span className="font-mono text-[9px] text-muted-foreground">Illustrative simulation</span><div className="flex items-stretch gap-2"><button type="button" aria-label={motionPaused ? "Resume canvas animations" : "Pause canvas animations"} title={motionPaused ? "Resume canvas animations" : "Pause canvas animations"} aria-pressed={motionPaused} onClick={() => setPauseOverride(!motionPaused)} className="inline-flex h-11 w-11 shrink-0 items-center justify-center border border-accent/50 bg-accent/10 text-accent hover:bg-accent/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">{motionPaused ? <Play aria-hidden="true" className="h-4 w-4" /> : <Pause aria-hidden="true" className="h-4 w-4" />}</button><button type="button" onClick={() => { setIsSimulating((value) => !value); }} disabled={motionPaused} className="group inline-flex min-h-11 flex-1 items-center disabled:cursor-not-allowed disabled:opacity-50 justify-center gap-2 border border-accent/50 bg-accent/10 px-3 py-2 font-mono text-[10px] font-semibold tracking-widest text-accent transition-all hover:bg-accent/20 hover:shadow-[0_0_24px_hsl(var(--accent)/0.2)]" aria-pressed={isSimulating}>{isSimulating ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />} {isSimulating ? "PAUSE RUN" : "SIMULATE PIPELINE FLOW"}</button></div></div></div>
-        <motion.div className="hidden items-stretch lg:flex [transform-style:preserve-3d]" style={{ x: motionPaused ? 0 : stageShiftX, y: motionPaused ? 0 : stageShiftY }}>{EXPERTISE.map((item, index) => <div key={item.number} className="contents"><SystemNode motionPaused={motionPaused} item={item} active={activeIndex === index} onSelect={() => { setActiveIndex(index); setIsSimulating(false); }} index={index} />{index < EXPERTISE.length - 1 && <PipelineConnector active={isSimulating || activeIndex === index} tone={item.tone} />}</div>)}</motion.div>
-        <div className="flex flex-col lg:hidden">
+
+        {/* ── Desktop tablist (horizontal) ── */}
+        <motion.div role="tablist" aria-label="Expertise domains" aria-orientation="horizontal" className="hidden items-stretch lg:flex [transform-style:preserve-3d]" style={{ x: motionPaused ? 0 : stageShiftX, y: motionPaused ? 0 : stageShiftY }}>{EXPERTISE.map((item, index) => <div key={item.number} className="contents"><SystemNode ref={(el: HTMLButtonElement | null) => { tabRefs.current[index] = el; }} motionPaused={motionPaused} item={item} active={activeIndex === index} onSelect={() => { setActiveIndex(index); setIsSimulating(false); }} index={index} onKeyDown={(e) => handleTabKeyDown(e, index)} />{index < EXPERTISE.length - 1 && <PipelineConnector active={isSimulating || activeIndex === index} tone={item.tone} />}</div>)}</motion.div>
+
+        {/* ── Mobile tablist (vertical, stacked with inline connectors) ── */}
+        <div role="tablist" aria-label="Expertise domains" aria-orientation="vertical" className="flex flex-col lg:hidden">
           {EXPERTISE.map((item, index) => {
             const nextItem = EXPERTISE[index + 1];
             return <div key={item.number} className="flex min-w-0 flex-col items-stretch">
-              <SystemNode motionPaused={motionPaused} stacked item={item} active={activeIndex === index} onSelect={() => { setActiveIndex(index); setIsSimulating(false); }} index={index} />
-              <div id={`mobile-inspector-${item.number}`} hidden={activeIndex !== index} className="mt-2">
-                <Inspector motionPaused={motionPaused || activeIndex !== index} item={item} isSimulating={isSimulating && activeIndex === index} />
-              </div>
+              <SystemNode motionPaused={motionPaused} stacked item={item} active={activeIndex === index} onSelect={() => { setActiveIndex(index); setIsSimulating(false); }} index={index} onKeyDown={(e) => handleTabKeyDown(e, index)} />
               {nextItem && <button type="button" aria-label={`Connect ${item.categoryLabel} to ${nextItem.categoryLabel}`} onClick={() => { setActiveIndex(index + 1); setIsSimulating(false); }} className={`${toneClasses[item.tone]} group relative flex min-h-12 w-full items-center justify-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent`}>
                 <PipelineConnector vertical active={isSimulating || activeIndex === index} tone={item.tone} />
                 <span className="absolute left-[calc(50%+14px)] flex items-center gap-2 font-mono text-[9px] text-muted-foreground group-hover:text-foreground"><ArrowDown aria-hidden="true" className="h-3 w-3 expertise-domain-text" />{item.number} → {nextItem.number}</span>
@@ -211,10 +252,19 @@ const ServicesSection = () => {
             </div>;
           })}
         </div>
-        <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-border/70 pt-3 font-mono text-[9px] tracking-widest text-muted-foreground"><span className="flex items-center gap-2"><span className={`h-1.5 w-1.5 rounded-full ${isSimulating ? "animate-ping bg-accent" : "bg-accent"}`} />{stageLabel}</span><span>LATENCY BUDGET / <span className="text-foreground">&lt; 50 MS</span></span></div>
+
+        <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-border/70 pt-3 font-mono text-[9px] tracking-widest text-muted-foreground"><span className="flex items-center gap-2"><span className={`h-1.5 w-1.5 rounded-full ${isSimulating ? "animate-ping bg-accent" : "bg-accent"}`} />{stageLabel}</span><span>PIPELINE FLOW / <span className="text-foreground">6 DOMAINS</span></span></div>
       </motion.div>
 
-      <div id="desktop-expertise-inspector" className="mt-5 hidden lg:block">{EXPERTISE.map((item, index) => <div key={item.number} id={`desktop-inspector-${item.number}`} hidden={activeIndex !== index}><Inspector motionPaused={motionPaused || activeIndex !== index} item={item} isSimulating={isSimulating && activeIndex === index} /></div>)}</div>
+      {/* ── Single shared inspector (rendered once, shown for active tab) ── */}
+      <div className="mt-5">
+        {EXPERTISE.map((item, index) => (
+          <div key={item.number} id={`expertise-panel-${item.number}`} role="tabpanel" aria-labelledby={`expertise-tab-${item.number}`} hidden={activeIndex !== index}>
+            <Inspector motionPaused={motionPaused || activeIndex !== index} item={item} isSimulating={isSimulating && activeIndex === index} id={`expertise-inspector-${item.number}`} />
+          </div>
+        ))}
+      </div>
+
       <FadeIn y={16} delay={0.2} duration={0.6} className="mt-10 flex justify-center"><a href="#projects" className="group inline-flex items-center gap-3 border border-accent/40 bg-accent/5 px-6 py-3 font-mono text-xs font-semibold tracking-widest text-accent transition-all hover:border-accent hover:bg-accent/10"><span>EXPLORE THE BUILDS</span><ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></a></FadeIn>
     </div>
   </section>;
