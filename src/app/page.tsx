@@ -14,9 +14,27 @@ import { fetchGitHubStats } from "@/lib/github-stats";
 
 const Index = async () => {
   const githubData = await fetchGitHubStats("saranjthilak");
+  const personSchema = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Saran Jaya Thilak",
+    jobTitle: "Data Engineer & GenAI Specialist",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Berlin",
+      addressCountry: "DE",
+    },
+    sameAs: [
+      "https://github.com/saranjthilak",
+      "https://www.linkedin.com/in/saranjayathilak",
+      "https://ieeexplore.ieee.org/document/10317646",
+      "https://ieeexplore.ieee.org/document/9998230",
+    ],
+  };
 
   return (
     <div className="v2-page" style={{ overflowX: "clip" }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema).replace(/</g, "\\u003c") }} />
       <HeroSection />
       <MarqueeSection />
       <AboutSection />

@@ -8,3 +8,5 @@
 - Expertise motion has one shared pause state covering CSS effects, domain simulation, inspector transitions, and cursor tilt while keeping navigation available; reduced-motion preferences default it to paused for accessible exploration.
 
 - Domain detail panels stay mounted when hidden so per-domain exploration state survives selection changes; related project examples resolve from the canonical portfolio data instead of duplicating project content.
+
+- Route-specific SEO metadata uses the Next.js App Router metadata exports so canonical URLs and social metadata are rendered server-side for crawlers.

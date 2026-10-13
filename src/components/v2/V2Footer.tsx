@@ -1,6 +1,7 @@
 "use client";
 
 import { Github, Linkedin, Mail } from "lucide-react";
+import Link from "next/link";
 
 const SOCIAL_LINKS = [
   {
@@ -45,6 +46,11 @@ const V2Footer = () => {
             </a>
           ))}
         </div>
+
+        <nav aria-label="Legal information" className="flex items-center gap-4 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+          <Link href="/impressum" className="transition-colors hover:text-accent">Impressum</Link>
+          <Link href="/datenschutz" className="transition-colors hover:text-accent">Datenschutz</Link>
+        </nav>
 
         {/* Copyright / Location */}
         <p className="text-white/30 tracking-wider">
