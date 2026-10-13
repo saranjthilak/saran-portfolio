@@ -1,0 +1,4 @@
+- [x] Set sitewide icon variants, theme color, and canonical metadata; remove keywords.
+- [x] Add Person structured data and update robots and sitemap URLs/routes.
+- [x] Add marked Impressum and Datenschutz placeholders and footer links.
+- [x] Restyle the custom 404 page and verify routes and generated metadata.

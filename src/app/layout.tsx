@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Space_Grotesk, JetBrains_Mono, Kanit, Bebas_Neue } from 'next/font/google';
 import './globals.css';
 
@@ -33,19 +33,24 @@ const bebasNeue = Bebas_Neue({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://saran.cloud'),
+  metadataBase: new URL('https://saran-portfolio.lovable.app'),
   title: {
     default: 'Saran Jaya Thilak — Data Engineer & GenAI Specialist',
     template: '%s | Saran Jaya Thilak',
   },
   description: 'Portfolio of Saran Jaya Thilak, Data Engineer & GenAI Specialist specializing in RAG systems, scalable data pipelines, and cloud architecture.',
-  keywords: ['Data Engineer', 'GenAI Specialist', 'AI Engineer', 'Machine Learning', 'RAG', 'AWS', 'Python', 'React', 'Next.js', 'Portfolio'],
   authors: [{ name: 'Saran Jaya Thilak' }],
   creator: 'Saran Jaya Thilak',
+  alternates: { canonical: '/' },
+  icons: {
+    icon: [{ url: '/favicon.png', type: 'image/png', sizes: '64x64' }],
+    shortcut: [{ url: '/favicon.png', type: 'image/png' }],
+    apple: [{ url: '/apple-touch-icon.png', type: 'image/png', sizes: '180x180' }],
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://saran.cloud',
+    url: 'https://saran-portfolio.lovable.app/',
     title: 'Saran Jaya Thilak — Data Engineer & GenAI Specialist',
     description: 'Portfolio of Saran Jaya Thilak, Data Engineer & GenAI Specialist specializing in RAG systems, scalable data pipelines, and cloud architecture.',
     siteName: 'Saran Jaya Thilak Portfolio',
@@ -76,6 +81,10 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#0a0a0f',
 };
 
 export default function RootLayout({
