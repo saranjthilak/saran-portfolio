@@ -3,6 +3,7 @@
 import React from "react";
 import FadeIn from "./FadeIn";
 import BlueprintSectionHeader from "./BlueprintSectionHeader";
+import SectionHeading from "./SectionHeading";
 
 const AboutSection = () => {
   return (
@@ -86,29 +87,15 @@ const AboutSection = () => {
               >
                 I engineer data<br />
                 and AI systems<br />
-                that{" "}
-                <span
-                  className="accent-serif"
-                  style={{
-                    background: "linear-gradient(135deg, hsl(var(--accent)), #06b6d4)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  scale
-                </span>
-                <span
-                  style={{
-                    background: "linear-gradient(135deg, hsl(var(--accent)), #06b6d4)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  .
-                </span>
               </h2>
+              <SectionHeading
+                prefix="that "
+                accentWord="scale"
+                gradient="research"
+                align="left"
+                fontSize="clamp(2.5rem, 5vw, 4.5rem)"
+                className="font-podium uppercase leading-[0.95] tracking-tight"
+              />
             </FadeIn>
           </div>
 
@@ -120,7 +107,7 @@ const AboutSection = () => {
                    className="font-kanit font-light text-foreground/70 leading-relaxed"
                   style={{ fontSize: "clamp(1rem, 1.5vw, 1.25rem)" }}
                 >
-                  I spent seven years keeping mission-critical infrastructure alive — first at <strong className="text-white font-normal">Nokia</strong>, then at <strong className="text-white font-normal">Huawei</strong> — managing telecom and cloud systems at 99.9%+ uptime, 24×7, with no tolerance for failure. That decade of operational discipline shaped how I think about reliability, observability, and what "production-ready" actually means.
+                  I spent nine years keeping mission-critical infrastructure alive — first at <strong className="text-white font-normal">Nokia</strong>, then at <strong className="text-white font-normal">Huawei</strong> — managing telecom and cloud systems at 99.9%+ uptime, 24×7, with no tolerance for failure. That decade of operational discipline shaped how I think about reliability, observability, and what "production-ready" actually means.
                 </p>
                 <p
                    className="font-kanit font-light text-muted-foreground leading-relaxed"

@@ -252,9 +252,7 @@ const IDCard = () => {
         <div className="w-full h-full bg-v2-raised rounded-2xl overflow-hidden relative">
           <img
             src="/images/profile.png"
-            alt="Portrait of Saran Jaya Thilak"
-            width={300}
-            height={420}
+            alt="Saran Portrait"
             className="w-full h-full object-cover opacity-80 group-hover:opacity-95 transition-opacity duration-500"
             draggable={false}
           />
@@ -387,15 +385,14 @@ const HeroSection = () => {
 
       {/* Massive Typography Graphic */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-        <motion.p
-          aria-hidden="true"
+        <motion.h1
           className="text-[20vw] font-black opacity-[0.02] tracking-tighter select-none"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 0.02, scale: 1 }}
           transition={{ duration: 1.5, ease: "easeOut" }}
         >
           PRODUCTION
-        </motion.p>
+        </motion.h1>
       </div>
 
       {/* Hero Content */}
@@ -421,7 +418,7 @@ const HeroSection = () => {
 
             <FadeIn y={20} delay={0.8} viewportMargin="-100px">
               <p className="text-gray-400 max-w-lg text-base leading-relaxed mb-10">
-                RAG chatbots improving customer interaction efficiency by 25%. Airflow pipelines running at 99.9% reliability. I design and ship data&nbsp;+&nbsp;AI infrastructure that doesn&apos;t break under real workloads.
+                RAG chatbots that cut support load by 25%. Airflow pipelines running at 99.9% reliability. I design and ship data&nbsp;+&nbsp;AI infrastructure that doesn&apos;t break under real workloads.
               </p>
             </FadeIn>
 

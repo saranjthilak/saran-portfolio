@@ -49,19 +49,19 @@ interface ExpertiseItem {
 
 const EXPERTISE: ExpertiseItem[] = [
   {
-    number: "01", skills: ["ETL/ELT design", "Streaming ingestion", "Data contracts", "SQL transformations"], projectRepos: ["Divvy-Bike-Data-End-to-End-Pipeline"], categoryLabel: "Data Engineering", name: "Production Data Engineering", spec: "REFERENCE PATTERN · STREAMING INGESTION", icon: Database,
+    number: "01", skills: ["ETL/ELT design", "Streaming ingestion", "Data contracts", "SQL transformations"], projectRepos: ["Divvy-Bike-Data-End-to-End-Pipeline"], categoryLabel: "Data Engineering", name: "Data Engineering Architecture", spec: "REFERENCE PATTERN · STREAMING INGESTION", icon: Database,
     description: "Reference architecture for resilient ETL/ELT pipelines with Apache Airflow and dbt, including data contracts, idempotent processing, and streaming ingestion into analytical warehouses.",
     pipeline: ["Kafka Ingest", "Airflow DAG", "dbt Models", "BigQuery"], tags: ["Airflow", "dbt", "BigQuery", "Snowflake", "ETL/ELT"], metrics: { label: "SCENARIO", value: "STREAMING INGEST" }, inspectorNote: "TODO: add the source dataset, measured event volume, and benchmark window.", tone: "cyan",
-    telemetry: [{ label: "THROUGHPUT", value: "1.2M EVENTS/S" }, { label: "SCHEMA", value: "ENFORCED" }, { label: "DROPPED", value: "0.00%" }], terminal: ["> airflow dags trigger ingest_prod", "> dbt run --select marts+", "> contract.check() ........ PASS"],
+    telemetry: [{ label: "THROUGHPUT", value: "1.2M EVENTS/S" }, { label: "SCHEMA", value: "ENFORCED" }, { label: "DROPPED", value: "0.00%" }], terminal: ["> airflow dags trigger ingest_reference", "> dbt run --select marts+", "> contract.check() ........ PASS"],
   },
   {
-    number: "02", skills: ["Hybrid retrieval", "Multimodal embeddings", "Citation grounding", "Hallucination guardrails"], projectRepos: ["Multimodel_RAG", "Car-Manual-RAG-Assistant"], categoryLabel: "GenAI & RAG", name: "Enterprise GenAI & RAG Systems", spec: "REFERENCE PATTERN · HYBRID RETRIEVAL", icon: BrainCircuit,
+    number: "02", skills: ["Hybrid retrieval", "Multimodal embeddings", "Citation grounding", "Hallucination guardrails"], projectRepos: ["Multimodel_RAG", "Car-Manual-RAG-Assistant"], categoryLabel: "GenAI & RAG", name: "GenAI & RAG Systems", spec: "REFERENCE PATTERN · HYBRID RETRIEVAL", icon: BrainCircuit,
     description: "Reference architecture for grounded, citation-backed responses, combining semantic and keyword retrieval, cross-encoder reranking, and answer guardrails with LangChain and FAISS.",
     pipeline: ["Query", "Embed", "FAISS Vector", "Rerank", "Grounded LLM"], tags: ["LangChain", "Vector DB", "FAISS", "Guardrails", "Reranking"], metrics: { label: "DESIGN FOCUS", value: "CITATION GROUNDING" }, inspectorNote: "TODO: add the evaluation set, grounding metric definition, and test results.", tone: "violet",
     telemetry: [{ label: "P99 LATENCY", value: "42 MS" }, { label: "GROUNDING", value: "99.4%" }, { label: "TOP-K", value: "8 DOCS" }], terminal: ["> retriever.search(hybrid=True)", "> reranker.score(cross_encoder)", "> citation_guard ............ PASS"],
   },
   {
-    number: "03", skills: ["Model serving", "Quantized inference", "Canary deployments", "Drift monitoring"], projectRepos: ["ai_poduct_matching"], categoryLabel: "MLOps", name: "Production MLOps & Model Serving", spec: "MODEL REGISTRY · CANARY ROLLOUT", icon: GitBranch,
+    number: "03", skills: ["Model serving", "Quantized inference", "Canary deployments", "Drift monitoring"], projectRepos: ["ai_poduct_matching"], categoryLabel: "MLOps", name: "Model Operations & Serving", spec: "MODEL REGISTRY · CANARY ROLLOUT", icon: GitBranch,
     description: "Reference workflow for model registration, quantized inference, canary routing, and drift monitoring using NVIDIA Triton, MLflow, and FastAPI.",
     pipeline: ["Train / Log", "MLflow", "Triton Server", "Canary Route"], tags: ["MLflow", "Triton", "Quantization", "Docker", "Model Registry"], metrics: { label: "DESIGN FOCUS", value: "CANARY ROLLOUT" }, inspectorNote: "TODO: add the deployed model, inference hardware, and latency test conditions.", tone: "amber",
     telemetry: [{ label: "P99 INFERENCE", value: "18 MS" }, { label: "CANARY", value: "10% TRAFFIC" }, { label: "DRIFT", value: "NORMAL" }], terminal: ["> mlflow.register_model(v2.5)", "> triton_client.infer(model)", "> route.canary(traffic=0.1)"],
@@ -253,7 +253,7 @@ const ServicesSection = () => {
           })}
         </div>
 
-        <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-border/70 pt-3 font-mono text-[9px] tracking-widest text-muted-foreground"><span className="flex items-center gap-2"><span className={`h-1.5 w-1.5 rounded-full ${isSimulating ? "animate-ping bg-accent" : "bg-accent"}`} />{stageLabel}</span><span>LATENCY BUDGET / <span className="text-foreground">&lt; 50 MS</span></span></div>
+        <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-border/70 pt-3 font-mono text-[9px] tracking-widest text-muted-foreground"><span className="flex items-center gap-2"><span className={`h-1.5 w-1.5 rounded-full ${isSimulating ? "animate-ping bg-accent" : "bg-accent"}`} />{stageLabel}</span><span>PIPELINE FLOW / <span className="text-foreground">6 DOMAINS</span></span></div>
       </motion.div>
 
       {/* ── Single shared inspector (rendered once, shown for active tab) ── */}
