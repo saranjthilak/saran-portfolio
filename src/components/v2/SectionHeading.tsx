@@ -38,6 +38,8 @@ interface SectionHeadingProps {
   align?: "left" | "center";
   /** Extra className on the h2 */
   className?: string;
+  /** HTML id for the h2 element (for aria-labelledby) */
+  id?: string;
   /** font-size clamp; defaults to "clamp(2.6rem, 6.5vw, 4.8rem)" */
   fontSize?: string;
 }
@@ -51,6 +53,7 @@ export default function SectionHeading({
   align = "center",
   className = "",
   fontSize = "clamp(2.6rem, 6.5vw, 4.8rem)",
+  id,
 }: SectionHeadingProps) {
   const ref = useRef<HTMLHeadingElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
@@ -72,6 +75,7 @@ export default function SectionHeading({
   return (
     <motion.h2
       ref={ref}
+      id={id}
       className={`font-black leading-[0.92] tracking-tighter ${alignClass} ${className}`}
       style={{ fontSize }}
     >
