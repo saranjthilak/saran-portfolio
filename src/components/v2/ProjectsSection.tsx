@@ -5,6 +5,7 @@ import { motion, useInView } from "framer-motion";
 import { projects } from "@/data/portfolio";
 import ProjectLinks from "./LiveProjectButton";
 import BlueprintSectionHeader from "./BlueprintSectionHeader";
+import FadeIn from "./FadeIn";
 import SectionHeading from "./SectionHeading";
 
 const FEATURED = projects.filter((p) => p.featured);
