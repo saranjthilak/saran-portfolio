@@ -83,7 +83,7 @@ const AboutSection = () => {
             <FadeIn delay={0.08} y={30}>
               <SectionHeading
                 prefix="Ops brain, "
-                accentWord="AI hands"
+                accentWord={"AI\u00a0hands"}
                 gradient="research"
                 align="left"
                 className="mb-4"
