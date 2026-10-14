@@ -76,25 +76,17 @@ const AboutSection = () => {
           <div>
             <FadeIn delay={0} y={20}>
               <p className="mono-label flex items-center gap-2 mb-5 sm:mb-8">
-                <span className="w-1.5 h-1.5 rounded-full bg-accent inline-block" />
+                <span className="w-1.5 h-1.5 rounded-full bg-white/50 inline-block" />
                 About Me
               </p>
             </FadeIn>
-            <FadeIn delay={0.1} y={20}>
-              <h2
-                className="font-podium uppercase leading-[0.95] tracking-tight text-foreground"
-                style={{ fontSize: "clamp(2.5rem, 5vw, 4.5rem)" }}
-              >
-                I engineer data<br />
-                and AI systems<br />
-              </h2>
+            <FadeIn delay={0.08} y={30}>
               <SectionHeading
-                prefix="that "
-                accentWord="scale"
+                prefix="Ops brain, "
+                accentWord="AI hands"
                 gradient="research"
                 align="left"
-                fontSize="clamp(2.5rem, 5vw, 4.5rem)"
-                className="font-podium uppercase leading-[0.95] tracking-tight"
+                className="mb-4"
               />
             </FadeIn>
           </div>
@@ -107,7 +99,7 @@ const AboutSection = () => {
                    className="font-kanit font-light text-foreground/70 leading-relaxed"
                   style={{ fontSize: "clamp(1rem, 1.5vw, 1.25rem)" }}
                 >
-                  I spent nine years keeping mission-critical infrastructure alive — first at <strong className="text-white font-normal">Nokia</strong>, then at <strong className="text-white font-normal">Huawei</strong> — managing telecom and cloud systems at 99.9%+ uptime, 24×7, with no tolerance for failure. That decade of operational discipline shaped how I think about reliability, observability, and what "production-ready" actually means.
+                  I spent seven years keeping mission-critical infrastructure alive — first at <strong className="text-white font-normal">Nokia</strong>, then at <strong className="text-white font-normal">Huawei</strong> — managing telecom and cloud systems at 99.9%+ uptime, 24×7, with no tolerance for failure. That decade of operational discipline shaped how I think about reliability, observability, and what "production-ready" actually means.
                 </p>
                 <p
                    className="font-kanit font-light text-muted-foreground leading-relaxed"
