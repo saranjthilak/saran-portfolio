@@ -192,23 +192,31 @@ export default function ProjectsSection() {
         <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
           <BlueprintSectionHeader align="left">
             <div className="mb-20 md:mb-32">
-              <SectionHeading
-                prefix="Featured "
-                accentWord="Dashboard"
-                gradient="projects"
-                align="left"
-                fontSize="clamp(3rem, 8vw, 6.5rem)"
-              />
-              <motion.p 
-                className="mt-6 text-white/50 max-w-xl font-kanit font-light text-lg"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-              >
-                A curated selection of my most significant technical achievements, 
-                architected for performance and scale.
-              </motion.p>
+              {/* Eyebrow — matches Experience section style */}
+              <FadeIn delay={0} y={20}>
+                <p className="flex items-center gap-2 font-medium uppercase tracking-[0.25em] text-white/50 text-xs mb-5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white/50 inline-block" />
+                  Projects
+                </p>
+              </FadeIn>
+
+              {/* Heading — reuses SectionHeading exactly as Experience section does */}
+              <FadeIn delay={0.08} y={30}>
+                <SectionHeading
+                  prefix="Proof of "
+                  accentWord="work"
+                  gradient="projects"
+                  align="left"
+                  className="mb-4"
+                />
+              </FadeIn>
+
+              {/* Subtitle */}
+              <FadeIn delay={0.2} y={16}>
+                <p className="mt-6 text-white/50 max-w-xl font-kanit font-light text-lg">
+                  Four projects across RAG, computer vision, and data engineering, each with the problem, the approach, and the result.
+                </p>
+              </FadeIn>
             </div>
           </BlueprintSectionHeader>
 
