@@ -128,23 +128,28 @@ export default function GithubSection({ initialData }: { initialData?: { stats: 
         {/* ── Section Header ── */}
         <BlueprintSectionHeader align="center">
           <div className="text-center mb-16 md:mb-20">
-            <FadeIn
-              y={10}
-              duration={0.6}
-              ease={[0.16, 1, 0.3, 1]}
-              className="flex items-center justify-center gap-2 font-medium uppercase tracking-[0.25em] text-white/50 text-xs mb-4"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-              Open Source
+            {/* Eyebrow — matches Experience section style */}
+            <FadeIn delay={0} y={20}>
+              <p className="flex items-center justify-center gap-2 font-medium uppercase tracking-[0.25em] text-white/50 text-xs mb-5">
+                <span className="w-1.5 h-1.5 rounded-full bg-white/50 inline-block" />
+                Activity
+              </p>
             </FadeIn>
-            <SectionHeading
-              prefix="GitHub "
-              accentWord="Contributions"
-              gradient="github"
-              align="center"
-            />
-            <FadeIn y={0} delay={0.3} duration={1} className="mt-5 text-white/40 max-w-md mx-auto font-kanit font-light text-base">
-              <p>Shipping code consistently — building in public, one commit at a time.</p>
+
+            {/* Heading — reuses SectionHeading exactly as Experience section does */}
+            <FadeIn delay={0.08} y={30}>
+              <SectionHeading
+                prefix="Code, "
+                accentWord="every week"
+                gradient="github"
+                align="center"
+                className="mb-4"
+              />
+            </FadeIn>
+
+            {/* Subtitle */}
+            <FadeIn y={16} delay={0.2} duration={0.6} className="mt-5 text-white/40 max-w-md mx-auto font-kanit font-light text-base">
+              <p>Public activity on GitHub, updated automatically.</p>
             </FadeIn>
           </div>
         </BlueprintSectionHeader>
