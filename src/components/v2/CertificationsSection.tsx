@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { certifications } from "@/data/portfolio";
+import FadeIn from "./FadeIn";
 import SectionHeading from "./SectionHeading";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -41,14 +42,31 @@ export default function CertificationsSection() {
       {/* ── Content ── */}
       <div className="relative z-10 w-full max-w-6xl mx-auto px-6 md:px-10 pb-16 md:pb-24 pt-20 md:pt-24 my-auto">
 
-        {/* Heading */}
-        <SectionHeading
-          prefix="My "
-          accentWord="Certifications"
-          gradient="certifications"
-          align="center"
-          className="mb-12"
-        />
+        {/* Eyebrow — matches Experience section style */}
+        <FadeIn delay={0} y={20}>
+          <p className="flex items-center gap-2 font-medium uppercase tracking-[0.25em] text-white/50 text-xs mb-5">
+            <span className="w-1.5 h-1.5 rounded-full bg-white/50 inline-block" />
+            Credentials
+          </p>
+        </FadeIn>
+
+        {/* Heading — reuses SectionHeading exactly as Experience section does */}
+        <FadeIn delay={0.08} y={30}>
+          <SectionHeading
+            prefix="Credentials that "
+            accentWord="check out"
+            gradient="certifications"
+            align="left"
+            className="mb-4"
+          />
+        </FadeIn>
+
+        {/* Subtitle */}
+        <FadeIn delay={0.2} y={16}>
+          <p className="mt-4 sm:mt-6 text-white/50 max-w-2xl font-kanit font-light text-base sm:text-lg mb-12 sm:mb-16 md:mb-20">
+            Cloud, GenAI, and data certifications from AWS, Oracle, HashiCorp, DeepLearning.AI, and UC Davis.
+          </p>
+        </FadeIn>
 
         {/* Cert list */}
         {certifications.length > 0 && (
