@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { publications } from "@/data/portfolio";
+import FadeIn from "./FadeIn";
 import SectionHeading from "./SectionHeading";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -51,28 +52,32 @@ export default function ResearchSection() {
       {/* ── Content ── */}
       <div className="relative z-10 w-full max-w-[90%] lg:max-w-5xl mx-auto px-6 md:px-10 pb-16 md:pb-24 pt-20 md:pt-24 my-auto">
 
+        {/* Eyebrow — matches Experience section style */}
+        <FadeIn delay={0} y={20}>
+          <p className="flex items-center gap-2 font-medium uppercase tracking-[0.25em] text-white/50 text-xs mb-5">
+            <span className="w-1.5 h-1.5 rounded-full bg-white/50 inline-block" />
+            Research
+          </p>
+        </FadeIn>
 
-        {/* Main heading */}
-        <SectionHeading
-          prefix="Published "
-          accentWord="work"
-          gradient="research"
-          align="center"
-          className="mb-8"
-        />
+        {/* Heading — reuses SectionHeading exactly as Experience section does */}
+        <FadeIn delay={0.08} y={30}>
+          <SectionHeading
+            prefix="Peer-reviewed, "
+            accentWord="not just claimed"
+            gradient="research"
+            align="left"
+            className="mb-4 lg:whitespace-nowrap"
+            fontSize="clamp(1.75rem, 3.8vw, 3.25rem)"
+          />
+        </FadeIn>
 
-        {/* Sub-line */}
-        <motion.p
-          className="text-white/55 font-light mb-10 max-w-xl mx-auto text-center"
-          style={{ fontSize: "clamp(0.9rem, 1.4vw, 1.15rem)" }}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.25, ease: EASE }}
-        >
-          Peer-reviewed machine learning research published at IEEE — spanning renewable energy
-          forecasting and dynamic pricing systems.
-        </motion.p>
+        {/* Subtitle */}
+        <FadeIn delay={0.2} y={16}>
+          <p className="mt-4 sm:mt-6 text-white/50 max-w-2xl font-kanit font-light text-base sm:text-lg mb-12 sm:mb-16 md:mb-20">
+            Two peer-reviewed papers published at IEEE, on solar plant performance and air ticket price prediction.
+          </p>
+        </FadeIn>
 
         {/* ── Publications ── */}
         {publications.length > 0 && (
