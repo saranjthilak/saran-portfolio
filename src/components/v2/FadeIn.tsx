@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, type Easing, type Variant, type Variants } from "framer-motion";
+import { motion, useReducedMotion, type Easing, type Variant, type Variants } from "framer-motion";
 import { type ReactNode } from "react";
 
 interface FadeInProps {
@@ -32,6 +32,12 @@ const FadeIn = ({
   ease = [0.25, 0.1, 0.25, 1],
   viewportMargin = "50px",
 }: FadeInProps) => {
+  const shouldReduceMotion = useReducedMotion();
+
+  if (shouldReduceMotion) {
+    return <div className={className}>{children}</div>;
+  }
+
   const hasScale = scale !== 1;
   const hasBlur = blur > 0;
 
