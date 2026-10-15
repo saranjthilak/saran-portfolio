@@ -103,19 +103,21 @@ export default function SectionHeading({
         }}
       >
         {accentWord.split("").map((char, i) => (
-          <motion.span
-            key={i}
-            className="inline-block"
-            initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-            animate={shouldReduceMotion || inView ? { opacity: 1, y: 0 } : {}}
-            transition={
-              shouldReduceMotion
-                ? { duration: 0 }
-                : { duration: 0.05, delay: prefixDelay + i * charDelay }
-            }
-          >
-            {char === " " ? "\u00A0" : char}
-          </motion.span>
+          <span key={i} className="inline">
+            <motion.span
+              className="inline-block"
+              initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+              animate={shouldReduceMotion || inView ? { opacity: 1, y: 0 } : {}}
+              transition={
+                shouldReduceMotion
+                  ? { duration: 0 }
+                  : { duration: 0.05, delay: prefixDelay + i * charDelay }
+              }
+            >
+              {char === " " ? "\u00A0" : char}
+            </motion.span>
+            {char === " " && <wbr />}
+          </span>
         ))}
       </span>
 
