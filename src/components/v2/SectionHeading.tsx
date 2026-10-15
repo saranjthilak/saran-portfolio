@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -57,6 +57,7 @@ export default function SectionHeading({
 }: SectionHeadingProps) {
   const ref = useRef<HTMLHeadingElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
+  const shouldReduceMotion = useReducedMotion();
 
   const stops = gradientStops ?? HEADING_GRADIENTS[gradient];
   // Build a CSS gradient string from the stops array
@@ -83,9 +84,9 @@ export default function SectionHeading({
       {prefix && (
         <motion.span
           className="text-white"
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, ease: EASE }}
+          initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          animate={shouldReduceMotion || inView ? { opacity: 1, y: 0 } : {}}
+          transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.5, ease: EASE }}
         >
           {prefix}
         </motion.span>
@@ -105,11 +106,15 @@ export default function SectionHeading({
           <motion.span
             key={i}
             className="inline-block"
-            initial={{ opacity: 0, y: 10 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.05, delay: prefixDelay + i * charDelay }}
+            initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+            animate={shouldReduceMotion || inView ? { opacity: 1, y: 0 } : {}}
+            transition={
+              shouldReduceMotion
+                ? { duration: 0 }
+                : { duration: 0.05, delay: prefixDelay + i * charDelay }
+            }
           >
-            {char}
+            {char === " " ? "\u00A0" : char}
           </motion.span>
         ))}
       </span>
@@ -118,9 +123,13 @@ export default function SectionHeading({
       {suffix && (
         <motion.span
           className="text-white"
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, ease: EASE, delay: prefixDelay + 0.1 }}
+          initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          animate={shouldReduceMotion || inView ? { opacity: 1, y: 0 } : {}}
+          transition={
+            shouldReduceMotion
+              ? { duration: 0 }
+              : { duration: 0.5, ease: EASE, delay: prefixDelay + 0.1 }
+          }
         >
           {suffix}
         </motion.span>
@@ -135,31 +144,41 @@ export default function SectionHeading({
           WebkitTextFillColor: "transparent",
           backgroundClip: "text",
         }}
-        initial={{ opacity: 0, scale: 0, rotate: -20 }}
-        animate={inView ? { opacity: 1, scale: 1, rotate: 0 } : {}}
-        transition={{
-          type: "spring",
-          stiffness: 500,
-          damping: 12,
-          delay: typingEnd + 0.15,
-        }}
+        initial={
+          shouldReduceMotion
+            ? { opacity: 1, scale: 1, rotate: 0 }
+            : { opacity: 0, scale: 0, rotate: -20 }
+        }
+        animate={shouldReduceMotion || inView ? { opacity: 1, scale: 1, rotate: 0 } : {}}
+        transition={
+          shouldReduceMotion
+            ? { duration: 0 }
+            : {
+                type: "spring",
+                stiffness: 500,
+                damping: 12,
+                delay: typingEnd + 0.15,
+              }
+        }
       >
         .
       </motion.span>
 
       {/* Blinking cursor — loops a few times then disappears */}
-      <motion.span
-        className="inline-block w-[3px] h-[0.8em] ml-1 align-middle rounded-full"
-        style={{ background: gradientCss }}
-        initial={{ opacity: 0 }}
-        animate={inView ? { opacity: [0, 1, 0] } : { opacity: 0 }}
-        transition={{
-          duration: 0.7,
-          repeat: 5,
-          delay: 0.4,
-          repeatType: "loop",
-        }}
-      />
+      {!shouldReduceMotion && (
+        <motion.span
+          className="inline-block w-[3px] h-[0.8em] ml-1 align-middle rounded-full"
+          style={{ background: gradientCss }}
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: [0, 1, 0] } : { opacity: 0 }}
+          transition={{
+            duration: 0.7,
+            repeat: 5,
+            delay: 0.4,
+            repeatType: "loop",
+          }}
+        />
+      )}
     </motion.h2>
   );
 }
