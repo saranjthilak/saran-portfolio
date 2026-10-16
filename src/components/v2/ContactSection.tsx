@@ -8,6 +8,8 @@ import { Check, Crown, ArrowUpRight, Loader2 } from "lucide-react";
 import { useState, useRef } from "react";
 import { useInView } from "framer-motion";
 import BlueprintSectionHeader from "./BlueprintSectionHeader";
+import FadeIn from "./FadeIn";
+import SectionHeading from "./SectionHeading";
 
 // ── Validation schema (mirrors server-side limits) ─────────────────────────
 const formSchema = z.object({
@@ -130,22 +132,31 @@ const ContactSection = () => {
         <div>
 
 
-          {/* Heading */}
-          <div className="animate-fade-up-delay-1">
-            <h2
-              className="font-black leading-[0.92] tracking-tighter text-white"
-              style={{ fontSize: "clamp(2.8rem, 8vw, 7rem)" }}
-            >
-              Build<span className="text-accent">.</span><br />Ship<span className="text-accent">.</span><br /><span className="accent-serif">Scale</span><span className="text-accent">.</span>
-            </h2>
-          </div>
+          {/* Eyebrow — matches Experience section style */}
+          <FadeIn delay={0} y={20}>
+            <p className="font-kanit flex items-center gap-2 font-medium uppercase tracking-[0.25em] text-white/50 text-xs mb-5">
+              <span className="w-1.5 h-1.5 rounded-full bg-white/50 inline-block" />
+              Contact
+            </p>
+          </FadeIn>
+
+          {/* Heading — reuses SectionHeading exactly as Experience section does */}
+          <FadeIn delay={0.08} y={30}>
+            <SectionHeading
+              prefix="Let's build something that "
+              accentWord="holds up"
+              gradient="experience"
+              align="left"
+              className="font-kanit"
+            />
+          </FadeIn>
 
           {/* Subtext */}
-          <div className="animate-fade-up-delay-2 mt-6 lg:mt-8">
-            <p className="font-inter text-white/70 text-sm sm:text-base leading-relaxed max-w-md">
-              I design and deliver production-grade RAG systems, end-to-end MLOps pipelines, and scalable cloud data infrastructure — built to handle real workloads, not just demos. If you have a data or AI problem worth solving, <strong className="text-white">let&apos;s get to work.</strong>
+          <FadeIn delay={0.2} y={16}>
+            <p className="mt-6 text-white/70 text-sm sm:text-base leading-relaxed max-w-md">
+              I work on RAG systems, data pipelines, and cloud infrastructure. Tell me what you&apos;re building, and I&apos;ll get back to you within a day.
             </p>
-          </div>
+          </FadeIn>
 
           {/* Links list */}
           <div className="animate-fade-up-delay-3">
