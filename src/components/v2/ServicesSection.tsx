@@ -42,48 +42,124 @@ interface ExpertiseItem {
   skills: string[];
   projectRepos: string[];
   metrics: { label: string; value: string };
-  inspectorNote: string;
+  inspectorNote?: string;
   tone: DomainTone;
   telemetry: { label: string; value: string }[];
   terminal: string[];
 }
 
+function isTodoOrEmpty(value: unknown): boolean {
+  if (value === null || value === undefined) return true;
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    return trimmed === "" || /^todo(\b|…|\.{3}|:|\s|$)/i.test(trimmed);
+  }
+  if (Array.isArray(value)) {
+    return value.length === 0 || value.every(isTodoOrEmpty);
+  }
+  if (typeof value === "object") {
+    const vals = Object.values(value);
+    return vals.length === 0 || vals.every(isTodoOrEmpty);
+  }
+  return false;
+}
+
 const EXPERTISE: ExpertiseItem[] = [
   {
-    number: "01", skills: ["ETL/ELT design", "Streaming ingestion", "Data contracts", "SQL transformations"], projectRepos: ["Divvy-Bike-Data-End-to-End-Pipeline"], categoryLabel: "Data Engineering", name: "Data Engineering Architecture", spec: "REFERENCE PATTERN · STREAMING INGESTION", icon: Database,
+    number: "01",
+    skills: ["ETL/ELT design", "Streaming ingestion", "Data contracts", "SQL transformations"],
+    projectRepos: ["Divvy-Bike-Data-End-to-End-Pipeline"],
+    categoryLabel: "Data Engineering",
+    name: "Data Engineering Architecture",
+    spec: "REFERENCE PATTERN · STREAMING INGESTION",
+    icon: Database,
     description: "Reference architecture for resilient ETL/ELT pipelines with Apache Airflow and dbt, including data contracts, idempotent processing, and streaming ingestion into analytical warehouses.",
-    pipeline: ["Kafka Ingest", "Airflow DAG", "dbt Models", "BigQuery"], tags: ["Airflow", "dbt", "BigQuery", "Snowflake", "ETL/ELT"], metrics: { label: "SCENARIO", value: "STREAMING INGEST" }, inspectorNote: "TODO: add the source dataset, measured event volume, and benchmark window.", tone: "cyan",
-    telemetry: [{ label: "THROUGHPUT", value: "1.2M EVENTS/S" }, { label: "SCHEMA", value: "ENFORCED" }, { label: "DROPPED", value: "0.00%" }], terminal: ["> airflow dags trigger ingest_reference", "> dbt run --select marts+", "> contract.check() ........ PASS"],
+    pipeline: ["Kafka Ingest", "Airflow DAG", "dbt Models", "BigQuery"],
+    tags: ["Airflow", "dbt", "BigQuery", "Snowflake", "ETL/ELT"],
+    metrics: { label: "SCENARIO", value: "STREAMING INGEST" },
+    tone: "cyan",
+    telemetry: [{ label: "THROUGHPUT", value: "1.2M EVENTS/S" }, { label: "SCHEMA", value: "ENFORCED" }, { label: "DROPPED", value: "0.00%" }],
+    terminal: ["> airflow dags trigger ingest_reference", "> dbt run --select marts+", "> contract.check() ........ PASS"],
   },
   {
-    number: "02", skills: ["Hybrid retrieval", "Multimodal embeddings", "Citation grounding", "Hallucination guardrails"], projectRepos: ["Multimodel_RAG", "Car-Manual-RAG-Assistant"], categoryLabel: "GenAI & RAG", name: "GenAI & RAG Systems", spec: "REFERENCE PATTERN · HYBRID RETRIEVAL", icon: BrainCircuit,
+    number: "02",
+    skills: ["Hybrid retrieval", "Multimodal embeddings", "Citation grounding", "Hallucination guardrails"],
+    projectRepos: ["Multimodel_RAG", "Car-Manual-RAG-Assistant"],
+    categoryLabel: "GenAI & RAG",
+    name: "GenAI & RAG Systems",
+    spec: "REFERENCE PATTERN · HYBRID RETRIEVAL",
+    icon: BrainCircuit,
     description: "Reference architecture for grounded, citation-backed responses, combining semantic and keyword retrieval, cross-encoder reranking, and answer guardrails with LangChain and FAISS.",
-    pipeline: ["Query", "Embed", "FAISS Vector", "Rerank", "Grounded LLM"], tags: ["LangChain", "Vector DB", "FAISS", "Guardrails", "Reranking"], metrics: { label: "DESIGN FOCUS", value: "CITATION GROUNDING" }, inspectorNote: "TODO: add the evaluation set, grounding metric definition, and test results.", tone: "violet",
-    telemetry: [{ label: "P99 LATENCY", value: "42 MS" }, { label: "GROUNDING", value: "99.4%" }, { label: "TOP-K", value: "8 DOCS" }], terminal: ["> retriever.search(hybrid=True)", "> reranker.score(cross_encoder)", "> citation_guard ............ PASS"],
+    pipeline: ["Query", "Embed", "FAISS Vector", "Rerank", "Grounded LLM"],
+    tags: ["LangChain", "Vector DB", "FAISS", "Guardrails", "Reranking"],
+    metrics: { label: "DESIGN FOCUS", value: "CITATION GROUNDING" },
+    tone: "violet",
+    telemetry: [{ label: "P99 LATENCY", value: "42 MS" }, { label: "GROUNDING", value: "99.4%" }, { label: "TOP-K", value: "8 DOCS" }],
+    terminal: ["> retriever.search(hybrid=True)", "> reranker.score(cross_encoder)", "> citation_guard ............ PASS"],
   },
   {
-    number: "03", skills: ["Model serving", "Quantized inference", "Canary deployments", "Drift monitoring"], projectRepos: ["ai_poduct_matching"], categoryLabel: "MLOps", name: "Model Operations & Serving", spec: "MODEL REGISTRY · CANARY ROLLOUT", icon: GitBranch,
+    number: "03",
+    skills: ["Model serving", "Quantized inference", "Canary deployments", "Drift monitoring"],
+    projectRepos: ["ai_poduct_matching"],
+    categoryLabel: "MLOps",
+    name: "Model Operations & Serving",
+    spec: "MODEL REGISTRY · CANARY ROLLOUT",
+    icon: GitBranch,
     description: "Reference workflow for model registration, quantized inference, canary routing, and drift monitoring using NVIDIA Triton, MLflow, and FastAPI.",
-    pipeline: ["Train / Log", "MLflow", "Triton Server", "Canary Route"], tags: ["MLflow", "Triton", "Quantization", "Docker", "Model Registry"], metrics: { label: "DESIGN FOCUS", value: "CANARY ROLLOUT" }, inspectorNote: "TODO: add the deployed model, inference hardware, and latency test conditions.", tone: "amber",
-    telemetry: [{ label: "P99 INFERENCE", value: "18 MS" }, { label: "CANARY", value: "10% TRAFFIC" }, { label: "DRIFT", value: "NORMAL" }], terminal: ["> mlflow.register_model(v2.5)", "> triton_client.infer(model)", "> route.canary(traffic=0.1)"],
+    pipeline: ["Train / Log", "MLflow", "Triton Server", "Canary Route"],
+    tags: ["MLflow", "Triton", "Quantization", "Docker", "Model Registry"],
+    metrics: { label: "DESIGN FOCUS", value: "CANARY ROLLOUT" },
+    tone: "amber",
+    telemetry: [{ label: "P99 INFERENCE", value: "18 MS" }, { label: "CANARY", value: "10% TRAFFIC" }, { label: "DRIFT", value: "NORMAL" }],
+    terminal: ["> mlflow.register_model(v2.5)", "> triton_client.infer(model)", "> route.canary(traffic=0.1)"],
   },
   {
-    number: "04", skills: ["Infrastructure as code", "Multi-cloud provisioning", "Container orchestration", "Cost optimization"], projectRepos: ["Divvy-Bike-Data-End-to-End-Pipeline", "vanilla-steel-assessment"], categoryLabel: "Cloud & IaC", name: "Cloud Topology & IaC", spec: "MULTI-CLOUD · TERRAFORM AUTOMATION", icon: Cloud,
+    number: "04",
+    skills: ["Infrastructure as code", "Multi-cloud provisioning", "Container orchestration", "Cost optimization"],
+    projectRepos: ["Divvy-Bike-Data-End-to-End-Pipeline", "vanilla-steel-assessment"],
+    categoryLabel: "Cloud & IaC",
+    name: "Cloud Topology & IaC",
+    spec: "MULTI-CLOUD · TERRAFORM AUTOMATION",
+    icon: Cloud,
     description: "Reference workflow for provisioning cloud infrastructure with Terraform and Kubernetes, with security, cost visibility, and repeatable deployments as design considerations.",
-    pipeline: ["Terraform HCL", "State Lock", "K8s Mesh", "Live Cluster"], tags: ["Terraform", "AWS", "GCP", "Kubernetes", "FinOps"], metrics: { label: "DESIGN FOCUS", value: "DECLARATIVE INFRASTRUCTURE" }, inspectorNote: "TODO: list the cloud account, Terraform modules, and infrastructure scope.", tone: "sky",
-    telemetry: [{ label: "AVAILABILITY", value: "99.99%" }, { label: "PODS", value: "12 / 12 READY" }, { label: "STATE", value: "SYNCED" }], terminal: ["> terraform plan -out=prod.tfplan", "> kubectl rollout status deploy/mesh", "> policy.guard .............. PASS"],
+    pipeline: ["Terraform HCL", "State Lock", "K8s Mesh", "Live Cluster"],
+    tags: ["Terraform", "AWS", "GCP", "Kubernetes", "FinOps"],
+    metrics: { label: "DESIGN FOCUS", value: "DECLARATIVE INFRASTRUCTURE" },
+    tone: "sky",
+    telemetry: [{ label: "AVAILABILITY", value: "99.99%" }, { label: "PODS", value: "12 / 12 READY" }, { label: "STATE", value: "SYNCED" }],
+    terminal: ["> terraform plan -out=prod.tfplan", "> kubectl rollout status deploy/mesh", "> policy.guard .............. PASS"],
   },
   {
-    number: "05", skills: ["Incident response", "Failover design", "SLA operations", "Infrastructure monitoring"], projectRepos: [], categoryLabel: "Mission-Critical", name: "Mission-Critical Ops & High Availability", spec: "INCIDENT RESPONSE · FAILOVER DESIGN", icon: Radio,
+    number: "05",
+    skills: ["Incident response", "Failover design", "SLA operations", "Infrastructure monitoring"],
+    projectRepos: [],
+    categoryLabel: "Mission-Critical",
+    name: "Mission-Critical Ops & High Availability",
+    spec: "INCIDENT RESPONSE · FAILOVER DESIGN",
+    icon: Radio,
     description: "Reference patterns for high-availability operations, including failover design, Prometheus/Grafana telemetry, incident response, and circuit-breaker remediation.",
-    pipeline: ["Prometheus", "Telemetry", "Circuit Breaker", "Auto-Heal"], tags: ["High Availability", "Prometheus", "Grafana", "Incident SRE", "Failover"], metrics: { label: "DESIGN FOCUS", value: "FAILOVER READINESS" }, inspectorNote: "TODO: add the service scope, availability target, and incident review source.", tone: "rose",
-    telemetry: [{ label: "UPTIME", value: "99.99%" }, { label: "MTTR", value: "< 8 MIN" }, { label: "FAILOVER", value: "ARMED" }], terminal: ["> alertmanager.route(severity)", "> circuit_breaker.trip()", "> failover.recover ........ PASS"],
+    pipeline: ["Prometheus", "Telemetry", "Circuit Breaker", "Auto-Heal"],
+    tags: ["High Availability", "Prometheus", "Grafana", "Incident SRE", "Failover"],
+    metrics: { label: "DESIGN FOCUS", value: "FAILOVER READINESS" },
+    tone: "rose",
+    telemetry: [{ label: "UPTIME", value: "99.99%" }, { label: "MTTR", value: "< 8 MIN" }, { label: "FAILOVER", value: "ARMED" }],
+    terminal: ["> alertmanager.route(severity)", "> circuit_breaker.trip()", "> failover.recover ........ PASS"],
   },
   {
-    number: "06", skills: ["Reactive interfaces", "Async APIs", "Token streaming", "Type-safe development"], projectRepos: ["German-Learning-APP", "vanilla-steel-assessment"], categoryLabel: "Full-Stack AI", name: "Full-Stack AI Interfaces", spec: "REACTIVE STREAMING · ASYNC APIS", icon: Monitor,
+    number: "06",
+    skills: ["Reactive interfaces", "Async APIs", "Token streaming", "Type-safe development"],
+    projectRepos: ["German-Learning-APP", "vanilla-steel-assessment"],
+    categoryLabel: "Full-Stack AI",
+    name: "Full-Stack AI Interfaces",
+    spec: "REACTIVE STREAMING · ASYNC APIS",
+    icon: Monitor,
     description: "Reference architecture connecting AI services to reactive client applications through FastAPI, type-safe React interfaces, and WebSocket token streaming.",
-    pipeline: ["FastAPI RPC", "WebSocket", "React State", "Edge Render"], tags: ["FastAPI", "React", "Next.js", "TypeScript", "WebSocket"], metrics: { label: "DESIGN FOCUS", value: "TOKEN STREAMING" }, inspectorNote: "TODO: add the app deployment, concurrent-session load, and measurement source.", tone: "emerald",
-    telemetry: [{ label: "STREAM", value: "LIVE" }, { label: "SOCKETS", value: "2.4K ACTIVE" }, { label: "FRAME", value: "16 MS" }], terminal: ["> await socket.accept()", "> tokens.emit(chunk)", "> render.commit ............ PASS"],
+    pipeline: ["FastAPI RPC", "WebSocket", "React State", "Edge Render"],
+    tags: ["FastAPI", "React", "Next.js", "TypeScript", "WebSocket"],
+    metrics: { label: "DESIGN FOCUS", value: "TOKEN STREAMING" },
+    tone: "emerald",
+    telemetry: [{ label: "STREAM", value: "LIVE" }, { label: "SOCKETS", value: "2.4K ACTIVE" }, { label: "FRAME", value: "16 MS" }],
+    terminal: ["> await socket.accept()", "> tokens.emit(chunk)", "> render.commit ............ PASS"],
   },
 ];
 
@@ -123,45 +199,309 @@ const SystemNode = forwardRef<HTMLButtonElement, SystemNodeProps>(function Syste
   ref
 ) {
   const Icon = item.icon;
+  const hasNumber = !isTodoOrEmpty(item.number);
+  const hasCategory = !isTodoOrEmpty(item.categoryLabel);
+  const hasName = !isTodoOrEmpty(item.name);
+
   return <motion.button ref={ref} type="button" role="tab" id={`expertise-tab-${item.number}`} aria-selected={active} aria-controls={`expertise-panel-${item.number}`} tabIndex={active ? 0 : -1} onClick={onSelect} onKeyDown={onKeyDown} className={`group ${toneClasses[item.tone]} relative flex min-w-0 flex-1 items-center gap-3 border bg-card/60 p-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background ${stacked ? "min-h-[88px] w-full px-4 py-4" : ""} backdrop-blur-md transition-colors duration-300 ${active ? "expertise-domain-border expertise-domain-surface expertise-domain-glow" : "border-border/70 hover:border-accent/50 hover:bg-card"}`} initial={motionPaused ? false : { opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-40px" }} transition={{ duration: motionPaused ? 0 : 0.5, delay: motionPaused ? 0 : index * 0.07, ease: EASE }} whileHover={motionPaused ? undefined : { y: -3 }}>
-    <span className={`grid h-9 w-9 shrink-0 place-items-center border ${active ? "expertise-domain-border expertise-domain-surface expertise-domain-text" : "border-border text-muted-foreground group-hover:text-foreground"}`}><Icon className="h-4 w-4" strokeWidth={1.6} /></span>
-    <span className="min-w-0 flex-1"><span className={`block font-mono ${stacked ? "text-[10px]" : "whitespace-nowrap text-[9px]"} tracking-[0.12em] ${active ? "expertise-domain-text" : "text-muted-foreground"}`}>{item.number} / {item.categoryLabel}</span><span className={`mt-1 block font-semibold text-foreground ${stacked ? "text-sm leading-5" : "truncate text-[11px] leading-tight"}`} title={item.name}>{item.name}</span></span>
+    {Icon && <span className={`grid h-9 w-9 shrink-0 place-items-center border ${active ? "expertise-domain-border expertise-domain-surface expertise-domain-text" : "border-border text-muted-foreground group-hover:text-foreground"}`}><Icon className="h-4 w-4" strokeWidth={1.6} /></span>}
+    <span className="min-w-0 flex-1">
+      {(hasNumber || hasCategory) && (
+        <span className={`block font-mono ${stacked ? "text-[10px]" : "whitespace-nowrap text-[9px]"} tracking-[0.12em] ${active ? "expertise-domain-text" : "text-muted-foreground"}`}>
+          {hasNumber && hasCategory ? `${item.number} / ${item.categoryLabel}` : (hasNumber ? item.number : item.categoryLabel)}
+        </span>
+      )}
+      {hasName && (
+        <span className={`mt-1 block font-semibold text-foreground ${stacked ? "text-sm leading-5" : "truncate text-[11px] leading-tight"}`} title={item.name}>
+          {item.name}
+        </span>
+      )}
+    </span>
     {stacked && <ChevronDown aria-hidden="true" className={`h-4 w-4 shrink-0 transition-transform ${active ? "rotate-180 expertise-domain-text" : "text-muted-foreground"}`} />}
     {active && <motion.span layoutId={motionPaused ? undefined : stacked ? "active-mobile-node" : "active-node"} className="absolute bottom-0 left-3 right-3 h-px bg-[var(--domain-color)]" />}
   </motion.button>;
 });
 
 function Inspector({ item, isSimulating, motionPaused, id }: { item: ExpertiseItem; isSimulating: boolean; motionPaused: boolean; id: string }) {
-  const [tab, setTab] = useState<InspectorTab>("system");
   const Icon = item.icon;
+
+  const validPipeline = useMemo(
+    () => (item.pipeline ?? []).filter((step) => !isTodoOrEmpty(step)),
+    [item.pipeline]
+  );
+
+  const validTelemetry = useMemo(
+    () => (item.telemetry ?? []).filter((metric) => !isTodoOrEmpty(metric.label) && !isTodoOrEmpty(metric.value)),
+    [item.telemetry]
+  );
+
+  const validTerminal = useMemo(
+    () => (item.terminal ?? []).filter((line) => !isTodoOrEmpty(line)),
+    [item.terminal]
+  );
+
+  const validSkills = useMemo(
+    () => (item.skills ?? []).filter((skill) => !isTodoOrEmpty(skill)),
+    [item.skills]
+  );
+
+  const validTags = useMemo(
+    () => (item.tags ?? []).filter((tool) => !isTodoOrEmpty(tool)),
+    [item.tags]
+  );
+
+  const validProjects = useMemo(() => {
+    return (item.projectRepos ?? [])
+      .filter((repo) => !isTodoOrEmpty(repo))
+      .map((repo) => projects.find((candidate) => candidate.url.split("/").pop() === repo))
+      .filter((project): project is NonNullable<typeof project> => Boolean(project));
+  }, [item.projectRepos]);
+
+  const hasSystemMetric = !isTodoOrEmpty(item.metrics?.label) && !isTodoOrEmpty(item.metrics?.value);
+  const hasInspectorNote = !isTodoOrEmpty(item.inspectorNote);
+  const hasSystemContent = hasSystemMetric || hasInspectorNote;
+  const hasTerminalContent = validTerminal.length > 0;
+
+  const [tab, setTab] = useState<InspectorTab>(() => (hasSystemContent ? "system" : "terminal"));
+
+  useEffect(() => {
+    if (tab === "system" && !hasSystemContent && hasTerminalContent) {
+      setTab("terminal");
+    } else if (tab === "terminal" && !hasTerminalContent && hasSystemContent) {
+      setTab("system");
+    }
+  }, [hasSystemContent, hasTerminalContent, tab]);
+
+  const hasLeft = validSkills.length > 0 || validTags.length > 0;
+  const hasProjects = validProjects.length > 0;
+
   return <motion.div id={id} role="tabpanel" aria-labelledby={`expertise-tab-${item.number}`} key={item.number} className={`${toneClasses[item.tone]} relative overflow-hidden border border-border/80 bg-card/70 backdrop-blur-xl`} initial={motionPaused ? false : { opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: motionPaused ? 0 : 0.45, ease: EASE }}>
     <CornerTicks />
     <div className="absolute inset-x-0 top-0 h-px bg-[var(--domain-color)] opacity-70" />
     <div className="flex flex-col gap-4 border-b border-border/70 p-5 sm:flex-row sm:items-start sm:justify-between sm:p-7">
-      <div className="flex min-w-0 gap-3"><span className="grid h-11 w-11 shrink-0 place-items-center border expertise-domain-border expertise-domain-surface expertise-domain-text"><Icon className="h-5 w-5" /></span><div className="min-w-0"><p className="font-mono text-[10px] tracking-[0.18em] expertise-domain-text">ACTIVE SYSTEM INSPECTOR / {item.number}</p><h3 className="mt-1 text-xl font-bold tracking-tight text-foreground sm:text-2xl">{item.name}</h3><p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{item.description}</p></div></div>
-      <div className="flex shrink-0 items-center gap-2 font-mono text-[10px] tracking-widest text-muted-foreground"><span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />{isSimulating ? "FLOWING" : item.metrics.value}</div>
+      <div className="flex min-w-0 gap-3">
+        {Icon && (
+          <span className="grid h-11 w-11 shrink-0 place-items-center border expertise-domain-border expertise-domain-surface expertise-domain-text">
+            <Icon className="h-5 w-5" />
+          </span>
+        )}
+        <div className="min-w-0">
+          {!isTodoOrEmpty(item.number) && (
+            <p className="font-mono text-[10px] tracking-[0.18em] expertise-domain-text">
+              ACTIVE SYSTEM INSPECTOR / {item.number}
+            </p>
+          )}
+          {!isTodoOrEmpty(item.name) && (
+            <h3 className="mt-1 text-xl font-bold tracking-tight text-foreground sm:text-2xl">{item.name}</h3>
+          )}
+          {!isTodoOrEmpty(item.description) && (
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{item.description}</p>
+          )}
+        </div>
+      </div>
+      {(isSimulating || !isTodoOrEmpty(item.metrics?.value)) && (
+        <div className="flex shrink-0 items-center gap-2 font-mono text-[10px] tracking-widest text-muted-foreground">
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
+          {isSimulating ? "FLOWING" : item.metrics.value}
+        </div>
+      )}
     </div>
     <div className="grid gap-0 lg:grid-cols-[1.35fr_0.65fr]">
-      <div className="border-b border-border/70 p-5 sm:p-7 lg:border-b-0 lg:border-r"><div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"><span className="font-mono text-[10px] tracking-[0.18em] text-muted-foreground">ARCHITECTURE FLOW</span><span className="font-mono text-[10px] expertise-domain-text">{item.spec}</span></div><div className="flex flex-col items-stretch gap-2 sm:flex-row sm:flex-wrap sm:items-center">{item.pipeline.map((step, index) => <div key={step} className="contents"><motion.div className={`border px-2.5 py-2 font-mono text-[10px] font-semibold text-foreground transition-colors ${isSimulating && index <= 3 ? "expertise-domain-border expertise-domain-surface" : "border-border/70 bg-background/40"}`} animate={isSimulating && !motionPaused ? { y: [0, -3, 0] } : { y: 0 }} transition={{ duration: motionPaused ? 0 : 1.3, repeat: isSimulating && !motionPaused ? Infinity : 0, delay: index * 0.12 }}>{step}</motion.div>{index < item.pipeline.length - 1 && <ArrowRight className="mx-auto h-3 w-3 shrink-0 rotate-90 text-muted-foreground sm:mx-0 sm:rotate-0" />}</div>)}</div><div className="mt-6 flex items-center justify-between gap-3"><span className="font-mono text-[9px] tracking-widest text-muted-foreground">METRICS PANEL</span><span className="font-mono text-[9px] text-muted-foreground">Illustrative simulation</span></div><div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3">{item.telemetry.map((metric) => <div key={metric.label} className="flex items-center justify-between gap-2 border border-border/70 bg-background/40 p-3 sm:block"><span className="block font-mono text-[9px] tracking-widest text-muted-foreground">{metric.label}</span><span className="block font-mono text-xs sm:mt-2 font-bold expertise-domain-text">{metric.value}</span></div>)}</div></div>
-      <div className="min-w-0 p-5 sm:p-7"><div className="mb-4 flex items-center justify-between"><div className="flex gap-1 border-b border-border/70"><button type="button" onClick={() => setTab("system")} className={`min-h-11 border-b-2 px-3 pb-2 font-mono text-[10px] tracking-widest transition-colors ${tab === "system" ? "border-accent text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"}`}>SYSTEM</button><button type="button" onClick={() => setTab("terminal")} className={`min-h-11 border-b-2 px-3 pb-2 font-mono text-[10px] tracking-widest transition-colors ${tab === "terminal" ? "border-accent text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"}`}>TERMINAL</button></div><Terminal className="h-4 w-4 text-muted-foreground" /></div><AnimatePresence mode="wait"><motion.div key={tab} initial={motionPaused ? false : { opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} exit={motionPaused ? undefined : { opacity: 0, x: -8 }} transition={{ duration: motionPaused ? 0 : 0.2 }} className="min-h-[130px] font-mono text-[11px] leading-7">{tab === "system" ? <div className="space-y-3"><div className="flex items-center gap-2 expertise-domain-text"><ShieldCheck className="h-4 w-4" />REFERENCE ARCHITECTURE</div><p className="text-muted-foreground">{item.metrics.label}: <span className="text-foreground">{item.metrics.value}</span></p><p className="text-muted-foreground">{item.inspectorNote}</p></div> : <div className="rounded border border-border/70 bg-background/70 p-3 text-muted-foreground break-words [overflow-wrap:anywhere]">{item.terminal.map((line) => <div key={line}><span className="mr-2 expertise-domain-text">›</span>{line.replace(/^&gt; /, "")}</div>)}</div>}</motion.div></AnimatePresence></div>
-    </div>
-    <div className="grid border-t border-border/70 lg:grid-cols-[0.8fr_1.2fr]">
-      <div className="space-y-6 border-b border-border/70 p-5 sm:p-7 lg:border-b-0 lg:border-r">
-        <div><h4 className="font-mono text-[10px] tracking-widest expertise-domain-text">RELATED SKILLS</h4><ul className="mt-3 grid gap-2 text-sm text-foreground">{item.skills.map((skill) => <li key={skill} className="flex items-start gap-2"><span aria-hidden="true" className="mt-2 h-1 w-1 shrink-0 bg-accent" />{skill}</li>)}</ul></div>
-        <div><h4 className="font-mono text-[10px] tracking-widest expertise-domain-text">TOOLS & TECHNOLOGIES</h4><ul className="mt-3 flex flex-wrap gap-2">{item.tags.map((tool) => <li key={tool} className="border border-border bg-background/40 px-2.5 py-2 font-mono text-[11px] text-foreground">{tool}</li>)}</ul></div>
+      <div className="border-b border-border/70 p-5 sm:p-7 lg:border-b-0 lg:border-r">
+        <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <span className="font-mono text-[10px] tracking-[0.18em] text-muted-foreground">ARCHITECTURE FLOW</span>
+          {!isTodoOrEmpty(item.spec) && (
+            <span className="font-mono text-[10px] expertise-domain-text">{item.spec}</span>
+          )}
+        </div>
+        {validPipeline.length > 0 && (
+          <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+            {validPipeline.map((step, index) => (
+              <div key={step} className="contents">
+                <motion.div
+                  className={`border px-2.5 py-2 font-mono text-[10px] font-semibold text-foreground transition-colors ${
+                    isSimulating && index <= 3 ? "expertise-domain-border expertise-domain-surface" : "border-border/70 bg-background/40"
+                  }`}
+                  animate={isSimulating && !motionPaused ? { y: [0, -3, 0] } : { y: 0 }}
+                  transition={{
+                    duration: motionPaused ? 0 : 1.3,
+                    repeat: isSimulating && !motionPaused ? Infinity : 0,
+                    delay: index * 0.12,
+                  }}
+                >
+                  {step}
+                </motion.div>
+                {index < validPipeline.length - 1 && (
+                  <ArrowRight className="mx-auto h-3 w-3 shrink-0 rotate-90 text-muted-foreground sm:mx-0 sm:rotate-0" />
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+        {validTelemetry.length > 0 && (
+          <>
+            <div className="mt-6 flex items-center justify-between gap-3">
+              <span className="font-mono text-[9px] tracking-widest text-muted-foreground">METRICS PANEL</span>
+              <span className="font-mono text-[9px] text-muted-foreground">Illustrative simulation</span>
+            </div>
+            <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3">
+              {validTelemetry.map((metric) => (
+                <div key={metric.label} className="flex items-center justify-between gap-2 border border-border/70 bg-background/40 p-3 sm:block">
+                  <span className="block font-mono text-[9px] tracking-widest text-muted-foreground">{metric.label}</span>
+                  <span className="block font-mono text-xs sm:mt-2 font-bold expertise-domain-text">{metric.value}</span>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
       </div>
-      <div className="min-w-0 p-5 sm:p-7"><h4 className="font-mono text-[10px] tracking-widest expertise-domain-text">RELATED PROJECT EXAMPLES</h4>
-        <div className="mt-3 divide-y divide-border/70">{item.projectRepos.map((repo) => {
-          const project = projects.find((candidate) => candidate.url.split("/").pop() === repo);
-          if (!project) return null;
-          return <a key={repo} href={project.url} target="_blank" rel="noopener noreferrer" aria-label={`View ${project.title} on GitHub`} className="group flex min-h-11 items-start gap-3 py-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
-            <img src={project.image} alt="" loading="lazy" className="h-14 w-16 shrink-0 border border-border object-cover sm:h-16 sm:w-24" />
-            <span className="min-w-0 flex-1"><span className="block text-sm font-semibold leading-5 text-foreground group-hover:text-accent">{project.title}</span><span className="mt-1 block font-mono text-[10px] leading-5 text-muted-foreground">{project.source}</span><span className="mt-2 block text-xs leading-5 text-muted-foreground">{project.description}</span></span>
-            <ArrowUpRight aria-hidden="true" className="h-4 w-4 shrink-0 expertise-domain-text" />
-          </a>;
-        })}</div>
-      </div>
+
+      {(hasSystemContent || hasTerminalContent) && (
+        <div className="min-w-0 p-5 sm:p-7">
+          <div className="mb-4 flex items-center justify-between">
+            <div className="flex gap-1 border-b border-border/70">
+              {hasSystemContent && (
+                <button
+                  type="button"
+                  onClick={() => setTab("system")}
+                  className={`min-h-11 border-b-2 px-3 pb-2 font-mono text-[10px] tracking-widest transition-colors ${
+                    tab === "system" ? "border-accent text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  SYSTEM
+                </button>
+              )}
+              {hasTerminalContent && (
+                <button
+                  type="button"
+                  onClick={() => setTab("terminal")}
+                  className={`min-h-11 border-b-2 px-3 pb-2 font-mono text-[10px] tracking-widest transition-colors ${
+                    tab === "terminal" ? "border-accent text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  TERMINAL
+                </button>
+              )}
+            </div>
+            <Terminal className="h-4 w-4 text-muted-foreground" />
+          </div>
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={tab}
+              initial={motionPaused ? false : { opacity: 0, x: 8 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={motionPaused ? undefined : { opacity: 0, x: -8 }}
+              transition={{ duration: motionPaused ? 0 : 0.2 }}
+              className="min-h-[130px] font-mono text-[11px] leading-7"
+            >
+              {tab === "system" && hasSystemContent ? (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 expertise-domain-text">
+                    <ShieldCheck className="h-4 w-4" />REFERENCE ARCHITECTURE
+                  </div>
+                  {hasSystemMetric && (
+                    <p className="text-muted-foreground">
+                      {item.metrics.label}: <span className="text-foreground">{item.metrics.value}</span>
+                    </p>
+                  )}
+                  {hasInspectorNote && (
+                    <p className="text-muted-foreground">{item.inspectorNote}</p>
+                  )}
+                </div>
+              ) : (
+                <div className="rounded border border-border/70 bg-background/70 p-3 text-muted-foreground break-words [overflow-wrap:anywhere]">
+                  {validTerminal.map((line) => (
+                    <div key={line}>
+                      <span className="mr-2 expertise-domain-text">›</span>
+                      {line.replace(/^&gt; /, "")}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      )}
     </div>
+
+    {(hasLeft || hasProjects) && (
+      <div className={`grid border-t border-border/70 ${hasLeft && hasProjects ? "lg:grid-cols-[0.8fr_1.2fr]" : "grid-cols-1"}`}>
+        {hasLeft && (
+          <div className={`space-y-6 p-5 sm:p-7 ${hasProjects ? "border-b border-border/70 lg:border-b-0 lg:border-r" : ""}`}>
+            {validSkills.length > 0 && (
+              <div>
+                <h4 className="font-mono text-[10px] tracking-widest expertise-domain-text">RELATED SKILLS</h4>
+                <ul className="mt-3 grid gap-2 text-sm text-foreground">
+                  {validSkills.map((skill) => (
+                    <li key={skill} className="flex items-start gap-2">
+                      <span aria-hidden="true" className="mt-2 h-1 w-1 shrink-0 bg-accent" />
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {validTags.length > 0 && (
+              <div>
+                <h4 className="font-mono text-[10px] tracking-widest expertise-domain-text">TOOLS & TECHNOLOGIES</h4>
+                <ul className="mt-3 flex flex-wrap gap-2">
+                  {validTags.map((tool) => (
+                    <li key={tool} className="border border-border bg-background/40 px-2.5 py-2 font-mono text-[11px] text-foreground">
+                      {tool}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
+        {hasProjects && (
+          <div className="min-w-0 p-5 sm:p-7">
+            <h4 className="font-mono text-[10px] tracking-widest expertise-domain-text">RELATED PROJECT EXAMPLES</h4>
+            <div className="mt-3 divide-y divide-border/70">
+              {validProjects.map((project) => (
+                <a
+                  key={project.url}
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`View ${project.title} on GitHub`}
+                  className="group flex min-h-11 items-start gap-3 py-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                >
+                  {!isTodoOrEmpty(project.image) && (
+                    <img
+                      src={project.image}
+                      alt=""
+                      loading="lazy"
+                      className="h-14 w-16 shrink-0 border border-border object-cover sm:h-16 sm:w-24"
+                    />
+                  )}
+                  <span className="min-w-0 flex-1">
+                    {!isTodoOrEmpty(project.title) && (
+                      <span className="block text-sm font-semibold leading-5 text-foreground group-hover:text-accent">
+                        {project.title}
+                      </span>
+                    )}
+                    {!isTodoOrEmpty(project.source) && (
+                      <span className="mt-1 block font-mono text-[10px] leading-5 text-muted-foreground">
+                        {project.source}
+                      </span>
+                    )}
+                    {!isTodoOrEmpty(project.description) && (
+                      <span className="mt-2 block text-xs leading-5 text-muted-foreground">
+                        {project.description}
+                      </span>
+                    )}
+                  </span>
+                  <ArrowUpRight aria-hidden="true" className="h-4 w-4 shrink-0 expertise-domain-text" />
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    )}
   </motion.div>;
 }
 
