@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Space_Grotesk, JetBrains_Mono, Kanit, Bebas_Neue } from 'next/font/google';
 import './globals.css';
+import { SITE_URL } from '@/lib/constants';
 
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import PageTransition from "@/components/ui/page-transition";
@@ -32,8 +33,10 @@ const bebasNeue = Bebas_Neue({
   display: 'swap',
 });
 
+export { SITE_URL };
+
 export const metadata: Metadata = {
-  metadataBase: new URL('https://saran-portfolio.lovable.app'),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: 'Saran Jaya Thilak — Data Engineer & GenAI Specialist',
     template: '%s | Saran Jaya Thilak',
@@ -41,7 +44,7 @@ export const metadata: Metadata = {
   description: 'Portfolio of Saran Jaya Thilak, Data Engineer & GenAI Specialist specializing in RAG systems, scalable data pipelines, and cloud architecture.',
   authors: [{ name: 'Saran Jaya Thilak' }],
   creator: 'Saran Jaya Thilak',
-  alternates: { canonical: '/' },
+  alternates: { canonical: SITE_URL },
   icons: {
     icon: [{ url: '/favicon.png', type: 'image/png', sizes: '64x64' }],
     shortcut: [{ url: '/favicon.png', type: 'image/png' }],
@@ -50,13 +53,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://saran-portfolio.lovable.app/',
+    url: SITE_URL,
     title: 'Saran Jaya Thilak — Data Engineer & GenAI Specialist',
     description: 'Portfolio of Saran Jaya Thilak, Data Engineer & GenAI Specialist specializing in RAG systems, scalable data pipelines, and cloud architecture.',
     siteName: 'Saran Jaya Thilak Portfolio',
     images: [
       {
-        url: '/og-image.jpg',
+        url: `${SITE_URL}/og-image.jpg`,
         width: 1200,
         height: 630,
         alt: 'Saran Jaya Thilak - Data Engineer & GenAI Specialist',
@@ -67,7 +70,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Saran Jaya Thilak — Data Engineer & GenAI Specialist',
     description: 'Portfolio of Saran Jaya Thilak, Data Engineer & GenAI Specialist specializing in RAG systems, scalable data pipelines, and cloud architecture.',
-    images: ['/og-image.jpg'],
+    images: [`${SITE_URL}/og-image.jpg`],
     creator: '@saranjthilak',
   },
   robots: {
