@@ -255,8 +255,8 @@ function Inspector({ item, isSimulating, motionPaused, id }: { item: ExpertiseIt
       )}
       <div className="min-w-0">
         {!isTodoOrEmpty(item.number) && (
-          <p className="font-mono text-[10px] tracking-[0.18em] expertise-domain-text">
-            {item.number} / {item.categoryLabel}
+          <p className="text-xs font-medium tracking-wide expertise-domain-text">
+            Domain {item.number} of 06
           </p>
         )}
         {!isTodoOrEmpty(item.name) && (
@@ -271,7 +271,7 @@ function Inspector({ item, isSimulating, motionPaused, id }: { item: ExpertiseIt
     {/* ── Flow diagram ── */}
     {validPipeline.length > 0 && (
       <div className="border-t border-border/70 px-5 py-4 sm:px-7">
-        <span className="mb-3 block font-mono text-[10px] tracking-[0.18em] text-muted-foreground">ARCHITECTURE FLOW</span>
+        <span className="mb-3 block text-xs font-medium text-muted-foreground">How it fits together</span>
         <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:flex-wrap sm:items-center">
           {validPipeline.map((step, index) => (
             <div key={step} className="contents">
@@ -297,17 +297,17 @@ function Inspector({ item, isSimulating, motionPaused, id }: { item: ExpertiseIt
       </div>
     )}
 
-    {/* ── Metrics panel (compact, muted) ── */}
     {validTelemetry.length > 0 && (
       <div className="border-t border-border/70 px-5 py-3 sm:px-7">
+        <p className="mb-2 text-xs font-medium text-muted-foreground">Example metrics</p>
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
           {validTelemetry.map((metric) => (
             <span key={metric.label} className="flex items-baseline gap-1.5">
-              <span className="font-mono text-[10px] text-muted-foreground/60">{metric.label}</span>
-              <span className="font-mono text-[11px] font-semibold expertise-domain-text opacity-70">{metric.value}</span>
+              <span className="text-xs text-muted-foreground/60">{metric.label}</span>
+              <span className="text-sm font-semibold expertise-domain-text opacity-75">{metric.value}</span>
             </span>
           ))}
-          <span className="ml-auto font-mono text-[9px] italic text-muted-foreground/40">Illustrative example, not measured data</span>
+          <span className="ml-auto text-xs italic text-muted-foreground/40">Illustrative example, not measured data</span>
         </div>
       </div>
     )}
@@ -328,7 +328,7 @@ function Inspector({ item, isSimulating, motionPaused, id }: { item: ExpertiseIt
     {/* ── "From my work" project links ── */}
     {hasProjects && (
       <div className="border-t border-border/70 px-5 py-4 sm:px-7">
-        <p className="mb-3 font-mono text-[10px] tracking-[0.18em] expertise-domain-text">From my work</p>
+        <p className="mb-3 text-xs font-medium tracking-wide expertise-domain-text">From my work</p>
         <ul className="flex flex-col gap-1">
           {validProjects.map((project) => (
             <li key={project.url}>
@@ -446,7 +446,7 @@ const ServicesSection = () => {
           </FadeIn>
 
           <FadeIn y={16} delay={0.2} duration={0.6} className="mx-auto mt-5 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
-            Reference architectures for data engineering, GenAI retrieval, model serving, cloud infrastructure, resilient operations, and full-stack AI—paired with illustrative telemetry.
+            Six areas I work in, from data pipelines and RAG systems to cloud infrastructure and high-availability operations.
           </FadeIn>
         </div>
       </BlueprintSectionHeader>
