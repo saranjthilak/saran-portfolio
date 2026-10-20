@@ -38,6 +38,7 @@ interface ExpertiseItem {
   skills: string[];
   projectRepos: string[];
   tone: DomainTone;
+  telemetry?: { label: string; value: string }[];
 }
 
 function isTodoOrEmpty(value: unknown): boolean {
@@ -68,6 +69,7 @@ const EXPERTISE: ExpertiseItem[] = [
     pipeline: ["Kafka Ingest", "Airflow DAG", "dbt Models", "BigQuery"],
     tags: ["Airflow", "dbt", "BigQuery", "Snowflake", "ETL/ELT"],
     tone: "cyan",
+    telemetry: [{ label: "Throughput", value: "1.2M events/s" }, { label: "Schema", value: "Enforced" }, { label: "Dropped", value: "0.00%" }],
   },
   {
     number: "02",
@@ -80,6 +82,7 @@ const EXPERTISE: ExpertiseItem[] = [
     pipeline: ["Query", "Embed", "FAISS Vector", "Rerank", "Grounded LLM"],
     tags: ["LangChain", "Vector DB", "FAISS", "Guardrails", "Reranking"],
     tone: "violet",
+    telemetry: [{ label: "P99 latency", value: "42 ms" }, { label: "Grounding", value: "99.4%" }, { label: "Top-K", value: "8 docs" }],
   },
   {
     number: "03",
@@ -92,6 +95,7 @@ const EXPERTISE: ExpertiseItem[] = [
     pipeline: ["Train / Log", "MLflow", "Triton Server", "Canary Route"],
     tags: ["MLflow", "Triton", "Quantization", "Docker", "Model Registry"],
     tone: "amber",
+    telemetry: [{ label: "P99 inference", value: "18 ms" }, { label: "Canary traffic", value: "10%" }, { label: "Drift", value: "Normal" }],
   },
   {
     number: "04",
@@ -104,6 +108,7 @@ const EXPERTISE: ExpertiseItem[] = [
     pipeline: ["Terraform HCL", "State Lock", "K8s Mesh", "Live Cluster"],
     tags: ["Terraform", "AWS", "GCP", "Kubernetes", "FinOps"],
     tone: "sky",
+    telemetry: [{ label: "Availability", value: "99.99%" }, { label: "Pods", value: "12 / 12 ready" }, { label: "State", value: "Synced" }],
   },
   {
     number: "05",
@@ -116,6 +121,7 @@ const EXPERTISE: ExpertiseItem[] = [
     pipeline: ["Prometheus", "Telemetry", "Circuit Breaker", "Auto-Heal"],
     tags: ["High Availability", "Prometheus", "Grafana", "Incident SRE", "Failover"],
     tone: "rose",
+    telemetry: [{ label: "Uptime", value: "99.99%" }, { label: "MTTR", value: "< 8 min" }, { label: "Failover", value: "Armed" }],
   },
   {
     number: "06",
@@ -128,6 +134,7 @@ const EXPERTISE: ExpertiseItem[] = [
     pipeline: ["FastAPI RPC", "WebSocket", "React State", "Edge Render"],
     tags: ["FastAPI", "React", "Next.js", "TypeScript", "WebSocket"],
     tone: "emerald",
+    telemetry: [{ label: "Stream", value: "Live" }, { label: "Active sockets", value: "2.4k" }, { label: "Frame time", value: "16 ms" }],
   },
 ];
 
@@ -196,6 +203,11 @@ function Inspector({ item, isSimulating, motionPaused, id }: { item: ExpertiseIt
   const validPipeline = useMemo(
     () => (item.pipeline ?? []).filter((step) => !isTodoOrEmpty(step)),
     [item.pipeline]
+  );
+
+  const validTelemetry = useMemo(
+    () => (item.telemetry ?? []).filter((m) => !isTodoOrEmpty(m.label) && !isTodoOrEmpty(m.value)),
+    [item.telemetry]
   );
 
   const validSkills = useMemo(
@@ -282,6 +294,21 @@ function Inspector({ item, isSimulating, motionPaused, id }: { item: ExpertiseIt
               )}
             </div>
           ))}
+        </div>
+      </div>
+    )}
+
+    {/* ── Metrics panel (compact, muted) ── */}
+    {validTelemetry.length > 0 && (
+      <div className="border-t border-border/70 px-5 py-3 sm:px-7">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+          {validTelemetry.map((metric) => (
+            <span key={metric.label} className="flex items-baseline gap-1.5">
+              <span className="font-mono text-[10px] text-muted-foreground/60">{metric.label}</span>
+              <span className="font-mono text-[11px] font-semibold expertise-domain-text opacity-70">{metric.value}</span>
+            </span>
+          ))}
+          <span className="ml-auto font-mono text-[9px] italic text-muted-foreground/40">Illustrative example, not measured data</span>
         </div>
       </div>
     )}
