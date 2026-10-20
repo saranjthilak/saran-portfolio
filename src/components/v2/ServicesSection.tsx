@@ -6,7 +6,6 @@ import type { LucideIcon } from "lucide-react";
 import {
   Activity,
   ArrowRight,
-  ArrowDown,
   ArrowUpRight,
   ChevronDown,
   BrainCircuit,
@@ -415,6 +414,11 @@ const ServicesSection = () => {
     if (motionPaused) { rotateX.jump(0); rotateY.jump(0); }
   }, [motionPaused, rotateX, rotateY]);
 
+  // Scroll the active tab into view on mobile when activeIndex changes
+  useEffect(() => {
+    tabRefs.current[activeIndex]?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
+  }, [activeIndex]);
+
   const activeItem = EXPERTISE[activeIndex];
 
   return <section data-motion-paused={motionPaused} id="skills" className="relative z-20 -mt-10 overflow-hidden rounded-t-section border-t border-border bg-v2-recessed px-5 pb-24 pt-16 sm:-mt-12 sm:px-8 sm:pt-24 md:-mt-14" aria-labelledby="expertise-heading">
@@ -449,21 +453,64 @@ const ServicesSection = () => {
 
       <motion.div className="expertise-canvas relative overflow-hidden border border-border/80 p-3 shadow-[0_20px_80px_hsl(var(--background)/0.45)] [transform-style:preserve-3d] sm:p-5" style={{ rotateX: motionPaused ? 0 : rotateX, rotateY: motionPaused ? 0 : rotateY, transformPerspective: 1400 }} onMouseMove={handleTilt} onMouseLeave={resetTilt}><CornerTicks /><div className="mb-4 flex flex-col gap-3 border-b border-border/70 pb-4 sm:flex-row sm:items-center sm:justify-between"><div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.16em] text-muted-foreground"><Activity className="h-3.5 w-3.5 text-accent" />REFERENCE ARCHITECTURE</div><div className="flex flex-col gap-2 sm:flex-row sm:items-center"><span className="font-mono text-[9px] text-muted-foreground">Illustrative simulation</span><div className="flex items-stretch gap-2"><button type="button" aria-label={motionPaused ? "Resume canvas animations" : "Pause canvas animations"} title={motionPaused ? "Resume canvas animations" : "Pause canvas animations"} aria-pressed={motionPaused} onClick={() => setPauseOverride(!motionPaused)} className="inline-flex h-11 w-11 shrink-0 items-center justify-center border border-accent/50 bg-accent/10 text-accent hover:bg-accent/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">{motionPaused ? <Play aria-hidden="true" className="h-4 w-4" /> : <Pause aria-hidden="true" className="h-4 w-4" />}</button><button type="button" onClick={() => { setIsSimulating((value) => !value); }} disabled={motionPaused} className="group inline-flex min-h-11 flex-1 items-center disabled:cursor-not-allowed disabled:opacity-50 justify-center gap-2 border border-accent/50 bg-accent/10 px-3 py-2 font-mono text-[10px] font-semibold tracking-widest text-accent transition-all hover:bg-accent/20 hover:shadow-[0_0_24px_hsl(var(--accent)/0.2)]" aria-pressed={isSimulating}>{isSimulating ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />} {isSimulating ? "PAUSE RUN" : "SIMULATE PIPELINE FLOW"}</button></div></div></div>
 
-        {/* ── Desktop tablist (horizontal) ── */}
+        {/* ── Desktop tablist — horizontal with pipeline connectors ── */}
         <motion.div role="tablist" aria-label="Expertise domains" aria-orientation="horizontal" className="hidden items-stretch lg:flex [transform-style:preserve-3d]" style={{ x: motionPaused ? 0 : stageShiftX, y: motionPaused ? 0 : stageShiftY }}>{EXPERTISE.map((item, index) => <div key={item.number} className="contents"><SystemNode ref={(el: HTMLButtonElement | null) => { tabRefs.current[index] = el; }} motionPaused={motionPaused} item={item} active={activeIndex === index} onSelect={() => { setActiveIndex(index); setIsSimulating(false); }} index={index} onKeyDown={(e) => handleTabKeyDown(e, index)} />{index < EXPERTISE.length - 1 && <PipelineConnector active={isSimulating || activeIndex === index} tone={item.tone} />}</div>)}</motion.div>
 
-        {/* ── Mobile tablist (vertical, stacked with inline connectors) ── */}
-        <div role="tablist" aria-label="Expertise domains" aria-orientation="vertical" className="flex flex-col lg:hidden">
-          {EXPERTISE.map((item, index) => {
-            const nextItem = EXPERTISE[index + 1];
-            return <div key={item.number} className="flex min-w-0 flex-col items-stretch">
-              <SystemNode motionPaused={motionPaused} stacked item={item} active={activeIndex === index} onSelect={() => { setActiveIndex(index); setIsSimulating(false); }} index={index} onKeyDown={(e) => handleTabKeyDown(e, index)} />
-              {nextItem && <button type="button" aria-label={`Connect ${item.categoryLabel} to ${nextItem.categoryLabel}`} onClick={() => { setActiveIndex(index + 1); setIsSimulating(false); }} className={`${toneClasses[item.tone]} group relative flex min-h-12 w-full items-center justify-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent`}>
-                <PipelineConnector vertical active={isSimulating || activeIndex === index} tone={item.tone} />
-                <span className="absolute left-[calc(50%+14px)] flex items-center gap-2 font-mono text-[9px] text-muted-foreground group-hover:text-foreground"><ArrowDown aria-hidden="true" className="h-3 w-3 expertise-domain-text" />{item.number} → {nextItem.number}</span>
-              </button>}
-            </div>;
-          })}
+        {/* ── Mobile tablist — horizontal scroll-snap, no stepper ── */}
+        {/*
+          - overflow-x-auto on the wrapper clips scroll to this element only,
+            preventing the section from widening the page at 375 px.
+          - Each tab is scroll-snap-align:start so swiping lands cleanly.
+          - Tabs are min-w-[140px] so 2.5 are visible at 375 px, signalling scrollability.
+          - The inner ul carries the ARIA tablist role so the row is one landmark.
+        */}
+        <div className="lg:hidden -mx-3 sm:-mx-5 overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <ul
+            role="tablist"
+            aria-label="Expertise domains"
+            aria-orientation="horizontal"
+            className="flex w-max min-w-full gap-1 px-3 sm:px-5 pb-1 [scroll-snap-type:x_mandatory]"
+          >
+            {EXPERTISE.map((item, index) => {
+              const Icon = item.icon;
+              const active = activeIndex === index;
+              return (
+                <li key={item.number} className="[scroll-snap-align:start]" role="presentation">
+                  <button
+                    ref={(el: HTMLButtonElement | null) => { tabRefs.current[index] = el; }}
+                    type="button"
+                    role="tab"
+                    id={`expertise-tab-${item.number}`}
+                    aria-selected={active}
+                    aria-controls={`expertise-panel-${item.number}`}
+                    tabIndex={active ? 0 : -1}
+                    onClick={() => { setActiveIndex(index); setIsSimulating(false); }}
+                    onKeyDown={(e) => handleTabKeyDown(e, index)}
+                    className={`${toneClasses[item.tone]} group relative flex min-h-[72px] min-w-[140px] flex-col items-start gap-1.5 border bg-card/60 px-3 py-3 text-left backdrop-blur-md transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+                      active
+                        ? "expertise-domain-border expertise-domain-surface expertise-domain-glow"
+                        : "border-border/70 hover:border-accent/50 hover:bg-card"
+                    }`}
+                  >
+                    <span className={`flex items-center gap-2`}>
+                      {Icon && (
+                        <span className={`grid h-6 w-6 shrink-0 place-items-center border ${
+                          active ? "expertise-domain-border expertise-domain-surface expertise-domain-text" : "border-border text-muted-foreground"
+                        }`}>
+                          <Icon className="h-3 w-3" strokeWidth={1.6} />
+                        </span>
+                      )}
+                      <span className={`font-mono text-[9px] tracking-[0.12em] ${
+                        active ? "expertise-domain-text" : "text-muted-foreground"
+                      }`}>{item.number} / {item.categoryLabel}</span>
+                    </span>
+                    <span className="block text-[11px] font-semibold leading-tight text-foreground line-clamp-2">{item.name}</span>
+                    {active && <motion.span layoutId={motionPaused ? undefined : "active-mobile-tab"} className="absolute bottom-0 left-2 right-2 h-px bg-[var(--domain-color)]" />}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
         </div>
 
         <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-border/70 pt-3 font-mono text-[9px] tracking-widest text-muted-foreground"><span className="flex items-center gap-2"><span className={`h-1.5 w-1.5 rounded-full ${isSimulating ? "animate-ping bg-accent" : "bg-accent"}`} />{stageLabel}</span><span>PIPELINE FLOW / <span className="text-foreground">6 DOMAINS</span></span></div>
