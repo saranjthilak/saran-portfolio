@@ -1,5 +1,6 @@
 import HeroSection from "@/components/v2/HeroSection";
 import MarqueeSection from "@/components/v2/MarqueeSection";
+import FromMyWorkSection from "@/components/v2/FromMyWorkSection";
 import AboutSection from "@/components/v2/AboutSection";
 import ExperienceSection from "@/components/v2/ExperienceSection";
 
@@ -37,6 +38,7 @@ const Index = async () => {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema).replace(/</g, "\\u003c") }} />
       <HeroSection />
       <MarqueeSection />
+      <FromMyWorkSection />
       <AboutSection />
       <ExperienceSection />
 
