@@ -1,4 +1,31 @@
 
+export const fromMyWork = [
+  {
+    id: "01",
+    text: "At Tesla: Airflow ETL pipelines with 99.9% reliability and real-time alerting.",
+  },
+  {
+    id: "02",
+    text: "At Tesla: RAG chatbots with hallucination guardrails, improving customer interaction efficiency by 25%.",
+  },
+  {
+    id: "03",
+    text: "In my AI Product Matching System: a quantized CLIP model served via NVIDIA Triton.",
+  },
+  {
+    id: "04",
+    text: "At Huawei: Terraform-based AWS infrastructure and monitoring that cut AWS costs by about 20%.",
+  },
+  {
+    id: "05",
+    text: "At Nokia and Huawei: 24×7 network operations at 99.9%+ availability.",
+  },
+  {
+    id: "06",
+    text: "In my German Learning App: an AI learning platform built with TypeScript and React.",
+  },
+];
+
 export const experience = [
   {
     company: "Tesla",
