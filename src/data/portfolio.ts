@@ -129,8 +129,8 @@ export const projects = [
   {
     title: "Divvy Bikes – End-to-End Data Pipeline",
     source: "GCP | Terraform | Airflow | DBT",
-    description: "Built an end-to-end data pipeline on GCP using Terraform for infrastructure, Airflow for orchestration, and DBT for SQL transformations. Loaded data into BigQuery and visualized insights via Google Data Studio.",
-    skills: ["GCP", "Terraform", "Airflow", "DBT", "BigQuery", "Data Studio"],
+    description: "Built an end-to-end data pipeline on GCP using Terraform for infrastructure, Airflow for orchestration, and DBT for SQL transformations. Loaded data into BigQuery and visualized insights via Looker Studio.",
+    skills: ["GCP", "Terraform", "Airflow", "DBT", "BigQuery", "Looker Studio"],
     image: "/images/projects/project-divvy-bikes.webp",
     url: "https://github.com/saranjthilak/Divvy-Bike-Data-End-to-End-Pipeline",
     liveUrl: undefined as string | undefined,
@@ -143,7 +143,7 @@ export const projects = [
       { label: "Airflow", icon: "workflow" },
       { label: "DBT", icon: "layers" },
       { label: "BigQuery", icon: "database" },
-      { label: "Looker", icon: "chart" },
+      { label: "Looker Studio", icon: "chart" },
     ],
   },
   {
