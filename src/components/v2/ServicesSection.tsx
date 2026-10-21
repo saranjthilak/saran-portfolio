@@ -65,7 +65,7 @@ const EXPERTISE: ExpertiseItem[] = [
     name: "Data Engineering Architecture",
     icon: Database,
     description: "Reference architecture for resilient ETL/ELT pipelines with Apache Airflow and dbt, including data contracts, idempotent processing, and streaming ingestion into analytical warehouses.",
-    pipeline: ["Kafka Ingest", "Airflow DAG", "dbt Models", "BigQuery"],
+    pipeline: ["Source Ingest", "Airflow DAG", "dbt Models", "BigQuery"],
     tags: ["Airflow", "dbt", "BigQuery", "Snowflake", "ETL/ELT"],
     tone: "cyan",
     telemetry: [{ label: "Throughput", value: "1.2M events/s" }, { label: "Schema", value: "Enforced" }, { label: "Dropped", value: "0.00%" }],
