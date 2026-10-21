@@ -331,6 +331,15 @@
     .expertise-signal, .expertise-signal-vertical, .expertise-packet { animation: none; }
     .expertise-packet { opacity: 0; }
   }
+  /* JS pause-toggle: freeze connector animations when user clicks Pause */
+  [data-motion-paused="true"] .expertise-signal,
+  [data-motion-paused="true"] .expertise-signal-vertical,
+  [data-motion-paused="true"] .expertise-packet {
+    animation-play-state: paused;
+  }
+  [data-motion-paused="true"] .expertise-packet {
+    opacity: 0;
+  }
 
   /* Hero heading — gradient text */
   .hero-heading {
