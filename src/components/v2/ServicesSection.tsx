@@ -357,10 +357,9 @@ const ServicesSection = () => {
   const [activeIndex, setActiveIndex] = useState(1);
   const [isSimulating, setIsSimulating] = useState(false);
   const prefersReducedMotion = useReducedMotion();
-  const [pauseOverride, setPauseOverride] = useState<boolean | null>(null);
   const [motionPreferenceReady, setMotionPreferenceReady] = useState(false);
   useEffect(() => { setMotionPreferenceReady(true); }, []);
-  const motionPaused = pauseOverride ?? (motionPreferenceReady && Boolean(prefersReducedMotion));
+  const motionPaused = motionPreferenceReady && Boolean(prefersReducedMotion);
   const stageLabel = useMemo(() => motionPaused ? "MOTION PAUSED" : isSimulating ? "SIMULATION RUNNING" : "PIPELINE READY", [isSimulating, motionPaused]);
 
   // ── Arrow-key navigation for tabs ──
@@ -451,7 +450,42 @@ const ServicesSection = () => {
         </div>
       </BlueprintSectionHeader>
 
-      <motion.div className="expertise-canvas relative overflow-hidden border border-border/80 p-3 shadow-[0_20px_80px_hsl(var(--background)/0.45)] [transform-style:preserve-3d] sm:p-5" style={{ rotateX: motionPaused ? 0 : rotateX, rotateY: motionPaused ? 0 : rotateY, transformPerspective: 1400 }} onMouseMove={handleTilt} onMouseLeave={resetTilt}><CornerTicks /><div className="mb-4 flex flex-col gap-3 border-b border-border/70 pb-4 sm:flex-row sm:items-center sm:justify-between"><div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.16em] text-muted-foreground"><Activity className="h-3.5 w-3.5 text-accent" />REFERENCE ARCHITECTURE</div><div className="flex flex-col gap-2 sm:flex-row sm:items-center"><span className="font-mono text-[9px] text-muted-foreground">Illustrative simulation</span><div className="flex items-stretch gap-2"><button type="button" aria-label={motionPaused ? "Resume canvas animations" : "Pause canvas animations"} title={motionPaused ? "Resume canvas animations" : "Pause canvas animations"} aria-pressed={motionPaused} onClick={() => setPauseOverride(!motionPaused)} className="inline-flex h-11 w-11 shrink-0 items-center justify-center border border-accent/50 bg-accent/10 text-accent hover:bg-accent/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">{motionPaused ? <Play aria-hidden="true" className="h-4 w-4" /> : <Pause aria-hidden="true" className="h-4 w-4" />}</button><button type="button" onClick={() => { setIsSimulating((value) => !value); }} disabled={motionPaused} className="group inline-flex min-h-11 flex-1 items-center disabled:cursor-not-allowed disabled:opacity-50 justify-center gap-2 border border-accent/50 bg-accent/10 px-3 py-2 font-mono text-[10px] font-semibold tracking-widest text-accent transition-all hover:bg-accent/20 hover:shadow-[0_0_24px_hsl(var(--accent)/0.2)]" aria-pressed={isSimulating}>{isSimulating ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />} {isSimulating ? "PAUSE RUN" : "SIMULATE PIPELINE FLOW"}</button></div></div></div>
+      <motion.div
+        className="expertise-canvas relative overflow-hidden border border-border/80 p-3 shadow-[0_20px_80px_hsl(var(--background)/0.45)] [transform-style:preserve-3d] sm:p-5"
+        style={{
+          rotateX: motionPaused ? 0 : rotateX,
+          rotateY: motionPaused ? 0 : rotateY,
+          transformPerspective: 1400,
+        }}
+        onMouseMove={handleTilt}
+        onMouseLeave={resetTilt}
+      >
+        <CornerTicks />
+        <div className="mb-4 flex flex-col gap-3 border-b border-border/70 pb-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.16em] text-muted-foreground">
+            <Activity className="h-3.5 w-3.5 text-accent" />
+            REFERENCE ARCHITECTURE
+          </div>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <span className="font-mono text-[9px] text-muted-foreground">Illustrative simulation</span>
+            <button
+              type="button"
+              onClick={() => {
+                setIsSimulating((value) => !value);
+              }}
+              disabled={motionPaused}
+              className="group inline-flex min-h-11 items-center disabled:cursor-not-allowed disabled:opacity-50 justify-center gap-2 border border-accent/50 bg-accent/10 px-3 py-2 font-mono text-[10px] font-semibold tracking-widest text-accent transition-all hover:bg-accent/20 hover:shadow-[0_0_24px_hsl(var(--accent)/0.2)]"
+              aria-pressed={isSimulating}
+            >
+              {isSimulating ? (
+                <Pause className="h-3.5 w-3.5" />
+              ) : (
+                <Play className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+              )}{" "}
+              {isSimulating ? "PAUSE RUN" : "SIMULATE PIPELINE FLOW"}
+            </button>
+          </div>
+        </div>
 
         {/* ── Desktop tablist — horizontal with pipeline connectors ── */}
         <motion.div role="tablist" aria-label="Expertise domains" aria-orientation="horizontal" className="hidden items-stretch lg:flex [transform-style:preserve-3d]" style={{ x: motionPaused ? 0 : stageShiftX, y: motionPaused ? 0 : stageShiftY }}>{EXPERTISE.map((item, index) => <div key={item.number} className="contents"><SystemNode ref={(el: HTMLButtonElement | null) => { tabRefs.current[index] = el; }} motionPaused={motionPaused} item={item} active={activeIndex === index} onSelect={() => { setActiveIndex(index); setIsSimulating(false); }} index={index} onKeyDown={(e) => handleTabKeyDown(e, index)} />{index < EXPERTISE.length - 1 && <PipelineConnector active={isSimulating || activeIndex === index} tone={item.tone} />}</div>)}</motion.div>
