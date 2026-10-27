@@ -276,6 +276,44 @@
   .expertise-domain-border { border-color: color-mix(in srgb, var(--domain-color) 38%, transparent); }
   .expertise-domain-surface { background-color: color-mix(in srgb, var(--domain-color) 9%, transparent); }
   .expertise-domain-glow { box-shadow: 0 0 28px color-mix(in srgb, var(--domain-color) 22%, transparent); }
+  .expertise-canvas {
+    background-image:
+      linear-gradient(to right, color-mix(in srgb, var(--border) 25%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in srgb, var(--border) 25%, transparent) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .expertise-telemetry-card {
+    position: relative;
+    background: color-mix(in srgb, var(--domain-color) 5%, hsl(var(--card) / 0.75));
+    border: 1px solid color-mix(in srgb, var(--domain-color) 24%, hsl(var(--border) / 0.7));
+    backdrop-filter: blur(12px);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .expertise-telemetry-card:hover {
+    border-color: color-mix(in srgb, var(--domain-color) 55%, transparent);
+    box-shadow: 0 0 22px color-mix(in srgb, var(--domain-color) 20%, transparent);
+    transform: translateY(-2px);
+  }
+  .expertise-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.3rem 0.65rem;
+    font-family: var(--font-mono, monospace);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    background: color-mix(in srgb, var(--domain-color) 5%, hsl(var(--background) / 0.65));
+    border: 1px solid color-mix(in srgb, var(--domain-color) 20%, hsl(var(--border) / 0.8));
+    color: hsl(var(--foreground));
+    backdrop-filter: blur(8px);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .expertise-chip:hover {
+    border-color: color-mix(in srgb, var(--domain-color) 60%, transparent);
+    background: color-mix(in srgb, var(--domain-color) 14%, transparent);
+    box-shadow: 0 0 14px color-mix(in srgb, var(--domain-color) 20%, transparent);
+    transform: translateY(-1px);
+  }
   .expertise-signal {
     background: linear-gradient(90deg, transparent, var(--domain-color), transparent);
     animation: expertise-signal 2.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;

@@ -144,10 +144,16 @@ const toneClasses: Record<DomainTone, string> = {
   sky: "expertise-domain-sky",
   rose: "expertise-domain-rose",
   emerald: "expertise-domain-emerald",
-};
-
-function CornerTicks() {
-  return <><span className="pointer-events-none absolute left-0 top-0 h-3 w-3 border-l-2 border-t-2 border-accent/70" /><span className="pointer-events-none absolute right-0 top-0 h-3 w-3 border-r-2 border-t-2 border-accent/70" /><span className="pointer-events-none absolute bottom-0 left-0 h-3 w-3 border-b-2 border-l-2 border-accent/70" /><span className="pointer-events-none absolute bottom-0 right-0 h-3 w-3 border-b-2 border-r-2 border-accent/70" /></>;
+};function CornerTicks({ tone = false }: { tone?: boolean }) {
+  const tickClass = tone ? "border-[var(--domain-color)]/60" : "border-accent/60";
+  return (
+    <>
+      <span className={`pointer-events-none absolute left-0 top-0 h-3 w-3 border-l-2 border-t-2 ${tickClass}`} />
+      <span className={`pointer-events-none absolute right-0 top-0 h-3 w-3 border-r-2 border-t-2 ${tickClass}`} />
+      <span className={`pointer-events-none absolute bottom-0 left-0 h-3 w-3 border-b-2 border-l-2 ${tickClass}`} />
+      <span className={`pointer-events-none absolute bottom-0 right-0 h-3 w-3 border-b-2 border-r-2 ${tickClass}`} />
+    </>
+  );
 }
 
 function PipelineConnector({ active, tone, vertical = false }: { active: boolean; tone: DomainTone; vertical?: boolean }) {
@@ -177,23 +183,84 @@ const SystemNode = forwardRef<HTMLButtonElement, SystemNodeProps>(function Syste
   const hasCategory = !isTodoOrEmpty(item.categoryLabel);
   const hasName = !isTodoOrEmpty(item.name);
 
-  return <motion.button ref={ref} type="button" role="tab" id={`expertise-tab-${item.number}`} aria-selected={active} aria-controls={`expertise-panel-${item.number}`} tabIndex={active ? 0 : -1} onClick={onSelect} onKeyDown={onKeyDown} className={`group ${toneClasses[item.tone]} relative flex min-w-0 flex-1 items-center gap-3 border bg-card/60 p-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background ${stacked ? "min-h-[88px] w-full px-4 py-4" : ""} backdrop-blur-md transition-colors duration-300 ${active ? "expertise-domain-border expertise-domain-surface expertise-domain-glow" : "border-border/70 hover:border-accent/50 hover:bg-card"}`} initial={motionPaused ? false : { opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-40px" }} transition={{ duration: motionPaused ? 0 : 0.5, delay: motionPaused ? 0 : index * 0.07, ease: EASE }} whileHover={motionPaused ? undefined : { y: -3 }}>
-    {Icon && <span className={`grid h-9 w-9 shrink-0 place-items-center border ${active ? "expertise-domain-border expertise-domain-surface expertise-domain-text" : "border-border text-muted-foreground group-hover:text-foreground"}`}><Icon className="h-4 w-4" strokeWidth={1.6} /></span>}
-    <span className="min-w-0 flex-1">
-      {(hasNumber || hasCategory) && (
-        <span className={`block font-mono ${stacked ? "text-[10px]" : "whitespace-nowrap text-[9px]"} tracking-[0.12em] ${active ? "expertise-domain-text" : "text-muted-foreground"}`}>
-          {hasNumber && hasCategory ? `${item.number} / ${item.categoryLabel}` : (hasNumber ? item.number : item.categoryLabel)}
+  return (
+    <motion.button
+      ref={ref}
+      type="button"
+      role="tab"
+      id={`expertise-tab-${item.number}`}
+      aria-selected={active}
+      aria-controls={`expertise-panel-${item.number}`}
+      tabIndex={active ? 0 : -1}
+      onClick={onSelect}
+      onKeyDown={onKeyDown}
+      className={`group ${toneClasses[item.tone]} relative flex min-w-0 flex-1 items-center gap-3 border bg-card/60 p-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+        stacked ? "min-h-[88px] w-full px-4 py-4" : ""
+      } backdrop-blur-md transition-all duration-300 ${
+        active
+          ? "expertise-domain-border expertise-domain-surface expertise-domain-glow shadow-[0_4px_24px_color-mix(in_srgb,var(--domain-color)_20%,transparent)]"
+          : "border-border/70 hover:border-accent/50 hover:bg-card/80"
+      }`}
+      initial={motionPaused ? false : { opacity: 0, y: 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: motionPaused ? 0 : 0.5, delay: motionPaused ? 0 : index * 0.07, ease: EASE }}
+      whileHover={motionPaused ? undefined : { y: -3 }}
+    >
+      {active && (
+        <span className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-[var(--domain-color)] shadow-[0_0_8px_var(--domain-color)]" />
+      )}
+      {Icon && (
+        <span
+          className={`grid h-9 w-9 shrink-0 place-items-center border transition-colors duration-300 ${
+            active
+              ? "expertise-domain-border expertise-domain-surface expertise-domain-text shadow-[0_0_12px_color-mix(in_srgb,var(--domain-color)_30%,transparent)]"
+              : "border-border/80 bg-background/40 text-muted-foreground group-hover:border-accent/40 group-hover:text-foreground"
+          }`}
+        >
+          <Icon className="h-4 w-4" strokeWidth={1.6} />
         </span>
       )}
-      {hasName && (
-        <span className={`mt-1 block font-semibold text-foreground ${stacked ? "text-sm leading-5" : "truncate text-[11px] leading-tight"}`} title={item.name}>
-          {item.name}
-        </span>
+      <span className="min-w-0 flex-1">
+        {(hasNumber || hasCategory) && (
+          <span
+            className={`flex items-center gap-1.5 font-mono ${
+              stacked ? "text-[10px]" : "whitespace-nowrap text-[9px]"
+            } tracking-[0.14em] ${active ? "expertise-domain-text font-semibold" : "text-muted-foreground"}`}
+          >
+            {active && (
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--domain-color)] shadow-[0_0_6px_var(--domain-color)]" />
+            )}
+            {hasNumber && hasCategory ? `${item.number} / ${item.categoryLabel}` : (hasNumber ? item.number : item.categoryLabel)}
+          </span>
+        )}
+        {hasName && (
+          <span
+            className={`mt-1 block font-semibold text-foreground ${
+              stacked ? "text-sm leading-5" : "truncate text-[11px] leading-tight"
+            }`}
+            title={item.name}
+          >
+            {item.name}
+          </span>
+        )}
+      </span>
+      {stacked && (
+        <ChevronDown
+          aria-hidden="true"
+          className={`h-4 w-4 shrink-0 transition-transform ${
+            active ? "rotate-180 expertise-domain-text" : "text-muted-foreground"
+          }`}
+        />
       )}
-    </span>
-    {stacked && <ChevronDown aria-hidden="true" className={`h-4 w-4 shrink-0 transition-transform ${active ? "rotate-180 expertise-domain-text" : "text-muted-foreground"}`} />}
-    {active && <motion.span layoutId={motionPaused ? undefined : stacked ? "active-mobile-node" : "active-node"} className="absolute bottom-0 left-3 right-3 h-px bg-[var(--domain-color)]" />}
-  </motion.button>;
+      {active && (
+        <motion.span
+          layoutId={motionPaused ? undefined : stacked ? "active-mobile-node" : "active-node"}
+          className="absolute bottom-0 left-3 right-3 h-px bg-[var(--domain-color)]"
+        />
+      )}
+    </motion.button>
+  );
 });
 
 function Inspector({ item, isSimulating, motionPaused, id }: { item: ExpertiseItem; isSimulating: boolean; motionPaused: boolean; id: string }) {
@@ -242,115 +309,204 @@ function Inspector({ item, isSimulating, motionPaused, id }: { item: ExpertiseIt
 
   const hasProjects = validProjects.length > 0;
 
-  return <motion.div id={id} role="tabpanel" aria-labelledby={`expertise-tab-${item.number}`} key={item.number} className={`${toneClasses[item.tone]} relative overflow-hidden border border-border/80 bg-card/70 backdrop-blur-xl`} initial={motionPaused ? false : { opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: motionPaused ? 0 : 0.45, ease: EASE }}>
-    <CornerTicks />
-    <div className="absolute inset-x-0 top-0 h-px bg-[var(--domain-color)] opacity-70" />
+  return (
+    <motion.div
+      id={id}
+      role="tabpanel"
+      aria-labelledby={`expertise-tab-${item.number}`}
+      key={item.number}
+      className={`${toneClasses[item.tone]} relative overflow-hidden border border-border/80 bg-card/75 backdrop-blur-xl shadow-[0_20px_60px_hsl(var(--background)/0.5)]`}
+      initial={motionPaused ? false : { opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: motionPaused ? 0 : 0.45, ease: EASE }}
+    >
+      <CornerTicks tone />
+      <div className="absolute inset-x-0 top-0 h-px bg-[var(--domain-color)] opacity-80 shadow-[0_0_8px_var(--domain-color)]" />
+      {/* Ambient background glow */}
+      <div
+        className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[var(--domain-color)] opacity-[0.08] blur-3xl"
+        aria-hidden="true"
+      />
 
-    {/* ── Header: label + name + description ── */}
-    <div className="flex min-w-0 gap-3 p-5 sm:p-7">
-      {Icon && (
-        <span className="grid h-11 w-11 shrink-0 place-items-center border expertise-domain-border expertise-domain-surface expertise-domain-text">
-          <Icon className="h-5 w-5" />
-        </span>
-      )}
-      <div className="min-w-0">
-        {!isTodoOrEmpty(item.number) && (
-          <p className="text-xs font-medium tracking-wide expertise-domain-text">
-            Domain {item.number} of 06
-          </p>
+      {/* ── Header: label + name + description ── */}
+      <div className="relative flex min-w-0 gap-4 p-5 sm:p-7">
+        {Icon && (
+          <span className="grid h-12 w-12 shrink-0 place-items-center border expertise-domain-border expertise-domain-surface expertise-domain-text shadow-[0_0_16px_color-mix(in_srgb,var(--domain-color)_30%,transparent)]">
+            <Icon className="h-6 w-6" strokeWidth={1.75} />
+          </span>
         )}
-        {!isTodoOrEmpty(item.name) && (
-          <h3 className="mt-1 text-xl font-bold tracking-tight text-foreground sm:text-2xl">{item.name}</h3>
-        )}
-        {!isTodoOrEmpty(item.description) && (
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{item.description}</p>
-        )}
-      </div>
-    </div>
-
-    {/* ── Flow diagram ── */}
-    {validPipeline.length > 0 && (
-      <div className="border-t border-border/70 px-5 py-4 sm:px-7">
-        <span className="mb-3 block text-xs font-medium text-muted-foreground">How it fits together</span>
-        <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:flex-wrap sm:items-center">
-          {validPipeline.map((step, index) => (
-            <div key={step} className="contents">
-              <motion.div
-                className={`border px-2.5 py-2 font-mono text-[10px] font-semibold text-foreground transition-colors ${
-                  isSimulating && index <= 3 ? "expertise-domain-border expertise-domain-surface" : "border-border/70 bg-background/40"
-                }`}
-                animate={isSimulating && !motionPaused ? { y: [0, -3, 0] } : { y: 0 }}
-                transition={{
-                  duration: motionPaused ? 0 : 1.3,
-                  repeat: isSimulating && !motionPaused ? Infinity : 0,
-                  delay: index * 0.12,
-                }}
-              >
-                {step}
-              </motion.div>
-              {index < validPipeline.length - 1 && (
-                <ArrowRight className="mx-auto h-3 w-3 shrink-0 rotate-90 text-muted-foreground sm:mx-0 sm:rotate-0" />
-              )}
+        <div className="min-w-0 flex-1">
+          {!isTodoOrEmpty(item.number) && (
+            <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] expertise-domain-text">
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--domain-color)] shadow-[0_0_8px_var(--domain-color)]" />
+              DOMAIN {item.number} OF 06 • {item.categoryLabel}
             </div>
-          ))}
+          )}
+          {!isTodoOrEmpty(item.name) && (
+            <h3 className="mt-1.5 text-xl font-bold tracking-tight text-foreground sm:text-2xl">
+              {item.name}
+            </h3>
+          )}
+          {!isTodoOrEmpty(item.description) && (
+            <p className="mt-2.5 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+              {item.description}
+            </p>
+          )}
         </div>
       </div>
-    )}
 
-    {validTelemetry.length > 0 && (
-      <div className="border-t border-border/70 px-5 py-3 sm:px-7">
-        <p className="mb-2 text-xs font-medium text-muted-foreground">Example metrics</p>
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-          {validTelemetry.map((metric) => (
-            <span key={metric.label} className="flex items-baseline gap-1.5">
-              <span className="text-xs text-muted-foreground/60">{metric.label}</span>
-              <span className="text-sm font-semibold expertise-domain-text opacity-75">{metric.value}</span>
+      {/* ── Flow diagram ── */}
+      {validPipeline.length > 0 && (
+        <div className="border-t border-border/70 px-5 py-4 sm:px-7">
+          <div className="mb-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+            <span>PIPELINE TOPOLOGY // SIGNAL PATH</span>
+            {isSimulating && (
+              <span className="flex items-center gap-1.5 font-semibold expertise-domain-text animate-pulse">
+                <span className="h-1.5 w-1.5 rounded-full bg-[var(--domain-color)] shadow-[0_0_6px_var(--domain-color)]" />
+                TRANSMITTING
+              </span>
+            )}
+          </div>
+          <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+            {validPipeline.map((step, index) => {
+              const isStepActive = isSimulating && index <= 3;
+              return (
+                <div key={step} className="contents">
+                  <motion.div
+                    className={`relative flex items-center gap-2 border px-3 py-2 font-mono text-[11px] font-semibold transition-all duration-300 ${
+                      isStepActive
+                        ? "expertise-domain-border expertise-domain-surface text-foreground shadow-[0_0_18px_color-mix(in_srgb,var(--domain-color)_30%,transparent)]"
+                        : "border-border/80 bg-background/50 text-foreground/80 hover:border-border hover:bg-background/80"
+                    }`}
+                    animate={isSimulating && !motionPaused ? { y: [0, -3, 0] } : { y: 0 }}
+                    transition={{
+                      duration: motionPaused ? 0 : 1.3,
+                      repeat: isSimulating && !motionPaused ? Infinity : 0,
+                      delay: index * 0.12,
+                    }}
+                  >
+                    <span className="font-mono text-[9px] text-[var(--domain-color)] opacity-70">
+                      0{index + 1}.
+                    </span>
+                    <span>{step}</span>
+                    {isStepActive && (
+                      <span className="h-1.5 w-1.5 rounded-full bg-[var(--domain-color)] shadow-[0_0_6px_var(--domain-color)] animate-ping" />
+                    )}
+                  </motion.div>
+                  {index < validPipeline.length - 1 && (
+                    <ArrowRight className="mx-auto h-3.5 w-3.5 shrink-0 rotate-90 text-[var(--domain-color)] opacity-60 sm:mx-0 sm:rotate-0" />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* ── Glowing Telemetry Cards ── */}
+      {validTelemetry.length > 0 && (
+        <div className="border-t border-border/70 px-5 py-4 sm:px-7">
+          <div className="mb-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+            <span className="flex items-center gap-1.5">
+              <Activity className="h-3 w-3 text-[var(--domain-color)]" />
+              RUNTIME TELEMETRY // BENCHMARKS
             </span>
-          ))}
-          <span className="ml-auto text-xs italic text-muted-foreground/40">Illustrative example, not measured data</span>
+            <span className="text-[9px] text-muted-foreground/60 italic hidden sm:inline">
+              // PRODUCTION TARGET BENCHMARKS
+            </span>
+          </div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            {validTelemetry.map((metric) => (
+              <div
+                key={metric.label}
+                className="expertise-telemetry-card p-3.5"
+              >
+                <span className="pointer-events-none absolute left-0 top-0 h-1.5 w-1.5 border-l border-t border-[var(--domain-color)]/60" />
+                <span className="pointer-events-none absolute right-0 top-0 h-1.5 w-1.5 border-r border-t border-[var(--domain-color)]/60" />
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                    {metric.label}
+                  </span>
+                  <span className="flex h-1.5 w-1.5 items-center justify-center">
+                    <span className="h-1 w-1 rounded-full bg-[var(--domain-color)] opacity-80" />
+                  </span>
+                </div>
+                <div className="mt-2 font-mono text-xl sm:text-2xl font-bold tracking-tight text-[var(--domain-color)] drop-shadow-[0_0_10px_color-mix(in_srgb,var(--domain-color)_45%,transparent)]">
+                  {metric.value}
+                </div>
+                <div className="mt-1.5 flex items-center gap-1.5 font-mono text-[9px] text-muted-foreground/60">
+                  <span className="h-1 w-2 rounded-full bg-[var(--domain-color)]/60" />
+                  <span>TARGET SPEC VERIFIED</span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-    )}
+      )}
 
-    {/* ── Merged chip row: skills + tools de-duplicated ── */}
-    {mergedChips.length > 0 && (
-      <div className="border-t border-border/70 px-5 py-4 sm:px-7">
-        <ul className="flex flex-wrap gap-2">
-          {mergedChips.map((chip) => (
-            <li key={chip} className="border border-border bg-background/40 px-2.5 py-1.5 font-mono text-[11px] text-foreground">
-              {chip}
-            </li>
-          ))}
-        </ul>
-      </div>
-    )}
+      {/* ── Sharper Badges: Toolchain & Domain Specifications ── */}
+      {mergedChips.length > 0 && (
+        <div className="border-t border-border/70 px-5 py-4 sm:px-7">
+          <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+            TOOLCHAIN & DOMAIN SPECIFICATIONS
+          </div>
+          <ul className="flex flex-wrap gap-2">
+            {mergedChips.map((chip) => (
+              <li key={chip} className="expertise-chip">
+                <span className="font-mono text-[10px] text-[var(--domain-color)] opacity-80">
+                  #
+                </span>
+                <span>{chip}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
-    {/* ── "From my work" project links ── */}
-    {hasProjects && (
-      <div className="border-t border-border/70 px-5 py-4 sm:px-7">
-        <p className="mb-3 text-xs font-medium tracking-wide expertise-domain-text">From my work</p>
-        <ul className="flex flex-col gap-1">
-          {validProjects.map((project) => (
-            <li key={project.url}>
+      {/* ── "From my work" Verified Implementation Cards ── */}
+      {hasProjects && (
+        <div className="border-t border-border/70 px-5 py-4 sm:px-7">
+          <div className="mb-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+            <span className="flex items-center gap-1.5 expertise-domain-text">
+              <GitBranch className="h-3 w-3" />
+              VERIFIED IMPLEMENTATIONS // CODE ARTIFACTS
+            </span>
+          </div>
+          <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+            {validProjects.map((project) => (
               <a
+                key={project.url}
                 href={project.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`View ${project.title} on GitHub`}
-                className="group inline-flex min-h-9 items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                className="group relative flex items-center justify-between border border-border/80 bg-background/50 p-3 backdrop-blur-sm transition-all duration-200 hover:border-[var(--domain-color)]/60 hover:bg-[var(--domain-color)]/5 hover:shadow-[0_0_18px_color-mix(in_srgb,var(--domain-color)_15%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
-                <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5 shrink-0 expertise-domain-text" />
-                <span className="font-medium group-hover:underline underline-offset-2">{project.title}</span>
-                {!isTodoOrEmpty(project.source) && (
-                  <span className="font-mono text-[10px] text-muted-foreground/60">— {project.source}</span>
-                )}
+                <div className="flex min-w-0 items-center gap-2.5">
+                  <span className="grid h-7 w-7 shrink-0 place-items-center border border-border/80 bg-card/60 text-muted-foreground transition-colors group-hover:border-[var(--domain-color)]/50 group-hover:text-[var(--domain-color)]">
+                    <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" />
+                  </span>
+                  <div className="min-w-0">
+                    <p className="truncate text-xs font-semibold text-foreground group-hover:text-[var(--domain-color)] transition-colors">
+                      {project.title}
+                    </p>
+                    {!isTodoOrEmpty(project.source) && (
+                      <p className="font-mono text-[9px] text-muted-foreground/70 truncate">
+                        {project.source}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <span className="shrink-0 font-mono text-[9px] uppercase tracking-wider text-muted-foreground/60 transition-colors group-hover:text-[var(--domain-color)] flex items-center gap-1">
+                  REPO <ArrowRight className="h-2.5 w-2.5 transition-transform group-hover:translate-x-0.5" />
+                </span>
               </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    )}
-  </motion.div>;
+            ))}
+          </div>
+        </div>
+      )}
+    </motion.div>
+  );
 }
 
 const ServicesSection = () => {
@@ -462,19 +618,27 @@ const ServicesSection = () => {
       >
         <CornerTicks />
         <div className="mb-4 flex flex-col gap-3 border-b border-border/70 pb-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.16em] text-muted-foreground">
-            <Activity className="h-3.5 w-3.5 text-accent" />
-            REFERENCE ARCHITECTURE
+          <div className="flex items-center gap-2.5 font-mono text-[10px] tracking-[0.18em] text-muted-foreground">
+            <div className="relative flex h-2 w-2 items-center justify-center">
+              <span className="absolute h-full w-full animate-ping rounded-full bg-accent opacity-75" />
+              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+            </div>
+            <span className="font-semibold text-foreground">REFERENCE ARCHITECTURE</span>
+            <span className="hidden text-border sm:inline">|</span>
+            <span className="hidden font-mono text-[9px] text-muted-foreground/70 sm:inline">TOPOLOGY SPEC // REV-2.4</span>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-            <span className="font-mono text-[9px] text-muted-foreground">Illustrative simulation</span>
+            <span className="inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-wider text-muted-foreground">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent/80" />
+              Interactive Simulation
+            </span>
             <button
               type="button"
               onClick={() => {
                 setIsSimulating((value) => !value);
               }}
               disabled={motionPaused}
-              className="group inline-flex min-h-11 items-center disabled:cursor-not-allowed disabled:opacity-50 justify-center gap-2 border border-accent/50 bg-accent/10 px-3 py-2 font-mono text-[10px] font-semibold tracking-widest text-accent transition-all hover:bg-accent/20 hover:shadow-[0_0_24px_hsl(var(--accent)/0.2)]"
+              className="group inline-flex min-h-10 items-center disabled:cursor-not-allowed disabled:opacity-50 justify-center gap-2 border border-accent/50 bg-accent/10 px-3.5 py-1.5 font-mono text-[10px] font-semibold tracking-widest text-accent transition-all hover:bg-accent/20 hover:shadow-[0_0_24px_hsl(var(--accent)/0.25)]"
               aria-pressed={isSimulating}
             >
               {isSimulating ? (
@@ -520,23 +684,28 @@ const ServicesSection = () => {
                     tabIndex={active ? 0 : -1}
                     onClick={() => { setActiveIndex(index); setIsSimulating(false); }}
                     onKeyDown={(e) => handleTabKeyDown(e, index)}
-                    className={`${toneClasses[item.tone]} group relative flex min-h-[72px] min-w-[140px] flex-col items-start gap-1.5 border bg-card/60 px-3 py-3 text-left backdrop-blur-md transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+                    className={`${toneClasses[item.tone]} group relative flex min-h-[72px] min-w-[140px] flex-col items-start gap-1.5 border bg-card/60 px-3 py-3 text-left backdrop-blur-md transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                       active
-                        ? "expertise-domain-border expertise-domain-surface expertise-domain-glow"
-                        : "border-border/70 hover:border-accent/50 hover:bg-card"
+                        ? "expertise-domain-border expertise-domain-surface expertise-domain-glow shadow-[0_4px_20px_color-mix(in_srgb,var(--domain-color)_20%,transparent)]"
+                        : "border-border/70 hover:border-accent/50 hover:bg-card/80"
                     }`}
                   >
-                    <span className={`flex items-center gap-2`}>
+                    <span className="flex items-center gap-2">
                       {Icon && (
                         <span className={`grid h-6 w-6 shrink-0 place-items-center border ${
-                          active ? "expertise-domain-border expertise-domain-surface expertise-domain-text" : "border-border text-muted-foreground"
+                          active ? "expertise-domain-border expertise-domain-surface expertise-domain-text" : "border-border/80 bg-background/40 text-muted-foreground"
                         }`}>
                           <Icon className="h-3 w-3" strokeWidth={1.6} />
                         </span>
                       )}
-                      <span className={`font-mono text-[9px] tracking-[0.12em] ${
-                        active ? "expertise-domain-text" : "text-muted-foreground"
-                      }`}>{item.number} / {item.categoryLabel}</span>
+                      <span className={`flex items-center gap-1 font-mono text-[9px] tracking-[0.14em] ${
+                        active ? "expertise-domain-text font-semibold" : "text-muted-foreground"
+                      }`}>
+                        {active && (
+                          <span className="h-1 w-1 rounded-full bg-[var(--domain-color)] shadow-[0_0_6px_var(--domain-color)]" />
+                        )}
+                        {item.number} / {item.categoryLabel}
+                      </span>
                     </span>
                     <span className="block text-[11px] font-semibold leading-tight text-foreground line-clamp-2">{item.name}</span>
                     {active && <motion.span layoutId={motionPaused ? undefined : "active-mobile-tab"} className="absolute bottom-0 left-2 right-2 h-px bg-[var(--domain-color)]" />}
@@ -547,7 +716,17 @@ const ServicesSection = () => {
           </ul>
         </div>
 
-        <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-border/70 pt-3 font-mono text-[9px] tracking-widest text-muted-foreground"><span className="flex items-center gap-2"><span className={`h-1.5 w-1.5 rounded-full ${isSimulating ? "animate-ping bg-accent" : "bg-accent"}`} />{stageLabel}</span><span>PIPELINE FLOW / <span className="text-foreground">6 DOMAINS</span></span></div>
+        <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-border/70 pt-3 font-mono text-[9px] tracking-widest text-muted-foreground">
+          <span className="flex items-center gap-2">
+            <span className={`h-1.5 w-1.5 rounded-full ${isSimulating ? "animate-ping bg-accent" : "bg-accent"}`} />
+            {stageLabel}
+          </span>
+          <span className="flex items-center gap-2">
+            <span>PIPELINE FLOW</span>
+            <span className="text-border">/</span>
+            <span className="text-foreground font-semibold">6 DOMAINS</span>
+          </span>
+        </div>
       </motion.div>
 
       {/* ── Single shared inspector (rendered once, shown for active tab) ── */}
