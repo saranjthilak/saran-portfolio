@@ -64,7 +64,7 @@ const EXPERTISE: ExpertiseItem[] = [
     categoryLabel: "Data Engineering",
     name: "Data Engineering Architecture",
     icon: Database,
-    description: "Reference architecture for resilient ETL/ELT pipelines with Apache Airflow and dbt, including data contracts, idempotent processing, and streaming ingestion into analytical warehouses.",
+    description: "Resilient ETL/ELT pipelines with Apache Airflow and dbt, data contracts, idempotent processing, and streaming ingestion into analytical warehouses.",
     pipeline: ["Source Ingest", "Airflow DAG", "dbt Models", "BigQuery"],
     tags: ["Airflow", "dbt", "BigQuery", "Snowflake", "ETL/ELT"],
     tone: "cyan",
@@ -77,7 +77,7 @@ const EXPERTISE: ExpertiseItem[] = [
     categoryLabel: "GenAI & RAG",
     name: "GenAI & RAG Systems",
     icon: BrainCircuit,
-    description: "Reference architecture for grounded, citation-backed responses, combining semantic and keyword retrieval, cross-encoder reranking, and answer guardrails with LangChain and FAISS.",
+    description: "Grounded, citation-backed responses with semantic and keyword retrieval, cross-encoder reranking, and answer guardrails via LangChain and FAISS.",
     pipeline: ["Query", "Embed", "FAISS Vector", "Rerank", "Grounded LLM"],
     tags: ["LangChain", "Vector DB", "FAISS", "Guardrails", "Reranking"],
     tone: "violet",
@@ -90,7 +90,7 @@ const EXPERTISE: ExpertiseItem[] = [
     categoryLabel: "MLOps",
     name: "Model Operations & Serving",
     icon: GitBranch,
-    description: "Reference workflow for model registration, quantized inference, canary routing, and drift monitoring using NVIDIA Triton, MLflow, and FastAPI.",
+    description: "Model registration, quantized inference, canary routing, and drift monitoring using NVIDIA Triton, MLflow, and FastAPI.",
     pipeline: ["Train / Log", "MLflow", "Triton Server", "Canary Route"],
     tags: ["MLflow", "Triton", "Quantization", "Docker", "Model Registry"],
     tone: "amber",
@@ -103,7 +103,7 @@ const EXPERTISE: ExpertiseItem[] = [
     categoryLabel: "Cloud & IaC",
     name: "Cloud Topology & IaC",
     icon: Cloud,
-    description: "Reference workflow for provisioning cloud infrastructure with Terraform and Kubernetes, with security, cost visibility, and repeatable deployments as design considerations.",
+    description: "Cloud infrastructure with Terraform and Kubernetes, security, cost visibility, and repeatable deployments as design considerations.",
     pipeline: ["Terraform HCL", "State Lock", "K8s Mesh", "Live Cluster"],
     tags: ["Terraform", "AWS", "GCP", "Kubernetes", "FinOps"],
     tone: "sky",
@@ -116,7 +116,7 @@ const EXPERTISE: ExpertiseItem[] = [
     categoryLabel: "Mission-Critical",
     name: "Mission-Critical Ops & High Availability",
     icon: Radio,
-    description: "Reference patterns for high-availability operations, including failover design, Prometheus/Grafana telemetry, incident response, and circuit-breaker remediation.",
+    description: "High-availability operations with failover design, Prometheus/Grafana telemetry, incident response, and circuit-breaker remediation.",
     pipeline: ["Prometheus", "Telemetry", "Circuit Breaker", "Auto-Heal"],
     tags: ["High Availability", "Prometheus", "Grafana", "Incident SRE", "Failover"],
     tone: "rose",
@@ -129,7 +129,7 @@ const EXPERTISE: ExpertiseItem[] = [
     categoryLabel: "Full-Stack AI",
     name: "Full-Stack AI Interfaces",
     icon: Monitor,
-    description: "Reference architecture connecting AI services to reactive client applications through FastAPI, type-safe React interfaces, and WebSocket token streaming.",
+    description: "AI services connected to reactive clients through FastAPI, type-safe React interfaces, and WebSocket token streaming.",
     pipeline: ["FastAPI RPC", "WebSocket", "React State", "Edge Render"],
     tags: ["FastAPI", "React", "Next.js", "TypeScript", "WebSocket"],
     tone: "emerald",
@@ -144,44 +144,71 @@ const toneClasses: Record<DomainTone, string> = {
   sky: "expertise-domain-sky",
   rose: "expertise-domain-rose",
   emerald: "expertise-domain-emerald",
-};function CornerTicks({ tone = false }: { tone?: boolean }) {
-  const tickClass = tone ? "border-[var(--domain-color)]/60" : "border-accent/60";
+};
+
+/* ───── Ambient glow orbs behind the canvas ───── */
+function AmbientOrbs({ activeTone = "cyan" }: { activeTone?: DomainTone }) {
+  const toneMap: Record<DomainTone, string> = {
+    cyan: "187 80% 48%",
+    violet: "258 90% 76%",
+    amber: "38 92% 55%",
+    sky: "199 92% 60%",
+    rose: "350 86% 60%",
+    emerald: "160 84% 39%",
+  };
+  const primary = toneMap[activeTone];
+  const secondary = activeTone === "cyan" ? toneMap.violet : toneMap.cyan;
+
   return (
-    <>
-      <span className={`pointer-events-none absolute left-0 top-0 h-3 w-3 border-l-2 border-t-2 ${tickClass}`} />
-      <span className={`pointer-events-none absolute right-0 top-0 h-3 w-3 border-r-2 border-t-2 ${tickClass}`} />
-      <span className={`pointer-events-none absolute bottom-0 left-0 h-3 w-3 border-b-2 border-l-2 ${tickClass}`} />
-      <span className={`pointer-events-none absolute bottom-0 right-0 h-3 w-3 border-b-2 border-r-2 ${tickClass}`} />
-    </>
+    <div className="pointer-events-none inset-0 z-0 overflow-hidden" aria-hidden="true">
+      <div className="absolute -top-40 -left-40 h-[600px] w-[600px] rounded-full bg-[hsl(var(--domain-color)/0.10)] blur-[120px]" style={{ "--domain-color": primary } as React.CSSProperties} />
+      <div className="absolute -bottom-40 -right-40 h-[500px] w-[500px] rounded-full bg-[hsl(var(--domain-color)/0.08)] blur-[100px]" style={{ "--domain-color": secondary } as React.CSSProperties} />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[400px] w-[400px] rounded-full bg-[hsl(var(--domain-color)/0.06)] blur-[80px] animate-pulse" style={{ "--domain-color": primary } as React.CSSProperties} />
+    </div>
   );
 }
 
+/* ───── Pipeline connector between domain tabs ───── */
 function PipelineConnector({ active, tone, vertical = false }: { active: boolean; tone: DomainTone; vertical?: boolean }) {
-  return <div aria-hidden="true" className={`${vertical ? "h-8 w-3" : "h-3 min-w-5 flex-1"} relative overflow-hidden ${toneClasses[tone]}`}>
-    <span className={`absolute rounded-full bg-border/80 ${vertical ? "left-1/2 top-0 h-full w-px -translate-x-1/2" : "left-0 top-1/2 h-px w-full -translate-y-1/2"}`} />
-    <span className={`absolute ${vertical ? "inset-x-0 top-0 h-10 expertise-signal-vertical" : "inset-y-0 left-0 w-16 expertise-signal"} ${active ? "opacity-100" : "opacity-0"}`} />
-    {[0, 1].map((i) => <span key={i} className={`expertise-packet ${vertical ? "left-[calc(50%-2px)] expertise-packet-vertical" : "top-[calc(50%-2px)]"} ${active ? "expertise-packet-hot" : ""}`} style={{ animationDelay: `${i * 1.8}s` }} />)}
-  </div>;
+  return (
+    <div aria-hidden="true" className={`${vertical ? "h-6 w-2" : "h-2 min-w-4 flex-1"} relative overflow-hidden ${toneClasses[tone]}`}>
+      <span className={`absolute rounded-full bg-border/60 ${vertical ? "left-1/2 top-0 h-full w-px -translate-x-1/2" : "left-0 top-1/2 h-px w-full -translate-y-1/2"}`} />
+      <span className={`absolute ${vertical ? "inset-x-0 top-0 h-8 expertise-signal-vertical" : "inset-y-0 left-0 w-20 expertise-signal"} ${active ? "opacity-100" : "opacity-0"}`} />
+      {[0, 1].map((i) => (
+        <span
+          key={i}
+          className={`expertise-packet ${vertical ? "left-[calc(50%-1px)] expertise-packet-vertical" : "top-[calc(50%-1px)]"} ${active ? "expertise-packet-hot" : ""}`}
+          style={{ animationDelay: `${i * 1.6}s` }}
+        />
+      ))}
+    </div>
+  );
 }
 
+/* ───── Domain tab (glass card) ───── */
 interface SystemNodeProps {
   item: ExpertiseItem;
   active: boolean;
   onSelect: () => void;
   index: number;
-  stacked?: boolean;
   motionPaused: boolean;
   onKeyDown?: (e: React.KeyboardEvent) => void;
 }
 
 const SystemNode = forwardRef<HTMLButtonElement, SystemNodeProps>(function SystemNode(
-  { item, active, onSelect, index, stacked = false, motionPaused, onKeyDown },
+  { item, active, onSelect, index, motionPaused, onKeyDown },
   ref
 ) {
   const Icon = item.icon;
-  const hasNumber = !isTodoOrEmpty(item.number);
-  const hasCategory = !isTodoOrEmpty(item.categoryLabel);
-  const hasName = !isTodoOrEmpty(item.name);
+
+  const baseClasses = "group relative flex min-w-0 flex-1 items-center gap-3 border bg-white/5 backdrop-blur-md p-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-all duration-300";
+  const activeClasses = active ? "expertise-domain-border bg-white/10 shadow-[0_0_30px_color-mix(in_srgb,var(--domain-color)_35%,transparent)]" : "border-border/60 hover:border-accent/50 hover:bg-white/8 hover:shadow-[0_0_20px_color-mix(in_srgb,var(--domain-color)_15%,transparent)]";
+  const iconClasses = active ? "expertise-domain-border expertise-domain-surface expertise-domain-text expertise-domain-glow" : "border-border/70 bg-white/5 text-muted-foreground group-hover:border-accent/40 group-hover:expertise-domain-text";
+  const labelClasses = active ? "text-[var(--domain-color)] font-semibold" : "text-muted-foreground";
+  const nameClasses = "mt-1 block font-semibold text-[11px] leading-tight text-foreground truncate group-hover:text-[var(--domain-color)] transition-colors";
+  const dotClasses = active ? "h-1.5 w-1.5 rounded-full bg-[var(--domain-color)] shadow-[0_0_6px_var(--domain-color)]" : "";
+  const nodeDotClasses = active ? "h-1 w-1 rounded-full bg-[var(--domain-color)] shadow-[0_0_6px_var(--domain-color)]" : "";
+  const bottomLineClasses = "absolute bottom-0 left-2 right-2 h-px bg-[var(--domain-color)]";
 
   return (
     <motion.button
@@ -194,75 +221,36 @@ const SystemNode = forwardRef<HTMLButtonElement, SystemNodeProps>(function Syste
       tabIndex={active ? 0 : -1}
       onClick={onSelect}
       onKeyDown={onKeyDown}
-      className={`group ${toneClasses[item.tone]} relative flex min-w-0 flex-1 items-center gap-3 border bg-card/60 p-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
-        stacked ? "min-h-[88px] w-full px-4 py-4" : ""
-      } backdrop-blur-md transition-all duration-300 ${
-        active
-          ? "expertise-domain-border expertise-domain-surface expertise-domain-glow shadow-[0_4px_24px_color-mix(in_srgb,var(--domain-color)_20%,transparent)]"
-          : "border-border/70 hover:border-accent/50 hover:bg-card/80"
-      }`}
-      initial={motionPaused ? false : { opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: motionPaused ? 0 : 0.5, delay: motionPaused ? 0 : index * 0.07, ease: EASE }}
-      whileHover={motionPaused ? undefined : { y: -3 }}
+      className={`${baseClasses} ${toneClasses[item.tone]} ${activeClasses}`}
+      initial={motionPaused ? false : { opacity: 0, y: 16, scale: 0.95 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: motionPaused ? 0 : 0.5, delay: motionPaused ? 0 : index * 0.08, ease: EASE }}
+      whileHover={motionPaused ? undefined : { y: -4, scale: 1.02 }}
     >
       {active && (
-        <span className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-[var(--domain-color)] shadow-[0_0_8px_var(--domain-color)]" />
+        <span className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-[var(--domain-color)] shadow-[0_0_12px_var(--domain-color)]" />
       )}
-      {Icon && (
-        <span
-          className={`grid h-9 w-9 shrink-0 place-items-center border transition-colors duration-300 ${
-            active
-              ? "expertise-domain-border expertise-domain-surface expertise-domain-text shadow-[0_0_12px_color-mix(in_srgb,var(--domain-color)_30%,transparent)]"
-              : "border-border/80 bg-background/40 text-muted-foreground group-hover:border-accent/40 group-hover:text-foreground"
-          }`}
-        >
-          <Icon className="h-4 w-4" strokeWidth={1.6} />
-        </span>
-      )}
-      <span className="min-w-0 flex-1">
-        {(hasNumber || hasCategory) && (
-          <span
-            className={`flex items-center gap-1.5 font-mono ${
-              stacked ? "text-[10px]" : "whitespace-nowrap text-[9px]"
-            } tracking-[0.14em] ${active ? "expertise-domain-text font-semibold" : "text-muted-foreground"}`}
-          >
-            {active && (
-              <span className="h-1.5 w-1.5 rounded-full bg-[var(--domain-color)] shadow-[0_0_6px_var(--domain-color)]" />
-            )}
-            {hasNumber && hasCategory ? `${item.number} / ${item.categoryLabel}` : (hasNumber ? item.number : item.categoryLabel)}
-          </span>
-        )}
-        {hasName && (
-          <span
-            className={`mt-1 block font-semibold text-foreground ${
-              stacked ? "text-sm leading-5" : "truncate text-[11px] leading-tight"
-            }`}
-            title={item.name}
-          >
-            {item.name}
-          </span>
-        )}
+      <span className={`grid h-9 w-9 shrink-0 place-items-center border rounded-xl transition-all duration-300 ${iconClasses}`}>
+        <Icon className="h-4 w-4" strokeWidth={1.6} />
       </span>
-      {stacked && (
-        <ChevronDown
-          aria-hidden="true"
-          className={`h-4 w-4 shrink-0 transition-transform ${
-            active ? "rotate-180 expertise-domain-text" : "text-muted-foreground"
-          }`}
-        />
-      )}
+      <span className="min-w-0 flex-1">
+        <span className={`flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.14em] ${labelClasses}`}>
+          {active && <span className={dotClasses} />}
+          {item.number} / {item.categoryLabel}
+        </span>
+        <span className={nameClasses} title={item.name}>
+          {item.name}
+        </span>
+      </span>
       {active && (
-        <motion.span
-          layoutId={motionPaused ? undefined : stacked ? "active-mobile-node" : "active-node"}
-          className="absolute bottom-0 left-3 right-3 h-px bg-[var(--domain-color)]"
-        />
+        <motion.span layoutId={motionPaused ? undefined : "active-node"} className={bottomLineClasses} />
       )}
     </motion.button>
   );
 });
 
+/* ───── Inspector panel (mounted, hidden when inactive) ───── */
 function Inspector({ item, isSimulating, motionPaused, id }: { item: ExpertiseItem; isSimulating: boolean; motionPaused: boolean; id: string }) {
   const Icon = item.icon;
 
@@ -286,7 +274,6 @@ function Inspector({ item, isSimulating, motionPaused, id }: { item: ExpertiseIt
     [item.tags]
   );
 
-  // Merged, de-duplicated chip row: skills first, then tools not already in skills
   const mergedChips = useMemo(() => {
     const seen = new Set<string>();
     const result: string[] = [];
@@ -307,94 +294,73 @@ function Inspector({ item, isSimulating, motionPaused, id }: { item: ExpertiseIt
       .filter((project): project is NonNullable<typeof project> => Boolean(project));
   }, [item.projectRepos]);
 
-  const hasProjects = validProjects.length > 0;
-
   return (
     <motion.div
       id={id}
       role="tabpanel"
       aria-labelledby={`expertise-tab-${item.number}`}
       key={item.number}
-      className={`${toneClasses[item.tone]} relative overflow-hidden border border-border/80 bg-card/75 backdrop-blur-xl shadow-[0_20px_60px_hsl(var(--background)/0.5)]`}
-      initial={motionPaused ? false : { opacity: 0, y: 14 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: motionPaused ? 0 : 0.45, ease: EASE }}
+      className={`${toneClasses[item.tone]} relative overflow-hidden border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_24px_80px_hsl(var(--background)/0.6)] rounded-3xl`}
+      initial={motionPaused ? false : { opacity: 0, y: 20, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: 10, scale: 0.98 }}
+      transition={{ duration: motionPaused ? 0 : 0.5, ease: EASE }}
     >
-      <CornerTicks tone />
-      <div className="absolute inset-x-0 top-0 h-px bg-[var(--domain-color)] opacity-80 shadow-[0_0_8px_var(--domain-color)]" />
-      {/* Ambient background glow */}
-      <div
-        className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[var(--domain-color)] opacity-[0.08] blur-3xl"
-        aria-hidden="true"
-      />
+      <div className="absolute inset-0 bg-gradient-to-tr from-[var(--domain-color)]/5 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 [mask-image:radial-gradient(600px_circle_at_var(--mouse-x)_var(--mouse-y),black,transparent)]" style={{ "--mouse-x": "50%", "--mouse-y": "50%" } as React.CSSProperties} />
 
-      {/* ── Header: label + name + description ── */}
-      <div className="relative flex min-w-0 gap-4 p-5 sm:p-7">
-        {Icon && (
-          <span className="grid h-12 w-12 shrink-0 place-items-center border expertise-domain-border expertise-domain-surface expertise-domain-text shadow-[0_0_16px_color-mix(in_srgb,var(--domain-color)_30%,transparent)]">
-            <Icon className="h-6 w-6" strokeWidth={1.75} />
-          </span>
-        )}
+      {/* Header */}
+      <div className="relative flex min-w-0 gap-4 p-6 sm:p-8">
+        <span className="grid h-13 w-13 shrink-0 place-items-center border rounded-2xl expertise-domain-border expertise-domain-surface expertise-domain-text shadow-[0_0_20px_color-mix(in_srgb,var(--domain-color)_35%,transparent)]">
+          <Icon className="h-6 w-6" strokeWidth={1.75} />
+        </span>
         <div className="min-w-0 flex-1">
-          {!isTodoOrEmpty(item.number) && (
-            <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] expertise-domain-text">
-              <span className="h-1.5 w-1.5 rounded-full bg-[var(--domain-color)] shadow-[0_0_8px_var(--domain-color)]" />
-              DOMAIN {item.number} OF 06 • {item.categoryLabel}
-            </div>
-          )}
-          {!isTodoOrEmpty(item.name) && (
-            <h3 className="mt-1.5 text-xl font-bold tracking-tight text-foreground sm:text-2xl">
-              {item.name}
-            </h3>
-          )}
-          {!isTodoOrEmpty(item.description) && (
-            <p className="mt-2.5 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-              {item.description}
-            </p>
-          )}
+          <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] expertise-domain-text">
+            <span className="h-1.5 w-1.5 rounded-full bg-[var(--domain-color)] shadow-[0_0_8px_var(--domain-color)]" />
+            DOMAIN {item.number} OF 06 • {item.categoryLabel}
+          </div>
+          <h3 className="mt-2 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">{item.name}</h3>
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">{item.description}</p>
         </div>
       </div>
 
-      {/* ── Flow diagram ── */}
+      {/* Pipeline */}
       {validPipeline.length > 0 && (
-        <div className="border-t border-border/70 px-5 py-4 sm:px-7">
-          <div className="mb-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-            <span>PIPELINE TOPOLOGY // SIGNAL PATH</span>
+        <div className="border-t border-white/10 px-6 py-5 sm:px-8">
+          <div className="mb-4 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            <span className="flex items-center gap-2">PIPELINE TOPOLOGY</span>
             {isSimulating && (
               <span className="flex items-center gap-1.5 font-semibold expertise-domain-text animate-pulse">
-                <span className="h-1.5 w-1.5 rounded-full bg-[var(--domain-color)] shadow-[0_0_6px_var(--domain-color)]" />
-                TRANSMITTING
+                <span className="h-1.5 w-1.5 rounded-full bg-[var(--domain-color)] shadow-[0_0_8px_var(--domain-color)]" />
+                SIGNAL ACTIVE
               </span>
             )}
           </div>
-          <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3">
             {validPipeline.map((step, index) => {
-              const isStepActive = isSimulating && index <= 3;
+              const isStepActive = isSimulating && index < validPipeline.length - 1;
               return (
                 <div key={step} className="contents">
                   <motion.div
-                    className={`relative flex items-center gap-2 border px-3 py-2 font-mono text-[11px] font-semibold transition-all duration-300 ${
+                    className={`relative flex items-center gap-2 border rounded-lg px-4 py-2.5 font-mono text-[11px] font-semibold transition-all duration-300 ${
                       isStepActive
-                        ? "expertise-domain-border expertise-domain-surface text-foreground shadow-[0_0_18px_color-mix(in_srgb,var(--domain-color)_30%,transparent)]"
-                        : "border-border/80 bg-background/50 text-foreground/80 hover:border-border hover:bg-background/80"
+                        ? "border-[var(--domain-color)]/70 bg-[var(--domain-color)]/10 text-foreground shadow-[0_0_20px_color-mix(in_srgb,var(--domain-color)_30%,transparent)]"
+                        : "border-white/10 bg-white/5 text-foreground/70 hover:border-[var(--domain-color)]/40 hover:bg-[var(--domain-color)]/5"
                     }`}
-                    animate={isSimulating && !motionPaused ? { y: [0, -3, 0] } : { y: 0 }}
+                    animate={isSimulating && !motionPaused ? { y: [0, -4, 0] } : { y: 0 }}
                     transition={{
-                      duration: motionPaused ? 0 : 1.3,
+                      duration: motionPaused ? 0 : 1.2,
                       repeat: isSimulating && !motionPaused ? Infinity : 0,
-                      delay: index * 0.12,
+                      delay: index * 0.15,
+                      ease: "easeInOut",
                     }}
                   >
-                    <span className="font-mono text-[9px] text-[var(--domain-color)] opacity-70">
-                      0{index + 1}.
-                    </span>
+                    <span className="font-mono text-[9px] text-[var(--domain-color)] opacity-80">0{index + 1}.</span>
                     <span>{step}</span>
-                    {isStepActive && (
-                      <span className="h-1.5 w-1.5 rounded-full bg-[var(--domain-color)] shadow-[0_0_6px_var(--domain-color)] animate-ping" />
-                    )}
+                    {isStepActive && <span className="h-2 w-2 rounded-full bg-[var(--domain-color)] shadow-[0_0_10px_var(--domain-color)] animate-ping" />}
                   </motion.div>
                   {index < validPipeline.length - 1 && (
-                    <ArrowRight className="mx-auto h-3.5 w-3.5 shrink-0 rotate-90 text-[var(--domain-color)] opacity-60 sm:mx-0 sm:rotate-0" />
+                    <ArrowRight className="mx-auto h-4 w-4 shrink-0 rotate-90 text-[var(--domain-color)] opacity-50 sm:mx-0 sm:rotate-0" />
                   )}
                 </div>
               );
@@ -403,40 +369,28 @@ function Inspector({ item, isSimulating, motionPaused, id }: { item: ExpertiseIt
         </div>
       )}
 
-      {/* ── Glowing Telemetry Cards ── */}
+      {/* Telemetry */}
       {validTelemetry.length > 0 && (
-        <div className="border-t border-border/70 px-5 py-4 sm:px-7">
-          <div className="mb-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-            <span className="flex items-center gap-1.5">
+        <div className="border-t border-white/10 px-6 py-5 sm:px-8">
+          <div className="mb-4 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            <span className="flex items-center gap-2">
               <Activity className="h-3 w-3 text-[var(--domain-color)]" />
-              RUNTIME TELEMETRY // BENCHMARKS
-            </span>
-            <span className="text-[9px] text-muted-foreground/60 italic hidden sm:inline">
-              // PRODUCTION TARGET BENCHMARKS
+              RUNTIME TELEMETRY
             </span>
           </div>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             {validTelemetry.map((metric) => (
-              <div
-                key={metric.label}
-                className="expertise-telemetry-card p-3.5"
-              >
-                <span className="pointer-events-none absolute left-0 top-0 h-1.5 w-1.5 border-l border-t border-[var(--domain-color)]/60" />
-                <span className="pointer-events-none absolute right-0 top-0 h-1.5 w-1.5 border-r border-t border-[var(--domain-color)]/60" />
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                    {metric.label}
-                  </span>
-                  <span className="flex h-1.5 w-1.5 items-center justify-center">
-                    <span className="h-1 w-1 rounded-full bg-[var(--domain-color)] opacity-80" />
+              <div key={metric.label} className="relative p-4 rounded-xl border border-[var(--domain-color)]/20 bg-white/5 backdrop-blur-sm group hover:border-[var(--domain-color)]/50 hover:shadow-[0_0_24px_color-mix(in_srgb,var(--domain-color)_25%,transparent)] transition-all duration-300">
+                <div className="absolute left-0 top-0 h-1 w-1 rounded-full border-l border-t border-[var(--domain-color)]/60" />
+                <div className="absolute right-0 top-0 h-1 w-1 rounded-full border-r border-t border-[var(--domain-color)]/60" />
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-mono text-[9px] uppercase tracking-wider text-muted-foreground">{metric.label}</span>
+                  <span className="flex h-2 w-2 items-center justify-center">
+                    <span className="h-1 w-1 rounded-full bg-[var(--domain-color)] shadow-[0_0_6px_var(--domain-color)]" />
                   </span>
                 </div>
-                <div className="mt-2 font-mono text-xl sm:text-2xl font-bold tracking-tight text-[var(--domain-color)] drop-shadow-[0_0_10px_color-mix(in_srgb,var(--domain-color)_45%,transparent)]">
+                <div className="mt-1 font-mono text-2xl font-bold tracking-tight text-[var(--domain-color)] drop-shadow-[0_0_12px_color-mix(in_srgb,var(--domain-color)_40%,transparent)] group-hover:scale-105 transition-transform duration-200">
                   {metric.value}
-                </div>
-                <div className="mt-1.5 flex items-center gap-1.5 font-mono text-[9px] text-muted-foreground/60">
-                  <span className="h-1 w-2 rounded-full bg-[var(--domain-color)]/60" />
-                  <span>TARGET SPEC VERIFIED</span>
                 </div>
               </div>
             ))}
@@ -444,35 +398,30 @@ function Inspector({ item, isSimulating, motionPaused, id }: { item: ExpertiseIt
         </div>
       )}
 
-      {/* ── Sharper Badges: Toolchain & Domain Specifications ── */}
+      {/* Toolchain chips */}
       {mergedChips.length > 0 && (
-        <div className="border-t border-border/70 px-5 py-4 sm:px-7">
-          <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-            TOOLCHAIN & DOMAIN SPECIFICATIONS
-          </div>
+        <div className="border-t border-white/10 px-6 py-5 sm:px-8">
+          <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">TOOLCHAIN & DOMAIN SPECIFICATIONS</div>
           <ul className="flex flex-wrap gap-2">
             {mergedChips.map((chip) => (
-              <li key={chip} className="expertise-chip">
-                <span className="font-mono text-[10px] text-[var(--domain-color)] opacity-80">
-                  #
-                </span>
-                <span>{chip}</span>
+              <li key={chip} className="relative px-3 py-1.5 rounded-lg border border-[var(--domain-color)]/20 bg-white/5 text-[10px] font-mono text-[var(--domain-color)]/80 uppercase tracking-[0.1em] group cursor-default transition-all duration-200 hover:bg-[var(--domain-color)]/10 hover:border-[var(--domain-color)]/40 hover:shadow-[0_0_12px_color-mix(in_srgb,var(--domain-color)_30%,transparent)]">
+                <span className="opacity-50">#</span>{chip}
               </li>
             ))}
           </ul>
         </div>
       )}
 
-      {/* ── "From my work" Verified Implementation Cards ── */}
-      {hasProjects && (
-        <div className="border-t border-border/70 px-5 py-4 sm:px-7">
-          <div className="mb-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-            <span className="flex items-center gap-1.5 expertise-domain-text">
+      {/* Verified implementations */}
+      {validProjects.length > 0 && (
+        <div className="border-t border-white/10 px-6 py-5 sm:px-8 pb-8">
+          <div className="mb-4 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            <span className="flex items-center gap-2 expertise-domain-text">
               <GitBranch className="h-3 w-3" />
-              VERIFIED IMPLEMENTATIONS // CODE ARTIFACTS
+              VERIFIED IMPLEMENTATIONS
             </span>
           </div>
-          <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {validProjects.map((project) => (
               <a
                 key={project.url}
@@ -480,20 +429,16 @@ function Inspector({ item, isSimulating, motionPaused, id }: { item: ExpertiseIt
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`View ${project.title} on GitHub`}
-                className="group relative flex items-center justify-between border border-border/80 bg-background/50 p-3 backdrop-blur-sm transition-all duration-200 hover:border-[var(--domain-color)]/60 hover:bg-[var(--domain-color)]/5 hover:shadow-[0_0_18px_color-mix(in_srgb,var(--domain-color)_15%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                className="group relative flex items-center justify-between border border-white/10 bg-white/5 p-3 rounded-xl backdrop-blur-sm transition-all duration-300 hover:border-[var(--domain-color)]/50 hover:bg-[var(--domain-color)]/5 hover:shadow-[0_0_24px_color-mix(in_srgb,var(--domain-color)_20%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--domain-color)]"
               >
-                <div className="flex min-w-0 items-center gap-2.5">
-                  <span className="grid h-7 w-7 shrink-0 place-items-center border border-border/80 bg-card/60 text-muted-foreground transition-colors group-hover:border-[var(--domain-color)]/50 group-hover:text-[var(--domain-color)]">
-                    <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" />
+                <div className="flex min-w-0 items-center gap-3">
+                  <span className="grid h-8 w-8 shrink-0 place-items-center border border-white/10 bg-white/8 rounded-lg text-muted-foreground transition-colors group-hover:border-[var(--domain-color)]/50 group-hover:text-[var(--domain-color)]">
+                    <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
                   </span>
                   <div className="min-w-0">
-                    <p className="truncate text-xs font-semibold text-foreground group-hover:text-[var(--domain-color)] transition-colors">
-                      {project.title}
-                    </p>
+                    <p className="truncate text-sm font-semibold text-foreground group-hover:text-[var(--domain-color)] transition-colors">{project.title}</p>
                     {!isTodoOrEmpty(project.source) && (
-                      <p className="font-mono text-[9px] text-muted-foreground/70 truncate">
-                        {project.source}
-                      </p>
+                      <p className="font-mono text-[9px] text-muted-foreground/70 truncate">{project.source}</p>
                     )}
                   </div>
                 </div>
@@ -516,9 +461,8 @@ const ServicesSection = () => {
   const [motionPreferenceReady, setMotionPreferenceReady] = useState(false);
   useEffect(() => { setMotionPreferenceReady(true); }, []);
   const motionPaused = motionPreferenceReady && Boolean(prefersReducedMotion);
-  const stageLabel = useMemo(() => motionPaused ? "MOTION PAUSED" : isSimulating ? "SIMULATION RUNNING" : "PIPELINE READY", [isSimulating, motionPaused]);
+  const activeItem = EXPERTISE[activeIndex];
 
-  // ── Arrow-key navigation for tabs ──
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const handleTabKeyDown = useCallback((e: React.KeyboardEvent, currentIndex: number) => {
     let nextIndex: number | null = null;
@@ -542,26 +486,26 @@ const ServicesSection = () => {
     }
   }, []);
 
-  // Cursor-parallax depth
-  const rotateX = useSpring(0, { stiffness: 55, damping: 16, mass: 0.6 });
-  const rotateY = useSpring(0, { stiffness: 55, damping: 16, mass: 0.6 });
-  const stageShiftX = useTransform(rotateY, (value) => value * -1.6);
-  const stageShiftY = useTransform(rotateX, (value) => value * 1.4);
-  const tiltEnabled = () => typeof window !== "undefined" && window.matchMedia("(min-width: 1024px) and (hover: hover) and (prefers-reduced-motion: no-preference)").matches;
+  const rotateX = useSpring(0, { stiffness: 70, damping: 18, mass: 0.5 });
+  const rotateY = useSpring(0, { stiffness: 70, damping: 18, mass: 0.5 });
+  const stageShiftX = useTransform(rotateY, (value) => value * -2);
+  const stageShiftY = useTransform(rotateX, (value) => value * 1.8);
+  const tiltEnabled = () =>
+    typeof window !== "undefined" && window.matchMedia("(min-width: 1024px) and (hover: hover) and (prefers-reduced-motion: no-preference)").matches;
 
   const handleTilt = (event: React.MouseEvent<HTMLDivElement>) => {
     if (motionPaused || !tiltEnabled()) return;
     const rect = event.currentTarget.getBoundingClientRect();
     const nx = (event.clientX - rect.left) / rect.width - 0.5;
     const ny = (event.clientY - rect.top) / rect.height - 0.5;
-    rotateY.set(nx * 5);
-    rotateX.set(-ny * 4);
+    rotateY.set(nx * 6);
+    rotateX.set(-ny * 5);
   };
   const resetTilt = () => { rotateX.set(0); rotateY.set(0); };
 
   useEffect(() => {
     if (!isSimulating || motionPaused) return;
-    const timer = window.setInterval(() => setActiveIndex((current) => (current + 1) % EXPERTISE.length), 1500);
+    const timer = window.setInterval(() => setActiveIndex((current) => (current + 1) % EXPERTISE.length), 2000);
     return () => window.clearInterval(timer);
   }, [isSimulating, motionPaused]);
 
@@ -569,176 +513,189 @@ const ServicesSection = () => {
     if (motionPaused) { rotateX.jump(0); rotateY.jump(0); }
   }, [motionPaused, rotateX, rotateY]);
 
-  // Scroll the active tab into view on mobile when activeIndex changes
   useEffect(() => {
     tabRefs.current[activeIndex]?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
   }, [activeIndex]);
 
-  const activeItem = EXPERTISE[activeIndex];
+  const stageLabel = useMemo(() => (motionPaused ? "MOTION PAUSED" : isSimulating ? "SIMULATION RUNNING" : "PIPELINE READY"), [isSimulating, motionPaused]);
 
-  return <section data-motion-paused={motionPaused} id="skills" className="relative z-20 -mt-10 overflow-hidden rounded-t-section border-t border-border bg-v2-recessed px-5 pb-24 pt-16 sm:-mt-12 sm:px-8 sm:pt-24 md:-mt-14" aria-labelledby="expertise-heading">
-    <div className="absolute inset-0 blueprint-dots opacity-[0.16]" aria-hidden="true" />
-    <div className="relative mx-auto max-w-7xl">
-      <BlueprintSectionHeader align="center">
-        <div className="mb-10 text-center sm:mb-14">
-          <FadeIn delay={0} y={20}>
-            <p className="flex items-center justify-center gap-2 font-medium uppercase tracking-[0.25em] text-white/50 text-xs mb-5">
-              <span className="w-1.5 h-1.5 rounded-full bg-white/50 inline-block" />
-              Expertise
-            </p>
-          </FadeIn>
+  return (
+    <section data-motion-paused={motionPaused} id="skills" className="relative z-20 -mt-10 overflow-hidden rounded-t-section border-t border-white/10 bg-white/2 px-5 pb-28 pt-20 sm:-mt-12 sm:px-8 sm:pt-32 md:-mt-16 lg:pb-36" aria-labelledby="expertise-heading">
+      {/* Ambient orbs shift with active domain */}
+      <AmbientOrbs activeTone={activeItem.tone} />
 
-          <FadeIn delay={0.08} y={30}>
-            <SectionHeading
-              id="expertise-heading"
-              prefix="Six domains, one "
-              accentWord="reliability"
-              suffix=" mindset"
-              gradient="expertise"
-              align="center"
-              className="mb-4"
-            />
-          </FadeIn>
+      <div className="relative mx-auto max-w-7xl">
+        <BlueprintSectionHeader align="center">
+          <div className="mb-10 text-center sm:mb-16">
+            <FadeIn delay={0} y={20}>
+              <p className="flex items-center justify-center gap-2 font-medium uppercase tracking-[0.25em] text-white/60 text-xs mb-6">
+                <span className="w-2 h-2 rounded-full bg-[var(--domain-color)] shadow-[0_0_10px_var(--domain-color)] inline-block" />
+                Expertise
+              </p>
+            </FadeIn>
 
-          <FadeIn y={16} delay={0.2} duration={0.6} className="mx-auto mt-5 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
-            Six areas I work in, from data pipelines and RAG systems to cloud infrastructure and high-availability operations.
-          </FadeIn>
-        </div>
-      </BlueprintSectionHeader>
+            <FadeIn delay={0.08} y={30}>
+              <SectionHeading
+                id="expertise-heading"
+                prefix="Six domains, one "
+                accentWord="reliability"
+                suffix=" mindset"
+                gradient="expertise"
+                align="center"
+                className="mb-6"
+              />
+            </FadeIn>
 
-      <motion.div
-        className="expertise-canvas relative overflow-hidden border border-border/80 p-3 shadow-[0_20px_80px_hsl(var(--background)/0.45)] [transform-style:preserve-3d] sm:p-5"
-        style={{
-          rotateX: motionPaused ? 0 : rotateX,
-          rotateY: motionPaused ? 0 : rotateY,
-          transformPerspective: 1400,
-        }}
-        onMouseMove={handleTilt}
-        onMouseLeave={resetTilt}
-      >
-        <CornerTicks />
-        <div className="mb-4 flex flex-col gap-3 border-b border-border/70 pb-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-2.5 font-mono text-[10px] tracking-[0.18em] text-muted-foreground">
-            <div className="relative flex h-2 w-2 items-center justify-center">
-              <span className="absolute h-full w-full animate-ping rounded-full bg-accent opacity-75" />
-              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+            <FadeIn y={16} delay={0.2} duration={0.7} className="mx-auto mt-6 max-w-2xl text-sm leading-7 text-muted-foreground sm:text-base">
+              Production-grade systems across data, AI, cloud, and operations — each a reference architecture I’ve built and operated.
+            </FadeIn>
+          </div>
+        </BlueprintSectionHeader>
+
+        <motion.div
+          className="expertise-canvas relative overflow-hidden border border-white/15 p-4 shadow-[0_30px_100px_hsl(var(--background)/0.7)] [transform-style:preserve-3d] rounded-2xl sm:p-6"
+          style={{
+            rotateX: motionPaused ? 0 : rotateX,
+            rotateY: motionPaused ? 0 : rotateY,
+            transformPerspective: 1400,
+          }}
+          onMouseMove={handleTilt}
+          onMouseLeave={resetTilt}
+        >
+          <div className="absolute inset-0 blueprint-dots opacity-[0.12]" aria-hidden="true" />
+          <div className="relative z-10">
+
+            <div className="mb-6 flex flex-col gap-4 border-b border-white/10 pb-5 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-2.5 font-mono text-[9px] tracking-[0.18em] text-muted-foreground">
+                <div className="relative flex h-2 w-2 items-center justify-center">
+                  <span className="absolute h-full w-full animate-ping rounded-full bg-accent opacity-70" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                </div>
+                <span className="font-semibold text-foreground">REFERENCE ARCHITECTURE</span>
+                <span className="hidden text-white/40 sm:inline">|</span>
+                <span className="hidden font-mono text-[9px] text-muted-foreground/60 sm:inline">TOPOLOGY SPEC // REV-2.4</span>
+              </div>
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                <span className="inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-wider text-muted-foreground">
+                  <span className="h-1.5 w-1.5 rounded-full bg-accent/70" />
+                  Interactive Simulation
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setIsSimulating((value) => !value)}
+                  disabled={motionPaused}
+                  className="group inline-flex min-h-10 items-center disabled:cursor-not-allowed disabled:opacity-50 justify-center gap-2 border border-accent/40 bg-accent/5 px-3.5 py-1.5 font-mono text-[9px] font-semibold tracking-widest text-accent transition-all hover:bg-accent/10 hover:shadow-[0_0_24px_hsl(var(--accent)/0.3)]"
+                  aria-pressed={isSimulating}
+                >
+                  {isSimulating ? (
+                    <Pause className="h-3.5 w-3.5" />
+                  ) : (
+                    <Play className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                  )}{" "}
+                  {isSimulating ? "PAUSE RUN" : "SIMULATE PIPELINE FLOW"}
+                </button>
+              </div>
             </div>
-            <span className="font-semibold text-foreground">REFERENCE ARCHITECTURE</span>
-            <span className="hidden text-border sm:inline">|</span>
-            <span className="hidden font-mono text-[9px] text-muted-foreground/70 sm:inline">TOPOLOGY SPEC // REV-2.4</span>
-          </div>
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-            <span className="inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-wider text-muted-foreground">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent/80" />
-              Interactive Simulation
-            </span>
-            <button
-              type="button"
-              onClick={() => {
-                setIsSimulating((value) => !value);
-              }}
-              disabled={motionPaused}
-              className="group inline-flex min-h-10 items-center disabled:cursor-not-allowed disabled:opacity-50 justify-center gap-2 border border-accent/50 bg-accent/10 px-3.5 py-1.5 font-mono text-[10px] font-semibold tracking-widest text-accent transition-all hover:bg-accent/20 hover:shadow-[0_0_24px_hsl(var(--accent)/0.25)]"
-              aria-pressed={isSimulating}
+
+            {/* Desktop tablist */}
+            <motion.div
+              role="tablist"
+              aria-label="Expertise domains"
+              aria-orientation="horizontal"
+              className="hidden items-stretch lg:flex [transform-style:preserve-3d]"
+              style={{ x: motionPaused ? 0 : stageShiftX, y: motionPaused ? 0 : stageShiftY }}
             >
-              {isSimulating ? (
-                <Pause className="h-3.5 w-3.5" />
-              ) : (
-                <Play className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-              )}{" "}
-              {isSimulating ? "PAUSE RUN" : "SIMULATE PIPELINE FLOW"}
-            </button>
-          </div>
-        </div>
-
-        {/* ── Desktop tablist — horizontal with pipeline connectors ── */}
-        <motion.div role="tablist" aria-label="Expertise domains" aria-orientation="horizontal" className="hidden items-stretch lg:flex [transform-style:preserve-3d]" style={{ x: motionPaused ? 0 : stageShiftX, y: motionPaused ? 0 : stageShiftY }}>{EXPERTISE.map((item, index) => <div key={item.number} className="contents"><SystemNode ref={(el: HTMLButtonElement | null) => { tabRefs.current[index] = el; }} motionPaused={motionPaused} item={item} active={activeIndex === index} onSelect={() => { setActiveIndex(index); setIsSimulating(false); }} index={index} onKeyDown={(e) => handleTabKeyDown(e, index)} />{index < EXPERTISE.length - 1 && <PipelineConnector active={isSimulating || activeIndex === index} tone={item.tone} />}</div>)}</motion.div>
-
-        {/* ── Mobile tablist — horizontal scroll-snap, no stepper ── */}
-        {/*
-          - overflow-x-auto on the wrapper clips scroll to this element only,
-            preventing the section from widening the page at 375 px.
-          - Each tab is scroll-snap-align:start so swiping lands cleanly.
-          - Tabs are min-w-[140px] so 2.5 are visible at 375 px, signalling scrollability.
-          - The inner ul carries the ARIA tablist role so the row is one landmark.
-        */}
-        <div className="lg:hidden -mx-3 sm:-mx-5 overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <ul
-            role="tablist"
-            aria-label="Expertise domains"
-            aria-orientation="horizontal"
-            className="flex w-max min-w-full gap-1 px-3 sm:px-5 pb-1 [scroll-snap-type:x_mandatory]"
-          >
-            {EXPERTISE.map((item, index) => {
-              const Icon = item.icon;
-              const active = activeIndex === index;
-              return (
-                <li key={item.number} className="[scroll-snap-align:start]" role="presentation">
-                  <button
-                    ref={(el: HTMLButtonElement | null) => { tabRefs.current[index] = el; }}
-                    type="button"
-                    role="tab"
-                    id={`expertise-tab-${item.number}`}
-                    aria-selected={active}
-                    aria-controls={`expertise-panel-${item.number}`}
-                    tabIndex={active ? 0 : -1}
-                    onClick={() => { setActiveIndex(index); setIsSimulating(false); }}
+              {EXPERTISE.map((item, index) => (
+                <div key={item.number} className="contents">
+                  <SystemNode
+                    ref={(el) => { tabRefs.current[index] = el; }}
+                    motionPaused={motionPaused}
+                    item={item}
+                    active={activeIndex === index}
+                    onSelect={() => { setActiveIndex(index); setIsSimulating(false); }}
+                    index={index}
                     onKeyDown={(e) => handleTabKeyDown(e, index)}
-                    className={`${toneClasses[item.tone]} group relative flex min-h-[72px] min-w-[140px] flex-col items-start gap-1.5 border bg-card/60 px-3 py-3 text-left backdrop-blur-md transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
-                      active
-                        ? "expertise-domain-border expertise-domain-surface expertise-domain-glow shadow-[0_4px_20px_color-mix(in_srgb,var(--domain-color)_20%,transparent)]"
-                        : "border-border/70 hover:border-accent/50 hover:bg-card/80"
-                    }`}
-                  >
-                    <span className="flex items-center gap-2">
-                      {Icon && (
-                        <span className={`grid h-6 w-6 shrink-0 place-items-center border ${
-                          active ? "expertise-domain-border expertise-domain-surface expertise-domain-text" : "border-border/80 bg-background/40 text-muted-foreground"
-                        }`}>
-                          <Icon className="h-3 w-3" strokeWidth={1.6} />
+                  />
+                  {index < EXPERTISE.length - 1 && <PipelineConnector active={isSimulating || activeIndex === index} tone={item.tone} />}
+                </div>
+              ))}
+            </motion.div>
+
+            {/* Mobile tablist */}
+            <div className="lg:hidden -mx-4 sm:-mx-6 overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pb-2">
+              <ul role="tablist" aria-label="Expertise domains" aria-orientation="horizontal" className="flex w-max min-w-full gap-2 px-4 sm:px-6 [scroll-snap-type:x_mandatory]">
+                {EXPERTISE.map((item, index) => {
+                  const Icon = item.icon;
+                  const active = activeIndex === index;
+                  return (
+                    <li key={item.number} className="[scroll-snap-align:start]" role="presentation">
+                      <button
+                        ref={(el) => { tabRefs.current[index] = el; }}
+                        type="button"
+                        role="tab"
+                        id={`expertise-tab-${item.number}`}
+                        aria-selected={active}
+                        aria-controls={`expertise-panel-${item.number}`}
+                        tabIndex={active ? 0 : -1}
+                        onClick={() => { setActiveIndex(index); setIsSimulating(false); }}
+                        onKeyDown={(e) => handleTabKeyDown(e, index)}
+                        className={`${toneClasses[item.tone]} group relative flex min-h-[72px] min-w-[150px] flex-col items-start gap-1.5 border bg-white/5 backdrop-blur-md p-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--domain-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-all duration-300 ${
+                          active
+                            ? "border-[var(--domain-color)]/70 bg-white/10 shadow-[0_0_24px_color-mix(in_srgb,var(--domain-color)_30%,transparent)]"
+                            : "border-white/6 hover:border-[var(--domain-color)]/40 hover:bg-white/8"
+                        }`}
+                      >
+                        <span className="flex items-center gap-2">
+                          {Icon && (
+                            <span className={`grid h-6 w-6 shrink-0 place-items-center border rounded-lg ${
+                              active ? "border-[var(--domain-color)]/70 bg-[var(--domain-color)]/15 text-[var(--domain-color)]" : "border-white/10 bg-white/5 text-muted-foreground"
+                            }`}>
+                              <Icon className="h-3 w-3" strokeWidth={1.6} />
+                            </span>
+                          )}
+                          <span className={`flex items-center gap-1 font-mono text-[9px] tracking-[0.14em] ${
+                            active ? "text-[var(--domain-color)] font-semibold" : "text-muted-foreground"
+                          }`}>
+                            {active && <span className="h-1 w-1 rounded-full bg-[var(--domain-color)] shadow-[0_0_6px_var(--domain-color)]" />}
+                            {item.number} / {item.categoryLabel}
+                          </span>
                         </span>
-                      )}
-                      <span className={`flex items-center gap-1 font-mono text-[9px] tracking-[0.14em] ${
-                        active ? "expertise-domain-text font-semibold" : "text-muted-foreground"
-                      }`}>
-                        {active && (
-                          <span className="h-1 w-1 rounded-full bg-[var(--domain-color)] shadow-[0_0_6px_var(--domain-color)]" />
-                        )}
-                        {item.number} / {item.categoryLabel}
-                      </span>
-                    </span>
-                    <span className="block text-[11px] font-semibold leading-tight text-foreground line-clamp-2">{item.name}</span>
-                    {active && <motion.span layoutId={motionPaused ? undefined : "active-mobile-tab"} className="absolute bottom-0 left-2 right-2 h-px bg-[var(--domain-color)]" />}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+                        <span className="block text-[11px] font-semibold leading-tight text-foreground line-clamp-2">{item.name}</span>
+                        {active && <motion.span layoutId={motionPaused ? undefined : "active-mobile-tab"} className="absolute bottom-0 left-2 right-2 h-px bg-[var(--domain-color)]" />}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
 
-        <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-border/70 pt-3 font-mono text-[9px] tracking-widest text-muted-foreground">
-          <span className="flex items-center gap-2">
-            <span className={`h-1.5 w-1.5 rounded-full ${isSimulating ? "animate-ping bg-accent" : "bg-accent"}`} />
-            {stageLabel}
-          </span>
-          <span className="flex items-center gap-2">
-            <span>PIPELINE FLOW</span>
-            <span className="text-border">/</span>
-            <span className="text-foreground font-semibold">6 DOMAINS</span>
-          </span>
-        </div>
-      </motion.div>
-
-      {/* ── Single shared inspector (rendered once, shown for active tab) ── */}
-      <div className="mt-5">
-        {EXPERTISE.map((item, index) => (
-          <div key={item.number} id={`expertise-panel-${item.number}`} role="tabpanel" aria-labelledby={`expertise-tab-${item.number}`} hidden={activeIndex !== index}>
-            <Inspector motionPaused={motionPaused || activeIndex !== index} item={item} isSimulating={isSimulating && activeIndex === index} id={`expertise-inspector-${item.number}`} />
+            <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-4 font-mono text-[9px] tracking-widest text-muted-foreground">
+              <span className="flex items-center gap-2">
+                <span className={`h-1.5 w-1.5 rounded-full ${isSimulating ? "animate-ping bg-accent" : "bg-accent"}`} />
+                {stageLabel}
+              </span>
+              <span className="flex items-center gap-2">
+                <span>PIPELINE FLOW</span>
+                <span className="text-white/30">/</span>
+                <span className="text-foreground font-semibold">6 DOMAINS</span>
+              </span>
+            </div>
           </div>
-        ))}
+
+          {/* Single shared inspector */}
+          <AnimatePresence mode="wait">
+            <div className="mt-8">
+              {EXPERTISE.map((item, index) => (
+                <div key={item.number} id={`expertise-panel-${item.number}`} role="tabpanel" aria-labelledby={`expertise-tab-${item.number}`} hidden={activeIndex !== index}>
+                  <Inspector motionPaused={motionPaused || activeIndex !== index} item={item} isSimulating={isSimulating && activeIndex === index} id={`expertise-inspector-${item.number}`} />
+                </div>
+              ))}
+            </div>
+          </AnimatePresence>
+        </motion.div>
       </div>
-    </div>
-  </section>;
+    </section>
+  );
 };
 
 export default ServicesSection;
