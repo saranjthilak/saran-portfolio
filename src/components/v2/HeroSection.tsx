@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useSpring, useTransform, useMotionValue } from "framer-motion";
-import { ArrowUpRight, ChevronDown, Globe } from "lucide-react";
+import { ArrowUpRight, ChevronDown } from "lucide-react";
 import { useEffect, useRef, useState, useCallback } from "react";
 import FadeIn from "./FadeIn";
 
@@ -392,19 +392,6 @@ const HeroSection = () => {
           {/* Left Column */}
           <div className="flex flex-col items-start pt-8 lg:pt-0 max-w-md">
 
-            {/* Note + hairline rule */}
-            <motion.div
-              className="mb-6 flex items-center gap-2 border-b border-white/10 pb-2 w-fit max-w-xs"
-              initial={{ opacity: 0, y: 22 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.95, delay: 0, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <Globe className="w-4 h-4 text-[hsl(var(--fluxora-flame-lit))]" />
-              <span className="text-xs font-mono uppercase tracking-[0.05em] text-white/72 leading-relaxed">
-                Design systems that scale, built for humans not machines.
-              </span>
-            </motion.div>
-
             {/* Headline */}
             <AnimatedHeading />
 
@@ -504,28 +491,6 @@ const HeroSection = () => {
 
         </div>
       </section>
-
-      {/* Ghost analytics panel (wide viewports) */}
-      <aside className="hidden lg:block absolute right-[var(--gutter,44px)] top-1/2 -translate-y-1/2 z-10 w-[330px] text-white/26 pointer-events-none">
-        <div className="flex items-end gap-18 h-74">
-          <div className="flex items-end gap-5">
-            <span className="w-9 h-[34%] rounded-t-[2px] bg-white/50" />
-            <span className="w-9 h-[52%] rounded-t-[2px] bg-white/50" />
-            <span className="w-9 h-[44%] rounded-t-[2px] bg-white/50" />
-            <span className="w-9 h-[70%] rounded-t-[2px] bg-white/50" />
-            <span className="w-9 h-[88%] rounded-t-[2px] bg-white/50" />
-          </div>
-          <p className="text-[11px] leading-1.4">
-            <span className="block text-[22px] font-black tracking-tighter text-white/55">+42%</span>
-            Experience<br />
-            Performance
-          </p>
-        </div>
-        <h2 className="mt-8 text-[22px] font-black tracking-tight text-white/40">Measure Real Impact</h2>
-        <p className="mt-2 text-xs leading-1.6 text-white/26">
-          We track user response through meaningful metrics and refine every detail until the experience feels effortless.
-        </p>
-      </aside>
 
       <ScrollIndicator />
     </div>
