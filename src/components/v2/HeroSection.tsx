@@ -147,7 +147,7 @@ const Logo = (props: { className?: string }) => (
 const AnimatedHeading = () => {
   return (
     <motion.h1
-      className="text-6xl md:text-[5.5rem] lg:text-[6.1rem] font-black leading-[0.9] tracking-tighter mb-6 text-white"
+      className="text-5xl md:text-[3.5rem] lg:text-[4rem] font-black leading-[0.92] tracking-tighter mb-6 text-white"
       initial={{ opacity: 0, y: 22 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.95, delay: 0.06, ease: [0.16, 1, 0.3, 1] }}
@@ -386,11 +386,11 @@ const HeroSection = () => {
       </nav>
 
       {/* Hero Content */}
-      <section id="home" className="relative z-10 min-h-screen flex items-center pt-24 px-6 md:px-12">
-        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+      <section id="home" className="relative z-10 min-h-screen flex items-center pt-16 px-4 md:px-8">
+        <div className="max-w-5xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
 
           {/* Left Column */}
-          <div className="flex flex-col items-start pt-12 lg:pt-0 max-w-lg">
+          <div className="flex flex-col items-start pt-8 lg:pt-0 max-w-md">
 
             {/* Note + hairline rule */}
             <motion.div
@@ -459,23 +459,23 @@ const HeroSection = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.95, delay: 0.36, ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className="relative w-[200px] min-h-[132px] p-4 rounded-[16px] border border-white/10 bg-[rgba(56,20,6,0.42)] backdrop-blur-[16px] saturate-[1.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.09)]">
-                <span className="absolute top-[14px] right-[16px] text-[15px] text-white/80 font-mono">*</span>
-                <span className="text-2xl md:text-[2.3rem] font-black leading-1 tracking-tighter text-white">10+</span>
-                <span className="text-[11px] font-mono uppercase tracking-[0.14em] text-white/80 mt-1">Years Exp.</span>
-                <span className="absolute right-[16px] bottom-[22px] w-14 h-[1px] bg-white/28" />
+              <div className="relative w-[160px] min-h-[110px] p-3 rounded-[12px] border border-white/10 bg-[rgba(56,20,6,0.42)] backdrop-blur-[16px] saturate-[1.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.09)]">
+                <span className="absolute top-[10px] right-[12px] text-[12px] text-white/80 font-mono">*</span>
+                <span className="text-xl md:text-[2rem] font-black leading-1 tracking-tighter text-white">10+</span>
+                <span className="text-[10px] font-mono uppercase tracking-[0.14em] text-white/80 mt-1">Years Exp.</span>
+                <span className="absolute right-[12px] bottom-[18px] w-10 h-[1px] bg-white/28" />
               </div>
-              <div className="relative w-[200px] min-h-[132px] p-4 rounded-[16px] border border-white/10 bg-gradient-to-br from-[rgba(120,30,4,0.5)] to-[rgba(48,14,2,0.5)] backdrop-blur-[16px] shadow-[inset_0_1px_0_rgba(255,255,255,0.09)]">
-                <span className="absolute top-[14px] right-[16px] text-[15px] text-white/80 font-mono">*</span>
-                <span className="text-2xl md:text-[2.3rem] font-black leading-1 tracking-tighter text-white">2</span>
-                <span className="text-[11px] font-mono uppercase tracking-[0.14em] text-white/80 mt-1">IEEE Papers</span>
-                <span className="absolute right-[16px] bottom-[22px] w-14 h-[1px] bg-white/28" />
+              <div className="relative w-[160px] min-h-[110px] p-3 rounded-[12px] border border-white/10 bg-gradient-to-br from-[rgba(120,30,4,0.5)] to-[rgba(48,14,2,0.5)] backdrop-blur-[16px] shadow-[inset_0_1px_0_rgba(255,255,255,0.09)]">
+                <span className="absolute top-[10px] right-[12px] text-[12px] text-white/80 font-mono">*</span>
+                <span className="text-xl md:text-[2rem] font-black leading-1 tracking-tighter text-white">2</span>
+                <span className="text-[10px] font-mono uppercase tracking-[0.14em] text-white/80 mt-1">IEEE Papers</span>
+                <span className="absolute right-[12px] bottom-[18px] w-10 h-[1px] bg-white/28" />
               </div>
-              <div className="relative w-[200px] min-h-[132px] p-4 rounded-[16px] border border-white/10 bg-[rgba(56,20,6,0.42)] backdrop-blur-[16px] saturate-[1.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.09)]">
-                <span className="absolute top-[14px] right-[16px] text-[15px] text-white/80 font-mono">*</span>
-                <span className="text-2xl md:text-[2.3rem] font-black leading-1 tracking-tighter text-white">5+</span>
-                <span className="text-[11px] font-mono uppercase tracking-[0.14em] text-white/80 mt-1">Certifications</span>
-                <span className="absolute right-[16px] bottom-[22px] w-14 h-[1px] bg-white/28" />
+              <div className="relative w-[160px] min-h-[110px] p-3 rounded-[12px] border border-white/10 bg-[rgba(56,20,6,0.42)] backdrop-blur-[16px] saturate-[1.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.09)]">
+                <span className="absolute top-[10px] right-[12px] text-[12px] text-white/80 font-mono">*</span>
+                <span className="text-xl md:text-[2rem] font-black leading-1 tracking-tighter text-white">5+</span>
+                <span className="text-[10px] font-mono uppercase tracking-[0.14em] text-white/80 mt-1">Certifications</span>
+                <span className="absolute right-[12px] bottom-[18px] w-10 h-[1px] bg-white/28" />
               </div>
             </motion.div>
           </div>
@@ -526,22 +526,6 @@ const HeroSection = () => {
           We track user response through meaningful metrics and refine every detail until the experience feels effortless.
         </p>
       </aside>
-
-      {/* Footer band */}
-      <div className="relative flex items-end justify-between gap-24 mt-12 px-6 md:px-12 max-w-7xl mx-auto">
-        <span className="text-[clamp(3rem,8vw,7rem)] font-black leading-0.8 tracking-tighter text-white/5 select-none">SJT</span>
-
-        <div className="text-right">
-          <span className="block mb-2 text-xs font-mono uppercase tracking-[0.1em] text-white/72">Our Partners</span>
-          <ul className="flex items-center gap-[clamp(16px,2.2vw,32px)]">
-            <li className="text-sm font-medium text-white/86">AWS</li>
-            <li className="text-sm font-medium text-white/86">Oracle</li>
-            <li className="text-sm font-medium text-white/86">LangChain</li>
-            <li className="text-sm font-medium text-white/86">HashiCorp</li>
-            <li className="text-sm font-medium text-white/86">NVIDIA</li>
-          </ul>
-        </div>
-      </div>
 
       <ScrollIndicator />
     </div>
