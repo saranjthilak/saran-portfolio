@@ -386,8 +386,8 @@ const HeroSection = () => {
       </nav>
 
       {/* Hero Content */}
-      <section id="home" className="relative z-10 min-h-screen flex items-center pt-16 px-4 md:px-8">
-        <div className="max-w-5xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+      <section id="home" className="relative z-10 min-h-screen flex items-start pt-16 px-4 md:px-8">
+        <div className="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
 
           {/* Left Column */}
           <div className="flex flex-col items-start pt-8 lg:pt-0 max-w-md">
