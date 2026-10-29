@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform, type Easing, type Variants } from "framer-motion";
-import { ArrowUpRight, ChevronDown } from "lucide-react";
+import { motion, useSpring, useTransform, useMotionValue } from "framer-motion";
+import { ArrowUpRight, ChevronDown, Globe } from "lucide-react";
 import { useEffect, useRef, useState, useCallback } from "react";
 import FadeIn from "./FadeIn";
 
@@ -63,7 +63,7 @@ const ParticleNetwork = () => {
     window.addEventListener("resize", handleResize);
     canvas.addEventListener("mousemove", handleMouseMove);
 
-    const accentRGB = { r: 0, g: 223, b: 143 }; // #00df8f
+    const accentRGB = { r: 255, g: 61, b: 0 }; // #ff3d00 flame
 
     const animate = () => {
       ctx.clearRect(0, 0, width, height);
@@ -75,7 +75,6 @@ const ParticleNetwork = () => {
         if (p.x < 0 || p.x > width) p.vx *= -1;
         if (p.y < 0 || p.y > height) p.vy *= -1;
 
-        // Mouse repulsion
         const dxm = p.x - mouse.x;
         const dym = p.y - mouse.y;
         const distMouse = Math.sqrt(dxm * dxm + dym * dym);
@@ -85,7 +84,6 @@ const ParticleNetwork = () => {
           p.vy += dym * force;
         }
 
-        // Speed damping
         const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
         if (speed > 1.5) {
           p.vx *= 0.98;
@@ -98,7 +96,6 @@ const ParticleNetwork = () => {
         ctx.fill();
       }
 
-      // Draw connections
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
@@ -132,54 +129,33 @@ const ParticleNetwork = () => {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full pointer-events-auto z-0"
-      style={{ opacity: 0.6 }}
+      style={{ opacity: 0.5 }}
     />
   );
 };
 
-/* ─── Animated Heading ───────────────────────────────────── */
+/* ─── Logo ───────────────────────────────────────────────── */
+const Logo = (props: { className?: string }) => (
+  <svg viewBox="0 0 28 28" fill="none" aria-hidden="true" className={props.className}>
+    <path d="M14 1.6 20.3 8 14 14.4 7.7 8 14 1.6Z" fill="#ff6a00" />
+    <path d="M6.4 9.3 12.7 15.7 6.4 22.1 0.1 15.7 6.4 9.3Z" fill="#ff3d00" />
+    <path d="M21.6 9.3 27.9 15.7 21.6 22.1 15.3 15.7 21.6 9.3Z" fill="#ff9a2e" />
+  </svg>
+);
+
+/* ─── Animated Heading (Fluxora: 4-line display, serif italic accent) ─── */
 const AnimatedHeading = () => {
-  const containerVariants = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.3,
-      },
-    },
-  };
-
-  const lineVariants: Variants = {
-    hidden: { opacity: 0, y: 30, filter: "blur(6px)" },
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: "blur(0px)",
-      transition: {
-        duration: 0.7,
-        ease: [0.25, 0.1, 0.25, 1] as Easing,
-      },
-    },
-  };
-
   return (
     <motion.h1
-      className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-black leading-[0.92] tracking-tighter mb-6"
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
+      className="text-6xl md:text-[5.5rem] lg:text-[6.1rem] font-black leading-[0.9] tracking-tighter mb-6 text-white"
+      initial={{ opacity: 0, y: 22 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.95, delay: 0.06, ease: [0.16, 1, 0.3, 1] }}
     >
-      <motion.span variants={lineVariants} className="inline">
-        I build AI systems
-      </motion.span>
-      <br/>
-      <motion.span variants={lineVariants} className="inline">
-        that hold up{" "}
-      </motion.span>
-      <motion.span variants={lineVariants} className="accent-serif inline">
-        in production
-      </motion.span>
-      <motion.span variants={lineVariants} className="text-accent inline">.</motion.span>
+      <span className="block">I build AI systems</span>
+      <span className="block">that hold up</span>
+      <span className="block font-serif italic text-[hsl(var(--fluxora-flame))]">in production</span>
+      <span className="block text-[hsl(var(--fluxora-flame-lit))]">.</span>
     </motion.h1>
   );
 };
@@ -221,14 +197,14 @@ const IDCard = () => {
       }}
       initial={{ opacity: 0, scale: 0.85, rotate: 5 }}
       animate={{ opacity: 1, scale: 1, rotate: 3 }}
-      transition={{ duration: 0.9, delay: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+      transition={{ duration: 0.9, delay: 0.36, ease: [0.25, 0.1, 0.25, 1] }}
       whileHover={{ rotate: 0 }}
-      className="relative z-10 w-[300px] h-[420px] bg-[#161b22]/80 backdrop-blur-sm border border-white/15 overflow-hidden shadow-2xl shadow-black/80 cursor-pointer group"
+      className="relative z-10 w-[300px] h-[420px] bg-[hsl(var(--fluxora-ground-deep))/80] backdrop-blur-sm border border-white/15 overflow-hidden shadow-2xl shadow-black/80 cursor-pointer group rounded-2xl"
     >
       {/* Holographic shimmer overlay */}
       <div className="absolute inset-0 z-30 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700"
         style={{
-          background: "linear-gradient(105deg, transparent 20%, rgba(0,223,143,0.06) 35%, rgba(0,223,143,0.12) 45%, rgba(0,223,143,0.06) 55%, transparent 70%)",
+          background: "linear-gradient(105deg, transparent 20%, rgba(255,61,0,0.06) 35%, rgba(255,138,31,0.12) 45%, rgba(255,61,0,0.06) 55%, transparent 70%)",
           mixBlendMode: "screen",
         }}
       />
@@ -237,40 +213,38 @@ const IDCard = () => {
       <motion.div
         className="absolute left-0 right-0 h-[2px] z-30 pointer-events-none"
         style={{
-          background: "linear-gradient(90deg, transparent, hsl(158 100% 44% / 0.6), transparent)",
-          boxShadow: "0 0 20px hsl(158 100% 44% / 0.3)",
+          background: "linear-gradient(90deg, transparent, hsl(17 100% 50% / 0.6), transparent)",
+          boxShadow: "0 0 20px hsl(17 100% 50% / 0.3)",
         }}
         animate={{ top: ["-5%", "105%"] }}
         transition={{ duration: 3, repeat: Infinity, repeatDelay: 2, ease: "linear" }}
       />
 
       {/* Card Header Hole */}
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 w-16 h-3 bg-v2-raised rounded-full border border-white/10 z-20 shadow-inner" />
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 w-16 h-3 bg-[hsl(var(--fluxora-ground-deep))] rounded-full border border-white/10 z-20 shadow-inner" />
 
       {/* ID Portrait */}
       <div className="absolute inset-0 p-3 pb-24">
-        <div className="w-full h-full bg-v2-raised rounded-2xl overflow-hidden relative">
+        <div className="w-full h-full bg-[hsl(var(--fluxora-ground-deep))] rounded-2xl overflow-hidden relative">
           <img
             src="/images/profile.png"
             alt="Saran Portrait"
             className="w-full h-full object-cover opacity-80 group-hover:opacity-95 transition-opacity duration-500"
             draggable={false}
           />
-          {/* Inner neon border effect */}
-          <div className="absolute inset-0 border border-accent/30 rounded-2xl pointer-events-none" />
+          <div className="absolute inset-0 border border-[hsl(var(--fluxora-flame))]/30 rounded-2xl pointer-events-none" />
         </div>
       </div>
 
       {/* Card Bottom Details */}
-      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#14181f] via-[#14181f]/95 to-transparent flex flex-col justify-end p-6">
+      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[hsl(var(--fluxora-ground-deep))] via-[hsl(var(--fluxora-ground-deep))/95] to-transparent flex flex-col justify-end p-6">
         <div className="flex items-center gap-2 mb-1">
-          <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.6)]" />
-          <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400/80">Available for hire</span>
+          <div className="w-2 h-2 rounded-full bg-[hsl(var(--fluxora-flame-lit))] animate-pulse shadow-[0_0_8px_rgba(255,138,31,0.6)]" />
+          <span className="text-[10px] font-mono uppercase tracking-widest text-[hsl(var(--fluxora-flame-lit))]/80">Available for hire</span>
         </div>
         <h3 className="text-[1.35rem] font-black tracking-tighter text-white leading-tight">Saran Jaya Thilak</h3>
-        <p className="text-accent text-xs uppercase tracking-widest font-semibold mt-1">Data Engineer &amp; GenAI Specialist</p>
+        <p className="text-[hsl(var(--fluxora-flame-lit))] text-xs uppercase tracking-widest font-semibold mt-1">Data Engineer &amp; GenAI Specialist</p>
 
-        {/* Barcode graphic */}
         <div className="w-full h-6 mt-4 flex gap-[2px] opacity-40">
           <div className="w-1 h-full bg-white"></div>
           <div className="w-[6px] h-full bg-white"></div>
@@ -296,12 +270,12 @@ const ScrollIndicator = () => (
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay: 2, duration: 0.8 }}
   >
-    <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-gray-500">Scroll</span>
+    <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-white/50">Scroll</span>
     <motion.div
       animate={{ y: [0, 6, 0] }}
       transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
     >
-      <ChevronDown className="w-4 h-4 text-gray-500" />
+      <ChevronDown className="w-4 h-4 text-white/50" />
     </motion.div>
   </motion.div>
 );
@@ -309,16 +283,16 @@ const ScrollIndicator = () => (
 /* ─── Availability Badge ─────────────────────────────────── */
 const AvailabilityBadge = () => (
   <motion.div
-    className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/5"
+    className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full border border-[hsl(var(--fluxora-flame-lit))]/30 bg-[hsl(var(--fluxora-flame-lit))]/5"
     initial={{ opacity: 0, scale: 0.8 }}
     animate={{ opacity: 1, scale: 1 }}
     transition={{ delay: 1.2, duration: 0.5 }}
   >
     <div className="relative">
-      <div className="w-2 h-2 rounded-full bg-emerald-400" />
-      <div className="absolute inset-0 w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+      <div className="w-2 h-2 rounded-full bg-[hsl(var(--fluxora-flame-lit))]" />
+      <div className="absolute inset-0 w-2 h-2 rounded-full bg-[hsl(var(--fluxora-flame-lit))] animate-ping" />
     </div>
-    <span className="text-[11px] font-mono uppercase tracking-wider text-emerald-400/90">
+    <span className="text-[11px] font-mono uppercase tracking-wider text-[hsl(var(--fluxora-flame-lit))]/90">
       Available
     </span>
   </motion.div>
@@ -327,33 +301,54 @@ const AvailabilityBadge = () => (
 /* ─── Main Hero Section ──────────────────────────────────── */
 const HeroSection = () => {
   const [mounted, setMounted] = useState(false);
+  const [ready, setReady] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     setMounted(true);
+
+    const video = videoRef.current;
+    if (!video) return;
+    const play = video.play();
+    if (play?.catch) play.catch(() => {});
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      video.pause();
+      setReady(true);
+    }
   }, []);
 
   return (
-    <div className="relative bg-v2-raised min-h-screen overflow-hidden text-white font-sans">
-      {/* Ambient gradient orbs */}
-      <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full pointer-events-none z-0"
-        style={{
-          background: "radial-gradient(circle, hsl(158 100% 44% / 0.06) 0%, transparent 70%)",
-        }}
-      />
-      <div className="absolute bottom-[-30%] right-[-10%] w-[800px] h-[800px] rounded-full pointer-events-none z-0"
-        style={{
-          background: "radial-gradient(circle, hsl(158 100% 44% / 0.04) 0%, transparent 70%)",
-        }}
-      />
-
-      {/* Particle Network Background */}
-      {mounted && <ParticleNetwork />}
+    <div className="relative min-h-screen overflow-hidden text-white font-sans">
+      {/* Video background */}
+      <div className="absolute inset-0 z-[-2]">
+        <video
+          ref={videoRef}
+          className={`w-full h-full object-cover object-position-[68%_center] hero__video ${ready ? "is-ready" : ""}`}
+          src="/hero-loop.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+          onCanPlay={() => setReady(true)}
+        />
+        {/* Ember scrim overlay */}
+        <div className="absolute inset-0 z-[-1]"
+          style={{
+            background:
+              "linear-gradient(96deg, rgba(10, 3, 0, 0.9) 0%, rgba(14, 4, 0, 0.66) 30%, rgba(20, 6, 0, 0.16) 52%, rgba(20, 6, 0, 0) 68%)," +
+              "linear-gradient(0deg, rgba(9, 2, 0, 0.78) 0%, rgba(9, 2, 0, 0.12) 28%, rgba(0, 0, 0, 0) 46%)," +
+              "linear-gradient(180deg, rgba(8, 2, 0, 0.5) 0%, rgba(0, 0, 0, 0) 22%)",
+          }}
+        />
+      </div>
 
       {/* Blueprint dotted grid background */}
       <div className="blueprint-dots absolute inset-0 pointer-events-none opacity-[0.06]" />
 
       {/* Navbar */}
-      <nav className="fixed top-0 w-full h-24 z-50 bg-v2-raised/80 backdrop-blur-md border-b border-white/10 flex items-center justify-between px-6 md:px-12">
+      <nav className="fixed top-0 w-full z-50 bg-[hsl(var(--fluxora-ground-deep))]/80 backdrop-blur-md border-b border-white/10 flex items-center justify-between px-6 md:px-12 h-24">
         <motion.a
           href="#home"
           className="text-2xl font-black tracking-tighter"
@@ -361,130 +356,147 @@ const HeroSection = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
         >
-          SARAN<span className="text-accent">.</span>
+          <Logo className="w-6 h-6 mr-2" />
+          SARAN<span className="text-[hsl(var(--fluxora-flame-lit))]">.</span>
         </motion.a>
 
-        <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link, i) => (
-            <motion.a
-              key={link.label}
-              href={link.href}
-              className="text-sm font-semibold text-gray-300 uppercase hover:text-accent transition-colors relative group"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 + i * 0.08, duration: 0.4 }}
-            >
-              {link.label}
-              <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-accent transition-all duration-300 group-hover:w-full" />
-            </motion.a>
-          ))}
+        <div className="hidden md:flex items-center gap-3">
+          <div className="px-3 py-1 border border-white/10 rounded-full bg-[rgba(28,10,2,0.34)] backdrop-blur-sm flex items-center gap-2">
+            {navLinks.map((link, i) => (
+              <motion.a
+                key={link.label}
+                href={link.href}
+                className="text-xs font-semibold uppercase text-white/80 hover:text-white transition-colors px-3 py-1.5 rounded-md hover:bg-white/10"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 + i * 0.08, duration: 0.4 }}
+              >
+                {link.label}
+              </motion.a>
+            ))}
+          </div>
         </div>
 
-        <AvailabilityBadge />
+        <div className="flex items-center gap-3">
+          <AvailabilityBadge />
+          <a href="#contact" className="px-6 py-2 bg-[hsl(var(--fluxora-flame))] text-white font-bold text-sm uppercase tracking-wider rounded-full hover:bg-[hsl(var(--fluxora-flame-lit))] transition-colors shadow-[0_14px_40px_rgba(255,61,0,0.38)] hover:shadow-[0_20px_52px_rgba(255,61,0,0.5)]">
+            Get Started
+          </a>
+        </div>
       </nav>
-
-      {/* Massive Typography Graphic */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-        <motion.h1
-          className="text-[20vw] font-black opacity-[0.02] tracking-tighter select-none"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 0.02, scale: 1 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
-        >
-          PRODUCTION
-        </motion.h1>
-      </div>
 
       {/* Hero Content */}
       <section id="home" className="relative z-10 min-h-screen flex items-center pt-24 px-6 md:px-12">
-        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
 
           {/* Left Column */}
-          <div className="flex flex-col items-start pt-12 lg:pt-0">
+          <div className="flex flex-col items-start pt-12 lg:pt-0 max-w-lg">
+
+            {/* Note + hairline rule */}
             <motion.div
-              className="mb-6 inline-block"
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
+              className="mb-6 flex items-center gap-2 border-b border-white/10 pb-2 w-fit max-w-xs"
+              initial={{ opacity: 0, y: 22 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.95, delay: 0, ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className="px-3 py-1.5 border border-accent/60 text-xs uppercase tracking-widest relative overflow-hidden group">
-                <span className="text-accent font-mono font-medium relative z-10">DATA ENGINEER & GENAI SPECIALIST</span>
-                {/* Shimmer sweep */}
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-accent/10 to-transparent" />
-              </div>
+              <Globe className="w-4 h-4 text-[hsl(var(--fluxora-flame-lit))]" />
+              <span className="text-xs font-mono uppercase tracking-[0.05em] text-white/72 leading-relaxed">
+                Design systems that scale, built for humans not machines.
+              </span>
             </motion.div>
 
+            {/* Headline */}
             <AnimatedHeading />
 
-            <FadeIn y={20} delay={0.8} viewportMargin="-100px">
-              <p className="text-gray-400 max-w-lg text-base leading-relaxed mb-10">
+            {/* Lede */}
+            <FadeIn y={20} delay={0.14} viewportMargin="-100px">
+              <p className="text-white/72 max-w-lg text-base leading-relaxed mb-10">
                 RAG chatbots that cut support load by 25%. Airflow pipelines running at 99.9% reliability. I design and ship data&nbsp;+&nbsp;AI infrastructure that doesn&apos;t break under real workloads.
               </p>
             </FadeIn>
 
+            {/* CTA row */}
             <motion.div
-              className="flex flex-wrap items-center gap-6"
-              initial={{ opacity: 0, y: 20 }}
+              className="flex flex-wrap items-center gap-4"
+              initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.0, duration: 0.6 }}
+              transition={{ duration: 0.95, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             >
-              <a href="#projects" className="btn-frame group flex items-center gap-3 bg-accent text-accent-foreground px-8 py-4 font-bold text-sm uppercase tracking-wider relative overflow-hidden">
-                <span className="relative z-10">View My Work</span>
-                <ArrowUpRight className="w-5 h-5 group-hover:rotate-45 transition-transform relative z-10" />
-                {/* Hover shine */}
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-500 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+              <a href="#projects" className="group flex items-center gap-2 px-6 py-2.5 bg-[hsl(var(--fluxora-flame))] text-white font-bold text-sm uppercase tracking-wider rounded-full shadow-[0_14px_40px_rgba(255,61,0,0.38)] hover:bg-[hsl(var(--fluxora-flame-lit))] hover:shadow-[0_20px_52px_rgba(255,61,0,0.5)] transition-all">
+                <span className="relative z-10">Get started</span>
+                <span className="hero__go-dot flex items-center justify-center w-7 h-7 rounded-full bg-white text-[hsl(var(--fluxora-ground-deep))] ml-2">
+                  <ArrowUpRight className="w-3.5 h-3.5 group-hover:rotate-45 transition-transform" />
+                </span>
               </a>
-              <a href="#contact" className="btn-frame flex items-center gap-3 bg-transparent border border-white/25 px-8 py-4 font-bold text-sm uppercase tracking-wider text-white hover:border-accent hover:text-accent transition-colors">
+              <a href="#contact" className="px-6 py-2.5 border border-white/25 text-white font-bold text-sm uppercase tracking-wider rounded-full hover:border-[hsl(var(--fluxora-flame-lit))] hover:text-[hsl(var(--fluxora-flame-lit))] transition-colors">
                 Contact Me
               </a>
             </motion.div>
 
-            {/* Social proof metrics */}
+            {/* Proof: avatar dots + stats */}
             <motion.div
-              className="mt-12 flex items-center gap-8 text-sm"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.4, duration: 0.8 }}
+              className="mt-4 flex items-center gap-2"
+              initial={{ opacity: 0, y: 22 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.95, delay: 0.28, ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className="flex flex-col">
-                <span className="text-xl font-black text-white tnum">10+</span>
-                <span className="text-[11px] font-mono uppercase tracking-wider text-gray-500">Years Exp.</span>
+              <div className="flex -space-x-2">
+                <div className="w-7 h-7 rounded-full border-2 border-[hsl(var(--fluxora-ground-deep))] bg-gradient-to-br from-[#ff7a3d] to-[#ffb27a]" />
+                <div className="w-7 h-7 rounded-full border-2 border-[hsl(var(--fluxora-ground-deep))] bg-gradient-to-br from-[#6f4bd8] to-[#a98cff]" />
+                <div className="w-7 h-7 rounded-full border-2 border-[hsl(var(--fluxora-ground-deep))] bg-gradient-to-br from-[#1f9ea8] to-[#63d6df]" />
+                <div className="w-7 h-7 rounded-full border-2 border-[hsl(var(--fluxora-ground-deep))] bg-gradient-to-br from-[#d8434b] to-[#ff8a8f]" />
               </div>
-              <div className="w-px h-8 bg-white/10" />
-              <div className="flex flex-col">
-                <span className="text-xl font-black text-white tnum">2</span>
-                <span className="text-[11px] font-mono uppercase tracking-wider text-gray-500">IEEE Papers</span>
+              <span className="text-[10px] font-mono uppercase tracking-[0.1em] text-white/72 leading-tight">
+                <span className="block text-white font-semibold text-[12px]">10+ Years Exp</span>
+                Live Support
+              </span>
+            </motion.div>
+
+            {/* Glass stat cards */}
+            <motion.div
+              className="mt-10 flex flex-wrap gap-4"
+              initial={{ opacity: 0, y: 22 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.95, delay: 0.36, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="relative w-[200px] min-h-[132px] p-4 rounded-[16px] border border-white/10 bg-[rgba(56,20,6,0.42)] backdrop-blur-[16px] saturate-[1.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.09)]">
+                <span className="absolute top-[14px] right-[16px] text-[15px] text-white/80 font-mono">*</span>
+                <span className="text-2xl md:text-[2.3rem] font-black leading-1 tracking-tighter text-white">10+</span>
+                <span className="text-[11px] font-mono uppercase tracking-[0.14em] text-white/80 mt-1">Years Exp.</span>
+                <span className="absolute right-[16px] bottom-[22px] w-14 h-[1px] bg-white/28" />
               </div>
-              <div className="w-px h-8 bg-white/10" />
-              <div className="flex flex-col">
-                <span className="text-xl font-black text-white tnum">5+</span>
-                <span className="text-[11px] font-mono uppercase tracking-wider text-gray-500">Certifications</span>
+              <div className="relative w-[200px] min-h-[132px] p-4 rounded-[16px] border border-white/10 bg-gradient-to-br from-[rgba(120,30,4,0.5)] to-[rgba(48,14,2,0.5)] backdrop-blur-[16px] shadow-[inset_0_1px_0_rgba(255,255,255,0.09)]">
+                <span className="absolute top-[14px] right-[16px] text-[15px] text-white/80 font-mono">*</span>
+                <span className="text-2xl md:text-[2.3rem] font-black leading-1 tracking-tighter text-white">2</span>
+                <span className="text-[11px] font-mono uppercase tracking-[0.14em] text-white/80 mt-1">IEEE Papers</span>
+                <span className="absolute right-[16px] bottom-[22px] w-14 h-[1px] bg-white/28" />
+              </div>
+              <div className="relative w-[200px] min-h-[132px] p-4 rounded-[16px] border border-white/10 bg-[rgba(56,20,6,0.42)] backdrop-blur-[16px] saturate-[1.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.09)]">
+                <span className="absolute top-[14px] right-[16px] text-[15px] text-white/80 font-mono">*</span>
+                <span className="text-2xl md:text-[2.3rem] font-black leading-1 tracking-tighter text-white">5+</span>
+                <span className="text-[11px] font-mono uppercase tracking-[0.14em] text-white/80 mt-1">Certifications</span>
+                <span className="absolute right-[16px] bottom-[22px] w-14 h-[1px] bg-white/28" />
               </div>
             </motion.div>
           </div>
 
           {/* Right Column - Interactive ID Card */}
           <div className="relative flex justify-center lg:justify-end items-center h-[500px]">
-            {/* Ambient green glow behind card */}
             <motion.div
               className="absolute w-[350px] h-[350px] rounded-full -z-0"
               style={{
-                background: "radial-gradient(circle, hsl(158 100% 44% / 0.12) 0%, hsl(158 100% 44% / 0.04) 40%, transparent 70%)",
+                background: "radial-gradient(circle, hsl(17 100% 50% / 0.12) 0%, hsl(17 100% 50% / 0.04) 40%, transparent 70%)",
               }}
-              animate={{
-                scale: [1, 1.1, 1],
-                opacity: [0.8, 1, 0.8],
-              }}
+              animate={{ scale: [1, 1.1, 1], opacity: [0.8, 1, 0.8] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             />
 
-            {/* Orbiting ring */}
             <motion.div
-              className="absolute w-[380px] h-[380px] rounded-full border border-accent/[0.08] -z-0"
+              className="absolute w-[380px] h-[380px] rounded-full border border-[hsl(var(--fluxora-flame))]/8 -z-0"
               animate={{ rotate: 360 }}
               transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
             >
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-accent/30" />
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[hsl(var(--fluxora-flame))]/30" />
             </motion.div>
 
             <IDCard />
@@ -492,6 +504,44 @@ const HeroSection = () => {
 
         </div>
       </section>
+
+      {/* Ghost analytics panel (wide viewports) */}
+      <aside className="hidden lg:block absolute right-[var(--gutter,44px)] top-1/2 -translate-y-1/2 z-10 w-[330px] text-white/26 pointer-events-none">
+        <div className="flex items-end gap-18 h-74">
+          <div className="flex items-end gap-5">
+            <span className="w-9 h-[34%] rounded-t-[2px] bg-white/50" />
+            <span className="w-9 h-[52%] rounded-t-[2px] bg-white/50" />
+            <span className="w-9 h-[44%] rounded-t-[2px] bg-white/50" />
+            <span className="w-9 h-[70%] rounded-t-[2px] bg-white/50" />
+            <span className="w-9 h-[88%] rounded-t-[2px] bg-white/50" />
+          </div>
+          <p className="text-[11px] leading-1.4">
+            <span className="block text-[22px] font-black tracking-tighter text-white/55">+42%</span>
+            Experience<br />
+            Performance
+          </p>
+        </div>
+        <h2 className="mt-8 text-[22px] font-black tracking-tight text-white/40">Measure Real Impact</h2>
+        <p className="mt-2 text-xs leading-1.6 text-white/26">
+          We track user response through meaningful metrics and refine every detail until the experience feels effortless.
+        </p>
+      </aside>
+
+      {/* Footer band */}
+      <div className="relative flex items-end justify-between gap-24 mt-12 px-6 md:px-12 max-w-7xl mx-auto">
+        <span className="text-[clamp(3rem,8vw,7rem)] font-black leading-0.8 tracking-tighter text-white/5 select-none">SJT</span>
+
+        <div className="text-right">
+          <span className="block mb-2 text-xs font-mono uppercase tracking-[0.1em] text-white/72">Our Partners</span>
+          <ul className="flex items-center gap-[clamp(16px,2.2vw,32px)]">
+            <li className="text-sm font-medium text-white/86">AWS</li>
+            <li className="text-sm font-medium text-white/86">Oracle</li>
+            <li className="text-sm font-medium text-white/86">LangChain</li>
+            <li className="text-sm font-medium text-white/86">HashiCorp</li>
+            <li className="text-sm font-medium text-white/86">NVIDIA</li>
+          </ul>
+        </div>
+      </div>
 
       <ScrollIndicator />
     </div>
