@@ -386,18 +386,18 @@ const HeroSection = () => {
       </nav>
 
       {/* Hero Content */}
-      <section id="home" className="relative z-10 min-h-screen flex items-start pt-16 px-4 md:px-8">
-        <div className="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+      <section id="home" className="relative z-10 min-h-screen flex items-center pt-16 px-4 md:px-8">
+        <div className="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
 
           {/* Left Column */}
-          <div className="flex flex-col items-start pt-8 lg:pt-0 max-w-md">
+          <div className="flex flex-col items-start pt-8 lg:pt-0">
 
             {/* Headline */}
             <AnimatedHeading />
 
             {/* Lede */}
             <FadeIn y={20} delay={0.14} viewportMargin="-100px">
-              <p className="text-white/72 max-w-lg text-base leading-relaxed mb-10">
+              <p className="text-white/72 text-base leading-relaxed mb-10">
                 RAG chatbots that cut support load by 25%. Airflow pipelines running at 99.9% reliability. I design and ship data&nbsp;+&nbsp;AI infrastructure that doesn&apos;t break under real workloads.
               </p>
             </FadeIn>
@@ -468,7 +468,7 @@ const HeroSection = () => {
           </div>
 
           {/* Right Column - Interactive ID Card */}
-          <div className="relative flex justify-center lg:justify-end items-center h-[500px]">
+          <div className="relative flex items-center justify-center h-[500px]">
             <motion.div
               className="absolute w-[350px] h-[350px] rounded-full -z-0"
               style={{
