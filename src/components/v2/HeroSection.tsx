@@ -154,8 +154,7 @@ const AnimatedHeading = () => {
     >
       <span className="block">I build AI systems</span>
       <span className="block">that hold up</span>
-      <span className="block font-serif italic text-[hsl(var(--fluxora-flame))]">in production</span>
-      <span className="block text-[hsl(var(--fluxora-flame-lit))]">.</span>
+      <span className="block font-serif italic text-[hsl(var(--fluxora-flame))]">in production.</span>
     </motion.h1>
   );
 };
