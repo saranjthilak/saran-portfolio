@@ -278,7 +278,7 @@ const AboutSection = () => {
                       </span>
                     </span>
                   </a>
-                </div>
+                </FadeIn>
               </div>
             </FadeIn>
             </div>
