@@ -213,21 +213,20 @@ const AboutSection = () => {
           <div>
             <FadeIn delay={0.2} y={20}>
               <div className="flex flex-col gap-6">
-                <p
-                   className="font-kanit font-light text-foreground/70 leading-relaxed"
+                <StaggeredWords
+                  segments={ABOUT_P1}
+                  className="font-kanit font-light text-foreground/70 leading-relaxed"
                   style={{ fontSize: "clamp(1rem, 1.5vw, 1.25rem)" }}
-                >
-                  I spent seven years keeping mission-critical infrastructure alive — first at <strong className="text-white font-normal">Nokia</strong>, then at <strong className="text-white font-normal">Huawei</strong> — managing telecom and cloud systems at 99.9%+ uptime, 24×7, with no tolerance for failure. That decade of operational discipline shaped how I think about reliability, observability, and what "production-ready" actually means.
-                </p>
-                <p
-                   className="font-kanit font-light text-muted-foreground leading-relaxed"
+                />
+                <StaggeredWords
+                  segments={ABOUT_P2}
+                  baseDelay={0.18}
+                  className="font-kanit font-light text-muted-foreground leading-relaxed"
                   style={{ fontSize: "clamp(0.9rem, 1.2vw, 1.1rem)" }}
-                >
-                  Now, with an M.Sc. in Data Science and hands-on work at <strong className="text-white font-normal">Tesla</strong> building RAG chatbots and Airflow pipelines, I bring that same infrastructure mindset to AI engineering. I build GenAI and data systems the way I once ran networks — with the assumption that they have to hold up under real load, not just in a notebook.
-                </p>
+                />
 
                 {/* ── Resume Download Button ── */}
-                <div className="pt-2">
+                <FadeIn delay={0.5} y={14} className="pt-2">
                   <a
                     href="/Saran-Jaya-Thilak-Resume.pdf"
                     download="Saran-Jaya-Thilak-Resume.pdf"
