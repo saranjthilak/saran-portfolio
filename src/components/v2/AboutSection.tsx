@@ -1,9 +1,112 @@
 "use client";
 
 import React from "react";
+import dynamic from "next/dynamic";
+import { motion, useReducedMotion } from "framer-motion";
 import FadeIn from "./FadeIn";
 import BlueprintSectionHeader from "./BlueprintSectionHeader";
 import SectionHeading from "./SectionHeading";
+
+// Real 3D wireframe globe — loaded client-side only, keeps SSR light
+const AboutGlobe = dynamic(() => import("./AboutGlobe"), {
+  ssr: false,
+  loading: () => null,
+});
+
+type Segment = { text: string; strong?: boolean };
+
+/**
+ * Word-by-word mask reveal for a paragraph made of plain/bold segments.
+ * Words rise out of an overflow-hidden mask with a shared stagger.
+ */
+function StaggeredWords({
+  segments,
+  baseDelay = 0,
+  step = 0.014,
+  className,
+  style,
+}: {
+  segments: Segment[];
+  baseDelay?: number;
+  step?: number;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
+  const shouldReduceMotion = useReducedMotion();
+
+  if (shouldReduceMotion) {
+    return (
+      <p className={className} style={style}>
+        {segments.map((seg, si) =>
+          seg.strong ? (
+            <strong key={si} className="text-white font-normal">
+              {seg.text}
+            </strong>
+          ) : (
+            <React.Fragment key={si}>{seg.text}</React.Fragment>
+          )
+        )}
+      </p>
+    );
+  }
+
+  const words: { w: string; strong: boolean; i: number }[] = [];
+  let n = 0;
+  segments.forEach((seg) => {
+    seg.text
+      .split(/\s+/)
+      .filter(Boolean)
+      .forEach((w) => words.push({ w, strong: !!seg.strong, i: n++ }));
+  });
+
+  return (
+    <p className={className} style={style}>
+      {words.map(({ w, strong, i }) => (
+        <span
+          key={i}
+          className="inline-block overflow-hidden align-bottom pb-[0.1em] -mb-[0.1em]"
+        >
+          <motion.span
+            className={`inline-block ${strong ? "text-white font-normal" : ""}`}
+            initial={{ y: "110%", opacity: 0 }}
+            whileInView={{ y: "0%", opacity: 1 }}
+            viewport={{ once: true, margin: "-40px", amount: 0 }}
+            transition={{
+              duration: 0.55,
+              ease: [0.16, 1, 0.3, 1],
+              delay: baseDelay + i * step,
+            }}
+          >
+            {w}
+          </motion.span>
+          {i < words.length - 1 ? "\u00A0" : ""}
+        </span>
+      ))}
+    </p>
+  );
+}
+
+const ABOUT_P1: Segment[] = [
+  {
+    text: "I spent seven years keeping mission-critical infrastructure alive — first at ",
+  },
+  { text: "Nokia", strong: true },
+  { text: ", then at " },
+  { text: "Huawei", strong: true },
+  {
+    text: ' — managing telecom and cloud systems at 99.9%+ uptime, 24×7, with no tolerance for failure. That decade of operational discipline shaped how I think about reliability, observability, and what "production-ready" actually means.',
+  },
+];
+
+const ABOUT_P2: Segment[] = [
+  {
+    text: "Now, with an M.Sc. in Data Science and hands-on work at ",
+  },
+  { text: "Tesla", strong: true },
+  {
+    text: " building RAG chatbots and Airflow pipelines, I bring that same infrastructure mindset to AI engineering. I build GenAI and data systems the way I once ran networks — with the assumption that they have to hold up under real load, not just in a notebook.",
+  },
+];
 
 const AboutSection = () => {
   return (
@@ -66,6 +169,21 @@ const AboutSection = () => {
         <div className="hidden md:block pointer-events-none absolute inset-y-0 left-1/4 w-px bg-white/10 z-[5]" />
         <div className="hidden md:block pointer-events-none absolute inset-y-0 left-2/4 w-px bg-white/10 z-[5]" />
         <div className="hidden md:block pointer-events-none absolute inset-y-0 left-3/4 w-px bg-white/10 z-[5]" />
+
+        {/* ── 3D Wireframe Data Globe (Three.js, cursor-parallaxed) ── */}
+        <div
+          className="absolute z-[3] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2
+            w-[min(88vw,620px)] h-[min(88vw,620px)] opacity-30
+            md:left-[64%] md:opacity-70"
+          style={{
+            maskImage:
+              "radial-gradient(ellipse at center, black 52%, transparent 76%)",
+            WebkitMaskImage:
+              "radial-gradient(ellipse at center, black 52%, transparent 76%)",
+          }}
+        >
+          <AboutGlobe className="w-full h-full" />
+        </div>
 
         {/* Content Wrapper */}
         <div className="relative z-10 w-full max-w-7xl mx-auto">
