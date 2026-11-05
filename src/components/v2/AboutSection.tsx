@@ -172,14 +172,10 @@ const AboutSection = () => {
 
         {/* ── 3D Wireframe Data Globe (Three.js, cursor-parallaxed) ── */}
         <div
-          className="absolute z-[3] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2
-            w-[min(88vw,620px)] h-[min(88vw,620px)] opacity-30
-            md:left-[64%] md:opacity-70"
+          className="absolute z-[3] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[min(88vw,620px)] h-[min(88vw,620px)] opacity-30 md:left-[64%] md:opacity-70"
           style={{
-            maskImage:
-              "radial-gradient(ellipse at center, black 52%, transparent 76%)",
-            WebkitMaskImage:
-              "radial-gradient(ellipse at center, black 52%, transparent 76%)",
+            maskImage: "radial-gradient(ellipse at center, black 52%, transparent 76%)",
+            WebkitMaskImage: "radial-gradient(ellipse at center, black 52%, transparent 76%)",
           }}
         >
           <AboutGlobe className="w-full h-full" />
@@ -189,7 +185,7 @@ const AboutSection = () => {
         <div className="relative z-10 w-full max-w-7xl mx-auto">
           <BlueprintSectionHeader>
             <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-20 items-center">
-          
+
           {/* Left: The Hook */}
           <div>
             <FadeIn delay={0} y={20}>
@@ -284,7 +280,7 @@ const AboutSection = () => {
             </div>
             </div>
           </BlueprintSectionHeader>
-          
+
         </div>
       </section>
     </>
