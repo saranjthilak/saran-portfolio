@@ -8,7 +8,7 @@ import BlueprintSectionHeader from "./BlueprintSectionHeader";
 import SectionHeading from "./SectionHeading";
 
 // Real 3D wireframe globe — loaded client-side only, keeps SSR light
-const AboutGlobe = dynamic(() => import("./AboutGlobe"), {
+const AboutGlobe = dynamic(() => import("./AboutGlobe-disabled"), {
   ssr: false,
   loading: () => null,
 });
