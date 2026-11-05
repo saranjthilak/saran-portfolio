@@ -7,12 +7,6 @@ import FadeIn from "./FadeIn";
 import BlueprintSectionHeader from "./BlueprintSectionHeader";
 import SectionHeading from "./SectionHeading";
 
-// Real 3D wireframe globe — loaded client-side only, keeps SSR light
-const AboutGlobe = dynamic(() => import("./AboutGlobe-disabled"), {
-  ssr: false,
-  loading: () => null,
-});
-
 type Segment = { text: string; strong?: boolean };
 
 /**
