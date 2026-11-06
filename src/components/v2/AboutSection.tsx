@@ -60,7 +60,13 @@ function StaggeredWords({
   });
 
   return (
-    <p className={className} style={style}>
+    <motion.p
+      className={className}
+      style={style}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-40px", amount: 0.1 }}
+    >
       {words.map(({ w, strong, i }) => (
         <span
           key={i}
@@ -68,13 +74,17 @@ function StaggeredWords({
         >
           <motion.span
             className={`inline-block ${strong ? "text-white font-normal" : ""}`}
-            initial={{ y: "110%", opacity: 0 }}
-            whileInView={{ y: "0%", opacity: 1 }}
-            viewport={{ once: true, margin: "-40px", amount: 0 }}
-            transition={{
-              duration: 0.55,
-              ease: [0.16, 1, 0.3, 1],
-              delay: baseDelay + i * step,
+            variants={{
+              hidden: { y: "110%", opacity: 0 },
+              visible: {
+                y: "0%",
+                opacity: 1,
+                transition: {
+                  duration: 0.55,
+                  ease: [0.16, 1, 0.3, 1],
+                  delay: baseDelay + i * step,
+                },
+              },
             }}
           >
             {w}
@@ -82,7 +92,7 @@ function StaggeredWords({
           {i < words.length - 1 ? "\u00A0" : ""}
         </span>
       ))}
-    </p>
+    </motion.p>
   );
 }
 
