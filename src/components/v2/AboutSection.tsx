@@ -50,13 +50,17 @@ function StaggeredWords({
     );
   }
 
-  const words: { w: string; strong: boolean; i: number }[] = [];
+  const words: { w: string; strong: boolean; i: number; space: boolean }[] = [];
   let n = 0;
-  segments.forEach((seg) => {
-    seg.text
-      .split(/\s+/)
-      .filter(Boolean)
-      .forEach((w) => words.push({ w, strong: !!seg.strong, i: n++ }));
+  segments.forEach((seg, si) => {
+    const tokens = seg.text.split(/\s+/).filter(Boolean);
+    const next = segments[si + 1];
+    tokens.forEach((w, ti) => {
+      const isLast = ti === tokens.length - 1;
+      // keep punctuation glued to the next segment when no whitespace separates them
+      const space = !isLast || /\s$/.test(seg.text) || (!!next && /^\s/.test(next.text));
+      words.push({ w, strong: !!seg.strong, i: n++, space });
+    });
   });
 
   return (
@@ -67,7 +71,7 @@ function StaggeredWords({
       whileInView="visible"
       viewport={{ once: true, margin: "-40px", amount: 0.1 }}
     >
-      {words.map(({ w, strong, i }) => (
+      {words.map(({ w, strong, i, space }) => (
         <span
           key={i}
           className="inline-block overflow-hidden align-bottom pb-[0.1em] -mb-[0.1em]"
@@ -89,7 +93,7 @@ function StaggeredWords({
           >
             {w}
           </motion.span>
-          {i < words.length - 1 ? "\u00A0" : ""}
+          {space && i < words.length - 1 ? "\u00A0" : ""}
         </span>
       ))}
     </motion.p>
@@ -182,7 +186,7 @@ const AboutSection = () => {
 
         {/* ── 3D Wireframe Data Globe (Three.js, cursor-parallaxed) ── */}
         <div
-          className="absolute z-[3] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[min(88vw,620px)] h-[min(88vw,620px)] opacity-30 md:left-[64%] md:opacity-70"
+          className="absolute z-[3] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[min(88vw,620px)] h-[min(88vw,620px)] opacity-25 md:left-[50%] md:opacity-45"
           style={{
             maskImage: "radial-gradient(ellipse at center, black 52%, transparent 76%)",
             WebkitMaskImage: "radial-gradient(ellipse at center, black 52%, transparent 76%)",
