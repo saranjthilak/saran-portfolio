@@ -346,6 +346,9 @@ const HeroSection = () => {
       {/* Blueprint dotted grid background */}
       <div className="blueprint-dots absolute inset-0 pointer-events-none opacity-[0.06]" />
 
+      {/* Particle network — interactive flame particles */}
+      <ParticleNetwork />
+
       {/* Navbar */}
       <nav className="fixed top-0 w-full z-50 bg-[hsl(var(--fluxora-ground-deep))]/80 backdrop-blur-md border-b border-white/10 flex items-center justify-between px-6 md:px-12 h-24">
         <motion.a
