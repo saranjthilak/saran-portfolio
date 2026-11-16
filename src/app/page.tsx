@@ -6,7 +6,6 @@ import ExperienceSection from "@/components/v2/ExperienceSection";
 
 import ServicesSection from "@/components/v2/ServicesSection";
 import ProjectsSection from "@/components/v2/ProjectsSection";
-import TestimonialsSection from "@/components/v2/TestimonialsSection";
 import ResearchSection from "@/components/v2/ResearchSection";
 import CertificationsSection from "@/components/v2/CertificationsSection";
 import GithubSection from "@/components/v2/GithubSection";
@@ -47,7 +46,6 @@ const Index = async () => {
       <ProjectsSection />
       <GithubSection initialData={githubData} />
       <CertificationsSection />
-      <TestimonialsSection />
       <ResearchSection />
       <ContactSection />
       <V2Footer />
