@@ -317,12 +317,14 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <div className="relative min-h-screen overflow-hidden text-white font-sans">
-      {/* Video background */}
-      <div className="absolute inset-0 z-[-2]">
+    <div className="relative min-h-screen overflow-hidden text-white font-sans bg-[#060606] selection:bg-[#0000ee] selection:text-white">
+      {/* Agencia-style Luxury-Brutalist Background */}
+      <div className="absolute inset-0 z-[-2] overflow-hidden">
+        {/* Centered video background with 75% brightness */}
         <video
           ref={videoRef}
           className={`w-full h-full object-cover object-position-[68%_center] hero__video ${ready ? "is-ready" : ""}`}
+          style={{ filter: "brightness(0.75)" }}
           src="/hero-loop.mp4"
           autoPlay
           muted
@@ -332,19 +334,28 @@ const HeroSection = () => {
           aria-hidden="true"
           onCanPlay={() => setReady(true)}
         />
-        {/* Ember scrim overlay */}
-        <div className="absolute inset-0 z-[-1]"
+        
+        {/* Spotlight effect: radial gradient from top center */}
+        <div 
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: "radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.1) 0%, transparent 70%)",
+          }}
+        />
+
+        {/* Ambient bottom & edge scrim blending to #060606 */}
+        <div
+          className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "linear-gradient(96deg, rgba(10, 3, 0, 0.9) 0%, rgba(14, 4, 0, 0.66) 30%, rgba(20, 6, 0, 0.16) 52%, rgba(20, 6, 0, 0) 68%)," +
-              "linear-gradient(0deg, rgba(9, 2, 0, 0.78) 0%, rgba(9, 2, 0, 0.12) 28%, rgba(0, 0, 0, 0) 46%)," +
-              "linear-gradient(180deg, rgba(8, 2, 0, 0.5) 0%, rgba(0, 0, 0, 0) 22%)",
+              "linear-gradient(180deg, rgba(6, 6, 6, 0.2) 0%, rgba(6, 6, 6, 0) 30%, rgba(6, 6, 6, 0.75) 80%, #060606 100%)," +
+              "linear-gradient(90deg, rgba(6, 6, 6, 0.7) 0%, transparent 35%, transparent 65%, rgba(6, 6, 6, 0.7) 100%)",
           }}
         />
       </div>
 
       {/* Blueprint dotted grid background */}
-      <div className="blueprint-dots absolute inset-0 pointer-events-none opacity-[0.06]" />
+      <div className="blueprint-dots absolute inset-0 pointer-events-none opacity-[0.04]" />
 
       {/* Particle network — interactive flame particles */}
       <ParticleNetwork />
