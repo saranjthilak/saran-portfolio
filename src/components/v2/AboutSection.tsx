@@ -1,9 +1,78 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useEffect, useState } from "react";
 import FadeIn from "./FadeIn";
 import BlueprintSectionHeader from "./BlueprintSectionHeader";
 import SectionHeading from "./SectionHeading";
+
+/* ── Animated counter that counts up when it enters the viewport ── */
+function HudCounter({
+  target,
+  suffix = "",
+  prefix = "",
+  label,
+  accent = "hsl(var(--accent))",
+  nodeId,
+}: {
+  target: number;
+  suffix?: string;
+  prefix?: string;
+  label: string;
+  accent?: string;
+  nodeId: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [count, setCount] = useState(0);
+  const [started, setStarted] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting && !started) setStarted(true); },
+      { threshold: 0.4 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [started]);
+
+  useEffect(() => {
+    if (!started) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setCount(target);
+      return;
+    }
+    let frame = 0;
+    const duration = 1200;
+    const startTime = performance.now();
+    const tick = (now: number) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.round(eased * target));
+      if (progress < 1) frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [started, target]);
+
+  return (
+    <div ref={ref} className="group relative overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] p-4 backdrop-blur-sm hover:border-[var(--stat-accent,hsl(var(--accent)))]/40 hover:bg-white/[0.05] transition-all duration-300" style={{ "--stat-accent": accent } as React.CSSProperties}>
+      {/* corner marks */}
+      <span className="absolute top-0 left-0 h-3 w-3 border-t border-l border-[var(--stat-accent,hsl(var(--accent)))]/40" />
+      <span className="absolute top-0 right-0 h-3 w-3 border-t border-r border-[var(--stat-accent,hsl(var(--accent)))]/40" />
+      <span className="absolute bottom-0 left-0 h-3 w-3 border-b border-l border-[var(--stat-accent,hsl(var(--accent)))]/40" />
+      <span className="absolute bottom-0 right-0 h-3 w-3 border-b border-r border-[var(--stat-accent,hsl(var(--accent)))]/40" />
+      {/* top accent bar */}
+      <span className="absolute left-0 top-0 h-0.5 w-full" style={{ background: `linear-gradient(to right, ${accent}, transparent)` }} />
+      <div className="font-mono text-[8px] uppercase tracking-widest text-white/25 mb-2">{nodeId}</div>
+      <div className="font-mono text-3xl font-bold leading-none tracking-tight" style={{ color: accent, textShadow: `0 0 20px ${accent}60` }}>
+        {prefix}{count}{suffix}
+      </div>
+      <div className="mt-2 font-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground">{label}</div>
+    </div>
+  );
+}
 
 const AboutSection = () => {
   return (
@@ -107,6 +176,14 @@ const AboutSection = () => {
                 >
                   Now, with an M.Sc. in Data Science and hands-on work at <strong className="text-white font-normal">Tesla</strong> building RAG chatbots and Airflow pipelines, I bring that same infrastructure mindset to AI engineering. I build GenAI and data systems the way I once ran networks — with the assumption that they have to hold up under real load, not just in a notebook.
                 </p>
+
+                {/* ── HUD Stat Counters ── */}
+                <div className="grid grid-cols-2 gap-3 pt-2">
+                  <HudCounter target={10} suffix="+" label="Years of experience" nodeId="STAT-0x01" accent="hsl(var(--accent))" />
+                  <HudCounter target={99.9} suffix="%" label="Uptime SLA operated" nodeId="STAT-0x02" accent="#38bdf8" />
+                  <HudCounter target={2} label="IEEE publications" nodeId="STAT-0x03" accent="#a78bfa" />
+                  <HudCounter target={5} suffix="+" label="Certifications" nodeId="STAT-0x04" accent="#f59e0b" />
+                </div>
 
                 {/* ── Resume Download Button ── */}
                 <div className="pt-2">
