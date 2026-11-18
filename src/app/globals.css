@@ -124,7 +124,11 @@
 
 @layer base {
   * { @apply border-border; }
-  html { scroll-behavior: auto; }
+  html {
+    scroll-behavior: smooth;
+    /* 96px = navbar h-24, so anchors land below the fixed nav */
+    scroll-padding-top: 96px;
+  }
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-feature-settings: "ss01";
