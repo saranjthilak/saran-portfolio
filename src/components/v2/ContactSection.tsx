@@ -4,10 +4,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
-import { Check, Crown, ArrowUpRight, Loader2 } from "lucide-react";
+import { ArrowUpRight, Check, Loader2, Mail, Github, Linkedin, Phone } from "lucide-react";
 import { useState, useRef } from "react";
-import { useInView } from "framer-motion";
-import BlueprintSectionHeader from "./BlueprintSectionHeader";
+import { motion, useInView } from "framer-motion";
 import FadeIn from "./FadeIn";
 import SectionHeading from "./SectionHeading";
 
@@ -30,16 +29,46 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 const LINKS = [
-  { label: "Email", value: "saranjthilak@gmail.com", href: "mailto:saranjthilak@gmail.com" },
-  { label: "LinkedIn", value: "linkedin.com/in/saranjayathilak", href: "https://www.linkedin.com/in/saranjayathilak" },
-  { label: "GitHub", value: "github.com/saranjthilak", href: "https://github.com/saranjthilak" },
-  { label: "Calls", value: "Available for calls upon request", href: "" },
+  {
+    label: "Email",
+    value: "saranjthilak@gmail.com",
+    href: "mailto:saranjthilak@gmail.com",
+    icon: Mail,
+    nodeId: "CHAN-0x01",
+    accent: "hsl(var(--accent))",
+  },
+  {
+    label: "LinkedIn",
+    value: "in/saranjayathilak",
+    href: "https://www.linkedin.com/in/saranjayathilak",
+    icon: Linkedin,
+    nodeId: "CHAN-0x02",
+    accent: "#38bdf8",
+  },
+  {
+    label: "GitHub",
+    value: "saranjthilak",
+    href: "https://github.com/saranjthilak",
+    icon: Github,
+    nodeId: "CHAN-0x03",
+    accent: "#a78bfa",
+  },
+  {
+    label: "Calls",
+    value: "Available upon request",
+    href: "",
+    icon: Phone,
+    nodeId: "CHAN-0x04",
+    accent: "#f59e0b",
+  },
 ];
 
 const RATE_LIMIT_MS = 60_000;
 
 const inputBase =
-  "w-full rounded bg-white/5 border border-white/20 px-4 py-3.5 text-white placeholder-white/30 font-inter text-sm outline-none focus:border-white/60 focus:bg-white/10 transition-colors duration-200 backdrop-blur-md";
+  "w-full rounded-lg bg-white/[0.04] border border-white/15 px-4 py-3.5 text-white placeholder-white/25 font-mono text-sm outline-none focus:border-accent/60 focus:bg-white/[0.07] focus:shadow-[0_0_0_1px_hsl(var(--accent)/0.3)] transition-all duration-200 backdrop-blur-md";
+
+const EASE = [0.16, 1, 0.3, 1] as const;
 
 const ContactSection = () => {
   const videoRef = useRef<HTMLDivElement>(null);
@@ -48,7 +77,6 @@ const ContactSection = () => {
   const [honeypot, setHoneypot] = useState("");
   const [lastSubmit, setLastSubmit] = useState(0);
   const [submitting, setSubmitting] = useState(false);
-  // Accessible status message for screen readers
   const [statusMessage, setStatusMessage] = useState("");
 
   const {
@@ -59,7 +87,6 @@ const ContactSection = () => {
   } = useForm<FormValues>({ resolver: zodResolver(formSchema) });
 
   const onSubmit = async (values: FormValues) => {
-    // Honeypot — silently bail if filled
     if (honeypot) return;
 
     const now = Date.now();
@@ -103,10 +130,12 @@ const ContactSection = () => {
   return (
     <section
       id="contact"
-      className="blueprint-section font-inter rounded-t-section -mt-10 sm:-mt-12 md:-mt-14 relative z-50 min-h-[100svh] flex items-center border-t border-accent/20"
+      aria-labelledby="contact-heading"
+      className="font-inter rounded-t-section -mt-10 sm:-mt-12 md:-mt-14 relative z-50 min-h-[100svh] flex items-center overflow-hidden border-t border-white/10"
       style={{
         padding: "clamp(5rem, 9vw, 9rem) 1.25rem clamp(4rem, 6vw, 6rem)",
         boxShadow: "0 -10px 40px rgba(0,0,0,0.5)",
+        background: "hsl(var(--background))",
       }}
     >
       {/* Video background */}
@@ -118,196 +147,281 @@ const ContactSection = () => {
             loop
             muted
             playsInline
-            className="absolute inset-0 w-full h-full object-cover opacity-30"
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ filter: "brightness(0.18)" }}
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/35 to-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
       </div>
 
+      {/* Blueprint grid overlay */}
+      <div className="absolute inset-0 blueprint-dots opacity-[0.07] z-[1]" aria-hidden="true" />
+
+      {/* Accent glow top */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 h-px w-2/3 z-[2]"
+        style={{ background: "linear-gradient(to right, transparent, hsl(var(--accent)/0.4), transparent)" }}
+      />
+
+      {/* Content */}
       <div className="mx-auto w-full max-w-6xl relative z-10">
-        <BlueprintSectionHeader>
-          <div className="grid gap-14 lg:grid-cols-[1fr_1fr] items-center">
 
-        {/* ── Left column ─────────────────────────────────────────── */}
-        <div>
+        {/* Section eyebrow */}
+        <FadeIn delay={0} y={20}>
+          <p className="flex items-center gap-2 font-mono text-[10px] font-medium uppercase tracking-[0.25em] text-white/50 mb-5">
+            <span className="relative flex h-2 w-2 items-center justify-center">
+              <span className="absolute h-full w-full animate-ping rounded-full bg-accent opacity-70" />
+              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+            </span>
+            Contact
+            <span className="ml-auto font-mono text-[9px] text-white/30">ENDPOINT // OPEN</span>
+          </p>
+        </FadeIn>
 
+        <div className="grid gap-14 lg:grid-cols-[1fr_1fr] items-start">
 
-          {/* Eyebrow — matches Experience section style */}
-          <FadeIn delay={0} y={20}>
-            <p className="font-kanit flex items-center gap-2 font-medium uppercase tracking-[0.25em] text-white/50 text-xs mb-5">
-              <span className="w-1.5 h-1.5 rounded-full bg-white/50 inline-block" />
-              Contact
-            </p>
-          </FadeIn>
+          {/* ── Left column ── */}
+          <div>
+            <FadeIn delay={0.08} y={30}>
+              <SectionHeading
+                id="contact-heading"
+                prefix="Let's build something that "
+                accentWord="holds up"
+                gradient="experience"
+                align="left"
+                className="font-kanit"
+              />
+            </FadeIn>
 
-          {/* Heading — reuses SectionHeading exactly as Experience section does */}
-          <FadeIn delay={0.08} y={30}>
-            <SectionHeading
-              prefix="Let's build something that "
-              accentWord="holds up"
-              gradient="experience"
-              align="left"
-              className="font-kanit"
-            />
-          </FadeIn>
+            <FadeIn delay={0.2} y={16}>
+              <p className="mt-6 text-white/60 text-sm sm:text-base leading-relaxed max-w-md font-kanit font-light">
+                I work on RAG systems, data pipelines, and cloud infrastructure. Tell me what you&apos;re building, and I&apos;ll get back to you within a day.
+              </p>
+            </FadeIn>
 
-          {/* Subtext */}
-          <FadeIn delay={0.2} y={16}>
-            <p className="mt-6 text-white/70 text-sm sm:text-base leading-relaxed max-w-md">
-              I work on RAG systems, data pipelines, and cloud infrastructure. Tell me what you&apos;re building, and I&apos;ll get back to you within a day.
-            </p>
-          </FadeIn>
-
-          {/* Links list */}
-          <div className="animate-fade-up-delay-3">
-            <dl className="mt-10 border-t border-white/20">
-              {LINKS.map((link, i) => (
-                <div
-                  key={link.label}
-                  className="flex items-baseline justify-between gap-6 py-4 border-b border-white/20"
-                >
-                  <dt className="text-sm text-white/50 font-light">{link.label}</dt>
-                  <dd>
-                    {link.href ? (
-                      <a
-                        href={link.href}
-                        target={link.href.startsWith("http") ? "_blank" : undefined}
-                        rel="noreferrer"
-                        className="text-sm font-medium text-white hover:opacity-60 transition-opacity duration-200"
-                      >
-                        {link.value}
-                      </a>
-                    ) : (
-                      <span className="text-sm font-medium text-white/70">
-                        {link.value}
-                      </span>
-                    )}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-        </div>
-
-        {/* ── Right column — form ─────────────────────────────────── */}
-        <div className="animate-fade-up-delay-4">
-          <div
-            className="rounded-panel p-6 sm:p-8 relative overflow-hidden backdrop-blur-md"
-            style={{ background: "rgba(20,20,20,0.4)", border: "1px solid rgba(255,255,255,0.15)" }}
-          >
-            {/* Accessible live region for form status */}
-            <div
-              aria-live="polite"
-              aria-atomic="true"
-              className="sr-only"
-              role="status"
+            {/* ── HUD channel list ── */}
+            <div className="mt-10 relative overflow-hidden border border-white/10 rounded-2xl"
+              style={{ background: "rgba(255,255,255,0.02)", backdropFilter: "blur(12px)" }}
             >
-              {statusMessage}
+              {/* corner brackets */}
+              <span className="absolute top-0 left-0 h-4 w-4 border-t border-l border-accent/40" />
+              <span className="absolute top-0 right-0 h-4 w-4 border-t border-r border-accent/40" />
+              <span className="absolute bottom-0 left-0 h-4 w-4 border-b border-l border-accent/40" />
+              <span className="absolute bottom-0 right-0 h-4 w-4 border-b border-r border-accent/40" />
+              {/* top accent bar */}
+              <span className="absolute left-0 top-0 h-0.5 w-full" style={{ background: "linear-gradient(to right, hsl(var(--accent)/0.5), transparent)" }} />
+
+              {/* header */}
+              <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
+                <span className="flex items-center gap-2 font-mono text-[9px] tracking-[0.18em] text-muted-foreground">
+                  <span className="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_6px_hsl(var(--accent))]" />
+                  <span className="text-foreground font-semibold">CONTACT CHANNELS</span>
+                </span>
+                <span className="font-mono text-[9px] text-white/25">4 NODES ACTIVE</span>
+              </div>
+
+              {LINKS.map((link, i) => {
+                const Icon = link.icon;
+                return (
+                  <motion.div
+                    key={link.label}
+                    initial={{ opacity: 0, x: -16 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.1 + i * 0.08, ease: EASE }}
+                    className="group relative flex items-center justify-between gap-4 px-5 py-4 border-b border-white/[0.06] last:border-b-0 hover:bg-white/[0.02] transition-colors duration-200"
+                  >
+                    {/* hover left accent */}
+                    <span
+                      className="pointer-events-none absolute left-0 top-0 h-full w-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      style={{ background: link.accent }}
+                    />
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span
+                        className="grid h-8 w-8 shrink-0 place-items-center rounded-lg border"
+                        style={{ borderColor: `${link.accent}30`, background: `${link.accent}10`, color: link.accent }}
+                      >
+                        <Icon className="h-3.5 w-3.5" strokeWidth={1.5} />
+                      </span>
+                      <div className="min-w-0">
+                        <div className="font-mono text-[8px] uppercase tracking-widest text-white/30 mb-0.5">{link.nodeId} · {link.label}</div>
+                        {link.href ? (
+                          <a
+                            href={link.href}
+                            target={link.href.startsWith("http") ? "_blank" : undefined}
+                            rel="noreferrer"
+                            className="block font-mono text-[11px] text-white/70 hover:text-white truncate transition-colors duration-200"
+                            style={{ color: `${link.accent}cc` }}
+                          >
+                            {link.value}
+                          </a>
+                        ) : (
+                          <span className="font-mono text-[11px] text-white/40">{link.value}</span>
+                        )}
+                      </div>
+                    </div>
+                    {link.href && (
+                      <ArrowUpRight
+                        className="h-3.5 w-3.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                        style={{ color: link.accent }}
+                      />
+                    )}
+                  </motion.div>
+                );
+              })}
             </div>
+          </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
-              {/* Name + Email row */}
-              <div className="grid gap-5 sm:grid-cols-2">
-                <div>
-                  <label htmlFor="name" className="block text-xs text-white/70 font-light mb-2 uppercase tracking-wider">Your name</label>
-                  <input
-                    id="name"
-                    type="text"
-                    placeholder="Jane Doe"
-                    maxLength={100}
-                    aria-invalid={!!errors.name}
-                    aria-describedby={errors.name ? "name-error" : undefined}
-                    {...register("name")}
-                    className={inputBase}
-                  />
-                  {errors.name && <p id="name-error" className="text-xs text-red-400 mt-1" role="alert">{errors.name.message}</p>}
+          {/* ── Right column — form ── */}
+          <FadeIn delay={0.15} y={24}>
+            <div className="relative overflow-hidden border border-white/10 rounded-2xl"
+              style={{ background: "rgba(255,255,255,0.025)", backdropFilter: "blur(16px)" }}
+            >
+              {/* corner brackets */}
+              <span className="absolute top-0 left-0 h-5 w-5 border-t border-l border-accent/40 z-10" />
+              <span className="absolute top-0 right-0 h-5 w-5 border-t border-r border-accent/40 z-10" />
+              <span className="absolute bottom-0 left-0 h-5 w-5 border-b border-l border-accent/40 z-10" />
+              <span className="absolute bottom-0 right-0 h-5 w-5 border-b border-r border-accent/40 z-10" />
+              {/* top accent bar */}
+              <span className="absolute left-0 top-0 h-0.5 w-full z-10" style={{ background: "linear-gradient(to right, hsl(var(--accent)/0.6), transparent 60%)" }} />
+              {/* inner glow */}
+              <div className="absolute inset-0 bg-gradient-to-br from-accent/[0.03] to-transparent pointer-events-none" />
+
+              {/* form header */}
+              <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
+                <div className="flex items-center gap-2 font-mono text-[9px] tracking-[0.18em] text-muted-foreground">
+                  <span className="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_6px_hsl(var(--accent))]" />
+                  <span className="font-semibold text-foreground">MESSAGE TERMINAL</span>
+                  <span className="hidden text-white/30 sm:inline">|</span>
+                  <span className="hidden sm:inline">NODE-0xFF · OPEN</span>
                 </div>
-                <div>
-                  <label htmlFor="email" className="block text-xs text-white/70 font-light mb-2 uppercase tracking-wider">Email</label>
-                  <input
-                    id="email"
-                    type="email"
-                    placeholder="jane@company.com"
-                    maxLength={254}
-                    aria-invalid={!!errors.email}
-                    aria-describedby={errors.email ? "email-error" : undefined}
-                    {...register("email")}
-                    className={inputBase}
-                  />
-                  {errors.email && <p id="email-error" className="text-xs text-red-400 mt-1" role="alert">{errors.email.message}</p>}
+                <span className="font-mono text-[9px] text-white/25">ENCRYPTED</span>
+              </div>
+
+              {/* Accessible live region */}
+              <div aria-live="polite" aria-atomic="true" className="sr-only" role="status">
+                {statusMessage}
+              </div>
+
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 p-6 sm:p-8" noValidate>
+                {/* Name + Email */}
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="name" className="block font-mono text-[9px] text-white/50 mb-2 uppercase tracking-widest">
+                      // name
+                    </label>
+                    <input
+                      id="name"
+                      type="text"
+                      placeholder="Jane Doe"
+                      maxLength={100}
+                      aria-invalid={!!errors.name}
+                      aria-describedby={errors.name ? "name-error" : undefined}
+                      {...register("name")}
+                      className={inputBase}
+                    />
+                    {errors.name && (
+                      <p id="name-error" className="font-mono text-[10px] text-red-400 mt-1.5" role="alert">
+                        ⚠ {errors.name.message}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="block font-mono text-[9px] text-white/50 mb-2 uppercase tracking-widest">
+                      // email
+                    </label>
+                    <input
+                      id="email"
+                      type="email"
+                      placeholder="jane@company.com"
+                      maxLength={254}
+                      aria-invalid={!!errors.email}
+                      aria-describedby={errors.email ? "email-error" : undefined}
+                      {...register("email")}
+                      className={inputBase}
+                    />
+                    {errors.email && (
+                      <p id="email-error" className="font-mono text-[10px] text-red-400 mt-1.5" role="alert">
+                        ⚠ {errors.email.message}
+                      </p>
+                    )}
+                  </div>
                 </div>
-              </div>
 
-              {/* Message */}
-              <div>
-                <label htmlFor="message" className="block text-xs text-white/70 font-light mb-2 uppercase tracking-wider">Project or message</label>
-                <textarea
-                  id="message"
-                  rows={5}
-                  placeholder="Tell me what you're building…"
-                  maxLength={5000}
-                  aria-invalid={!!errors.message}
-                  aria-describedby={errors.message ? "message-error" : undefined}
-                  {...register("message")}
-                  className={`${inputBase} resize-none`}
-                />
-                {errors.message && <p id="message-error" className="text-xs text-red-400 mt-1" role="alert">{errors.message.message}</p>}
-              </div>
-
-              {/*
-                Honeypot field — positioned off-screen to avoid bot detection
-                via display:none heuristics. Real users never see or reach it
-                (tabIndex=-1, aria-hidden, autocomplete=off).
-              */}
-              <div
-                aria-hidden="true"
-                style={{
-                  position: "absolute",
-                  left: "-9999px",
-                  top: "-9999px",
-                  width: "1px",
-                  height: "1px",
-                  overflow: "hidden",
-                }}
-              >
-                <label htmlFor="v2-website">Website</label>
-                <input
-                  id="v2-website"
-                  type="text"
-                  name="website"
-                  tabIndex={-1}
-                  autoComplete="off"
-                  value={honeypot}
-                  onChange={(e) => setHoneypot(e.target.value)}
-                />
-              </div>
-
-              {/* Submit row */}
-              <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
-                <button
-                  type="submit"
-                  disabled={submitting || sent}
-                  aria-busy={submitting}
-                  className="group flex items-center gap-3 bg-black hover:bg-neutral-900 border border-white/20 hover:border-white/40 px-5 sm:px-7 py-3 sm:py-4 text-[11px] sm:text-xs text-white tracking-widest uppercase transition-all duration-300 disabled:opacity-60"
-                >
-                  <span>
-                    {submitting ? "Sending…" : sent ? "Message sent" : "Get In Touch"}
-                  </span>
-                  {submitting ? (
-                    <Loader2 className="w-4 h-4 text-white animate-spin" />
-                  ) : sent ? (
-                    <Check className="w-4 h-4 text-white" />
-                  ) : (
-                    <ArrowUpRight className="w-4 h-4 text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                {/* Message */}
+                <div>
+                  <label htmlFor="message" className="block font-mono text-[9px] text-white/50 mb-2 uppercase tracking-widest">
+                    // message
+                  </label>
+                  <textarea
+                    id="message"
+                    rows={5}
+                    placeholder="Tell me what you're building…"
+                    maxLength={5000}
+                    aria-invalid={!!errors.message}
+                    aria-describedby={errors.message ? "message-error" : undefined}
+                    {...register("message")}
+                    className={`${inputBase} resize-none`}
+                  />
+                  {errors.message && (
+                    <p id="message-error" className="font-mono text-[10px] text-red-400 mt-1.5" role="alert">
+                      ⚠ {errors.message.message}
+                    </p>
                   )}
-                </button>
-                <span className="text-xs text-white/50 font-light">Usually replies within a day.</span>
-              </div>
-            </form>
-          </div>
-          </div>
-          </div>
-        </BlueprintSectionHeader>
+                </div>
+
+                {/* Honeypot — hidden from real users */}
+                <div
+                  aria-hidden="true"
+                  style={{
+                    position: "absolute",
+                    left: "-9999px",
+                    top: "-9999px",
+                    width: "1px",
+                    height: "1px",
+                    overflow: "hidden",
+                  }}
+                >
+                  <label htmlFor="v2-website">Website</label>
+                  <input
+                    id="v2-website"
+                    type="text"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                  />
+                </div>
+
+                {/* Submit row */}
+                <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-white/[0.08]">
+                  <button
+                    type="submit"
+                    disabled={submitting || sent}
+                    aria-busy={submitting}
+                    className="group relative flex items-center gap-3 overflow-hidden border border-accent/40 bg-accent/5 px-6 py-3 font-mono text-[10px] font-semibold tracking-widest text-accent uppercase transition-all duration-300 hover:bg-accent/10 hover:border-accent/70 hover:shadow-[0_0_28px_hsl(var(--accent)/0.25)] disabled:opacity-50 disabled:cursor-not-allowed rounded-lg"
+                  >
+                    {/* hover shimmer */}
+                    <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-r from-transparent via-accent/5 to-transparent" />
+                    <span className="relative">
+                      {submitting ? "$ sending..." : sent ? "$ sent ✓" : "$ send --message"}
+                    </span>
+                    {submitting ? (
+                      <Loader2 className="relative w-3.5 h-3.5 animate-spin" />
+                    ) : sent ? (
+                      <Check className="relative w-3.5 h-3.5" />
+                    ) : (
+                      <ArrowUpRight className="relative w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    )}
+                  </button>
+                  <span className="font-mono text-[9px] text-white/30 tracking-wider">Usually replies within a day.</span>
+                </div>
+              </form>
+            </div>
+          </FadeIn>
+        </div>
       </div>
     </section>
   );
