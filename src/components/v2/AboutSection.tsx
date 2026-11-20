@@ -158,6 +158,44 @@ const AboutSection = () => {
                 className="mb-4"
               />
             </FadeIn>
+
+            {/* ── Compact profile card ── */}
+            <FadeIn delay={0.18} y={20}>
+              <div className="mt-8 relative overflow-hidden border border-white/10 rounded-2xl"
+                style={{ background: "rgba(255,255,255,0.025)", backdropFilter: "blur(12px)", maxWidth: "380px" }}
+              >
+                {/* corner brackets */}
+                <span className="absolute top-0 left-0 h-4 w-4 border-t border-l border-accent/40" />
+                <span className="absolute top-0 right-0 h-4 w-4 border-t border-r border-accent/40" />
+                <span className="absolute bottom-0 left-0 h-4 w-4 border-b border-l border-accent/40" />
+                <span className="absolute bottom-0 right-0 h-4 w-4 border-b border-r border-accent/40" />
+                {/* top accent bar */}
+                <span className="absolute left-0 top-0 h-0.5 w-full" style={{ background: "linear-gradient(to right, hsl(var(--accent)/0.5), transparent)" }} />
+
+                <div className="flex items-center gap-4 p-5">
+                  {/* photo */}
+                  <div className="relative shrink-0 h-16 w-16 rounded-xl overflow-hidden border border-white/10">
+                    <img src="/images/profile.png" alt="Saran Jaya Thilak" className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 border border-accent/20 rounded-xl pointer-events-none" />
+                  </div>
+                  {/* info */}
+                  <div className="min-w-0">
+                    <div className="font-mono text-[8px] uppercase tracking-widest text-white/30 mb-1">ID // SJT-001</div>
+                    <div className="text-white font-semibold text-sm leading-tight">Saran Jaya Thilak</div>
+                    <div className="font-mono text-[10px] text-white/50 mt-0.5">Data Engineer · GenAI Specialist</div>
+                    <div className="flex items-center gap-1.5 mt-2">
+                      <span className="relative flex h-1.5 w-1.5">
+                        <span className="animate-ping absolute h-full w-full rounded-full bg-accent opacity-70" />
+                        <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                      </span>
+                      <span className="font-mono text-[9px] uppercase tracking-widest" style={{ color: "hsl(var(--accent)/0.8)" }}>
+                        Open to opportunities · Berlin
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </FadeIn>
           </div>
 
           {/* Right: The Details */}
