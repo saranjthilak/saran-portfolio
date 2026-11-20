@@ -8,12 +8,66 @@ import BlueprintSectionHeader from "./BlueprintSectionHeader";
 import FadeIn from "./FadeIn";
 import SectionHeading from "./SectionHeading";
 import {
-  X, Maximize2, Minus, Square, ExternalLink,
+  X, Maximize2, ExternalLink,
   Github, Eye, Circle,
+  FileText, Layers, Cpu, Search, Bot,
+  Image as ImageIcon, Server, Database,
+  ArrowRight, type LucideProps,
 } from "lucide-react";
+import type { ForwardRefExoticComponent, RefAttributes } from "react";
 
 const FEATURED = projects.filter((p) => p.featured);
 const EASE = [0.16, 1, 0.3, 1] as const;
+
+/* ── Icon map for pipeline steps ─────────────────────────── */
+type LucideIcon = ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>;
+
+const ICON_MAP: Record<string, LucideIcon> = {
+  file: FileText, layers: Layers, cpu: Cpu, search: Search,
+  bot: Bot, image: ImageIcon, server: Server, database: Database,
+};
+
+/* ── Animated pipeline strip ──────────────────────────────── */
+function PipelineStrip({ steps, inView }: { steps: { label: string; icon: string }[]; inView: boolean }) {
+  return (
+    <div className="mt-6 flex flex-wrap items-center gap-2" aria-label="Architecture pipeline">
+      {steps.map((step, i) => {
+        const Icon = ICON_MAP[step.icon] ?? Cpu;
+        const isLast = i === steps.length - 1;
+        return (
+          <div key={step.label} className="contents">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.4, delay: 0.3 + i * 0.09, ease: EASE }}
+              className="relative flex items-center gap-1.5 border border-accent/25 bg-accent/5 px-3 py-1.5 rounded-lg group hover:border-accent/60 hover:bg-accent/10 transition-all duration-200"
+            >
+              {/* animated ping on first step */}
+              {i === 0 && inView && (
+                <span className="absolute -top-1 -right-1 flex h-2 w-2">
+                  <span className="animate-ping absolute h-full w-full rounded-full bg-accent opacity-50" />
+                  <span className="relative h-2 w-2 rounded-full bg-accent" />
+                </span>
+              )}
+              <Icon className="h-3 w-3 text-accent/70" strokeWidth={1.5 as number} />
+              <span className="font-mono text-[9px] uppercase tracking-widest text-accent/80">{step.label}</span>
+            </motion.div>
+            {!isLast && (
+              <motion.div
+                initial={{ opacity: 0, scaleX: 0 }}
+                animate={inView ? { opacity: 1, scaleX: 1 } : {}}
+                transition={{ duration: 0.3, delay: 0.35 + i * 0.09, ease: EASE }}
+                style={{ transformOrigin: "left" }}
+              >
+                <ArrowRight className="h-3 w-3 text-accent/30 shrink-0" />
+              </motion.div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 /* ── Live Preview Modal ──────────────────────────────────────────────────── */
 interface PreviewModalProps {
@@ -163,6 +217,7 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
   const isInView = useInView(ref, { once: true, margin: "-80px" });
   const isEven = index % 2 === 0;
   const [previewOpen, setPreviewOpen] = useState(false);
+  const pipeline = (project as { pipeline?: { label: string; icon: string }[] }).pipeline ?? [];
 
   const openPreview = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
@@ -247,9 +302,14 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
               <span className="font-mono text-sm text-accent bg-accent/10 px-3 py-1 rounded-full border border-accent/20">
                 Featured
               </span>
-              <span className="font-kanit text-xs uppercase tracking-widest text-white/40">
-                {project.source}
-              </span>
+              <div className="flex flex-col items-end gap-0.5">
+                <span className="font-mono text-[9px] uppercase tracking-widest text-white/25">
+                  {String(index + 1).padStart(2, "0")} / {String(FEATURED.length).padStart(2, "0")}
+                </span>
+                <span className="font-kanit text-xs uppercase tracking-widest text-white/40">
+                  {project.source}
+                </span>
+              </div>
             </div>
             <h3 className="text-3xl lg:text-4xl font-black uppercase tracking-wide text-white mb-4 leading-tight">
               {project.title}
@@ -257,6 +317,16 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
             <p className="text-white/60 text-sm leading-relaxed">
               {project.description}
             </p>
+
+            {/* ── Pipeline visualizer ── */}
+            {pipeline.length > 0 && (
+              <div className="mt-5 pt-5 border-t border-white/[0.07]">
+                <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-white/25 mb-2 block">
+                  Architecture Pipeline
+                </span>
+                <PipelineStrip steps={pipeline} inView={isInView} />
+              </div>
+            )}
           </div>
 
           <div className="mt-10 relative z-10 flex items-center gap-3 flex-wrap">
@@ -275,14 +345,19 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
         {/* ── CASE STUDY TILE ── */}
         <motion.div
           variants={itemVariants}
-          className={`p-8 md:p-10 rounded-card border border-white/10 hover:border-white/20 bg-v2-raised hover:bg-v2-base transition-colors duration-500 flex flex-col justify-center ${
+          className={`relative p-8 md:p-10 rounded-card border border-white/10 hover:border-white/20 bg-v2-raised hover:bg-v2-base transition-colors duration-500 flex flex-col justify-center overflow-hidden ${
             isEven ? "md:col-span-1 md:row-span-1" : "md:col-span-1 md:row-span-1 md:col-start-1 md:row-start-2"
           }`}
         >
+          {/* corner brackets */}
+          <span className="absolute top-3 left-3 h-3 w-3 border-t border-l border-white/15" />
+          <span className="absolute bottom-3 right-3 h-3 w-3 border-b border-r border-white/15" />
+
+          <div className="font-mono text-[9px] uppercase tracking-widest text-white/20 mb-5">Case Study</div>
           <div className="flex flex-col gap-5">
             {project.problem && (
               <div className="flex flex-col gap-1.5">
-                <span className="font-kanit text-[10px] uppercase tracking-widest text-[#ff4f4f] flex items-center gap-2">
+                <span className="font-mono text-[10px] uppercase tracking-widest text-[#ff4f4f] flex items-center gap-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-[#ff4f4f]" /> Problem
                 </span>
                 <span className="text-sm text-white/70 leading-relaxed">{project.problem}</span>
@@ -290,7 +365,7 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
             )}
             {project.approach && (
               <div className="flex flex-col gap-1.5">
-                <span className="font-kanit text-[10px] uppercase tracking-widest text-[#38bdf8] flex items-center gap-2">
+                <span className="font-mono text-[10px] uppercase tracking-widest text-[#38bdf8] flex items-center gap-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-[#38bdf8]" /> Approach
                 </span>
                 <span className="text-sm text-white/70 leading-relaxed">{project.approach}</span>
@@ -298,7 +373,7 @@ const ProjectBento = ({ project, index }: { project: (typeof FEATURED)[0]; index
             )}
             {project.result && (
               <div className="flex flex-col gap-1.5">
-                <span className="font-kanit text-[10px] uppercase tracking-widest text-[#f59e0b] flex items-center gap-2">
+                <span className="font-mono text-[10px] uppercase tracking-widest text-[#f59e0b] flex items-center gap-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-[#f59e0b]" /> Result
                 </span>
                 <span className="text-sm text-white/70 leading-relaxed">{project.result}</span>
