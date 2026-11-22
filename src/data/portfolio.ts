@@ -1,4 +1,157 @@
 
+export interface Achievement {
+  id: string;
+  metric: number;
+  prefix?: string;
+  suffix?: string;
+  trend?: "up" | "down" | "neutral";
+  metricLabel: string;
+  title: string;
+  organization: string;
+  roleOrContext: string;
+  category: "GenAI & LLMs" | "Data & MLOps" | "Cloud & SRE" | "Research";
+  description: string;
+  impactBadge: string;
+  skills: string[];
+  nodeId: string;
+  accent: string;
+}
+
+export const achievements: Achievement[] = [
+  {
+    id: "01",
+    metric: 25,
+    prefix: "+",
+    suffix: "%",
+    trend: "up",
+    metricLabel: "Efficiency Gain",
+    title: "Grounded RAG Assistants with Hallucination Guardrails",
+    organization: "Tesla",
+    roleOrContext: "Data Engineer",
+    category: "GenAI & LLMs",
+    description: "Architected conversational RAG chatbots with dynamic citation grounding, token streaming, and cross-encoder validation, reducing support query turnaround by 25%.",
+    impactBadge: "↑ 25% SPEEDUP",
+    skills: ["LangChain", "Vector DB", "Guardrails", "Python"],
+    nodeId: "ACH-0xTESLA1",
+    accent: "hsl(var(--accent))",
+  },
+  {
+    id: "02",
+    metric: 99.9,
+    suffix: "%",
+    trend: "neutral",
+    metricLabel: "Pipeline SLA",
+    title: "Fault-Tolerant Apache Airflow Data Orchestration",
+    organization: "Tesla",
+    roleOrContext: "Data Engineer",
+    category: "Data & MLOps",
+    description: "Engineered resilient ETL/ELT pipelines with idempotency, automated failure retries, schema enforcement, and real-time observability alerts, maintaining 99.9% uptime SLA.",
+    impactBadge: "🛡 99.9% SLA",
+    skills: ["Apache Airflow", "dbt", "PostgreSQL", "Kafka"],
+    nodeId: "ACH-0xTESLA2",
+    accent: "#38bdf8",
+  },
+  {
+    id: "03",
+    metric: 20,
+    prefix: "~",
+    suffix: "%",
+    trend: "down",
+    metricLabel: "AWS Spend Reduction",
+    title: "Terraform IaC Automation & FinOps Optimization",
+    organization: "Huawei",
+    roleOrContext: "Cloud Support Engineer",
+    category: "Cloud & SRE",
+    description: "Standardized multi-environment AWS deployments with modular Terraform IaC and continuous cost observability, shrinking recurring cloud infrastructure spend by ~20%.",
+    impactBadge: "↓ 20% CLOUD SPEND",
+    skills: ["Terraform", "AWS", "FinOps", "Lambda", "DynamoDB"],
+    nodeId: "ACH-0xHW1",
+    accent: "#f59e0b",
+  },
+  {
+    id: "04",
+    metric: 99.99,
+    suffix: "%",
+    trend: "neutral",
+    metricLabel: "Network Availability",
+    title: "Mission-Critical 24×7 Telecom Carrier Operations",
+    organization: "Nokia & Huawei",
+    roleOrContext: "Operations Engineer & Team Lead",
+    category: "Cloud & SRE",
+    description: "Managed statewide telecom core, transmission, and IP infrastructure under strict zero-tolerance downtime mandates, consistently sustaining 99.99% carrier service availability.",
+    impactBadge: "⚡ FIVE 9s TIER",
+    skills: ["IP Core", "RAN", "SRE", "Incident Response"],
+    nodeId: "ACH-0xNOKIA",
+    accent: "#38bdf8",
+  },
+  {
+    id: "05",
+    metric: 0.93,
+    suffix: " R²",
+    trend: "up",
+    metricLabel: "Model Fit Score",
+    title: "Solar Power Plant Performance Ratio ML Model",
+    organization: "IEEE Publication",
+    roleOrContext: "Lead Author",
+    category: "Research",
+    description: "Published peer-reviewed research in IEEE Xplore applying ensemble machine learning algorithms (RandomSearchCV, AdaBoost, Random Forest) achieving 0.93 R² prediction accuracy.",
+    impactBadge: "★ 0.93 R² SCORE",
+    skills: ["Machine Learning", "Random Forest", "AdaBoost", "IEEE"],
+    nodeId: "ACH-0xIEEE1",
+    accent: "#a78bfa",
+  },
+  {
+    id: "06",
+    metric: 30,
+    prefix: "+",
+    suffix: "%",
+    trend: "up",
+    metricLabel: "Accuracy Lift",
+    title: "Quantized Multimodal Search with NVIDIA Triton",
+    organization: "AI Product Matching",
+    roleOrContext: "AI Engineering",
+    category: "GenAI & LLMs",
+    description: "Served quantized CLIP visual embeddings via NVIDIA Triton with FAISS ANN similarity search, achieving 30% higher match accuracy and cutting vector search latency to sub-50ms.",
+    impactBadge: "⚡ SUB-50MS LATENCY",
+    skills: ["NVIDIA Triton", "CLIP", "FAISS", "Docker"],
+    nodeId: "ACH-0xTRITON",
+    accent: "#00df8f",
+  },
+  {
+    id: "07",
+    metric: 30,
+    prefix: "~",
+    suffix: "%",
+    trend: "down",
+    metricLabel: "Escalation Reduction",
+    title: "Incident Triaging & Runbook Engineering Leadership",
+    organization: "Huawei",
+    roleOrContext: "Operations Team Leader",
+    category: "Cloud & SRE",
+    description: "Standardized incident triage procedures, established blameless post-mortems, and mentored junior engineers, cutting tier-3 critical escalations by ~30%.",
+    impactBadge: "↓ 30% ESCALATIONS",
+    skills: ["Team Leadership", "Runbooks", "RCA", "SRE"],
+    nodeId: "ACH-0xHW2",
+    accent: "#f59e0b",
+  },
+  {
+    id: "08",
+    metric: 2,
+    suffix: " Papers",
+    trend: "up",
+    metricLabel: "Peer-Reviewed",
+    title: "Applied Machine Learning Predictive Research",
+    organization: "IEEE",
+    roleOrContext: "Published Researcher",
+    category: "Research",
+    description: "Authored and published 2 international IEEE papers on operational performance estimation and airline pricing dynamics using advanced machine learning models.",
+    impactBadge: "📄 IEEE INDEXED",
+    skills: ["IEEE Xplore", "Scikit-Learn", "Data Science"],
+    nodeId: "ACH-0xIEEE2",
+    accent: "#a78bfa",
+  },
+];
+
 export const fromMyWork = [
   {
     id: "01",
@@ -32,7 +185,16 @@ export const experience = [
     role: "Data Engineer",
     period: "2023–2025",
     description: "Designed RAG-based LLM chatbots improving customer interaction efficiency by 25%, added guardrails (hallucination detection, response validation), and architected Apache Airflow ETL pipelines with 99.9% reliability and real-time alerting.",
-    logo: "🚗"
+    logo: "🚗",
+    metrics: [
+      { label: "Efficiency Gain", value: "+25%" },
+      { label: "Pipeline SLA", value: "99.9%" },
+    ],
+    achievements: [
+      "Engineered RAG-based LLM chatbots with hallucination guardrails, cutting support query resolution time by 25%.",
+      "Architected Apache Airflow ETL pipelines serving production analytics at 99.9% uptime SLA with real-time alerting.",
+      "Implemented automated retry logic and schema enforcement across distributed data pipelines."
+    ]
   },
   {
     company: "University of Europe for Applied Sciences",
@@ -41,27 +203,63 @@ export const experience = [
     description: "Completed a Master's in Data Science with a focus on machine learning, deep learning, and applied AI. Published two IEEE papers on ML-based prediction systems. Also completed the Le Wagon Data Science & AI bootcamp during this period, gaining intensive hands-on experience in production ML workflows.",
     logo: "🎓",
     type: "education" as const,
+    metrics: [
+      { label: "IEEE Papers", value: "2" },
+      { label: "Model R²", value: "0.93" },
+    ],
+    achievements: [
+      "Published 2 peer-reviewed IEEE papers on machine learning estimation models (0.93 R² accuracy).",
+      "Graduated with M.Sc. in Data Science focusing on ML, deep learning, and applied AI systems.",
+      "Completed Le Wagon Data Science & AI bootcamp, building production ML pipelines with Docker and FastAPI."
+    ]
   },
   {
     company: "Huawei",
     role: "Cloud Support Engineer",
     period: "2019–2021",
     description: "Accelerated AWS cloud-native infrastructure with Terraform, implemented secure architectures (EC2, S3, Lambda, DynamoDB), and reduced AWS costs by ~20% through monitoring and optimization.",
-    logo: "☁️"
+    logo: "☁️",
+    metrics: [
+      { label: "AWS Cost", value: "-20%" },
+      { label: "State", value: "IaC Sync" },
+    ],
+    achievements: [
+      "Accelerated AWS cloud-native infrastructure with modular Terraform IaC across EC2, S3, Lambda, and DynamoDB.",
+      "Reduced monthly AWS cloud expenditure by ~20% through rigorous resource rightsizing and FinOps monitoring.",
+      "Designed automated backup, failover, and IAM security policies for cloud production workloads."
+    ]
   },
   {
     company: "Huawei",
     role: "Operations Team Leader",
     period: "2016–2019",
     description: "Executed 24×7 GOC operations supporting 99.9%+ availability across IP, transmission, mobile core, and RAN domains. Mentored junior engineers and reduced escalations by ~30%.",
-    logo: "🔧"
+    logo: "🔧",
+    metrics: [
+      { label: "Availability", value: "99.9%+" },
+      { label: "Escalations", value: "-30%" },
+    ],
+    achievements: [
+      "Led 24×7 Global Operations Center (GOC) sustaining 99.9%+ network availability across IP, core, and RAN domains.",
+      "Reduced tier-3 critical incident escalations by ~30% through automated runbooks and incident root cause analysis.",
+      "Mentored junior engineers and conducted high-pressure failover simulation drills."
+    ]
   },
   {
     company: "Nokia",
     role: "Operations & Maintenance Engineer",
     period: "2014–2016",
     description: "Monitored statewide telecom infrastructure with 99.99% availability. Executed preventive and corrective maintenance on BTS, BSC, and transmission systems.",
-    logo: "📡"
+    logo: "📡",
+    metrics: [
+      { label: "Carrier Uptime", value: "99.99%" },
+      { label: "Ops Mode", value: "24×7" },
+    ],
+    achievements: [
+      "Monitored and maintained statewide telecom carrier infrastructure exceeding 99.99% uptime availability.",
+      "Executed preventive and corrective maintenance on BTS, BSC, optical SDH, and microwave transmission systems.",
+      "Coordinated with multi-vendor engineering teams during major network cutovers and outages."
+    ]
   }
 ];
 

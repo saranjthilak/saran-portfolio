@@ -12,10 +12,11 @@ const SOCIAL_LINKS = [
 ];
 
 const NAV_LINKS = [
-  { label: "About",    href: "#about"    },
-  { label: "Skills",   href: "#skills"   },
-  { label: "Projects", href: "#projects" },
-  { label: "Contact",  href: "#contact"  },
+  { label: "About",    href: "#about"        },
+  { label: "Impact",   href: "#achievements" },
+  { label: "Skills",   href: "#skills"       },
+  { label: "Projects", href: "#projects"     },
+  { label: "Contact",  href: "#contact"      },
 ];
 
 const V2Footer = () => {

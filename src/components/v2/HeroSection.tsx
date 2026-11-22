@@ -8,6 +8,7 @@ import FadeIn from "./FadeIn";
 /* ─── Nav links ──────────────────────────────────────────── */
 const navLinks = [
   { label: "ABOUT", href: "#about" },
+  { label: "IMPACT", href: "#achievements" },
   { label: "SKILLS", href: "#skills" },
   { label: "PROJECTS", href: "#projects" },
   { label: "CONTACT", href: "#contact" },

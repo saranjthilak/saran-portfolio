@@ -202,17 +202,64 @@ const ExperienceSection = () => {
                       )}
                     </div>
                     <p
-                      className="font-mono text-[10px] uppercase tracking-[0.14em] mb-3"
+                      className="font-mono text-[10px] uppercase tracking-[0.14em] mb-2"
                       style={{ color: accent, opacity: 0.8 }}
                     >
                       {item.role}
                     </p>
+
+                    {/* Metric highlight chips */}
+                    {'metrics' in item && Array.isArray(item.metrics) && item.metrics.length > 0 && (
+                      <div className="flex flex-wrap items-center gap-2 mb-3">
+                        {item.metrics.map((m: { label: string; value: string }) => (
+                          <span
+                            key={m.label}
+                            className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border text-[9px] font-mono tracking-wider"
+                            style={{
+                              borderColor: `${accent}35`,
+                              background: `${accent}0d`,
+                              color: accent,
+                            }}
+                          >
+                            <span className="font-bold">{m.value}</span>
+                            <span className="text-white/40 uppercase text-[8px]">{m.label}</span>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
                     <p
-                      className="font-kanit font-light text-white/45 leading-relaxed"
+                      className="font-kanit font-light text-white/50 leading-relaxed"
                       style={{ fontSize: "clamp(0.85rem, 1.2vw, 0.95rem)" }}
                     >
                       {item.description}
                     </p>
+
+                    {/* Key achievements bullet points */}
+                    {'achievements' in item && Array.isArray(item.achievements) && item.achievements.length > 0 && (
+                      <div className="mt-4 pt-3 border-t border-white/[0.06] space-y-2">
+                        <div className="font-mono text-[8px] uppercase tracking-[0.2em] text-white/35 flex items-center gap-1.5">
+                          <span className="h-1 w-1 rounded-full" style={{ background: accent }} />
+                          Key Deliverables &amp; Impact
+                        </div>
+                        <ul className="space-y-1.5 pl-0.5">
+                          {item.achievements.map((ach: string, achIdx: number) => (
+                            <li
+                              key={achIdx}
+                              className="flex items-start gap-2 text-white/70 font-kanit font-light text-[13px] leading-relaxed"
+                            >
+                              <span
+                                className="font-mono text-[10px] mt-0.5 shrink-0 select-none"
+                                style={{ color: accent }}
+                              >
+                                ▹
+                              </span>
+                              <span>{ach}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
 
                   {/* ── Col 3: Status badge ── */}
