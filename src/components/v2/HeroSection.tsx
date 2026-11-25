@@ -209,15 +209,14 @@ const IDCard = () => {
         }}
       />
 
-      {/* Scanning line animation */}
+      {/* Subtle scanning line animation on hover */}
       <motion.div
-        className="absolute left-0 right-0 h-[2px] z-30 pointer-events-none"
+        className="absolute left-0 right-0 h-[1px] z-30 pointer-events-none opacity-0 group-hover:opacity-60 transition-opacity duration-500"
         style={{
-          background: "linear-gradient(90deg, transparent, hsl(17 100% 50% / 0.6), transparent)",
-          boxShadow: "0 0 20px hsl(17 100% 50% / 0.3)",
+          background: "linear-gradient(90deg, transparent, hsl(17 100% 50% / 0.45), transparent)",
         }}
         animate={{ top: ["-5%", "105%"] }}
-        transition={{ duration: 3, repeat: Infinity, repeatDelay: 2, ease: "linear" }}
+        transition={{ duration: 3.5, repeat: Infinity, repeatDelay: 2, ease: "linear" }}
       />
 
       {/* Card Header Hole */}
@@ -237,10 +236,10 @@ const IDCard = () => {
       </div>
 
       {/* Card Bottom Details */}
-      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[hsl(var(--fluxora-ground-deep))] via-[hsl(var(--fluxora-ground-deep))/95] to-transparent flex flex-col justify-end p-6">
+      <div className="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-[hsl(var(--fluxora-ground-deep))] via-[hsl(var(--fluxora-ground-deep))]/95 to-transparent flex flex-col justify-end p-6">
         <div className="flex items-center gap-2 mb-1">
-          <div className="w-2 h-2 rounded-full bg-[hsl(var(--fluxora-flame-lit))] animate-pulse shadow-[0_0_8px_rgba(255,138,31,0.6)]" />
-          <span className="text-[10px] font-mono uppercase tracking-widest text-[hsl(var(--fluxora-flame-lit))]/80">Available for hire</span>
+          <div className="w-2 h-2 rounded-full bg-[hsl(var(--fluxora-flame-lit))] animate-pulse shadow-[0_0_8px_rgba(255,138,31,0.7)]" />
+          <span className="text-[10px] font-mono uppercase tracking-widest text-amber-200">Available for hire</span>
         </div>
         <h3 className="text-[1.35rem] font-black tracking-tighter text-white leading-tight">Saran Jaya Thilak</h3>
         <p className="text-[hsl(var(--fluxora-flame-lit))] text-xs uppercase tracking-widest font-semibold mt-1">Data Engineer &amp; GenAI Specialist</p>
@@ -283,7 +282,7 @@ const ScrollIndicator = () => (
 /* ─── Availability Badge ─────────────────────────────────── */
 const AvailabilityBadge = () => (
   <motion.div
-    className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full border border-[hsl(var(--fluxora-flame-lit))]/30 bg-[hsl(var(--fluxora-flame-lit))]/5"
+    className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full border border-[hsl(var(--fluxora-flame-lit))]/45 bg-[hsl(var(--fluxora-flame-lit))]/15"
     initial={{ opacity: 0, scale: 0.8 }}
     animate={{ opacity: 1, scale: 1 }}
     transition={{ delay: 1.2, duration: 0.5 }}
@@ -292,7 +291,7 @@ const AvailabilityBadge = () => (
       <div className="w-2 h-2 rounded-full bg-[hsl(var(--fluxora-flame-lit))]" />
       <div className="absolute inset-0 w-2 h-2 rounded-full bg-[hsl(var(--fluxora-flame-lit))] animate-ping" />
     </div>
-    <span className="text-[11px] font-mono uppercase tracking-wider text-[hsl(var(--fluxora-flame-lit))]/90">
+    <span className="text-[11px] font-mono uppercase tracking-wider text-amber-100">
       Available
     </span>
   </motion.div>
@@ -365,13 +364,13 @@ const HeroSection = () => {
       <nav className="fixed top-0 w-full z-50 bg-[hsl(var(--fluxora-ground-deep))]/80 backdrop-blur-md border-b border-white/10 flex items-center justify-between px-6 md:px-12 h-24">
         <motion.a
           href="#home"
-          className="text-2xl font-black tracking-tighter"
+          className="inline-flex items-center text-2xl font-black tracking-tighter"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <Logo className="w-6 h-6 mr-2" />
-          SARAN<span className="text-[hsl(var(--fluxora-flame-lit))]">.</span>
+          <Logo className="w-6 h-6 mr-2 shrink-0" />
+          <span>SARAN<span className="text-[hsl(var(--fluxora-flame-lit))]">.</span></span>
         </motion.a>
 
         <div className="hidden md:flex items-center gap-3">
@@ -400,11 +399,11 @@ const HeroSection = () => {
       </nav>
 
       {/* Hero Content */}
-      <section id="home" className="relative z-10 min-h-screen flex items-center pt-16 px-4 md:px-8">
+      <section id="home" className="relative z-10 min-h-screen flex items-center pt-28 pb-16 lg:pt-24 lg:pb-12 px-4 md:px-8">
         <div className="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
 
           {/* Left Column */}
-          <div className="flex flex-col items-start pt-8 lg:pt-0">
+          <div className="flex flex-col items-start pt-2 lg:pt-0">
 
             {/* Headline */}
             <AnimatedHeading />
@@ -455,28 +454,28 @@ const HeroSection = () => {
 
             {/* Glass stat cards */}
             <motion.div
-              className="mt-10 flex flex-wrap gap-4"
+              className="mt-10 grid grid-cols-3 gap-2.5 sm:gap-4 w-full max-w-[520px]"
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.95, delay: 0.36, ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className="relative w-[160px] min-h-[110px] p-3 rounded-[12px] border border-white/10 bg-[rgba(56,20,6,0.42)] backdrop-blur-[16px] saturate-[1.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.09)]">
-                <span className="absolute top-[10px] right-[12px] text-[12px] text-white/80 font-mono">*</span>
-                <span className="text-xl md:text-[2rem] font-black leading-1 tracking-tighter text-white">10+</span>
-                <span className="text-[10px] font-mono uppercase tracking-[0.14em] text-white/80 mt-1">Years Exp.</span>
-                <span className="absolute right-[12px] bottom-[18px] w-10 h-[1px] bg-white/28" />
+              <div className="relative flex flex-col justify-between min-h-[96px] sm:min-h-[104px] p-3 sm:p-4 rounded-[12px] border border-white/15 bg-[rgba(56,20,6,0.48)] backdrop-blur-[16px] saturate-[1.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.09)]">
+                <span className="absolute top-[10px] right-[12px] text-[12px] text-white/70 font-mono">*</span>
+                <span className="block text-2xl sm:text-[2rem] font-black leading-none tracking-tighter text-white">10+</span>
+                <span className="block text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.12em] text-white/85 mt-3">Years Exp.</span>
+                <span className="absolute right-[12px] bottom-[14px] w-8 h-[1px] bg-white/25 hidden sm:block" />
               </div>
-              <div className="relative w-[160px] min-h-[110px] p-3 rounded-[12px] border border-white/10 bg-gradient-to-br from-[rgba(120,30,4,0.5)] to-[rgba(48,14,2,0.5)] backdrop-blur-[16px] shadow-[inset_0_1px_0_rgba(255,255,255,0.09)]">
-                <span className="absolute top-[10px] right-[12px] text-[12px] text-white/80 font-mono">*</span>
-                <span className="text-xl md:text-[2rem] font-black leading-1 tracking-tighter text-white">2</span>
-                <span className="text-[10px] font-mono uppercase tracking-[0.14em] text-white/80 mt-1">IEEE Papers</span>
-                <span className="absolute right-[12px] bottom-[18px] w-10 h-[1px] bg-white/28" />
+              <div className="relative flex flex-col justify-between min-h-[96px] sm:min-h-[104px] p-3 sm:p-4 rounded-[12px] border border-white/15 bg-gradient-to-br from-[rgba(120,30,4,0.55)] to-[rgba(48,14,2,0.55)] backdrop-blur-[16px] shadow-[inset_0_1px_0_rgba(255,255,255,0.09)]">
+                <span className="absolute top-[10px] right-[12px] text-[12px] text-white/70 font-mono">*</span>
+                <span className="block text-2xl sm:text-[2rem] font-black leading-none tracking-tighter text-white">2</span>
+                <span className="block text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.12em] text-white/85 mt-3">IEEE Papers</span>
+                <span className="absolute right-[12px] bottom-[14px] w-8 h-[1px] bg-white/25 hidden sm:block" />
               </div>
-              <div className="relative w-[160px] min-h-[110px] p-3 rounded-[12px] border border-white/10 bg-[rgba(56,20,6,0.42)] backdrop-blur-[16px] saturate-[1.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.09)]">
-                <span className="absolute top-[10px] right-[12px] text-[12px] text-white/80 font-mono">*</span>
-                <span className="text-xl md:text-[2rem] font-black leading-1 tracking-tighter text-white">5+</span>
-                <span className="text-[10px] font-mono uppercase tracking-[0.14em] text-white/80 mt-1">Certifications</span>
-                <span className="absolute right-[12px] bottom-[18px] w-10 h-[1px] bg-white/28" />
+              <div className="relative flex flex-col justify-between min-h-[96px] sm:min-h-[104px] p-3 sm:p-4 rounded-[12px] border border-white/15 bg-[rgba(56,20,6,0.48)] backdrop-blur-[16px] saturate-[1.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.09)]">
+                <span className="absolute top-[10px] right-[12px] text-[12px] text-white/70 font-mono">*</span>
+                <span className="block text-2xl sm:text-[2rem] font-black leading-none tracking-tighter text-white">5+</span>
+                <span className="block text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.12em] text-white/85 mt-3">Certs</span>
+                <span className="absolute right-[12px] bottom-[14px] w-8 h-[1px] bg-white/25 hidden sm:block" />
               </div>
             </motion.div>
           </div>
