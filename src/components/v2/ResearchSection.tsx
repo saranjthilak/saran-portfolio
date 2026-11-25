@@ -42,7 +42,7 @@ const AnimatedCounter = ({ target, suffix = "" }: { target: number; suffix?: str
 /* ── Terminal line ───────────────────────────────────────────────────────── */
 const TerminalLine = ({ children, delay = 0, dim = false }: { children: React.ReactNode; delay?: number; dim?: boolean }) => (
   <motion.div
-    className={`font-mono text-xs leading-relaxed ${dim ? "text-white/25" : "text-white/60"}`}
+    className={`font-mono text-xs leading-relaxed ${dim ? "text-white/45" : "text-white/75"}`}
     initial={{ opacity: 0, x: -8 }}
     whileInView={{ opacity: 1, x: 0 }}
     viewport={{ once: true }}
@@ -142,7 +142,7 @@ const PaperCard = ({ pub, idx }: { pub: (typeof publications)[0]; idx: number })
         style={{ borderColor: c.accent }} />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col gap-5 p-6 md:p-8">
+      <div className="relative z-10 flex-1 flex flex-col gap-5 p-6 md:p-8">
 
         {/* Header row */}
         <div className="flex items-start justify-between gap-4">
@@ -212,8 +212,8 @@ const PaperCard = ({ pub, idx }: { pub: (typeof publications)[0]; idx: number })
             {c.metric}
           </span>
           <div className="flex items-center gap-1.5">
-            <GitBranch className="w-3 h-3 text-white/20" />
-            <span className="text-[10px] font-mono text-white/25">peer-reviewed</span>
+            <GitBranch className="w-3 h-3 text-white/40" />
+            <span className="text-[10px] font-mono text-white/50">peer-reviewed</span>
           </div>
         </div>
       </div>
@@ -320,7 +320,7 @@ export default function ResearchSection() {
             <p className="text-white/45 max-w-xl font-kanit font-light text-base sm:text-lg flex-1">
               Two peer-reviewed papers at IEEE — applied ML on solar performance and dynamic airline pricing.
             </p>
-            <div className="flex items-center gap-3 shrink-0">
+            <div className="grid grid-cols-3 sm:flex items-stretch gap-2.5 sm:gap-3 shrink-0">
               <HUDStat value={2}   label="IEEE Papers"  accent="rgba(99,255,180,1)" delay={0.2} />
               <HUDStat value={0.93} suffix="" label="Best R²" accent="rgba(99,255,180,0.8)" delay={0.26} />
               <HUDStat value={23}   suffix="'"  label="Published" accent="rgba(99,180,255,0.9)" delay={0.32} />

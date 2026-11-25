@@ -246,13 +246,11 @@ export default function GithubSection({ initialData }: { initialData?: { stats: 
           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
             style={{ background: "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(99,255,180,0.04) 0%, transparent 100%)" }} />
 
-          {/* Node ID */}
-          <div className="absolute top-4 left-1/2 -translate-x-1/2">
-            <span className="font-mono text-[9px] tracking-[0.2em] text-white/15">NODE-0xCAL</span>
-          </div>
-
           <div className="p-6 sm:p-10">
-            <div className="overflow-x-auto">
+            <div className="mb-4 flex items-center justify-center">
+              <span className="font-mono text-[9px] tracking-[0.2em] text-white/30">NODE-0xCAL</span>
+            </div>
+            <div className="overflow-x-auto pb-2 [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.18)_transparent] [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/15">
               {!statsLoaded ? (
                 <div className="flex flex-col items-center justify-center py-12 text-white/40 text-sm font-mono gap-3">
                   <span className="text-[10px] uppercase tracking-widest">GitHub data unavailable</span>
@@ -284,7 +282,7 @@ export default function GithubSection({ initialData }: { initialData?: { stats: 
                 href={`https://github.com/${GITHUB_USERNAME}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 bg-white/[0.03] text-white/50 text-sm font-mono hover:border-emerald-500/40 hover:text-emerald-400 hover:bg-emerald-500/5 transition-all duration-300"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 bg-white/[0.03] text-white/60 text-xs sm:text-sm font-mono whitespace-nowrap hover:border-emerald-500/40 hover:text-emerald-400 hover:bg-emerald-500/5 transition-all duration-300"
               >
                 github --profile={GITHUB_USERNAME}
                 <ArrowUpRight className="w-3.5 h-3.5" />

@@ -114,7 +114,7 @@ const V2Footer = () => {
         </div>
 
         {/* Bottom divider row */}
-        <div className="mt-8 pt-6 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="mt-8 pt-6 pb-8 sm:pb-2 sm:pr-14 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="font-mono text-[9px] uppercase tracking-widest text-white/20">
             © {new Date().getFullYear()} · Built with Next.js, Framer Motion &amp; Tailwind
           </p>

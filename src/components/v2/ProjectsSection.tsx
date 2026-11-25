@@ -511,16 +511,16 @@ const ProjectBento = ({ project, index }: { project: Project; index: number }) =
 
           <div className="relative z-10">
             {/* Header tags */}
-            <div className="flex justify-between items-start mb-4">
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-xs text-accent bg-accent/10 px-3 py-1 rounded-full border border-accent/20">
+            <div className="flex flex-wrap justify-between items-start gap-2 mb-4">
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="font-mono text-xs text-accent bg-accent/10 px-3 py-1 rounded-full border border-accent/20 whitespace-nowrap">
                   {project.category}
                 </span>
                 <span className="font-mono text-[9px] uppercase tracking-widest text-white/30 hidden sm:inline">
                   {project.nodeId}
                 </span>
               </div>
-              <div className="flex flex-col items-end gap-0.5">
+              <div className="flex flex-col items-end gap-0.5 text-right">
                 <span className="font-mono text-[9px] uppercase tracking-widest text-white/35">
                   {String(index + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
                 </span>
@@ -643,7 +643,7 @@ const ProjectBento = ({ project, index }: { project: Project; index: number }) =
         {/* ── SKILLS TILE ── */}
         <motion.div
           variants={itemVariants}
-          className={`p-7 sm:p-8 md:p-10 rounded-card border border-white/10 hover:border-white/20 bg-v2-raised hover:bg-v2-base transition-colors duration-500 flex flex-col justify-between ${
+          className={`p-7 sm:p-8 md:p-10 rounded-card border border-white/10 hover:border-white/20 bg-v2-raised hover:bg-v2-base transition-colors duration-500 flex flex-col justify-start gap-6 self-start md:self-stretch ${
             isEven ? "md:col-span-1 md:row-span-1" : "md:col-span-1 md:row-span-1 md:col-start-2 md:row-start-2"
           }`}
         >

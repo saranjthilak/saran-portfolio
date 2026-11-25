@@ -184,9 +184,9 @@ const CertCard = ({ cert, idx }: { cert: (typeof certifications)[0]; idx: number
             style={{ color: c.accent, borderColor: c.accentBorder, background: c.accentDim }}>
             {c.short}
           </span>
-          {cert.level && (
-            <span className="inline-flex items-center px-2.5 py-1 rounded border border-white/10 bg-white/5 text-[10px] font-mono text-white/35 uppercase tracking-widest">
-              {cert.level}
+          {(cert.level || c.tier) && (
+            <span className="inline-flex items-center px-2.5 py-1 rounded border border-white/10 bg-white/5 text-[10px] font-mono text-white/45 uppercase tracking-widest">
+              {cert.level || c.tier}
             </span>
           )}
         </div>
@@ -203,7 +203,7 @@ const CertCard = ({ cert, idx }: { cert: (typeof certifications)[0]; idx: number
         {/* Separator */}
         <div className="flex items-center gap-2">
           <div className="flex-1 h-px" style={{ background: `linear-gradient(90deg, ${c.accentBorder}, transparent)` }} />
-          <span className="font-mono text-[8px] tracking-widest opacity-25 text-white uppercase">Status</span>
+          <span className="font-mono text-[8px] tracking-widest opacity-40 text-white uppercase">Verified · Active</span>
         </div>
 
         {/* Signal bar / status viz */}
@@ -224,9 +224,9 @@ const CertCard = ({ cert, idx }: { cert: (typeof certifications)[0]; idx: number
 
         {/* Footer */}
         <div className="flex items-center justify-between gap-2 mt-auto pt-1">
-          <div className="flex items-center gap-1.5">
-            <Shield className="w-3 h-3" style={{ color: c.accent, opacity: 0.6 }} />
-            <span className="text-[10px] font-mono uppercase tracking-wider opacity-50 text-white truncate max-w-[120px]">
+          <div className="flex items-center gap-1.5 min-w-0 flex-1">
+            <Shield className="w-3 h-3 shrink-0" style={{ color: c.accent, opacity: 0.7 }} />
+            <span className="text-[10px] font-mono uppercase tracking-wider text-white/60 truncate">
               {cert.issuer}
             </span>
           </div>
