@@ -56,7 +56,7 @@ export default function SectionHeading({
   id,
 }: SectionHeadingProps) {
   const ref = useRef<HTMLHeadingElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const inView = useInView(ref, { once: true, margin: "-20px" });
   const shouldReduceMotion = useReducedMotion();
 
   const stops = gradientStops ?? HEADING_GRADIENTS[gradient];
@@ -92,7 +92,7 @@ export default function SectionHeading({
         </motion.span>
       )}
 
-      {/* Accent word — italic serif, gradient, per-character typewriter */}
+      {/* Accent word — italic serif, gradient, per-character typewriter (grouped by word to prevent mid-word breaks) */}
       <span
         className="accent-serif"
         style={{
@@ -102,23 +102,42 @@ export default function SectionHeading({
           backgroundClip: "text",
         }}
       >
-        {accentWord.split("").map((char, i) => (
-          <span key={i} className="inline">
-            <motion.span
-              className="inline-block"
-              initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-              animate={shouldReduceMotion || inView ? { opacity: 1, y: 0 } : {}}
-              transition={
-                shouldReduceMotion
-                  ? { duration: 0 }
-                  : { duration: 0.05, delay: prefixDelay + i * charDelay }
-              }
-            >
-              {char === " " ? "\u00A0" : char}
-            </motion.span>
-            {char === " " && <wbr />}
-          </span>
-        ))}
+        {(() => {
+          let runningIndex = 0;
+          const words = accentWord.split(/(\s+)/);
+          return words.map((segment, wIdx) => {
+            if (/^\s+$/.test(segment)) {
+              runningIndex += segment.length;
+              return <span key={`ws-${wIdx}`}> </span>;
+            }
+            return (
+              <span key={`w-${wIdx}`} className="inline-block whitespace-nowrap">
+                {segment.split("").map((char, cIdx) => {
+                  const delay = prefixDelay + (runningIndex + cIdx) * charDelay;
+                  return (
+                    <motion.span
+                      key={cIdx}
+                      className="inline-block"
+                      initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                      animate={shouldReduceMotion || inView ? { opacity: 1, y: 0 } : {}}
+                      transition={
+                        shouldReduceMotion
+                          ? { duration: 0 }
+                          : { duration: 0.05, delay }
+                      }
+                    >
+                      {char}
+                    </motion.span>
+                  );
+                })}
+                {(() => {
+                  runningIndex += segment.length;
+                  return null;
+                })()}
+              </span>
+            );
+          });
+        })()}
       </span>
 
       {/* Optional suffix after accent word */}
