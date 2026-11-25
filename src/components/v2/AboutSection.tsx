@@ -30,7 +30,7 @@ function HudCounter({
     if (!el) return;
     const obs = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting && !started) setStarted(true); },
-      { threshold: 0.4 }
+      { threshold: 0.15 }
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -228,16 +228,11 @@ const AboutSection = () => {
                   <a
                     href="/Saran-Jaya-Thilak-Resume.pdf"
                     download="Saran-Jaya-Thilak-Resume.pdf"
-                    className="group relative inline-flex items-center gap-3 font-kanit font-light text-sm tracking-widest uppercase"
-                    style={{ color: "hsl(var(--accent))" }}
+                    className="group relative inline-flex items-center gap-3 font-kanit font-normal text-sm tracking-widest uppercase text-white hover:text-white"
                   >
                     {/* Blueprint grid card */}
                     <span
-                      className="relative flex items-center gap-3 px-6 py-3 transition-all duration-300"
-                      style={{
-                        border: "1px solid hsl(var(--accent) / 0.35)",
-                        background: "hsl(var(--accent) / 0.04)",
-                      }}
+                      className="relative flex items-center gap-3 px-6 py-3 transition-all duration-300 border border-accent/45 bg-accent/10 group-hover:border-accent group-hover:bg-accent/15"
                     >
                       {/* Corner marks */}
                       <span className="absolute top-0 left-0 w-2 h-2 border-t border-l transition-all duration-300 group-hover:w-3 group-hover:h-3" style={{ borderColor: "hsl(var(--accent))" }} />
@@ -245,15 +240,9 @@ const AboutSection = () => {
                       <span className="absolute bottom-0 left-0 w-2 h-2 border-b border-l transition-all duration-300 group-hover:w-3 group-hover:h-3" style={{ borderColor: "hsl(var(--accent))" }} />
                       <span className="absolute bottom-0 right-0 w-2 h-2 border-b border-r transition-all duration-300 group-hover:w-3 group-hover:h-3" style={{ borderColor: "hsl(var(--accent))" }} />
 
-                      {/* Hover glow fill */}
-                      <span
-                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                        style={{ background: "hsl(var(--accent) / 0.07)" }}
-                      />
-
                       {/* Download icon */}
                       <svg
-                        className="relative w-4 h-4 transition-transform duration-300 group-hover:translate-y-0.5"
+                        className="relative w-4 h-4 text-accent transition-transform duration-300 group-hover:translate-y-0.5"
                         viewBox="0 0 16 16"
                         fill="none"
                         stroke="currentColor"
@@ -265,13 +254,10 @@ const AboutSection = () => {
                         <path d="M2 12h12" />
                       </svg>
 
-                      <span className="relative">Download Résumé</span>
+                      <span className="relative text-white">Download Résumé</span>
 
                       {/* Mono label */}
-                      <span
-                        className="relative font-mono text-[10px] tracking-widest opacity-50"
-                        style={{ color: "hsl(var(--accent))" }}
-                      >
+                      <span className="relative font-mono text-[10px] tracking-widest text-accent">
                         PDF
                       </span>
                     </span>

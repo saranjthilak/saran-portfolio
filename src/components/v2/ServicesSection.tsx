@@ -171,7 +171,7 @@ function AmbientOrbs({ activeTone = "cyan" }: { activeTone?: DomainTone }) {
 /* ───── Pipeline connector between domain tabs ───── */
 function PipelineConnector({ active, tone, vertical = false }: { active: boolean; tone: DomainTone; vertical?: boolean }) {
   return (
-    <div aria-hidden="true" className={`${vertical ? "h-6 w-2" : "h-2 min-w-4 flex-1"} relative overflow-hidden ${toneClasses[tone]}`}>
+    <div aria-hidden="true" className={`${vertical ? "h-6 w-2" : "h-2 w-4 xl:w-7 shrink-0"} relative overflow-hidden ${toneClasses[tone]}`}>
       <span className={`absolute rounded-full bg-border/60 ${vertical ? "left-1/2 top-0 h-full w-px -translate-x-1/2" : "left-0 top-1/2 h-px w-full -translate-y-1/2"}`} />
       <span className={`absolute ${vertical ? "inset-x-0 top-0 h-8 expertise-signal-vertical" : "inset-y-0 left-0 w-20 expertise-signal"} ${active ? "opacity-100" : "opacity-0"}`} />
       {[0, 1].map((i) => (
@@ -205,7 +205,7 @@ const SystemNode = forwardRef<HTMLButtonElement, SystemNodeProps>(function Syste
   const activeClasses = active ? "expertise-domain-border bg-white/10 shadow-[0_0_30px_color-mix(in_srgb,var(--domain-color)_35%,transparent)]" : "border-border/60 hover:border-accent/50 hover:bg-white/8 hover:shadow-[0_0_20px_color-mix(in_srgb,var(--domain-color)_15%,transparent)]";
   const iconClasses = active ? "expertise-domain-border expertise-domain-surface expertise-domain-text expertise-domain-glow" : "border-border/70 bg-white/5 text-muted-foreground group-hover:border-accent/40 group-hover:expertise-domain-text";
   const labelClasses = active ? "text-[var(--domain-color)] font-semibold" : "text-muted-foreground";
-  const nameClasses = "mt-1 block font-semibold text-[11px] leading-tight text-foreground truncate group-hover:text-[var(--domain-color)] transition-colors";
+  const nameClasses = "mt-1 block font-semibold text-[11px] leading-snug text-foreground line-clamp-2 group-hover:text-[var(--domain-color)] transition-colors";
   const dotClasses = active ? "h-1.5 w-1.5 rounded-full bg-[var(--domain-color)] shadow-[0_0_6px_var(--domain-color)]" : "";
   const nodeDotClasses = active ? "h-1 w-1 rounded-full bg-[var(--domain-color)] shadow-[0_0_6px_var(--domain-color)]" : "";
   const bottomLineClasses = "absolute bottom-0 left-2 right-2 h-px bg-[var(--domain-color)]";
@@ -310,8 +310,8 @@ function Inspector({ item, isSimulating, motionPaused, id }: { item: ExpertiseIt
       <div className="absolute inset-0 [mask-image:radial-gradient(600px_circle_at_var(--mouse-x)_var(--mouse-y),black,transparent)]" style={{ "--mouse-x": "50%", "--mouse-y": "50%" } as React.CSSProperties} />
 
       {/* Header */}
-      <div className="relative flex min-w-0 gap-4 p-6 sm:p-8">
-        <span className="grid h-13 w-13 shrink-0 place-items-center border rounded-2xl expertise-domain-border expertise-domain-surface expertise-domain-text shadow-[0_0_20px_color-mix(in_srgb,var(--domain-color)_35%,transparent)]">
+      <div className="relative flex min-w-0 items-start gap-4 p-6 sm:p-8">
+        <span className="grid h-12 w-12 sm:h-14 sm:w-14 shrink-0 place-items-center border rounded-2xl expertise-domain-border expertise-domain-surface expertise-domain-text shadow-[0_0_20px_color-mix(in_srgb,var(--domain-color)_35%,transparent)]">
           <Icon className="h-6 w-6" strokeWidth={1.75} />
         </span>
         <div className="min-w-0 flex-1">
@@ -514,7 +514,7 @@ const ServicesSection = () => {
   }, [motionPaused, rotateX, rotateY]);
 
   useEffect(() => {
-    tabRefs.current[activeIndex]?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
+    if (typeof window !== "undefined" && window.scrollY > 100) tabRefs.current[activeIndex]?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
   }, [activeIndex]);
 
   const stageLabel = useMemo(() => (motionPaused ? "MOTION PAUSED" : isSimulating ? "SIMULATION RUNNING" : "PIPELINE READY"), [isSimulating, motionPaused]);
@@ -622,7 +622,7 @@ const ServicesSection = () => {
             </motion.div>
 
             {/* Mobile tablist */}
-            <div className="lg:hidden -mx-4 sm:-mx-6 overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pb-2">
+            <div className="lg:hidden -mx-4 sm:-mx-6 overflow-x-auto overscroll-x-contain scroll-px-4 sm:scroll-px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pb-2">
               <ul role="tablist" aria-label="Expertise domains" aria-orientation="horizontal" className="flex w-max min-w-full gap-2 px-4 sm:px-6 [scroll-snap-type:x_mandatory]">
                 {EXPERTISE.map((item, index) => {
                   const Icon = item.icon;
